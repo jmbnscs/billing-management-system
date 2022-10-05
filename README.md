@@ -1,3 +1,6 @@
 # GSTech Billing Management System
 
--- Capstone Project Website for GSTech's Billing Management System
+*A Capstone Project Presented to the
+Faculty of the College of Computer and Information Sciences (CCIS),
+Polytechnic University of the Philippines, Sta. Mesa, Manila*
+
