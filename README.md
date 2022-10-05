@@ -1,2 +1,3 @@
-# billing-management-system
-Capstone Project Website for GSTech's Billing Management System
+# GSTech Billing Management System
+
+-- Capstone Project Website for GSTech's Billing Management System
