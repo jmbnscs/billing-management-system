@@ -1,6 +1,7 @@
 const DIR_API = 'http://localhost/gstech_api/api/';
 const admin_id = sessionStorage.getItem('admin_id');
 var user_level_id;
+// var admin_data;
 
 async function getAdminData(admin_id) {
     let url = DIR_API + 'admin/read_single.php?admin_id=' + admin_id;
@@ -48,7 +49,7 @@ async function setDefaults () {
     child[0].innerHTML = full_name;
     child[1].innerHTML = user_id.user_role;
 
-    if (admin_data.user_level_id == 2) {
+    if (admin_data.user_level_id == 3) {
         const navbar = document.getElementById('sidebar-nav').children;
         for (var i = 0; i < navbar.length; i++) {
             if (navbar[i].id == 'hide') {
@@ -65,3 +66,4 @@ async function setDefaults () {
 $(document).ready( () => {
     setDefaults();
 });
+
