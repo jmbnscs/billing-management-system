@@ -1,10 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<?php include '../models/login_header.html'; ?>
     <!-- Font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,700|Raleway:300,600">
 
@@ -13,8 +7,6 @@
 
     <!-- Local CSS -->
     <link rel="stylesheet" href="../css/login.css">
-
-    <title>GStech Billing Management System - Login</title>
 </head>
 <body>
     <div class="container">
@@ -67,7 +59,16 @@
                                 <input type="submit" id="submit" value="Login" />
                                 <!-- <button type="submit" id="submit" name="submit">Login</button> -->
                             </div>
+
+                            <div class="alert alert-danger alert-dismissible fade show " role="alert" id="error">
+                                <!-- <i class="bi bi-exclamation-octagon me-1"></i> -->
+                                <!-- <p>A simple danger alert with icon—check it out!</p> -->
+                                <!-- A simple danger alert with icon—check it out! -->
+                                <!-- <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> -->
+                            </div>
+
                         </form>
+
                     </div>
                     <!-- End Login Form -->
 
@@ -87,6 +88,19 @@
             </div>
         </section>
     </div>
+
+    <!-- Vendor JS Files -->
+    <script src="../assets/vendor/apexcharts/apexcharts.min.js"></script>
+    <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/vendor/chart.js/chart.min.js"></script>
+    <script src="../assets/vendor/echarts/echarts.min.js"></script>
+    <script src="../assets/vendor/quill/quill.min.js"></script>
+    <script src="../assets/vendor/simple-datatables/simple-datatables.js"></script>
+    <script src="../assets/vendor/tinymce/tinymce.min.js"></script>
+    <script src="../assets/vendor/php-email-form/validate.js"></script>
+
+    <!-- Template Main JS File -->
+    <script src="../assets/js/main.js"></script>
 
     <!-- Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>

@@ -1,3 +1,5 @@
+const error = document.getElementById('error');
+
 /* NOTE FROM KL:
     Hindi ko sure itong JS kinopya ko laang sya then may binago ng kaunti 
     hehehe pero working sya.
@@ -9,6 +11,9 @@
 $(document).ready(function () {
 
     'use strict';
+
+    error.classList.add('hide-error');
+    // removeAllChildNodes(error);
 
     // Detect browser for css purpose --> Not sure ako dito, Para san?
     if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
@@ -54,11 +59,19 @@ $(document).ready(function () {
 });
 
 // -------------------------------- Backend JS --------------------------------
+function removeAllChildNodes(parent) {
+    while (parent.firstChild) {
+        parent.removeChild(parent.firstChild);
+    }
+}
+
 $(function () {
     $('form').on('submit', function(e) {
         e.preventDefault();
         const admin_username = $('#admin_username').val();
         const admin_password = $('#admin_password').val();
+
+        error.classList.add('hide-error');
 
         // @Alfredo
         $.ajax({
@@ -76,8 +89,14 @@ $(function () {
                     sessionStorage.setItem("admin_id", admin_data.admin_id);
                     window.location.replace(url);
                 }
-                else {
+                else if (admin_data.message == 'failed') {
+                    // error.classList.add('hide-error');
                     const admin_data = JSON.parse(data);
+                    error.classList.remove('hide-error');
+                    // error.insertAdjacentText('beforeend', 'Username does not exist.');
+                    // error.innerHTML += '<i class="bi bi-exclamation-octagon me-1"></i>'
+                    error.innerHTML = 'Username does not exist.';
+                    // appendChild(admin_data.message);
                     // Error Handling Here
                     console.log(admin_data.message);
                 }
