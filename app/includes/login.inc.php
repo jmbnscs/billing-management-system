@@ -19,12 +19,20 @@ if ($e = curl_error($ch))
 else
 {
     $data = json_decode($resp, true);
-    
-    if ($data['admin_password'] ===  $admin_password) {
-        echo json_encode(
-            $data
-        );
-    } // You can extend the conditions here thru else if and change the message
+    if ($data['message'] === 'success') {
+        if ($data['admin_password'] ===  $admin_password) {
+            echo json_encode(
+                $data
+            );
+        } // You can extend the conditions here thru else if and change the message
+        else {
+            echo json_encode(
+                array (
+                    'message' => 'failed'
+                )
+            );
+        }
+    }
     else {
         echo json_encode(
             array (
@@ -32,6 +40,8 @@ else
             )
         );
     }
+    
+    
 }
 
 curl_close($ch);
