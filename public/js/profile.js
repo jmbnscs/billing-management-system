@@ -6,6 +6,7 @@ const change_password = document.getElementById('change-password');
 // On Boot Load
 $(document).ready( () => {
     displayData();
+
 });
 
 // Display Data

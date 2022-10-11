@@ -1,5 +1,9 @@
 const DIR_API = 'http://localhost/gstech_api/api/';
 const admin_id = sessionStorage.getItem('admin_id');
+// const nav = document.querySelector('nav-link').onclick( () => {
+//     nav.classList.remove('collapsed');
+//     console.log(nav.classList);
+// });
 
 // On Boot Load
 $(document).ready( () => {
