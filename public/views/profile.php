@@ -159,6 +159,8 @@
                   <!-- Change Password Form -->
                   <form id="change-password">
 
+                    <input type="text" id="admin_password" hidden>
+
                     <div class="row mb-3">
                       <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Current Password</label>
                       <div class="col-md-8 col-lg-9">
@@ -183,6 +185,7 @@
                     <div class="text-center">
                       <button type="submit" class="btn btn-primary">Change Password</button>
                     </div>
+
                   </form><!-- End Change Password Form -->
 
                 </div>

@@ -1,8 +1,13 @@
 const DIR_API = 'http://localhost/gstech_api/api/';
 const admin_id = sessionStorage.getItem('admin_id');
-var user_level_id;
-// var admin_data;
 
+// On Boot Load
+$(document).ready( () => {
+    setDefaults();
+    setToastr();
+});
+
+// Get Data
 async function getAdminData(admin_id) {
     let url = DIR_API + 'admin/read_single.php?admin_id=' + admin_id;
     try {
@@ -13,6 +18,7 @@ async function getAdminData(admin_id) {
     }
 }
 
+// Get User Level
 async function getUserLevel(user_id) {
     let url = DIR_API + 'user_level/read_single.php?user_id=' + user_id;
     try {
@@ -23,30 +29,15 @@ async function getUserLevel(user_id) {
     }
 }
 
-function logout() {
-    sessionStorage.clear();
-    $.ajax({
-        url: '../../app/includes/logout.inc.php',
-        cache: false,
-        success: function() {
-            window.location.replace('../views/login.php');
-        },
-        error: function (xhr, status, error) {
-            console.error(xhr)
-        }
-    });
-}
-
+// Display Default Data
 async function setDefaults () {
-    let admin_data = await getAdminData(admin_id);
-    const full_name = admin_data.first_name + ' ' + admin_data.last_name;
-    user_level_id = admin_data.user_level_id;
-    let user_id = await getUserLevel(user_level_id);
+    const admin_data = await getAdminData(admin_id);
+    const user_id = await getUserLevel(admin_data.user_level_id);
 
     const profile = document.getElementById('profile').children;
     const child = profile[0].children;
 
-    child[0].innerHTML = full_name;
+    child[0].innerHTML = admin_data.first_name + ' ' + admin_data.last_name;
     child[1].innerHTML = user_id.user_role;
 
     if (admin_data.user_level_id == 3) {
@@ -63,7 +54,41 @@ async function setDefaults () {
     display_name[1].innerHTML = admin_data.first_name;
 }
 
-$(document).ready( () => {
-    setDefaults();
-});
+// Logout Session
+function logout() {
+    sessionStorage.clear();
+    $.ajax({
+        url: '../../app/includes/logout.inc.php',
+        cache: false,
+        success: function() {
+            window.location.replace('../views/login.php');
+        },
+        error: function (xhr, status, error) {
+            console.error(xhr)
+        }
+    });
+}
+
+function setToastr() {
+    toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": false,
+        "rtl": false,
+        "positionClass": "toast-bottom-center",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": 300,
+        "hideDuration": 1000,
+        "timeOut": 5000,
+        "extendedTimeOut": 1000,
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+      }
+}
+
+
 

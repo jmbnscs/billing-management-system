@@ -2,20 +2,19 @@ const overview = document.getElementById('profile-overview').children;
 const edit = document.getElementById('edit-profile');
 const edit_profile = document.getElementById('edit-form');
 const change_password = document.getElementById('change-password');
-var admin_data;
-var user_level;
-var level;
 
 // On Boot Load
 $(document).ready( () => {
     displayData();
 });
 
+// Display Data
 async function displayData() {
     const data = await getAdminData(admin_id);
     const user = await getUserLevel(data.user_level_id);
     $(".profile-card h2").html(data.first_name + ' ' + data.last_name);
     $(".profile-card h3").html(user.user_role);
+    document.getElementById('admin_password').value = data.admin_password;
     
     for (var i = 0; i < overview.length; i++) {
         // console.log(overview[i]);
@@ -63,6 +62,7 @@ async function displayEditData () {
     document.getElementById('edit-emp-date').value = data.employment_date;
 }
 
+// API Updates
 async function updateAdmin() {
     // Fetch Data
     const admin_email = $('#edit-email').val();
@@ -93,17 +93,46 @@ async function updateAdmin() {
 
 async function changePassword() {
     // Fetch Data
+    const admin_password = document.getElementById('admin_password').value;
     const currentPassword = $('#currentPassword').val();
     const newPassword = $('#newPassword').val();
     const renewPassword = $('#renewPassword').val();
 
-    console.log(currentPassword);
+    const url = DIR_API + 'admin/update_password.php';
+
+    if (currentPassword == admin_password) {
+        if (newPassword == renewPassword) {
+            const changeResponse = await fetch(url, {
+                method : 'POST',
+                headers : {
+                    'Content-Type' : 'application/json'
+                },
+                body : JSON.stringify({
+                    'admin_id' : admin_id,
+                    'admin_password' : newPassword
+                })
+            });
+
+            const content = await changeResponse.json();
+            
+            if (content.message = 'Password Updated') {
+                toastr.success(content.message);
+                // location.reload();
+                setTimeout(function(){
+                    window.location.reload();
+                 }, 2000);
+            }
+        }
+        else {
+            toastr.error('New Password do not match.');
+        }
+    }
+    else {
+        toastr.error('Current Password do not match.');
+    }
 }
 
-
-
 // Form Submits -- onclick Triggers
-
 edit.onclick = () => {displayEditData()};
 
 edit_profile.onsubmit = (e) => {
