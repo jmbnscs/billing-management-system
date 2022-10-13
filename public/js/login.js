@@ -11,6 +11,7 @@ const error = document.getElementById('error');
 $(document).ready(function () {
 
     'use strict';
+    
 
     error.classList.add('hide-error');
     // removeAllChildNodes(error);
@@ -64,6 +65,8 @@ function removeAllChildNodes(parent) {
         parent.removeChild(parent.firstChild);
     }
 }
+
+
 
 $(function () {
     $('form').on('submit', function(e) {

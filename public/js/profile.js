@@ -1,15 +1,21 @@
 const overview = document.getElementById('profile-overview').children;
-var full_name;
-var admin_data;
-var user_level;
-var level;
+const edit = document.getElementById('edit-profile');
+const edit_profile = document.getElementById('edit-form');
+const change_password = document.getElementById('change-password');
 
+// On Boot Load
+$(document).ready( () => {
+    displayData();
+
+});
+
+// Display Data
 async function displayData() {
     const data = await getAdminData(admin_id);
     const user = await getUserLevel(data.user_level_id);
-    full_name = data.first_name + ' ' + data.last_name;
-    $(".profile-card h2").html(full_name);
+    $(".profile-card h2").html(data.first_name + ' ' + data.last_name);
     $(".profile-card h3").html(user.user_role);
+    document.getElementById('admin_password').value = data.admin_password;
     
     for (var i = 0; i < overview.length; i++) {
         // console.log(overview[i]);
@@ -17,7 +23,7 @@ async function displayData() {
         // console.log(row);
         for (var j = 0; j < row.length; j++) {
             if (row[j].id == 'full_name') {
-                row[j].innerHTML = full_name;
+                row[j].innerHTML = data.first_name + ' ' + data.last_name;
             }
             else if (row[j].id == 'email') {
                 row[j].innerHTML =  data.admin_email;
@@ -47,6 +53,95 @@ async function displayData() {
     }
 }
 
-$(document).ready( () => {
-    displayData();
-});
+async function displayEditData () {
+    const data = await getAdminData(admin_id);
+    document.getElementById('fullName').value = data.first_name + ' ' + data.last_name; 
+    document.getElementById('edit-email').value = data.admin_email;
+    document.getElementById('edit-number').value = data.mobile_number;
+    document.getElementById('edit-bday').value = data.birthdate;
+    document.getElementById('edit-address').value = data.address;
+    document.getElementById('edit-emp-date').value = data.employment_date;
+}
+
+// API Updates
+async function updateAdmin() {
+    // Fetch Data
+    const admin_email = $('#edit-email').val();
+    const mobile_number = $('#edit-number').val();
+    const address = $('#edit-address').val();
+
+    let url = DIR_API + 'admin/update.php';
+
+    const rawResponse = await fetch(url, {
+        method : 'POST',
+        headers : {
+            'Content-Type' : 'application/json'
+        },
+        body : JSON.stringify({
+            'admin_id' : admin_id,
+            'admin_email' : admin_email,
+            'mobile_number' : mobile_number,
+            'address' : address
+        })
+    });
+
+    const content = await rawResponse.json();
+    
+    if (content.message = 'Admin Updated') {
+        location.reload();
+    }
+}
+
+async function changePassword() {
+    // Fetch Data
+    const admin_password = document.getElementById('admin_password').value;
+    const currentPassword = $('#currentPassword').val();
+    const newPassword = $('#newPassword').val();
+    const renewPassword = $('#renewPassword').val();
+
+    const url = DIR_API + 'admin/update_password.php';
+
+    if (currentPassword == admin_password) {
+        if (newPassword == renewPassword) {
+            const changeResponse = await fetch(url, {
+                method : 'POST',
+                headers : {
+                    'Content-Type' : 'application/json'
+                },
+                body : JSON.stringify({
+                    'admin_id' : admin_id,
+                    'admin_password' : newPassword
+                })
+            });
+
+            const content = await changeResponse.json();
+            
+            if (content.message = 'Password Updated') {
+                toastr.success(content.message);
+                // location.reload();
+                setTimeout(function(){
+                    window.location.reload();
+                 }, 2000);
+            }
+        }
+        else {
+            toastr.error('New Password do not match.');
+        }
+    }
+    else {
+        toastr.error('Current Password do not match.');
+    }
+}
+
+// Form Submits -- onclick Triggers
+edit.onclick = () => {displayEditData()};
+
+edit_profile.onsubmit = (e) => {
+    e.preventDefault();
+    updateAdmin();
+};
+
+change_password.onsubmit = (e) => {
+    e.preventDefault();
+    changePassword();
+}

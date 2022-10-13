@@ -1,7 +1,17 @@
 const DIR_API = 'http://localhost/gstech_api/api/';
 const admin_id = sessionStorage.getItem('admin_id');
-var user_level_id;
+// const nav = document.querySelector('nav-link').onclick( () => {
+//     nav.classList.remove('collapsed');
+//     console.log(nav.classList);
+// });
 
+// On Boot Load
+$(document).ready( () => {
+    setDefaults();
+    setToastr();
+});
+
+// Get Data
 async function getAdminData(admin_id) {
     let url = DIR_API + 'admin/read_single.php?admin_id=' + admin_id;
     try {
@@ -12,6 +22,7 @@ async function getAdminData(admin_id) {
     }
 }
 
+// Get User Level
 async function getUserLevel(user_id) {
     let url = DIR_API + 'user_level/read_single.php?user_id=' + user_id;
     try {
@@ -22,6 +33,32 @@ async function getUserLevel(user_id) {
     }
 }
 
+// Display Default Data
+async function setDefaults () {
+    const admin_data = await getAdminData(admin_id);
+    const user_id = await getUserLevel(admin_data.user_level_id);
+
+    const profile = document.getElementById('profile').children;
+    const child = profile[0].children;
+
+    child[0].innerHTML = admin_data.first_name + ' ' + admin_data.last_name;
+    child[1].innerHTML = user_id.user_role;
+
+    if (admin_data.user_level_id == 3) {
+        const navbar = document.getElementById('sidebar-nav').children;
+        for (var i = 0; i < navbar.length; i++) {
+            if (navbar[i].id == 'hide') {
+                navbar[i].classList.remove('hide');
+            }
+        }
+    }
+
+    const display = document.getElementById('displayName').children;
+    const display_name = display[0].children;
+    display_name[1].innerHTML = admin_data.first_name;
+}
+
+// Logout Session
 function logout() {
     sessionStorage.clear();
     $.ajax({
@@ -36,32 +73,26 @@ function logout() {
     });
 }
 
-async function setDefaults () {
-    let admin_data = await getAdminData(admin_id);
-    const full_name = admin_data.first_name + ' ' + admin_data.last_name;
-    user_level_id = admin_data.user_level_id;
-    let user_id = await getUserLevel(user_level_id);
-
-    const profile = document.getElementById('profile').children;
-    const child = profile[0].children;
-
-    child[0].innerHTML = full_name;
-    child[1].innerHTML = user_id.user_role;
-
-    if (admin_data.user_level_id == 2) {
-        const navbar = document.getElementById('sidebar-nav').children;
-        for (var i = 0; i < navbar.length; i++) {
-            if (navbar[i].id == 'hide') {
-                navbar[i].classList.remove('hide');
-            }
-        }
-    }
-
-    const display = document.getElementById('displayName').children;
-    const display_name = display[0].children;
-    display_name[1].innerHTML = admin_data.first_name;
+function setToastr() {
+    toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": false,
+        "rtl": false,
+        "positionClass": "toast-bottom-center",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": 300,
+        "hideDuration": 1000,
+        "timeOut": 5000,
+        "extendedTimeOut": 1000,
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+      }
 }
 
-$(document).ready( () => {
-    setDefaults();
-});
+
+
