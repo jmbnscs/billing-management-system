@@ -1016,6 +1016,33 @@ h6 {
 }
 
 /*--------------------------------------------------------------
+# Admin / Add New Admin Page
+--------------------------------------------------------------*/
+.admin .admin-card {
+  background-color: #4397D0;
+  border-radius: 2vh;
+}
+
+.admin .admin-card h2 {
+  letter-spacing: 7px;
+  font-size: 30px;
+  font-weight: 700;
+  color: #FFFF;
+  margin: 10px 0 0 0;
+}
+
+.admin form label {
+  font-weight: 600;
+}
+
+.admin .admin_submit_btn button{
+  margin-top: 2vh;
+  height: 7vh;
+  font-size: large;
+  letter-spacing: 2px;
+}
+
+/*--------------------------------------------------------------
 # Profie Page
 --------------------------------------------------------------*/
 .profile .profile-card img {
