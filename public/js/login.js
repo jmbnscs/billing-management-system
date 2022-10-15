@@ -11,9 +11,8 @@ const error = document.getElementById('error');
 $(document).ready(function () {
 
     'use strict';
-    
 
-    error.classList.add('hide-error');
+    //error.classList.add('hide-error');
     // removeAllChildNodes(error);
 
     // Detect browser for css purpose --> Not sure ako dito, Para san?
@@ -66,15 +65,13 @@ function removeAllChildNodes(parent) {
     }
 }
 
-
+var attempts = 0;
 
 $(function () {
     $('form').on('submit', function(e) {
         e.preventDefault();
         const admin_username = $('#admin_username').val();
         const admin_password = $('#admin_password').val();
-
-        error.classList.add('hide-error');
 
         // @Alfredo
         $.ajax({
@@ -87,21 +84,53 @@ $(function () {
             cache: false,
             success: function(data) {
                 const admin_data = JSON.parse(data);
-                if (admin_data.message == 'success') {
+                if (admin_data.message == 'Success') {
                     const url = '../views/dashboard.php';
                     sessionStorage.setItem("admin_id", admin_data.admin_id);
+                    sessionStorage.setItem("admin_password", admin_data.admin_password);
                     window.location.replace(url);
                 }
-                else if (admin_data.message == 'failed') {
-                    // error.classList.add('hide-error');
-                    const admin_data = JSON.parse(data);
-                    error.classList.remove('hide-error');
-                    // error.insertAdjacentText('beforeend', 'Username does not exist.');
-                    // error.innerHTML += '<i class="bi bi-exclamation-octagon me-1"></i>'
-                    error.innerHTML = 'Username does not exist.';
-                    // appendChild(admin_data.message);
-                    // Error Handling Here
-                    console.log(admin_data.message);
+                else if (admin_data.message == 'Wrong Password') {
+                    if (admin_data.login_attempts == 2) {
+                        let message = (3 - admin_data.login_attempts) + " attempt remaining."
+                        setToastr(admin_data.message, message, "warning");
+                    }
+                    else if (admin_data.login_attempts >= 3) {
+                        let message = "Please contact system administrator."
+                        setToastr("5 seconds lockout", message, "error");
+                        $('#submit').prop('disabled', true);
+                        $('#submit').css('background-color', '#808080');
+                        setTimeout(function() {
+                              $('#submit').prop('disabled', false);
+                              $('#submit').css('background-color', '#4397d0');
+                        }, 5000);
+                    }
+                    else {
+                        let message = (3 - admin_data.login_attempts) + " Attempts Remaining."
+                        setToastr(admin_data.message, message, "warning");
+                    }
+                }
+                else {
+                    attempts += 1;
+                    if (attempts == 8) {
+                        let message = (9 - attempts) + " Attempt Remaining."
+                        setToastr(admin_data.message, message, "warning");
+                    }
+                    else if (attempts >= 9) {
+                        let message = "No more attempts remaining."
+                        setToastr("5 seconds lockout", message, "error");
+                        $('#submit').prop('disabled', true);
+                        $('#submit').css('background-color', '#808080');
+                        setTimeout(function() {
+                              $('#submit').prop('disabled', false);
+                              $('#submit').css('background-color', '#4397d0');
+                        }, 5000);
+                        attempts = 0;
+                    }
+                    else {
+                        let message = (9 - attempts) + " Attempts Remaining."
+                        setToastr(admin_data.message, message, "warning");
+                    }
                 }
             },
             error: function (xhr, status, error) {
@@ -110,3 +139,33 @@ $(function () {
         });
     });
 });
+
+function setToastr(title, message, type) {
+    toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": false,
+        "positionClass": "toast-bottom-right",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+      };
+
+      if (type == "error") {
+        toastr.error(message, title);
+      }
+      else if (type == "success") {
+        toastr.success(message, title);
+      }
+      else {
+        toastr.warning(message, title);
+      }
+}
