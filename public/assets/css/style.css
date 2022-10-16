@@ -688,7 +688,7 @@ h6 {
 }
 
 .sidebar-nav .nav-heading {
-  font-size: 11px;
+  font-size: 15px;
   text-transform: uppercase;
   color: #899bbd;
   font-weight: 600;
@@ -698,7 +698,7 @@ h6 {
 .sidebar-nav .nav-link {
   display: flex;
   align-items: center;
-  font-size: 15px;
+  font-size: 17px;
   font-weight: 600;
   color: #4154f1;
   transition: 0.3;
@@ -708,7 +708,7 @@ h6 {
 }
 
 .sidebar-nav .nav-link i {
-  font-size: 16px;
+  font-size: 25px;
   margin-right: 10px;
   color: #4154f1;
 }
@@ -749,7 +749,7 @@ h6 {
 .sidebar-nav .nav-content a {
   display: flex;
   align-items: center;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
   color: #012970;
   transition: 0.3;
@@ -1016,7 +1016,35 @@ h6 {
 }
 
 /*--------------------------------------------------------------
-# Profie Page
+# Customers / Add New Account Page
+--------------------------------------------------------------*/
+.customers .customers-card {
+  background-color: #4397D0;
+  border-radius: 2vh;
+}
+
+.customers .customers-card h2 {
+  letter-spacing: 7px;
+  font-size: 30px;
+  font-weight: 700;
+  color: #FFFF;
+  margin: 10px 0 0 0;
+}
+
+.customers form label {
+  font-weight: 600;
+}
+
+.customers .customer_submit_btn button{
+  margin-top: 2vh;
+  height: 7vh;
+  font-size: large;
+  letter-spacing: 2px;
+}
+
+
+/*--------------------------------------------------------------
+# Profile Page
 --------------------------------------------------------------*/
 .profile .profile-card img {
   max-width: 120px;
@@ -1263,3 +1291,4 @@ h6 {
   font-size: 13px;
   color: #012970;
 }
+
