@@ -24,10 +24,13 @@ if ($data['message'] === 'Success') {
     } 
     else {
         $resp_add = curl_request("update_add_attempts");
+        if(($data['login_attempts'] >= 9) && ($data['admin_status_id'] === 3)) {
+            $resp_status = curl_request("update_locked_status");
+        }
         echo json_encode(
             array (
                 'login_attempts' => $data['login_attempts'],
-                'message' => 'Wrong Password'
+                'message' => 'Invalid Credentials'
             )
         );
     }
@@ -35,7 +38,7 @@ if ($data['message'] === 'Success') {
 else {
     echo json_encode(
         array (
-            'message' => 'Account does not exist'
+            'message' => 'Invalid Credentials'
         )
     );
 }

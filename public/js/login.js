@@ -65,7 +65,7 @@ function removeAllChildNodes(parent) {
     }
 }
 
-var attempts = 0;
+var attempts = 3;
 
 $(function () {
     $('form').on('submit', function(e) {
@@ -84,52 +84,61 @@ $(function () {
             cache: false,
             success: function(data) {
                 const admin_data = JSON.parse(data);
-                if (admin_data.message == 'Success') {
+                if (admin_data.message === 'Success') {
                     const url = '../views/dashboard.php';
                     sessionStorage.setItem("admin_id", admin_data.admin_id);
                     sessionStorage.setItem("admin_password", admin_data.admin_password);
+                    sessionStorage.setItem("admin_status_id", admin_data.admin_status_id);
                     window.location.replace(url);
                 }
-                else if (admin_data.message == 'Wrong Password') {
-                    if (admin_data.login_attempts == 2) {
-                        let message = (3 - admin_data.login_attempts) + " attempt remaining."
-                        setToastr(admin_data.message, message, "warning");
-                    }
-                    else if (admin_data.login_attempts >= 3) {
-                        let message = "Please contact system administrator."
-                        setToastr("5 seconds lockout", message, "error");
-                        $('#submit').prop('disabled', true);
-                        $('#submit').css('background-color', '#808080');
-                        setTimeout(function() {
-                              $('#submit').prop('disabled', false);
-                              $('#submit').css('background-color', '#4397d0');
-                        }, 5000);
-                    }
-                    else {
-                        let message = (3 - admin_data.login_attempts) + " Attempts Remaining."
-                        setToastr(admin_data.message, message, "warning");
-                    }
-                }
                 else {
-                    attempts += 1;
-                    if (attempts == 8) {
-                        let message = (9 - attempts) + " Attempt Remaining."
-                        setToastr(admin_data.message, message, "warning");
-                    }
-                    else if (attempts >= 9) {
-                        let message = "No more attempts remaining."
-                        setToastr("5 seconds lockout", message, "error");
+                    if (admin_data.login_attempts >= 8) {
+                        let message = "Please contact the system administrator."
+                        setToastr("Your account is under lockout", message, "error");
                         $('#submit').prop('disabled', true);
                         $('#submit').css('background-color', '#808080');
                         setTimeout(function() {
-                              $('#submit').prop('disabled', false);
-                              $('#submit').css('background-color', '#4397d0');
+                                $('#submit').prop('disabled', false);
+                                $('#submit').css('background-color', '#4397d0');
                         }, 5000);
-                        attempts = 0;
+                        attempts = 3;
                     }
                     else {
-                        let message = (9 - attempts) + " Attempts Remaining."
-                        setToastr(admin_data.message, message, "warning");
+                        --attempts;
+                        if ((admin_data.login_attempts == 5) && (attempts <= 0)){
+                            let message = "3 attempts remaining before lockout."
+                            setToastr("Warning", message, "error");
+                            $('#submit').prop('disabled', true);
+                            $('#submit').css('background-color', '#808080');
+                            setTimeout(function() {
+                                    $('#submit').prop('disabled', false);
+                                    $('#submit').css('background-color', '#4397d0');
+                            }, 5000);
+                            attempts = 3;
+                        }
+                        else if (admin_data.login_attempts == 5){
+                            let message = "3 attempts remaining before lockout."
+                            setToastr("Warning", message, "error");
+                        }
+                        else if (attempts <= 0) {
+                            let message = "Please wait for 5 minutes to resume login."
+                            setToastr("Login Page Temporarily Disabled", message, "error");
+                            $('#submit').prop('disabled', true);
+                            $('#submit').css('background-color', '#808080');
+                            setTimeout(function() {
+                                    $('#submit').prop('disabled', false);
+                                    $('#submit').css('background-color', '#4397d0');
+                            }, 5000);
+                            attempts = 3;
+                        }
+                        else if (attempts == 1) {
+                            let message = attempts + " attempt remaining.";
+                            setToastr(admin_data.message, message, "warning");
+                        }
+                        else {
+                            let message = attempts + " attempts remaining."
+                            setToastr(admin_data.message, message, "warning");
+                        }
                     }
                 }
             },
