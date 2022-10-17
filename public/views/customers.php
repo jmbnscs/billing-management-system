@@ -10,12 +10,12 @@
         <table id="example" class="display table table-bordered" style="width:100%">
             <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>Position</th>
-                    <th>Office</th>
-                    <th>Age</th>
-                    <th>Start date</th>
-                    <th>Salary</th>
+                    <th>Account ID</th>
+                    <th>Client Name</th>
+                    <th>Address</th>
+                    <th>Mobile Number</th>
+                    <th>Email</th>
+                    <th>GSTech ID</th>
                 </tr>
             </thead>
 
@@ -45,16 +45,6 @@
                     <td>$86,000</td>
                 </tr>
             </tbody>
-            <tfoot>
-                <tr>
-                    <th>Name</th>
-                    <th>Position</th>
-                    <th>Office</th>
-                    <th>Age</th>
-                    <th>Start date</th>
-                    <th>Salary</th>
-                </tr>
-            </tfoot>
         </table>
     </div>
   </div><!-- End Default Card -->

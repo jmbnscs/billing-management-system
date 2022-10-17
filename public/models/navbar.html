@@ -4,24 +4,24 @@
     <ul class="sidebar-nav" id="sidebar-nav">
   
       <li class="nav-item">
-        <a class="nav-link collapsed" href="dashboard.php">
+        <a class="nav-link collapsed" href="dashboard.php" id="nav-dashboard">
           <i class="bi bi-grid"></i>
           <span>Dashboard</span>
         </a>
       </li><!-- End Dashboard Nav -->
 
       <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+        <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#" id="drop-components">
           <i class="bi bi-people"></i><span>Customers</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
-            <a href="../views/customers.php">
+            <a href="../views/customers.php" id="nav-customers">
               <i class="bi bi-circle"></i><span>Customer List</span>
             </a>
           </li>
           <li>
-            <a href="#">
+            <a href="../views/customers_add.php"  id="nav-customers_add">
               <i class="bi bi-circle"></i><span>Add New Account</span>
             </a>
           </li>
@@ -29,27 +29,27 @@
       </li><!-- End Customers Nav -->
 
       <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
+        <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#" id="drop-forms">
           <i class="bi bi-file-earmark"></i><span>Invoice</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
-            <a href="#">
+            <a href="../views/invoice.php"  id="nav-invoice">
               <i class="bi bi-circle"></i><span>View Invoices</span>
             </a>
           </li>
           <li>
-            <a href="#">
+            <a href="invoice_payments.php" id="nav-invoice_payments">
               <i class="bi bi-circle"></i><span>Payment Records</span>
             </a>
           </li>
           <li>
-            <a href="#">
+            <a href="invoice_prorate.php" id="nav-invoice_prorate">
               <i class="bi bi-circle"></i><span>Prorate Charges</span>
             </a>
           </li>
           <li>
-            <a href="#">
+            <a href="invoice_payments_add.php" id="nav-invoice_payments_add">
               <i class="bi bi-circle"></i><span>Add Payment Record</span>
             </a>
           </li>
@@ -57,17 +57,17 @@
       </li><!-- End Invoice Nav -->
 
       <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
+        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#" id="drop-tables">
           <i class="bi bi-wallet2"></i><span>Plans</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
-            <a href="#">
+            <a href="../views/plans.php"  id="nav-plans">
               <i class="bi bi-circle"></i><span>View Plans</span>
             </a>
           </li>
           <li>
-            <a href="../views/add_new_plan.php">
+            <a href="#">
               <i class="bi bi-circle"></i><span>Add New Plan</span>
             </a>
           </li>
@@ -75,27 +75,27 @@
       </li><!-- End Plans Nav -->
 
       <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#">
+        <a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#" id="drop-charts">
           <i class="bi bi-inboxes"></i><span>Tickets</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="charts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
-            <a href="#">
+            <a href="../views/tickets.php"  id="nav-tickets">
               <i class="bi bi-circle"></i><span>Active Tickets</span>
             </a>
           </li>
           <li>
-            <a href="#">
+            <a href="../views/tickets_resolved.php"  id="nav-tickets_resolved">
               <i class="bi bi-circle"></i><span>Resolved Tickets</span>
             </a>
           </li>
           <li>
-            <a href="#">
+            <a href="../views/tickets_categories.php"  id="nav-tickets_categories">
               <i class="bi bi-circle"></i><span>Active Ticket Categories</span>
             </a>
           </li>
           <li>
-            <a href="../views/create_a_ticket.php">
+            <a href="#">
               <i class="bi bi-circle"></i><span>Create a Ticket</span>
             </a>
           </li>
@@ -103,17 +103,17 @@
       </li><!-- End Tickets Nav -->
 
       <li class="nav-item hide" id="hide">
-        <a class="nav-link collapsed" data-bs-target="#icons-nav" data-bs-toggle="collapse" href="#">
+        <a class="nav-link collapsed" data-bs-target="#icons-nav" data-bs-toggle="collapse" href="#" id="drop-icons">
           <i class="ri ri-admin-line"></i><span>Admins</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="icons-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
-            <a href="#">
+            <a href="../views/admins.php"  id="nav-admins">
               <i class="bi bi-circle"></i><span>View Admins</span>
             </a>
           </li>
           <li>
-            <a href="../views/add_new_admin.php">
+            <a href="#">
               <i class="bi bi-circle"></i><span>Add New Admin</span>
             </a>
           </li>
@@ -123,7 +123,7 @@
       <li class="nav-heading">Pages</li>
   
       <li class="nav-item">
-        <a class="nav-link collapsed " href="profile.php">
+        <a class="nav-link collapsed " href="profile.php" id="nav-profile">
           <i class="bi bi-person"></i>
           <span>Profile</span>
         </a>
