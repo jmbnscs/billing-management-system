@@ -1032,10 +1032,12 @@ h6 {
 }
 
 .customers form label {
+  border: 2px solid red;
   font-weight: 600;
+  color: rgba(1, 41, 112, 0.6);
 }
 
-.customers .customer_submit_btn button{
+.customers .customer_submit_btn button {
   margin-top: 2vh;
   height: 7vh;
   font-size: large;
@@ -1291,4 +1293,3 @@ h6 {
   font-size: 13px;
   color: #012970;
 }
-

@@ -5,11 +5,10 @@
 <main id="main" class="main">
 
 <div class="pagetitle">
-  <h1>Add New Account</h1>
+  <h1>Customers</h1>
   <nav>
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="dashboard.php">Home</a></li>
-      <li class="breadcrumb-item">Customers</li>
       <li class="breadcrumb-item active">Add New Account</li>
     </ol>
   </nav>
@@ -17,25 +16,12 @@
 
 <section class="section customers">
   <div class="row">
-    <div class="col-mb-4">
-
-      <div class="card">
-        <div class="card-body customers-card pt-4 d-flex flex-column align-items-center">
-
-          <!-- <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle"> -->
-          <h2>Add New Account</h2>
-          <h3></h3>
-        </div>
-      </div>
-
-    </div>
-
     <div class="col-mb-8">
 
       <div class="card">
         <div class="card-body pt-4">
             
-        <form>
+        <form >
                 <div class="row mb-3">
                     <label for="first_name" class="col-sm-2 col-form-label">First Name</label>
                     <div class="col-sm-10">
@@ -46,7 +32,7 @@
                 <div class="row mb-3">
                     <label for="middle_name" class="col-sm-2 col-form-label">Middle Name</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="middle_name" required>
+                        <input type="text" class="form-control" id="middle_name">
                     </div>
                 </div>
         
@@ -97,11 +83,11 @@
                     <div class="col-sm-10">
                         <select id="plan_name" class="form-select" required>
                             <option selected>Subscription</option>
-                            <option value="Plan 100">Plan 100</option>
-                            <option value="Plan 1250">Plan 1250</option>
-                            <option value="Plan 1500">Plan 1500</option>
-                            <option value="Plan 1899">Plan 1899</option>
-                            <option value="Plan 2250-Business Plan">Plan 2250-Business Plan</option>
+                            <option>Plan 100</option>
+                            <option>Plan 1250</option>
+                            <option>Plan 1500</option>
+                            <option>Plan 1899</option>
+                            <option>Plan 2250-Business Plan</option>
                         </select>
                     </div>
                 </div>
@@ -111,11 +97,11 @@
                     <div class="col-sm-10">
                         <select id="plan_id" class="form-select" required>
                             <option selected>Plan</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
                         </select>
                     </div>
                 </div>
@@ -125,8 +111,8 @@
                     <div class="col-sm-10">
                         <select id="connection_id" class="form-select" required>
                             <option selected>Connection</option>
-                            <option value=2>OLT</option>
-                            <option value=1>PPPOE</option>
+                            <option>OLT</option>
+                            <option>PPPOE</option>
                         </select>
                     </div>
                 </div>
@@ -136,16 +122,16 @@
                     <div class="col-sm-10">
                         <select id="area_id" class="form-select" required>
                             <option selected>Area</option>
-                            <option value="1">Area I</option>
-                            <option value="2">Area II</option>
-                            <option value="3">Area III</option>
-                            <option value="4">Area IV</option>
-                            <option value="5">Area V</option>
-                            <option value="6">Area VI</option>
-                            <option value="7">Area VII</option>
-                            <option value="8">Area VIII</option>
-                            <option value="9">Area IX</option>
-                            <option value="10">Area X</option>
+                            <option>Area I</option>
+                            <option>Area II</option>
+                            <option>Area III</option>
+                            <option>Area IV</option>
+                            <option>Area V</option>
+                            <option>Area VI</option>
+                            <option>Area VII</option>
+                            <option>Area VIII</option>
+                            <option>Area IX</option>
+                            <option>Area X</option>
                         </select>
                     </div>
                 </div>
@@ -164,8 +150,8 @@
                     </div>
                 </div>
 
-                <div class ="d-grid gap-2 col-6 mx-auto customer_submit_btn">
-                    <button type="submit" class="btn btn-outline-primary">Save Account</button>
+                <div class ="text-center">
+                    <button type="submit" class="btn btn-primary">Save Account</button>
                 </div>
 
             </form>
