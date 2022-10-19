@@ -125,3 +125,40 @@ function setToastrArgs(msg, title) {
       toastr.error(msg, title);
     }
 
+// Active NavBar Config
+$(() => {
+    const path = location.pathname.split('/')[4];
+    const id = 'nav-' + path.split('.')[0];
+
+    if (id == 'nav-dashboard' || id == 'nav-profile') {
+        document.getElementById(id).classList.remove('collapsed');
+    }
+    else {
+        console.log(id);
+        if (id == 'nav-customers' || id == 'nav-customers_add') {
+            document.getElementById('drop-components').classList.remove('collapsed');
+            document.getElementById('components-nav').classList.add('show');
+            document.getElementById(id).classList.add('active');
+        }
+        else if (id == 'nav-invoice' || id == 'nav-invoice_payments' || id == 'nav-invoice_prorate' || id == 'nav-invoice_payments_add') {
+            document.getElementById('drop-forms').classList.remove('collapsed');
+            document.getElementById('forms-nav').classList.add('show');
+            document.getElementById(id).classList.add('active');
+        }
+        else if (id == 'nav-plans' || id == 'nav-plans_add') {
+            document.getElementById('drop-tables').classList.remove('collapsed');
+            document.getElementById('tables-nav').classList.add('show');
+            document.getElementById(id).classList.add('active');
+        }
+        else if (id == 'nav-tickets' || id == 'nav-tickets_resolved' || id == 'nav-tickets_categories' || id == 'nav-tickets_create') {
+            document.getElementById('drop-charts').classList.remove('collapsed');
+            document.getElementById('charts-nav').classList.add('show');
+            document.getElementById(id).classList.add('active');
+        }
+        else if (id == 'nav-admins' || id == 'nav-admins_add') {
+            document.getElementById('drop-icons').classList.remove('collapsed');
+            document.getElementById('icons-nav').classList.add('show');
+            document.getElementById(id).classList.add('active');
+        }
+    }
+  });
