@@ -3,8 +3,21 @@ const admin_id = sessionStorage.getItem('admin_id');
 
 // On Boot Load
 $(document).ready( () => {
+    if (sessionStorage.admin_status_id == 3) {
+        let msg = "Please contact the system administrator.";
+        let title = "Your account has been locked!"
+        setToastrArgs(msg, title);
+    }
+
+    //to hash condition
+    if (sessionStorage.admin_password.includes("_478324")) { 
+        let msg = "Please change your password.";
+        let title = "Important!"
+        setToastrArgs(msg, title);
+    }
+
     setDefaults();
-    setToastr();
+    //setToastr();
 });
 
 // Get Data
@@ -90,40 +103,25 @@ function setToastr() {
       }
 }
 
-// Active NavBar Config
-$(() => {
-    const path = location.pathname.split('/')[4];
-    const id = 'nav-' + path.split('.')[0];
+function setToastrArgs(msg, title) {
+    toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": false,
+        "positionClass": "toast-bottom-center",
+        "preventDuplicates": true,
+        "onclick": null,
+        "showDuration": "2000",
+        "hideDuration": "0",
+        "timeOut": "0",
+        "extendedTimeOut": "0",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+      };
+      
+      toastr.error(msg, title);
+    }
 
-    if (id == 'nav-dashboard' || id == 'nav-profile') {
-        document.getElementById(id).classList.remove('collapsed');
-    }
-    else {
-        console.log(id);
-        if (id == 'nav-customers' || id == 'nav-customers_add') {
-            document.getElementById('drop-components').classList.remove('collapsed');
-            document.getElementById('components-nav').classList.add('show');
-            document.getElementById(id).classList.add('active');
-        }
-        else if (id == 'nav-invoice' || id == 'nav-invoice_payments' || id == 'nav-invoice_prorate' || id == 'nav-invoice_payments_add') {
-            document.getElementById('drop-forms').classList.remove('collapsed');
-            document.getElementById('forms-nav').classList.add('show');
-            document.getElementById(id).classList.add('active');
-        }
-        else if (id == 'nav-plans' || id == 'nav-plans_add') {
-            document.getElementById('drop-tables').classList.remove('collapsed');
-            document.getElementById('tables-nav').classList.add('show');
-            document.getElementById(id).classList.add('active');
-        }
-        else if (id == 'nav-tickets' || id == 'nav-tickets_resolved' || id == 'nav-tickets_categories' || id == 'nav-tickets_create') {
-            document.getElementById('drop-charts').classList.remove('collapsed');
-            document.getElementById('charts-nav').classList.add('show');
-            document.getElementById(id).classList.add('active');
-        }
-        else if (id == 'nav-admins' || id == 'nav-admins_add') {
-            document.getElementById('drop-icons').classList.remove('collapsed');
-            document.getElementById('icons-nav').classList.add('show');
-            document.getElementById(id).classList.add('active');
-        }
-    }
-  });
