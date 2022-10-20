@@ -33,13 +33,13 @@ if ($data['message'] === 'Success') {
         $resp_update = curl_request("update_attempts");
     } 
     else {
-        $resp_add = curl_request("update_add_attempts");
         // Where login_attempts from $data is 8, but user attempts is now 9 
         if(($data['login_attempts'] >= 8) && ($data['admin_status_id'] === 1)) {
             $resp_status = curl_request("update_locked_status");
             echo_json('locked', $data);
         }
         else if ($data['admin_status_id'] === 1) {
+            $resp_add = curl_request("update_add_attempts");
             echo_json('Invalid Credentials', $data);
         }
         else if ($data['admin_status_id'] === 2) {
@@ -48,8 +48,11 @@ if ($data['message'] === 'Success') {
         else if ($data['admin_status_id'] === 3) {
             echo_json('locked', $data);
         }
-        else {
+        else if ($data['admin_status_id'] === 4) {
             echo_json('resigned', $data);
+        }
+        else {
+            $resp_add = curl_request("update_add_attempts");
         }
     }
 }
@@ -60,23 +63,3 @@ else {
         )
     );
 }
-
-/*
-// Inititiate curl
-$ch = require 'curl.init.php';
-
-# GET REQUEST
-$url = DIR_API . "admin/login.php?admin_username=" . $admin_username;
-curl_setopt($ch, CURLOPT_URL, $url);
-*/
-
-/*if ($e = curl_error($ch))
-{
-    echo $e;
-}
-else
-{
-
-}
-*/
-// curl_close($ch);

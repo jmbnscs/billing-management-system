@@ -117,6 +117,7 @@ async function changePassword() {
             const content = await changeResponse.json();
             
             if (content.message = 'Password Updated') {
+                sessionStorage.setItem('admin_password', newPassword);
                 toastr.success(content.message);
                 // location.reload();
                 setTimeout(function(){
