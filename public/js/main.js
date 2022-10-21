@@ -11,7 +11,6 @@ $(document).ready( () => {
         setToastrArgs(msg, title);
     }
 
-    // console.log(hashed);
     if (hashed == 0) { 
         let msg = "Please change your password.";
         let title = "Important!"
@@ -138,7 +137,6 @@ $(() => {
         document.getElementById(id).classList.remove('collapsed');
     }
     else {
-        console.log(id);
         if (id == 'nav-customers' || id == 'nav-customers_add') {
             document.getElementById('drop-components').classList.remove('collapsed');
             document.getElementById('components-nav').classList.add('show');
