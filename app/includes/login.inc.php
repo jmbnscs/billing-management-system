@@ -1,4 +1,5 @@
 <?php
+
 // Fetch POST Data
 $admin_username = $_POST['admin_username'];
 $admin_password = $_POST['admin_password'];
@@ -26,7 +27,7 @@ $resp = curl_request("login");
 
 $data = json_decode($resp, true);
 if ($data['message'] === 'Success') {
-    if (($data['admin_password'] ===  $admin_password) && (($data['admin_status_id'] === 1) || ($data['admin_status_id'] === 3))) {
+    if (($data['admin_password'] ===  $admin_password) && (($data['admin_status_id'] === 1))) {
         echo json_encode(
             $data
         );

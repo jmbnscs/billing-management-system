@@ -1,11 +1,4 @@
-const error = document.getElementById('error');
-
-/* NOTE FROM KL:
-    Hindi ko sure itong JS kinopya ko laang sya then may binago ng kaunti 
-    hehehe pero working sya.
-    ang need ko dito sa login.js is yung label effect, reload page siguro
-    tsaka form switch =)
-*/
+// Frontend JS
 
 /*global $, document, window, setTimeout, navigator, console, location*/
 $(document).ready(function () {
@@ -14,10 +7,7 @@ $(document).ready(function () {
 
     initializeAttempts();
 
-    //error.classList.add('hide-error');
-    // removeAllChildNodes(error);
-
-    // Detect browser for css purpose --> Not sure ako dito, Para san?
+    // Detect browser for css purpose
     if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
         $('.form form .label').addClass('fontSwitch');
     }
@@ -61,14 +51,7 @@ $(document).ready(function () {
 });
 
 // -------------------------------- Backend JS --------------------------------
-function disableLoginButton() {
-    $('#submit').prop('disabled', true);
-    $('#submit').css('background-color', '#808080');
-    setTimeout(function() {
-            $('#submit').prop('disabled', false);
-            $('#submit').css('background-color', '#4397d0');
-    }, 5000);
-}
+const error = document.getElementById('error');
 
 $(function () {
     $('form').on('submit', function(e) {
@@ -87,7 +70,6 @@ $(function () {
         // console.log(localStorage.getItem('attempts'));
         // console.log(localStorage.getItem('admin_username'));
 
-        // @Alfredo
         $.ajax({
             type: 'post',
             url: '../../app/includes/login.inc.php',
@@ -99,28 +81,12 @@ $(function () {
             success: function(data) {
                 const admin_data = JSON.parse(data);
                 if (admin_data.message === 'Success') {
-                    if (admin_data.admin_status_id === 2) {
-                        let message = "Please contact the system administrator.";
-                        let title = "The account has been suspended.";
-                        setToastr(title, message, "warning");
-                    }
-                    else if (admin_data.admin_status_id === 3) {
-                        let message = "Please contact the system administrator.";
-                        let title = "The account has been locked.";
-                        setToastr(title, message, "warning");
-                    }
-                    else if (admin_data.admin_status_id === 4) {
-                        let message = "Please contact the system administrator.";
-                        let title = "The account has been resigned.";
-                        setToastr(title, message, "warning");
-                    }
-                    else {
-                        const url = '../views/dashboard.php';
+                    const url = '../views/dashboard.php';
                         sessionStorage.setItem("admin_id", admin_data.admin_id);
                         sessionStorage.setItem("admin_password", admin_data.admin_password);
                         sessionStorage.setItem("admin_status_id", admin_data.admin_status_id);
+                        sessionStorage.setItem("hashed", admin_data.hashed);
                         window.location.replace(url);
-                    }
                 }
                 else {
                     if ((admin_data.login_attempts >= 8) || ((admin_data.admin_status_id > 1) && (admin_data.admin_status_id < 5))) {
@@ -179,6 +145,15 @@ $(function () {
         });
     });
 });
+
+function disableLoginButton() {
+    $('#submit').prop('disabled', true);
+    $('#submit').css('background-color', '#808080');
+    setTimeout(function() {
+            $('#submit').prop('disabled', false);
+            $('#submit').css('background-color', '#4397d0');
+    }, 5000);
+}
 
 function initializeAttempts() {
     if (localStorage.getItem('admin_username') == null) {

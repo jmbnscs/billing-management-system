@@ -7,6 +7,12 @@ const change_password = document.getElementById('change-password');
 $(document).ready( () => {
     displayData();
 
+    if (hashed == 0) {
+        document.getElementById('password-change').click();
+    }
+    else {
+        document.getElementById('overview-profile').click();
+    }
 });
 
 // Display Data
@@ -118,6 +124,7 @@ async function changePassword() {
             
             if (content.message = 'Password Updated') {
                 sessionStorage.setItem('admin_password', newPassword);
+                sessionStorage.setItem('hashed', 1);
                 toastr.success(content.message);
                 // location.reload();
                 setTimeout(function(){

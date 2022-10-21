@@ -1,23 +1,25 @@
 const DIR_API = 'http://localhost/gstech_api/api/';
 const admin_id = sessionStorage.getItem('admin_id');
+const admin_status_id = sessionStorage.getItem('admin_status_id');
+const hashed = sessionStorage.getItem('hashed');
 
 // On Boot Load
 $(document).ready( () => {
-    if (sessionStorage.admin_status_id == 3) {
+    if (admin_status_id == 3) {
         let msg = "Please contact the system administrator.";
         let title = "Your account has been locked!"
         setToastrArgs(msg, title);
     }
 
-    //to hash condition
-    if (sessionStorage.admin_password.includes("_478324")) { 
+    // console.log(hashed);
+    if (hashed == 0) { 
         let msg = "Please change your password.";
         let title = "Important!"
         setToastrArgs(msg, title);
     }
 
     setDefaults();
-    //setToastr();
+    setToastr();
 });
 
 // Get Data
@@ -70,6 +72,7 @@ async function setDefaults () {
 // Logout Session
 function logout() {
     sessionStorage.clear();
+    localStorage.clear();
     $.ajax({
         url: '../../app/includes/logout.inc.php',
         cache: false,
@@ -82,6 +85,7 @@ function logout() {
     });
 }
 
+// Toastr Configs
 function setToastr() {
     toastr.options = {
         "closeButton": true,

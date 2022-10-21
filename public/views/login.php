@@ -60,16 +60,7 @@
 
                             <div class="CTA">
                                 <input type="submit" id="submit" value="Login" />
-                                <!-- <button type="submit" id="submit" name="submit">Login</button> -->
                             </div>
-                            
-                            
-                            <!-- <div class="alert alert-danger alert-dismissible fade show " role="alert" id="error"> -->
-                                <!-- <i class="bi bi-exclamation-octagon me-1"></i> -->
-                                <!-- <p>A simple danger alert with icon—check it out!</p> -->
-                                <!-- A simple danger alert with icon—check it out! -->
-                                <!-- <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> -->
-                            <!-- </div> -->
 
                         </form>
 
