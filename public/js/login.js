@@ -1,11 +1,4 @@
-const error = document.getElementById('error');
-
-/* NOTE FROM KL:
-    Hindi ko sure itong JS kinopya ko laang sya then may binago ng kaunti 
-    hehehe pero working sya.
-    ang need ko dito sa login.js is yung label effect, reload page siguro
-    tsaka form switch =)
-*/
+// Frontend JS
 
 /*global $, document, window, setTimeout, navigator, console, location*/
 $(document).ready(function () {
@@ -14,10 +7,7 @@ $(document).ready(function () {
 
     initializeAttempts();
 
-    //error.classList.add('hide-error');
-    // removeAllChildNodes(error);
-
-    // Detect browser for css purpose --> Not sure ako dito, Para san?
+    // Detect browser for css purpose
     if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
         $('.form form .label').addClass('fontSwitch');
     }
@@ -61,23 +51,7 @@ $(document).ready(function () {
 });
 
 // -------------------------------- Backend JS --------------------------------
-function removeAllChildNodes(parent) {
-    while (parent.firstChild) {
-        parent.removeChild(parent.firstChild);
-    }
-}
-
-function disableLoginButton() {
-    $('#submit').prop('disabled', true);
-    $('#submit').css('background-color', '#808080');
-    setTimeout(function() {
-            $('#submit').prop('disabled', false);
-            $('#submit').css('background-color', '#4397d0');
-    }, 5000);
-}
-
-// localStorage.setItem('attempts', 3);
-// var attempts;
+const error = document.getElementById('error');
 
 $(function () {
     $('form').on('submit', function(e) {
@@ -85,9 +59,17 @@ $(function () {
         const admin_username = $('#admin_username').val();
         const admin_password = $('#admin_password').val();
 
-        console.log(localStorage.getItem('attempts'));
+        if (localStorage.getItem('admin_username') == null) {
+            localStorage.setItem('admin_username', admin_username);
+        }
+        else if (localStorage.getItem('admin_username') != admin_username) {
+            localStorage.setItem('attempts', 3);
+            localStorage.setItem('admin_username', admin_username);
+        }
 
-        // @Alfredo
+        // console.log(localStorage.getItem('attempts'));
+        // console.log(localStorage.getItem('admin_username'));
+
         $.ajax({
             type: 'post',
             url: '../../app/includes/login.inc.php',
@@ -100,14 +82,13 @@ $(function () {
                 const admin_data = JSON.parse(data);
                 if (admin_data.message === 'Success') {
                     const url = '../views/dashboard.php';
-                    sessionStorage.setItem("admin_id", admin_data.admin_id);
-                    sessionStorage.setItem("admin_password", admin_data.admin_password);
-                    sessionStorage.setItem("admin_status_id", admin_data.admin_status_id);
-                    window.location.replace(url);
+                        sessionStorage.setItem("admin_id", admin_data.admin_id);
+                        sessionStorage.setItem("admin_password", admin_data.admin_password);
+                        sessionStorage.setItem("admin_status_id", admin_data.admin_status_id);
+                        sessionStorage.setItem("hashed", admin_data.hashed);
+                        window.location.replace(url);
                 }
                 else {
-                    localStorage.setItem('attempts', localStorage.getItem('attempts') - 1);
-                    
                     if ((admin_data.login_attempts >= 8) || ((admin_data.admin_status_id > 1) && (admin_data.admin_status_id < 5))) {
                         if (localStorage.getItem('attempts') <= 0) {
                             let message = "The login page is disabled for 5 minutes.";
@@ -130,6 +111,7 @@ $(function () {
                         }
                     }
                     else {
+                        localStorage.setItem('attempts', localStorage.getItem('attempts') - 1);
                         if ((admin_data.login_attempts === 5) && (localStorage.getItem('attempts') <= 0)) {
                             let message = "3 attempts remaining before lockout.";
                             setToastr("Warning", message, "error");
@@ -164,8 +146,20 @@ $(function () {
     });
 });
 
+function disableLoginButton() {
+    $('#submit').prop('disabled', true);
+    $('#submit').css('background-color', '#808080');
+    setTimeout(function() {
+            $('#submit').prop('disabled', false);
+            $('#submit').css('background-color', '#4397d0');
+    }, 5000);
+}
+
 function initializeAttempts() {
-    if (localStorage.getItem('attempts') == null || localStorage.getItem('attempts') == 3) {
+    if (localStorage.getItem('admin_username') == null) {
+        localStorage.setItem('attempts', 3);
+    }
+    if (localStorage.getItem('attempts') == null) {
         localStorage.setItem('attempts', 3);
     }
 }
