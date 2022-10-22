@@ -2,6 +2,7 @@ const add_admin = document.getElementById('add-admin');
 
 $(document).ready( () => {
     displayUserLevels();
+    console.log('test.');
 });
 
 async function addAdmin() {
