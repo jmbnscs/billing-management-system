@@ -6,10 +6,11 @@ $(document).ready(function () {
         $("#account_id").attr("value", result);
     });
 
-    displaySubscription();
+    displayPlan();
     displayConnection();
     displayAccountStatus();
     displayArea();
+    displayInstallation();
 });
 
 const getID = async () => {
@@ -60,6 +61,8 @@ async function addCustomer() {
     const account_status_id = $('#account_status_id').val();
     const area_id = $('#area_id').val();
 
+    const install_type_id = $('#install_type_id').val();
+
     let url = DIR_API + 'account/create.php';
     const addAccountResponse = await fetch(url, {
         method : 'POST',
@@ -94,24 +97,51 @@ async function addCustomer() {
         })
     });
 
+    url = DIR_API + 'installation/create.php';
+    const addInstallationResponse = await fetch(url, {
+        method : 'POST',
+        headers : {
+            'Content-Type' : 'application/json'
+        },
+        body : JSON.stringify({
+            'install_type_id' : install_type_id,
+            'account_id' : account_id
+        })
+    });
+
+    url = DIR_API + 'ratings/create.php';
+    const addRatingsResponse = await fetch(url, {
+        method : 'POST',
+        headers : {
+            'Content-Type' : 'application/json'
+        },
+        body : JSON.stringify({
+            'account_id' : account_id
+        })
+    });
+
     const account_content = await addAccountResponse.json();
     const customer_content = await addCustomerResponse.json();
+    const installation_content = await addInstallationResponse.json();
+    const ratings_content = await addRatingsResponse.json();
     
-    if (account_content.message == 'Account Created' && customer_content.message == 'Customer Created') {
+    if (account_content.message == 'Account Created' && customer_content.message == 'Customer Created' 
+        && installation_content.message == 'Installation Created' && ratings_content.message == 'Ratings Created') {
         toastr.success('Customer Created Successfully.');
         setTimeout(function(){
             window.location.reload();
          }, 2000);
     }
     else {
-        toastr.error(account_content.message + " " + customer_content.message);
+        toastr.error(account_content.message + " " + customer_content.message + " " 
+        + installation_content.message + " " + ratings_content.message);
         setTimeout(function(){
             window.location.reload();
          }, 2000);
     }
 }
 
-async function displaySubscription() {
+async function displayPlan() {
     let url = DIR_API + 'plan/read.php';
     let plan;
     try {
@@ -122,7 +152,7 @@ async function displaySubscription() {
     }
 
     for (var i = 0; i < plan.length; i++) {
-        var opt = `<option value='${plan[i].plan_id}'>${plan[i].plan_name}</option>`;
+        var opt = `<option value='${plan[i].plan_id}'>${plan[i].plan_id + " - " + plan[i].plan_name}</option>`;
         $("#plan_id").append(opt);
     }
 }
@@ -172,6 +202,22 @@ async function displayArea() {
     for (var i = 0; i < area.length; i++) {
         var opt = `<option value='${area[i].area_id}'>${area[i].area_name}</option>`;
         $("#area_id").append(opt);
+    }
+}
+
+async function displayInstallation() {
+    let url = DIR_API + 'installation_type/read.php';
+    let install_type;
+    try {
+        let res = await fetch(url);
+        install_type = await res.json();
+    } catch (error) {
+        console.log(error);
+    }
+
+    for (var i = 0; i < install_type.length; i++) {
+        var opt = `<option value='${install_type[i].install_type_id}'>${install_type[i].install_type_name}</option>`;
+        $("#install_type_id").append(opt);
     }
 }
 

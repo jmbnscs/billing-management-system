@@ -93,16 +93,6 @@
                 </div>
 
                 <div class="row mb-3">
-                    <label for="plan_id" class="col-sm-2 col-form-label">Subscription Type</label>
-                    <div class="col-sm-10">
-                        <select id="plan_id" class="form-select" required>
-                            <option selected disabled value="">Select subscription type:</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!--
-                <div class="row mb-3">
                     <label for="plan_id" class="col-sm-2 col-form-label">Plan Type</label>
                     <div class="col-sm-10">
                         <select id="plan_id" class="form-select" required>
@@ -110,7 +100,6 @@
                         </select>
                     </div>
                 </div>
-                -->
 
                 <div class="row mb-3">
                     <label for="connection_id" class="col-sm-2 col-form-label">Connection Type</label>
@@ -139,6 +128,15 @@
                     </div>
                 </div>
         
+                <div class="row mb-3">
+                    <label for="install_type_id" class="col-sm-2 col-form-label">Installation Type</label>
+                    <div class="col-sm-10">
+                        <select id="install_type_id" class="form-select" required>
+                            <option selected disabled value="">Select installation type:</option>
+                        </select>
+                    </div>
+                </div>
+
                 <div class="row mb-3">
                     <label for="account_id" class="col-sm-2 col-form-label">Account ID</label>
                     <div class="col-sm-10">
