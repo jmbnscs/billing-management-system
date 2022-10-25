@@ -35,39 +35,39 @@
       <div class="card">
         <div class="card-body pt-4">
             
-        <form>
+        <form id="add-customer">
                 <div class="row mb-3">
                     <label for="first_name" class="col-sm-2 col-form-label">First Name</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="first_name" required>
+                        <input type="text" class="form-control" id="first_name" placeholder="Ex. Juan" required>
                     </div>
                 </div>
                 
                 <div class="row mb-3">
                     <label for="middle_name" class="col-sm-2 col-form-label">Middle Name</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="middle_name" required>
+                        <input type="text" class="form-control" id="middle_name" placeholder="Ex. Santos">
                     </div>
                 </div>
         
                 <div class="row mb-3">    
                     <label for="last_name" class="col-sm-2 col-form-label">Last Name</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="last_name" required>
+                        <input type="text" class="form-control" id="last_name" placeholder="Ex. Dela Cruz" required>
                     </div>
                 </div>
         
                 <div class="row mb-3">
                     <label for="billing_address" class="col-sm-2 col-form-label">Address</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="billing_address" required>
+                        <textarea class="form-control" id="billing_address" placeholder="Ex. 123 Kapasigan St. Pasig City" required></textarea>
                     </div>
                 </div>
         
                 <div class="row mb-3">
                     <label for="mobile_number" class="col-sm-2 col-form-label">Mobile Number</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="mobile_number" required>
+                        <input type="text" class="form-control" id="mobile_number" placeholder="Ex. 09XXXXXXXXX" pattern="[0]{1}[9]{1}[0-9]{9}" required>
                     </div>
                 </div>
         
@@ -93,59 +93,48 @@
                 </div>
 
                 <div class="row mb-3">
-                    <label for="plan_name" class="col-sm-2 col-form-label">Subscription Type</label>
+                    <label for="plan_id" class="col-sm-2 col-form-label">Subscription Type</label>
                     <div class="col-sm-10">
-                        <select id="plan_name" class="form-select" required>
-                            <option selected>Subscription</option>
-                            <option value="Plan 100">Plan 100</option>
-                            <option value="Plan 1250">Plan 1250</option>
-                            <option value="Plan 1500">Plan 1500</option>
-                            <option value="Plan 1899">Plan 1899</option>
-                            <option value="Plan 2250-Business Plan">Plan 2250-Business Plan</option>
+                        <select id="plan_id" class="form-select" required>
+                            <option selected disabled value="">Select subscription type:</option>
                         </select>
                     </div>
                 </div>
 
+                <!--
                 <div class="row mb-3">
                     <label for="plan_id" class="col-sm-2 col-form-label">Plan Type</label>
                     <div class="col-sm-10">
                         <select id="plan_id" class="form-select" required>
-                            <option selected>Plan</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
+                            <option selected disabled value="">Select plan type:</option>
                         </select>
                     </div>
                 </div>
+                -->
 
                 <div class="row mb-3">
                     <label for="connection_id" class="col-sm-2 col-form-label">Connection Type</label>
                     <div class="col-sm-10">
                         <select id="connection_id" class="form-select" required>
-                            <option selected>Connection</option>
-                            <option value=2>OLT</option>
-                            <option value=1>PPPOE</option>
+                            <option selected disabled value="">Select connection type:</option>
                         </select>
                     </div>
                 </div>
         
                 <div class="row mb-3">
+                    <label for="account_status_id" class="col-sm-2 col-form-label">Account Status</label>
+                    <div class="col-sm-10">
+                        <select id="account_status_id" class="form-select" required>
+                            <option selected disabled value="">Select account status:</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
                     <label for="area_id" class="col-sm-2 col-form-label">Area</label>
                     <div class="col-sm-10">
                         <select id="area_id" class="form-select" required>
-                            <option selected>Area</option>
-                            <option value="1">Area I</option>
-                            <option value="2">Area II</option>
-                            <option value="3">Area III</option>
-                            <option value="4">Area IV</option>
-                            <option value="5">Area V</option>
-                            <option value="6">Area VI</option>
-                            <option value="7">Area VII</option>
-                            <option value="8">Area VIII</option>
-                            <option value="9">Area IX</option>
-                            <option value="10">Area X</option>
+                            <option selected disabled value="">Select area:</option>
                         </select>
                     </div>
                 </div>
@@ -153,7 +142,7 @@
                 <div class="row mb-3">
                     <label for="account_id" class="col-sm-2 col-form-label">Account ID</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="account_id" readonly>
+                        <input type="text" class="form-control" id="account_id" disabled>
                     </div>
                 </div>
         
