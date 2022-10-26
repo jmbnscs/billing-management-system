@@ -56,7 +56,7 @@ async function displayUserLevels() {
         console.log(error);
     }
 
-    for (var i = 2; i < user_levels.length; i++) {
+    for (var i = 1; i < user_levels.length; i++) {
         var opt = `<option value='${user_levels[i].user_id}'>${user_levels[i].user_role}</option>`;
         $("#role").append(opt);
     }
