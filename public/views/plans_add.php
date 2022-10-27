@@ -9,27 +9,13 @@
   <nav>
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="dashboard.html">Home</a></li>
-      <li class="breadcrumb-item">Plans</li>
-      <li class="breadcrumb-item active">Add New Plan</li>
+      <li class="breadcrumb-item active">Plans</li>
     </ol>
   </nav>
 </div><!-- End Page Title -->
 
-<section class="section admin">
+<section class="section plans-add">
   <div class="row">
-    <div class="col-mb-4">
-
-      <div class="card">
-        <div class="card-body admin-card pt-4 d-flex flex-column align-items-center">
-
-          <!-- <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle"> -->
-          <h2>Add New Plan</h2>
-          <h3></h3>
-        </div>
-      </div>
-
-    </div>
-
     <div class="col-mb-8">
 
       <div class="card">
@@ -57,19 +43,23 @@
                     </div>
                 </div>
 
-                <div class="custom-control custom-checkbox">
-                <label for="inclusion" class="col-sm-2 col-form-label">Inclusion(s)</label>
-                    <input type="checkbox" class="custom-control-input" id="inclusion" >
-                    <label class="custom-control-label" for="customCheck">Netflix</label>
-
-                    <input type="checkbox" class="custom-control-input" id="inclusion" >
-                    <label class="custom-control-label" for="customCheck">Fiber Switch</label>
+                <div class="row mb-3">
+                    <label for="inclusion" class="col-sm-2 col-form-label">Inclusion(s)</label>
+                    <div class="col-sm-10">
                     
+                        <select class="form-control selectpicker" multiple aria-label="size 5 select example">
+                          <option>Netflix</option>
+                          <option>Fiber Switch</option>
+                        </select>
+                      
+                    </div>
                 </div>
 
-                <div class ="d-grid gap-2 col-6 mx-auto admin_submit_btn">
-                    <button type="submit" class="btn btn-outline-primary">Save Account</button>
-                </div>
+              <div class ="text-center">
+                <button type="submit" class="btn btn-primary">Submit Plan</button>
+              </div>
+
+
             </form>
 
         </div>
@@ -92,6 +82,12 @@
   <script src="../assets/vendor/simple-datatables/simple-datatables.js"></script>
   <script src="../assets/vendor/tinymce/tinymce.min.js"></script>
   <script src="../assets/vendor/php-email-form/validate.js"></script>
+
+  <!--Dinagdag ko (KL i2)-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/css/bootstrap-select.min.css" integrity="sha512-mR/b5Y7FRsKqrYZou7uysnOdCIJib/7r5QeJMFvLNHNhtye3xJp1TdJVPLtetkukFn227nKpXD9OjUc09lx97Q==" crossorigin="anonymous"
+  referrerpolicy="no-referrer" />
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/js/bootstrap-select.min.js" integrity="sha512-FHZVRMUW9FsXobt+ONiix6Z0tIkxvQfxtCSirkKc5Sb4TKHmqq1dZa8DphF0XqKb3ldLu/wgMa8mT6uXiLlRlw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
   <!-- Template Main JS File -->
   <script src="../assets/js/main.js"></script>

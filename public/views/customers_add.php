@@ -9,65 +9,51 @@
   <nav>
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="dashboard.php">Home</a></li>
-      <li class="breadcrumb-item">Customers</li>
-      <li class="breadcrumb-item active">Add New Account</li>
+      <li class="breadcrumb-item active">Customers</li>
     </ol>
   </nav>
 </div><!-- End Page Title -->
 
-<section class="section customers">
+<section class="section customers-add">
   <div class="row">
-    <div class="col-mb-4">
-
-      <div class="card">
-        <div class="card-body customers-card pt-4 d-flex flex-column align-items-center">
-
-          <!-- <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle"> -->
-          <h2>Add New Account</h2>
-          <h3></h3>
-        </div>
-      </div>
-
-    </div>
-
     <div class="col-mb-8">
 
       <div class="card">
         <div class="card-body pt-4">
             
-        <form id="add-customer">
+        <form >
                 <div class="row mb-3">
                     <label for="first_name" class="col-sm-2 col-form-label">First Name</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="first_name" placeholder="Ex. Juan" required>
+                        <input type="text" class="form-control" id="first_name" required>
                     </div>
                 </div>
                 
                 <div class="row mb-3">
                     <label for="middle_name" class="col-sm-2 col-form-label">Middle Name</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="middle_name" placeholder="Ex. Santos">
+                        <input type="text" class="form-control" id="middle_name">
                     </div>
                 </div>
         
                 <div class="row mb-3">    
                     <label for="last_name" class="col-sm-2 col-form-label">Last Name</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="last_name" placeholder="Ex. Dela Cruz" required>
+                        <input type="text" class="form-control" id="last_name" required>
                     </div>
                 </div>
         
                 <div class="row mb-3">
                     <label for="billing_address" class="col-sm-2 col-form-label">Address</label>
                     <div class="col-sm-10">
-                        <textarea class="form-control" id="billing_address" placeholder="Ex. 123 Kapasigan St. Pasig City" required></textarea>
+                        <textarea type="text" class="form-control" id="billing_address" required></textarea>
                     </div>
                 </div>
         
                 <div class="row mb-3">
                     <label for="mobile_number" class="col-sm-2 col-form-label">Mobile Number</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="mobile_number" placeholder="Ex. 09XXXXXXXXX" pattern="[0]{1}[9]{1}[0-9]{9}" required>
+                        <input type="text" class="form-control" id="mobile_number" required>
                     </div>
                 </div>
         
@@ -93,10 +79,29 @@
                 </div>
 
                 <div class="row mb-3">
+                    <label for="plan_name" class="col-sm-2 col-form-label">Subscription Type</label>
+                    <div class="col-sm-10">
+                        <select id="plan_name" class="form-select" required>
+                            <option selected>Choose Subscription Type</option>
+                            <option>Plan 100</option>
+                            <option>Plan 1250</option>
+                            <option>Plan 1500</option>
+                            <option>Plan 1899</option>
+                            <option>Plan 2250-Business Plan</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
                     <label for="plan_id" class="col-sm-2 col-form-label">Plan Type</label>
                     <div class="col-sm-10">
                         <select id="plan_id" class="form-select" required>
-                            <option selected disabled value="">Select plan type:</option>
+                            <option selected>Choose Plan Type</option>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
                         </select>
                     </div>
                 </div>
@@ -105,42 +110,36 @@
                     <label for="connection_id" class="col-sm-2 col-form-label">Connection Type</label>
                     <div class="col-sm-10">
                         <select id="connection_id" class="form-select" required>
-                            <option selected disabled value="">Select connection type:</option>
+                            <option selected>Choose Connection Type</option>
+                            <option>OLT</option>
+                            <option>PPPOE</option>
                         </select>
                     </div>
                 </div>
         
-                <div class="row mb-3">
-                    <label for="account_status_id" class="col-sm-2 col-form-label">Account Status</label>
-                    <div class="col-sm-10">
-                        <select id="account_status_id" class="form-select" required>
-                            <option selected disabled value="">Select account status:</option>
-                        </select>
-                    </div>
-                </div>
-
                 <div class="row mb-3">
                     <label for="area_id" class="col-sm-2 col-form-label">Area</label>
                     <div class="col-sm-10">
                         <select id="area_id" class="form-select" required>
-                            <option selected disabled value="">Select area:</option>
+                            <option selected>Choose Area</option>
+                            <option>Area I</option>
+                            <option>Area II</option>
+                            <option>Area III</option>
+                            <option>Area IV</option>
+                            <option>Area V</option>
+                            <option>Area VI</option>
+                            <option>Area VII</option>
+                            <option>Area VIII</option>
+                            <option>Area IX</option>
+                            <option>Area X</option>
                         </select>
                     </div>
                 </div>
         
                 <div class="row mb-3">
-                    <label for="install_type_id" class="col-sm-2 col-form-label">Installation Type</label>
-                    <div class="col-sm-10">
-                        <select id="install_type_id" class="form-select" required>
-                            <option selected disabled value="">Select installation type:</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="row mb-3">
                     <label for="account_id" class="col-sm-2 col-form-label">Account ID</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="account_id" disabled>
+                        <input type="text" class="form-control" id="account_id" readonly>
                     </div>
                 </div>
         
@@ -151,8 +150,8 @@
                     </div>
                 </div>
 
-                <div class ="d-grid gap-2 col-6 mx-auto customer_submit_btn">
-                    <button type="submit" class="btn btn-outline-primary">Save Account</button>
+                <div class ="text-center">
+                    <button type="submit" class="btn btn-primary">Save Account</button>
                 </div>
 
             </form>
