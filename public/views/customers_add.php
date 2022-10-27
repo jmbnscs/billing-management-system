@@ -21,46 +21,46 @@
       <div class="card">
         <div class="card-body pt-4">
             
-        <form >
-                <div class="row mb-3">
+        <form id="add-customer">
+        <div class="row mb-3">
                     <label for="first_name" class="col-sm-2 col-form-label">First Name</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="first_name" required>
+                        <input type="text" class="form-control" id="first_name" placeholder="Ex. Juan" required>
                     </div>
                 </div>
                 
                 <div class="row mb-3">
                     <label for="middle_name" class="col-sm-2 col-form-label">Middle Name</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="middle_name">
+                        <input type="text" class="form-control" id="middle_name" placeholder="Ex. Santos">
                     </div>
                 </div>
         
                 <div class="row mb-3">    
                     <label for="last_name" class="col-sm-2 col-form-label">Last Name</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="last_name" required>
+                        <input type="text" class="form-control" id="last_name" placeholder="Ex. Dela Cruz" required>
                     </div>
                 </div>
         
                 <div class="row mb-3">
                     <label for="billing_address" class="col-sm-2 col-form-label">Address</label>
                     <div class="col-sm-10">
-                        <textarea type="text" class="form-control" id="billing_address" required></textarea>
+                        <textarea class="form-control" id="billing_address" placeholder="Ex. 123 Kapasigan St. Pasig City" required></textarea>
                     </div>
                 </div>
         
                 <div class="row mb-3">
                     <label for="mobile_number" class="col-sm-2 col-form-label">Mobile Number</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="mobile_number" required>
+                        <input type="text" class="form-control" id="mobile_number" placeholder="Ex. 09XXXXXXXXX" pattern="[0]{1}[9]{1}[0-9]{9}" required>
                     </div>
                 </div>
         
                 <div class="row mb-3">
                     <label for="email" class="col-sm-2 col-form-label">Email</label>
                     <div class="col-sm-10">
-                        <input type="email" class="form-control" placeholder="name@example.com" id="email" required>
+                        <input type="email" class="form-control" placeholder="Ex. name@example.com" id="email" required>
                     </div>
                 </div>
         
@@ -79,29 +79,10 @@
                 </div>
 
                 <div class="row mb-3">
-                    <label for="plan_name" class="col-sm-2 col-form-label">Subscription Type</label>
-                    <div class="col-sm-10">
-                        <select id="plan_name" class="form-select" required>
-                            <option selected>Choose Subscription Type</option>
-                            <option>Plan 100</option>
-                            <option>Plan 1250</option>
-                            <option>Plan 1500</option>
-                            <option>Plan 1899</option>
-                            <option>Plan 2250-Business Plan</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="row mb-3">
-                    <label for="plan_id" class="col-sm-2 col-form-label">Plan Type</label>
+                    <label for="plan_id" class="col-sm-2 col-form-label">Subscription Plan</label>
                     <div class="col-sm-10">
                         <select id="plan_id" class="form-select" required>
-                            <option selected>Choose Plan Type</option>
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
+                            <option selected disabled>Choose Subscription Plan</option>
                         </select>
                     </div>
                 </div>
@@ -110,9 +91,16 @@
                     <label for="connection_id" class="col-sm-2 col-form-label">Connection Type</label>
                     <div class="col-sm-10">
                         <select id="connection_id" class="form-select" required>
-                            <option selected>Choose Connection Type</option>
-                            <option>OLT</option>
-                            <option>PPPOE</option>
+                            <option selected disabled value="">Choose Connection Type</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label for="account_status_id" class="col-sm-2 col-form-label">Account Status</label>
+                    <div class="col-sm-10">
+                        <select id="account_status_id" class="form-select" required>
+                            <option selected disabled value="">Choose Account Status</option>
                         </select>
                     </div>
                 </div>
@@ -121,17 +109,16 @@
                     <label for="area_id" class="col-sm-2 col-form-label">Area</label>
                     <div class="col-sm-10">
                         <select id="area_id" class="form-select" required>
-                            <option selected>Choose Area</option>
-                            <option>Area I</option>
-                            <option>Area II</option>
-                            <option>Area III</option>
-                            <option>Area IV</option>
-                            <option>Area V</option>
-                            <option>Area VI</option>
-                            <option>Area VII</option>
-                            <option>Area VIII</option>
-                            <option>Area IX</option>
-                            <option>Area X</option>
+                            <option selected disabled value="">Choose Area</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label for="install_type_id" class="col-sm-2 col-form-label">Installation Type</label>
+                    <div class="col-sm-10">
+                        <select id="install_type_id" class="form-select" required>
+                            <option selected disabled value="">Choose Installation Type</option>
                         </select>
                     </div>
                 </div>
@@ -143,15 +130,15 @@
                     </div>
                 </div>
         
-                <div class="row mb-3">
+                <!-- <div class="row mb-3">
                     <label for="customer_password" class="col-sm-2 col-form-label">Password</label>
                     <div class="col-sm-10">
                         <input type="customer_password" class="form-control" placeholder="Password" id="password" disabled>
                     </div>
-                </div>
+                </div> -->
 
                 <div class ="text-center">
-                    <button type="submit" class="btn btn-primary">Save Account</button>
+                    <button type="submit" class="btn btn-primary">Create Account</button>
                 </div>
 
             </form>
