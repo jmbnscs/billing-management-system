@@ -8,34 +8,20 @@
   <h1>Create a Ticket</h1>
   <nav>
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="dashboard.html">Home</a></li>
-      <li class="breadcrumb-item">Tickets</li>
-      <li class="breadcrumb-item active">Create a Ticket</li>
+      <li class="breadcrumb-item"><a href="dashboard.php">Home</a></li>
+      <li class="breadcrumb-item active">Tickets</li>
     </ol>
   </nav>
 </div><!-- End Page Title -->
 
-<section class="section admin">
+<section class="section ticket-create">
   <div class="row">
-    <div class="col-mb-4">
-
-      <div class="card">
-        <div class="card-body admin-card pt-4 d-flex flex-column align-items-center">
-
-          <!-- <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle"> -->
-          <h2>Create a Ticket</h2>
-          <h3></h3>
-        </div>
-      </div>
-
-    </div>
-
     <div class="col-mb-8">
 
       <div class="card">
         <div class="card-body pt-4">
             
-        <form>
+        <form >
                 <div class="row mb-3">
                     <label for="ticket_num" class="col-sm-2 col-form-label">Ticket Number</label>
                     <div class="col-sm-10">
@@ -46,45 +32,57 @@
                 <div class="row mb-3">
                     <label for="concern_id" class="col-sm-2 col-form-label">Concern</label>
                     <div class="col-sm-10">
-                        <select id="plan_name" class="form-select" required>
+                        <select id="concern_id" class="form-select" required>
                             <option selected>Select the type of concern:</option>
-                            <option value = 1>Network Interruption</option>
-                            <option value = 2>Subscription Change</option>
-                            <option value = 3>Allocation Correction</option>
+                            <option>Network Interruption</option>
+                            <option>Subscription Change</option>
+                            <option>Allocation Correction</option>
                         </select>
                     </div>
                 </div>
-
+        
                 <div class="row mb-3">    
                     <label for="concern_details" class="col-sm-2 col-form-label">Concern Details</label>
                     <div class="col-sm-10">
                     <textarea class="form-control" id="concern_details" rows="4" placeholder="Enter concern details..." required></textarea>
                     </div>
                 </div>
-        
+
                 <div class="row mb-3">
                     <label for="date_filed" class="col-sm-2 col-form-label">Date Filed</label>
                     <div class="col-sm-10">
-                        <input type="date" class="form-control" id="date_filed" required>
+                        <input type="date" class="form-control" id="date_filed">
+                    </div>
+                </div>
+        
+                <div class="row mb-3">
+                    <label for="duration" class="col-sm-2 col-form-label">Duration</label>
+                    <div class="col-sm-10">
+                        <input type="datetime" class="form-control" id="duration" placeholder="HH:MM:SS">
                     </div>
                 </div>
 
                 <div class="row mb-3">
                     <label for="account_id" class="col-sm-2 col-form-label">Account ID</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="account_id" required>
+                        <input type="text" class="form-control" id="account_id">
                     </div>
                 </div>
 
+                <!--Dropdown for Admin ID - Assign  to... -->
                 <div class="row mb-3">
-                    <label for="admin_id" class="col-sm-2 col-form-label">Admin ID</label>
+                    <label for="admin_id" class="col-sm-2 col-form-label">Assign to</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="admin_id" readonly>
+                        <select id="admin_id" class="form-select" required>
+                            <option selected>Administrator</option>
+                            <option>....</option>
+
+                        </select>
                     </div>
                 </div>
-
-                <div class ="d-grid gap-2 col-6 mx-auto admin_submit_btn">
-                    <button type="submit" class="btn btn-outline-primary">Save Account</button>
+        
+                <div class ="text-center">
+                    <button type="submit" class="btn btn-primary">Submit Ticket</button>
                 </div>
 
             </form>
