@@ -5,6 +5,9 @@
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css">
 
+    <!-- Toastr -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+
     <!-- Local CSS -->
     <link rel="stylesheet" href="../css/login.css">
 </head>
@@ -57,14 +60,6 @@
 
                             <div class="CTA">
                                 <input type="submit" id="submit" value="Login" />
-                                <!-- <button type="submit" id="submit" name="submit">Login</button> -->
-                            </div>
-
-                            <div class="alert alert-danger alert-dismissible fade show " role="alert" id="error">
-                                <!-- <i class="bi bi-exclamation-octagon me-1"></i> -->
-                                <!-- <p>A simple danger alert with icon—check it out!</p> -->
-                                <!-- A simple danger alert with icon—check it out! -->
-                                <!-- <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> -->
                             </div>
 
                         </form>
@@ -104,6 +99,9 @@
 
     <!-- Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Toastr -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
     <!-- Ajax -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>

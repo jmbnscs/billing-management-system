@@ -1,8 +1,22 @@
 const DIR_API = 'http://localhost/gstech_api/api/';
 const admin_id = sessionStorage.getItem('admin_id');
+const admin_status_id = sessionStorage.getItem('admin_status_id');
+const hashed = sessionStorage.getItem('hashed');
 
 // On Boot Load
 $(document).ready( () => {
+    if (admin_status_id == 3) {
+        let msg = "Please contact the system administrator.";
+        let title = "Your account has been locked!"
+        setToastrArgs(msg, title);
+    }
+
+    if (hashed == 0) { 
+        let msg = "Please change your password.";
+        let title = "Important!"
+        setToastrArgs(msg, title);
+    }
+
     setDefaults();
     setToastr();
 });
@@ -57,6 +71,7 @@ async function setDefaults () {
 // Logout Session
 function logout() {
     sessionStorage.clear();
+    localStorage.clear();
     $.ajax({
         url: '../../app/includes/logout.inc.php',
         cache: false,
@@ -69,6 +84,7 @@ function logout() {
     });
 }
 
+// Toastr Configs
 function setToastr() {
     toastr.options = {
         "closeButton": true,
@@ -90,6 +106,28 @@ function setToastr() {
       }
 }
 
+function setToastrArgs(msg, title) {
+    toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": false,
+        "positionClass": "toast-bottom-center",
+        "preventDuplicates": true,
+        "onclick": null,
+        "showDuration": "2000",
+        "hideDuration": "0",
+        "timeOut": "0",
+        "extendedTimeOut": "0",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+      };
+      
+      toastr.error(msg, title);
+    }
+
 // Active NavBar Config
 $(() => {
     const path = location.pathname.split('/')[4];
@@ -99,7 +137,6 @@ $(() => {
         document.getElementById(id).classList.remove('collapsed');
     }
     else {
-        console.log(id);
         if (id == 'nav-customers' || id == 'nav-customers_add') {
             document.getElementById('drop-components').classList.remove('collapsed');
             document.getElementById('components-nav').classList.add('show');

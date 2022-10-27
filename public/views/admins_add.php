@@ -34,8 +34,7 @@
 
       <div class="card">
         <div class="card-body pt-4">
-            
-        <form>
+            <form id="add-admin">
                 <div class="row mb-3">
                     <label for="first_name" class="col-sm-2 col-form-label">First Name</label>
                     <div class="col-sm-10">
@@ -46,7 +45,7 @@
                 <div class="row mb-3">
                     <label for="middle_name" class="col-sm-2 col-form-label">Middle Name</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="middle_name" placeholder="Ex. Santos" required>
+                        <input type="text" class="form-control" id="middle_name" placeholder="Ex. Santos" >
                     </div>
                 </div>
         
@@ -57,17 +56,24 @@
                     </div>
                 </div>
         
-                <div class="row mb-3">
+                <!-- <div class="row mb-3">
                     <label for="admin_username" class="col-sm-2 col-form-label">Username</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="admin_username" placeholder="admin_username" readonly>
+                        <input type="text" class="form-control" id="admin_username" placeholder="admin_username" disabled>
                     </div>
                 </div>
 
                 <div class="row mb-3">
                     <label for="admin_password" class="col-sm-2 col-form-label">Password</label>
                     <div class="col-sm-10">
-                        <input type="customer_password" class="form-control" placeholder="admin_password" id="password" readonly>
+                        <input type="customer_password" class="form-control" placeholder="admin_password" id="password" disabled>
+                    </div>
+                </div> -->
+
+                <div class="row mb-3">
+                    <label for="mobile_number" class="col-sm-2 col-form-label">Mobile Number</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="mobile_number" placeholder="Ex. 09XXXXXXXXX" pattern="[0]{1}[9]{1}[0-9]{9}" required>
                     </div>
                 </div>
         
@@ -84,6 +90,13 @@
                         <input type="date" class="form-control" id="admin_bday" placeholder="Ex. 03/02/2001" required>
                     </div>
                 </div>
+
+                <div class="row mb-3">
+                    <label for="address" class="col-sm-2 col-form-label">Address</label>
+                    <div class="col-sm-10">
+                    <textarea class="form-control" id="address" rows="2" placeholder="Ex. Anonas Street Sta. Mesa Manila" required></textarea>
+                    </div>
+                </div>
         
                 <div class="row mb-3">
                     <label for="employment_date" class="col-sm-2 col-form-label">Employment Date</label>
@@ -96,20 +109,22 @@
                     <label for="role" class="col-sm-2 col-form-label">Admin Level</label>
                     <div class="col-sm-10">
                         <select id="role" class="form-select" required>
-                            <option selected>Select admin level:</option>
-                            <option value = 2>Manager</option>
-                            <option value = 3>Administrator</option>
-                            <option value = 4>Sales Agent</option>
-                            <option value = 5>Technical Support</option>
-                            <option value = 6>Technician</option>
+                            <option selected disabled value="">Select admin level:</option>
                         </select>
                     </div>
                 </div>
 
                 <div class="row mb-3">
+                    <label for="admin_id" class="col-sm-2 col-form-label">Admin ID</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="admin_id" disabled>
+                    </div>
+                </div>
+
+                <!-- <div class="row mb-3">
                     <label for="admin_status" class="col-sm-2 col-form-label">Employment Status</label>
                     <div class="col-sm-10">
-                        <select id="admin_status" class="form-select" required>
+                        <select id="admin_status" class="form-select" >
                             <option selected>Select employment status:</option>
                             <option>Employed</option>
                             <option>Suspended</option>
@@ -117,29 +132,13 @@
                             <option>Resigned</option>
                         </select>
                     </div>
-                </div>
-
-                <div class="row mb-3">
-                    <label for="mobile_number" class="col-sm-2 col-form-label">Mobile Number</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control" id="mobile_number" placeholder="Ex. 09234567891" required>
-                    </div>
-                </div>
-
-                <div class="row mb-3">
-                    <label for="address" class="col-sm-2 col-form-label">Address</label>
-                    <div class="col-sm-10">
-                    <textarea class="form-control" id="address" rows="2" placeholder="Ex. Anonas Street Sta. Mesa Manila" required></textarea>
-                    </div>
-                </div>
+                </div> -->
 
                 <div class ="d-grid gap-2 col-6 mx-auto admin_submit_btn">
-                    <button type="submit" class="btn btn-outline-primary">Save Account</button>
+                    <button type="submit" class="btn btn-outline-primary">Add Account</button>
                 </div>
 
             </form>
-
-
         </div>
       </div>
 
