@@ -152,7 +152,7 @@ async function displayPlan() {
     }
 
     for (var i = 0; i < plan.length; i++) {
-        var opt = `<option value='${plan[i].plan_id}'>${plan[i].plan_id + " - " + plan[i].plan_name}</option>`;
+        var opt = `<option value='${plan[i].plan_id}'>${plan[i].plan_name + " - " + plan[i].bandwidth + "mbps"}</option>`;
         $("#plan_id").append(opt);
     }
 }

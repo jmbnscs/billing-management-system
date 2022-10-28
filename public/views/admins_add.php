@@ -100,6 +100,13 @@
                         </div>
                     </div>
 
+                    <div class="row mb-3">
+                        <label for="admin_id" class="col-sm-2 col-form-label">Admin ID</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="admin_id" disabled>
+                        </div>
+                    </div>
+
                     <!-- <div class="row mb-3">
                         <label for="admin_status" class="col-sm-2 col-form-label">Employment Status</label>
                         <div class="col-sm-10">
