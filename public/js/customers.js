@@ -1,6 +1,12 @@
 const add_customer = document.getElementById('add-customer');
 
 // On Boot Load
+$(() => {
+    if (hashed == 0) { 
+        window.location.replace('../views/profile.php');
+    }
+});
+
 $(document).ready(function () {
     getID().then(result => {
         $("#account_id").attr("value", result);

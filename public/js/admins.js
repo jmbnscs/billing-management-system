@@ -1,5 +1,11 @@
 const add_admin = document.getElementById('add-admin');
 
+$(() => {
+    if (hashed == 0) { 
+        window.location.replace('../views/profile.php');
+    }
+});
+
 $(document).ready( () => {
     getAdminID().then(result => {
         $("#admin_id").attr("value", result);
