@@ -1,6 +1,6 @@
 $(document).ready( function () {
     //to hash condition
-    console.log(hashed);
+    // console.log(hashed);
     if (hashed == 0) { 
         window.location.replace('../views/profile.php');
     }
