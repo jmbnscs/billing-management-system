@@ -48,6 +48,9 @@
                     <div class="col-sm-10">
                     
                         <select class="form-control selectpicker" multiple aria-label="size 5 select example">
+                          <option value="" disabled>Choose Inclusions</option>
+                          <!-- @Alfredo - JS this data from inclusions table -->
+                          <!-- Delete comment once done -->
                           <option>Netflix</option>
                           <option>Fiber Switch</option>
                         </select>

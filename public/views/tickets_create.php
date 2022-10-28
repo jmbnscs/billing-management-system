@@ -74,9 +74,10 @@
                     <label for="admin_id" class="col-sm-2 col-form-label">Assign to</label>
                     <div class="col-sm-10">
                         <select id="admin_id" class="form-select" required>
-                            <option selected>Administrator</option>
+                            <option selected disabled value="">Choose Admin</option>
+                            <!-- @Alfredo - JS this data from user_level (except Manager and Customer) -->
+                            <!-- Delete comment once done -->
                             <option>....</option>
-
                         </select>
                     </div>
                 </div>
