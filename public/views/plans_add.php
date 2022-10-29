@@ -21,7 +21,7 @@
       <div class="card">
         <div class="card-body pt-4">
             
-        <form>
+        <form id="add-plan">
                 <div class="row mb-3">
                     <label for="plan_name" class="col-sm-2 col-form-label">Plan Name</label>
                     <div class="col-sm-10">
@@ -47,12 +47,8 @@
                     <label for="inclusion" class="col-sm-2 col-form-label">Inclusion(s)</label>
                     <div class="col-sm-10">
                     
-                        <select class="form-control selectpicker" multiple aria-label="size 5 select example">
+                        <select class="form-control selectpicker" id="inclusion" multiple aria-label="size 5 select example">
                           <option value="" disabled>Choose Inclusions</option>
-                          <!-- @Alfredo - JS this data from inclusions table -->
-                          <!-- Delete comment once done -->
-                          <option>Netflix</option>
-                          <option>Fiber Switch</option>
                         </select>
                       
                     </div>
