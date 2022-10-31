@@ -1,4 +1,7 @@
 // Frontend JS
+const cb = document.getElementById('remember_me');
+const un = document.getElementById('admin_username');
+const lbl = document.getElementById('un');
 
 /*global $, document, window, setTimeout, navigator, console, location*/
 $(document).ready(function () {
@@ -6,6 +9,22 @@ $(document).ready(function () {
     'use strict';
 
     initializeAttempts();
+
+    // Remember Me
+    $( () => {
+        console.log(localStorage.checked);
+
+        if (localStorage.checked == "true") {
+            un.value = localStorage.un;
+            lbl.classList.add('active');
+            cb.setAttribute("checked", "checked");
+        }
+        else {
+            un.value = "";
+            cb.checked = false;
+        }
+    });
+
 
     // Detect browser for css purpose
     if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
@@ -56,6 +75,7 @@ const error = document.getElementById('error');
 $(function () {
     $('form').on('submit', function(e) {
         e.preventDefault();
+
         const admin_username = $('#admin_username').val();
         const admin_password = $('#admin_password').val();
 
@@ -69,6 +89,17 @@ $(function () {
 
         // console.log(localStorage.getItem('attempts'));
         // console.log(localStorage.getItem('admin_username'));
+
+        console.log(cb.checked);
+
+        if (cb.checked) {
+            localStorage.un = admin_username;
+            localStorage.checked = true;
+        }
+        else {
+            localStorage.un = "";
+            localStorage.checked = false;
+        }
 
         $.ajax({
             type: 'post',
