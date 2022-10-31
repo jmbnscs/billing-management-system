@@ -21,7 +21,7 @@
       <div class="card">
         <div class="card-body pt-4">
             
-        <form >
+        <form id="create-ticket">
                 <div class="row mb-3">
                     <label for="ticket_num" class="col-sm-2 col-form-label">Ticket Number</label>
                     <div class="col-sm-10">
@@ -34,9 +34,6 @@
                     <div class="col-sm-10">
                         <select id="concern_id" class="form-select" required>
                             <option selected>Select the type of concern:</option>
-                            <option>Network Interruption</option>
-                            <option>Subscription Change</option>
-                            <option>Allocation Correction</option>
                         </select>
                     </div>
                 </div>
@@ -55,12 +52,12 @@
                     </div>
                 </div>
         
-                <div class="row mb-3">
+                <!-- <div class="row mb-3">
                     <label for="duration" class="col-sm-2 col-form-label">Duration</label>
                     <div class="col-sm-10">
                         <input type="datetime" class="form-control" id="duration" placeholder="HH:MM:SS">
                     </div>
-                </div>
+                </div> -->
 
                 <div class="row mb-3">
                     <label for="account_id" class="col-sm-2 col-form-label">Account ID</label>
@@ -71,13 +68,10 @@
 
                 <!--Dropdown for Admin ID - Assign  to... -->
                 <div class="row mb-3">
-                    <label for="admin_id" class="col-sm-2 col-form-label">Assign to</label>
+                    <label for="admin_role" class="col-sm-2 col-form-label">Assign to</label>
                     <div class="col-sm-10">
-                        <select id="admin_id" class="form-select" required>
+                        <select id="admin_role" class="form-select" required>
                             <option selected disabled value="">Choose Admin</option>
-                            <!-- @Alfredo - JS this data from user_level (except Manager and Customer) -->
-                            <!-- Delete comment once done -->
-                            <option>....</option>
                         </select>
                     </div>
                 </div>
