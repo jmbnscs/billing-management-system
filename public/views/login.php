@@ -34,7 +34,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label class="label">Username</label>
+                                <label class="label" id="un">Username</label>
                                 <input type="text" name="admin_username" id="admin_username" required>
                             </div>
                                 
@@ -54,7 +54,7 @@
                                         class="form-check-input"
                                         type="checkbox"
                                         value="1"
-                                        id="invalidCheck2">
+                                        id="remember_me">
                                 </div>
                             </div>
 
