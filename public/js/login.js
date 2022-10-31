@@ -12,8 +12,6 @@ $(document).ready(function () {
 
     // Remember Me
     $( () => {
-        console.log(localStorage.checked);
-
         if (localStorage.checked == "true") {
             un.value = localStorage.un;
             lbl.classList.add('active');
