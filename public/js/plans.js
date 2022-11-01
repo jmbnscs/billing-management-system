@@ -6,7 +6,7 @@ $(document).ready(function () {
         setAddPlanPage();
     }
     else {
-        console.log(window.location.pathname);
+        getPlans();
     }
 });
 
@@ -74,6 +74,38 @@ async function addPlan() {
         setTimeout(function(){
             window.location.reload();
          }, 2000);
+    }
+}
+
+// View Plan JS
+async function getPlans () {
+    let url = DIR_API + 'views/plan.php';
+    let plan_data;
+    var t = $('#plan-table').DataTable();
+    try {
+        let res = await fetch(url);
+        plan_data = await res.json();
+    } catch (error) {
+        console.log(error);
+    }
+
+    for (var i = 0; i < plan_data.length; i++) {
+        var tag;
+        if (plan_data[i].status == 'ACTIVE') {
+            tag = 'bg-success';
+        }
+        else {
+            tag = 'bg-danger';
+        }
+        t.row.add($(`
+            <tr>
+                <th scope="row"><a href="#">${plan_data[i].plan_name}</a></th>
+                <td>${plan_data[i].bandwidth} mbps</td>
+                <td>&#8369; ${plan_data[i].price}</a></td>
+                <td>${plan_data[i].inclusion}</td>
+                <td><span class="badge ${tag}">${plan_data[i].status}</span></td>
+            </tr>
+        `)).draw(false);
     }
 }
 

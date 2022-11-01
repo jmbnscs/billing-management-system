@@ -18,17 +18,17 @@
     <div class="card recent-sales overflow-auto">
       <br>
       <div class="card-body">
-        <table class="table table-borderless" id="customer-table">
+        <table class="table table-borderless" id="plan-table">
           <thead>
             <tr>
-              <th scope="col">ID</th>
-              <th scope="col">Customer</th>
-              <th scope="col">Plan</th>
-              <th scope="col">Balance</th>
+              <th scope="col">Plan Name</th>
+              <th scope="col">Bandwidth</th>
+              <th scope="col">Price</th>
+              <th scope="col">Inclusion</th>
               <th scope="col">Status</th>
             </tr>
           </thead>
-          <tbody id="customer-data">
+          <tbody id="plan-data">
           </tbody>
         </table>
 
