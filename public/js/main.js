@@ -1,4 +1,6 @@
 const DIR_API = 'http://localhost/gstech_api/api/';
+const DIR_MAIN = '/billing-management-system/public/';
+const DIR_CUR = window.location.pathname;
 const admin_id = sessionStorage.getItem('admin_id');
 const admin_status_id = sessionStorage.getItem('admin_status_id');
 const hashed = sessionStorage.getItem('hashed');
@@ -20,6 +22,13 @@ $(document).ready( () => {
     setDefaults();
     setToastr();
 });
+
+// Check if Default Password
+function isDefault () {
+    if (hashed == 0) { 
+        window.location.replace('../views/profile.php');
+    }
+}
 
 // Get Data
 async function getAdminData(admin_id) {

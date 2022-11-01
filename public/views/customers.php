@@ -3,62 +3,46 @@
   include '../models/navbar.html'; ?>
 
 <main id="main" class="main">
-  <!-- Default Card -->
-  <div class="card">
-    <div class="card-body">
-      <h5 class="card-title">Default Card</h5>
-        <table id="example" class="display table table-bordered" style="width:100%">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Position</th>
-                    <th>Office</th>
-                    <th>Age</th>
-                    <th>Start date</th>
-                    <th>Salary</th>
-                </tr>
-            </thead>
+  <div class="pagetitle">
+    <h1>Customer List</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="dashboard.php">Home</a></li>
+        <li class="breadcrumb-item active">Customers</li>
+      </ol>
+    </nav>
+  </div><!-- End Page Title -->
 
-            <tbody>
-                <tr>
-                    <td>Tiger Nixon</td>
-                    <td>System Architect</td>
-                    <td>Edinburgh</td>
-                    <td>61</td>
-                    <td>2011-04-25</td>
-                    <td>$320,800</td>
-                </tr>
-                <tr>
-                    <td>Garrett Winters</td>
-                    <td>Accountant</td>
-                    <td>Tokyo</td>
-                    <td>63</td>
-                    <td>2011-07-25</td>
-                    <td>$170,750</td>
-                </tr>
-                <tr>
-                    <td>Ashton Cox</td>
-                    <td>Junior Technical Author</td>
-                    <td>San Francisco</td>
-                    <td>66</td>
-                    <td>2009-01-12</td>
-                    <td>$86,000</td>
-                </tr>
-            </tbody>
-            <tfoot>
-                <tr>
-                    <th>Name</th>
-                    <th>Position</th>
-                    <th>Office</th>
-                    <th>Age</th>
-                    <th>Start date</th>
-                    <th>Salary</th>
-                </tr>
-            </tfoot>
+  <!-- Recent Sales -->
+  <div class="col-12">
+    <div class="card recent-sales overflow-auto">
+
+      <div class="card-body">
+        <table class="table table-borderless" id="customer-table">
+          <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Customer</th>
+              <th scope="col">Plan</th>
+              <th scope="col">Balance</th>
+              <th scope="col">Status</th>
+            </tr>
+          </thead>
+          <tbody id="customer-data">
+            <tr hidden>
+              <th scope="row"><a href="#">#2457</a></th>
+              <td>Brandon Jacob</td>
+              <td><a href="#" class="text-primary">At praesentium minu</a></td>
+              <td>$64</td>
+              <td><span class="badge bg-success">Approved</span></td>
+            </tr>
+          </tbody>
         </table>
+
+      </div>
+
     </div>
-  </div><!-- End Default Card -->
-  
+  </div><!-- End Recent Sales -->
 </main><!-- End #main -->
 
   <!-- Vendor JS Files -->

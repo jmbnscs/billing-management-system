@@ -1,24 +1,51 @@
-const add_customer = document.getElementById('add-customer');
+// On Load
+$(document).ready(function () {
+    isDefault();
 
-// On Boot Load
-$(() => {
-    if (hashed == 0) { 
-        window.location.replace('../views/profile.php');
+    if (DIR_CUR == DIR_MAIN + 'views/customers_add.php') {
+        setAddCustomerPage();
+    }
+    else {
+        getCustomers();
     }
 });
+// View Customer JS
+async function getCustomers () {
+    let url = DIR_API + 'views/customer.php';
+    let customer_data;
+    var t = $('#customer-table').DataTable();
+    try {
+        let res = await fetch(url);
+        customer_data = await res.json();
+    } catch (error) {
+        console.log(error);
+    }
 
-$(document).ready(function () {
-    getID().then(result => {
-        $("#account_id").attr("value", result);
-    });
+    for (var i = 0; i < customer_data.length; i++) {
+        var tag;
+        if (customer_data[i].status == 'VALUED') {
+            tag = 'bg-success';
+        }
+        else {
+            tag = 'bg-danger';
+        }
+        var row = `
+            <tr>
+              <th scope="row"><a href="#">${customer_data[i].account_id}</a></th>
+              <td>${customer_data[i].customer_name}</td>
+              <td><a href="#" class="text-primary">${customer_data[i].plan}</a></td>
+              <td>$${customer_data[i].balance}</td>
+              <td><span class="badge ${tag}">${customer_data[i].status}</span></td>
+            </tr>
+            `;
+        // $("#customer-data").append(row);
+        t.row.add([customer_data[i].account_id, customer_data[i].customer_name, customer_data[i].plan, customer_data[i].balance, customer_data[i].status]).draw(false);
+        // t.row.add(row);
+        // console.log(customer_data[i].account_id);
+    }
+}
 
-    displayPlan();
-    displayConnection();
-    displayAccountStatus();
-    displayArea();
-    displayInstallation();
-});
-
+// Add Customer JS
 const getID = async () => {
     const result = await generateAccountID();
     return result;
@@ -227,8 +254,22 @@ async function displayInstallation() {
     }
 }
 
-// Form Submits -- onclick Triggers
-add_customer.onsubmit = (e) => {
-    e.preventDefault();
-    addCustomer();
-};
+function setAddCustomerPage () {
+    const add_customer = document.getElementById('add-customer');
+
+    getID().then(result => {
+        $("#account_id").attr("value", result);
+    });
+
+    displayPlan();
+    displayConnection();
+    displayAccountStatus();
+    displayArea();
+    displayInstallation();
+
+    // Form Submits -- onclick Triggers
+    add_customer.onsubmit = (e) => {
+        e.preventDefault();
+        addCustomer();
+    };
+}
