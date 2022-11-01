@@ -29,19 +29,15 @@ async function getCustomers () {
         else {
             tag = 'bg-danger';
         }
-        var row = `
+        t.row.add($(`
             <tr>
-              <th scope="row"><a href="#">${customer_data[i].account_id}</a></th>
-              <td>${customer_data[i].customer_name}</td>
-              <td><a href="#" class="text-primary">${customer_data[i].plan}</a></td>
-              <td>$${customer_data[i].balance}</td>
-              <td><span class="badge ${tag}">${customer_data[i].status}</span></td>
+                <th scope="row"><a href="#">${customer_data[i].account_id}</a></th>
+                <td>${customer_data[i].customer_name}</td>
+                <td><a href="#" class="text-primary">${customer_data[i].plan}</a></td>
+                <td>&#8369; ${customer_data[i].balance}</td>
+                <td><span class="badge ${tag}">${customer_data[i].status}</span></td>
             </tr>
-            `;
-        // $("#customer-data").append(row);
-        t.row.add([customer_data[i].account_id, customer_data[i].customer_name, customer_data[i].plan, customer_data[i].balance, customer_data[i].status]).draw(false);
-        // t.row.add(row);
-        // console.log(customer_data[i].account_id);
+        `)).draw(false);
     }
 }
 

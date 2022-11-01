@@ -16,7 +16,7 @@
   <!-- Recent Sales -->
   <div class="col-12">
     <div class="card recent-sales overflow-auto">
-
+      <br>
       <div class="card-body">
         <table class="table table-borderless" id="customer-table">
           <thead>
@@ -29,13 +29,6 @@
             </tr>
           </thead>
           <tbody id="customer-data">
-            <tr hidden>
-              <th scope="row"><a href="#">#2457</a></th>
-              <td>Brandon Jacob</td>
-              <td><a href="#" class="text-primary">At praesentium minu</a></td>
-              <td>$64</td>
-              <td><span class="badge bg-success">Approved</span></td>
-            </tr>
           </tbody>
         </table>
 
