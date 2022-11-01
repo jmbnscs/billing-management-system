@@ -1,14 +1,13 @@
-const add_plan = document.getElementById('add-plan');
-
-$(() => {
-    if (hashed == 0) { 
-        window.location.replace('../views/profile.php');
-    }
-});
-
 // On Boot Load
 $(document).ready(function () {
-    displayInclusion();
+    isDefault();
+
+    if (DIR_CUR == DIR_MAIN + 'views/plans_add.php') {
+        setAddPlanPage();
+    }
+    else {
+        console.log(window.location.pathname);
+    }
 });
 
 async function addPlan() {
@@ -95,8 +94,16 @@ async function displayInclusion() {
     }
 }
 
-// Form Submits -- onclick Triggers
-add_plan.onsubmit = (e) => {
-    e.preventDefault();
-    addPlan();
-};
+function setAddPlanPage () {
+    const add_plan = document.getElementById('add-plan');
+
+    displayInclusion();
+
+    // Form Submits -- onclick Triggers
+    add_plan.onsubmit = (e) => {
+        e.preventDefault();
+        addPlan();
+    };
+}
+
+
