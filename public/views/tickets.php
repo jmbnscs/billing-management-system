@@ -1,6 +1,44 @@
+
 <?php 
   include '../models/header.html';
   include '../models/navbar.html'; ?>
+
+<main id="main" class="main">
+  <div class="pagetitle">
+    <h1>Active Tickets</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="dashboard.php">Home</a></li>
+        <li class="breadcrumb-item active">Tickets</li>
+      </ol>
+    </nav>
+  </div><!-- End Page Title -->
+
+  <!-- Recent Sales -->
+  <div class="col-12">
+    <div class="card recent-sales overflow-auto">
+      <br>
+      <div class="card-body">
+        <table class="table table-borderless" id="ticket-table">
+          <thead>
+            <tr>
+              <th scope="col">Ticket Number</th>
+              <th scope="col">Concern</th>
+              <th scope="col">Date Filed</th>
+              <th scope="col">Ticket Status</th>
+              <th scope="col">Account ID</th>
+              <th scope="col">Resolve</th>
+            </tr>
+          </thead>
+          <tbody id="ticket-data">
+          </tbody>
+        </table>
+
+      </div>
+
+    </div>
+  </div><!-- End Recent Sales -->
+</main><!-- End #main -->
 
   <!-- Vendor JS Files -->
   <script src="../assets/vendor/apexcharts/apexcharts.min.js"></script>

@@ -1,21 +1,16 @@
-const create_ticket = document.getElementById('create-ticket');
+// On Boot Load
+$(document).ready(function () {
+    isDefault();
 
-$(() => {
-    if (hashed == 0) { 
-        window.location.replace('../views/profile.php');
+    if (DIR_CUR == DIR_MAIN + 'views/tickets_create.php') {
+        setCreateTicketPage();
     }
-});
-
-
-$(document).ready(() => {
-    getTicketNum().then(result => {
-        $("#ticket_num").attr("value", result);
-    });
-
-    displayUserLevels();
-    displayConcern();
-
-
+    else if (DIR_CUR == DIR_MAIN + 'views/tickets_resolved.php') {
+        getResolvedTickets();
+    }
+    else {
+        getTickets();
+    }
 });
 
 const getTicketNum = async () => {
@@ -45,6 +40,70 @@ async function generateTicketNum() {
         }
     } catch (error) {
         console.log(error);
+    }
+}
+
+// View Ticket JS
+async function getTickets () {
+    let url = DIR_API + 'views/ticket.php';
+    let ticket_data;
+    var t = $('#ticket-table').DataTable();
+    try {
+        let res = await fetch(url);
+        ticket_data = await res.json();
+    } catch (error) {
+        console.log(error);
+    }
+
+    for (var i = 0; i < ticket_data.length; i++) {
+        var tag;
+        if (ticket_data[i].ticket_status == 'ACTIVE') {
+            tag = 'bg-danger';
+        }
+        else if (ticket_data[i].ticket_status == 'PENDING') {
+            tag = 'bg-warning';
+        }
+        else {
+            tag = 'bg-success';
+        }
+        t.row.add($(`
+            <tr>
+                <th scope="row"><a href="#">${ticket_data[i].ticket_num}</a></th>
+                <td>${ticket_data[i].concern}</td>
+                <td>${ticket_data[i].date_filed}</td>
+                <td><span class="badge ${tag}">${ticket_data[i].ticket_status}</span></td>
+                <td>${ticket_data[i].account_id}</td>
+                <td><a href=""><button type="button" class="btn btn-outline-primary"><i class="bi bi-collection"></i></a></button></td>
+            </tr>
+        `)).draw(false);
+    }
+}
+
+// View Resolved Ticket JS
+async function getResolvedTickets () {
+    let url = DIR_API + 'views/ticket_resolved.php';
+    let ticket_data;
+    var t = $('#ticket-resolved-table').DataTable();
+    try {
+        let res = await fetch(url);
+        ticket_data = await res.json();
+    } catch (error) {
+        console.log(error);
+    }
+
+    for (var i = 0; i < ticket_data.length; i++) {
+        var tag = 'bg-success';
+        t.row.add($(`
+            <tr>
+                <th scope="row"><a href="#">${ticket_data[i].ticket_num}</a></th>
+                <td>${ticket_data[i].concern}</td>
+                <td>${ticket_data[i].date_filed}</td>
+                <td>${ticket_data[i].date_resolved}</td>
+                <td><span class="badge ${tag}">${ticket_data[i].ticket_status}</span></td>
+                <td>${ticket_data[i].account_id}</td>
+                <td>${ticket_data[i].admin_username}</td>
+            </tr>
+        `)).draw(false);
     }
 }
 
@@ -138,8 +197,19 @@ async function createTicket() {
     }
 }
 
-// Form Submits -- onclick Triggers
-create_ticket.onsubmit = (e) => {
-    e.preventDefault();
-    createTicket();
-};
+function setCreateTicketPage () {
+    const create_ticket = document.getElementById('create-ticket');
+
+    getTicketNum().then(result => {
+        $("#ticket_num").attr("value", result);
+    });
+
+    displayUserLevels();
+    displayConcern();
+
+    // Form Submits -- onclick Triggers
+    create_ticket.onsubmit = (e) => {
+        e.preventDefault();
+        createTicket();
+    };
+}
