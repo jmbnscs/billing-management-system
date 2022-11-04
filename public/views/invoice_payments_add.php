@@ -36,6 +36,13 @@
                       </div>
                   </div>
 
+                  <div class="row mb-3">
+                    <label for="payment_date" class="col-sm-2 col-form-label">Payment Date</label>
+                    <div class="col-sm-10">
+                        <input type="date" class="form-control" id="payment_date" required>
+                    </div>
+                </div>
+
                 <div class ="text-center">
                   <button type="submit" class="btn btn-primary">Create Record</button>
                 </div>
