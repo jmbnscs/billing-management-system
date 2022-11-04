@@ -141,7 +141,8 @@ async function addPayment () {
     if (payment_content.message == 'Payment Record Created') {
         toastr.success('Payment Created Successfully.');
         setTimeout(function(){
-            window.location.reload();
+            window.location.replace('../views/invoice_payments.php');
+            // window.location.reload();
          }, 2000);
     }
     else {

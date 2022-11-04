@@ -128,7 +128,8 @@ async function changePassword() {
                 toastr.success(content.message);
                 // location.reload();
                 setTimeout(function(){
-                    window.location.reload();
+                    logout();
+                    // window.location.reload();
                  }, 2000);
             }
         }

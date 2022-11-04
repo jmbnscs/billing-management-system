@@ -112,7 +112,7 @@ async function addAdmin() {
     if (content.message = 'Admin Created') {
         toastr.success('Admin Created Successfully.');
         setTimeout(function(){
-            window.location.reload();
+            window.location.replace('../views/admins.php');
          }, 2000);
     }
 }

@@ -102,7 +102,7 @@ async function getPlans () {
                 <th scope="row"><a href="#">${plan_data[i].plan_name}</a></th>
                 <td>${plan_data[i].bandwidth} mbps</td>
                 <td>&#8369; ${plan_data[i].price}</a></td>
-                <td>${plan_data[i].inclusion}</td>
+                <td>${plan_data[i].inclusions}</td>
                 <td><span class="badge ${tag}">${plan_data[i].status}</span></td>
             </tr>
         `)).draw(false);
