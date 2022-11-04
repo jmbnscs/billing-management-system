@@ -1,19 +1,47 @@
-const add_admin = document.getElementById('add-admin');
+$(document).ready( () => {
+    isDefault();
 
-$(() => {
-    if (hashed == 0) { 
-        window.location.replace('../views/profile.php');
+    if (DIR_CUR == DIR_MAIN + 'views/admins_add.php') {
+        setAddAdminPage();
+    }
+    else {
+        getAdmins();
     }
 });
 
-$(document).ready( () => {
-    getAdminID().then(result => {
-        $("#admin_id").attr("value", result);
-    });
+// View Admin JS
+async function getAdmins () {
+    let url = DIR_API + 'views/admin.php';
+    let admin_data;
+    var t = $('#admins-table').DataTable();
+    try {
+        let res = await fetch(url);
+        admin_data = await res.json();
+    } catch (error) {
+        console.log(error);
+    }
 
-    displayUserLevels();
-});
+    for (var i = 0; i < admin_data.length; i++) {
+        var tag;
+        if (admin_data[i].status == 'EMPLOYED') {
+            tag = 'bg-success';
+        }
+        else {
+            tag = 'bg-danger';
+        }
+        t.row.add($(`
+            <tr>
+                <th scope="row"><a href="#">${admin_data[i].admin_id}</a></th>
+                <td>${admin_data[i].admin_name}</td>
+                <td><a href="#" class="text-primary">${admin_data[i].role}</a></td>
+                <td>${admin_data[i].admin_email}</td>
+                <td><span class="badge ${tag}">${admin_data[i].status}</span></td>
+            </tr>
+        `)).draw(false);
+    }
+}
 
+// Add Admin JS
 const getAdminID = async () => {
     const result = await generateAdminID();
     return result;
@@ -105,10 +133,18 @@ async function displayUserLevels() {
     }
 }
 
-// Form Submits -- onclick Triggers
-add_admin.onsubmit = (e) => {
-    e.preventDefault();
-    addAdmin();
-};
+function setAddAdminPage () {
+    const add_admin = document.getElementById('add-admin');
+    
+    getAdminID().then(result => {
+        $("#admin_id").attr("value", result);
+    });
 
+    displayUserLevels();
 
+    // Form Submits -- onclick Triggers
+    add_admin.onsubmit = (e) => {
+        e.preventDefault();
+        addAdmin();
+    };
+}
