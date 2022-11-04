@@ -1,14 +1,13 @@
-const add_plan = document.getElementById('add-plan');
-
-$(() => {
-    if (hashed == 0) { 
-        window.location.replace('../views/profile.php');
-    }
-});
-
 // On Boot Load
 $(document).ready(function () {
-    displayInclusion();
+    isDefault();
+
+    if (DIR_CUR == DIR_MAIN + 'views/plans_add.php') {
+        setAddPlanPage();
+    }
+    else {
+        getPlans();
+    }
 });
 
 async function addPlan() {
@@ -78,6 +77,38 @@ async function addPlan() {
     }
 }
 
+// View Plan JS
+async function getPlans () {
+    let url = DIR_API + 'views/plan.php';
+    let plan_data;
+    var t = $('#plan-table').DataTable();
+    try {
+        let res = await fetch(url);
+        plan_data = await res.json();
+    } catch (error) {
+        console.log(error);
+    }
+
+    for (var i = 0; i < plan_data.length; i++) {
+        var tag;
+        if (plan_data[i].status == 'ACTIVE') {
+            tag = 'bg-success';
+        }
+        else {
+            tag = 'bg-danger';
+        }
+        t.row.add($(`
+            <tr>
+                <th scope="row"><a href="#">${plan_data[i].plan_name}</a></th>
+                <td>${plan_data[i].bandwidth} mbps</td>
+                <td>&#8369; ${plan_data[i].price}</a></td>
+                <td>${plan_data[i].inclusion}</td>
+                <td><span class="badge ${tag}">${plan_data[i].status}</span></td>
+            </tr>
+        `)).draw(false);
+    }
+}
+
 async function displayInclusion() {
     let url = DIR_API + 'inclusion/read.php';
     let inclusion;
@@ -95,8 +126,16 @@ async function displayInclusion() {
     }
 }
 
-// Form Submits -- onclick Triggers
-add_plan.onsubmit = (e) => {
-    e.preventDefault();
-    addPlan();
-};
+function setAddPlanPage () {
+    const add_plan = document.getElementById('add-plan');
+
+    displayInclusion();
+
+    // Form Submits -- onclick Triggers
+    add_plan.onsubmit = (e) => {
+        e.preventDefault();
+        addPlan();
+    };
+}
+
+
