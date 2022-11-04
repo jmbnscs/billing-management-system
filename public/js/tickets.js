@@ -13,10 +13,7 @@ $(document).ready(function () {
     }
 });
 
-const getTicketNum = async () => {
-    const result = await generateTicketNum();
-    return result;
-}
+
 
 async function generateTicketNum() {
     let url = DIR_API + 'ticket/read.php';
@@ -199,6 +196,11 @@ async function createTicket() {
 
 function setCreateTicketPage () {
     const create_ticket = document.getElementById('create-ticket');
+
+    const getTicketNum = async () => {
+        const result = await generateTicketNum();
+        return result;
+    }
 
     getTicketNum().then(result => {
         $("#ticket_num").attr("value", result);

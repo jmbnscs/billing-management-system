@@ -158,7 +158,8 @@ async function addCustomer() {
         && installation_content.message == 'Installation Created' && ratings_content.message == 'Ratings Created') {
         toastr.success('Customer Created Successfully.');
         setTimeout(function(){
-            window.location.reload();
+            window.location.replace('../views/customers.php');
+            // window.location.reload();
          }, 2000);
     }
     else {
