@@ -9,7 +9,7 @@
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="dashboard.html">Home</a></li>
-          <li class="breadcrumb-item active">Concerns</li>
+          <li class="breadcrumb-item active">Inclusion</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
@@ -30,65 +30,53 @@
                 </li>
 
                 <li class="nav-item">
-                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#add-concern" id="edit-profile">Add Concern</button>
+                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#add-inclusion" id="edit-profile">Add Inclusion</button>
                 </li>
 
               </ul>
               <div class="tab-content pt-2">
 
                 <div class="tab-pane fade show active profile-overview " id="profile-overview">
-                  <h5 class="card-title">Concern Details</h5>
+                  <h5 class="card-title">Inclusion Details</h5>
 
-        <!-- Concern Details Table-->
+        <!-- Inclusion Details Table-->
                 <div class="col-12">
-                <div class="card concern-details overflow-auto">
+                <div class="card inclusion-details overflow-auto">
                 <br>
                 <div class="card-body">
-                  <table class="table table-borderless" id="concern-table">
+                  <table class="table table-borderless" id="inclusions-table">
                     <thead>
                       <tr>
-                        <th scope="col">Concern ID</th>
-                        <th scope="col">Concern Category</th>
+                        <th scope="col">Inclusion ID</th>
+                        <th scope="col">Inclusion Type</th>
                       </tr>
                     </thead>
-                    <tbody id="concern-data">
+                    <tbody id="inclusions-data">
                   </tbody>
                 </table>
               </div>
 
               </div>
-     </div><!-- Concern Details Table -->
+     </div><!-- Inclusion Details Table -->
 
                 </div>
 
-                <div class="tab-pane fade add-concern pt-3 " id="add-concern">
+                <div class="tab-pane fade add-inclusion pt-3 " id="add-inclusion">
 
-                  <!-- Add New Concern Form -->
+                  <!-- Add New inclusion Form -->
                   <form id="edit-form">
 
-                    <div class="row mb-3">  
-                      <label for="concern_name" class="col-md-4 col-lg-3 col-form-label">Concern Name</label>
-                      <div class="col-md-8 col-lg-9">
-                        <input name="concern_name" type="text" class="form-control" id="concern_name" value="" required>
-                      </div>
-                    </div>
-
                     <div class="row mb-3">
-                      <label for="" class="col-md-4 col-lg-3 col-form-label">Email</label>
+                      <label for="inclusion_name" class="col-md-4 col-lg-3 col-form-label">Inclusion Name</label>
                       <div class="col-md-8 col-lg-9">
-                        <input name="email" type="email" class="form-control" id="edit-email" value="" >
+                        <input name="inclusion_name" type="text" class="form-control" id="inclusion_name" value="" required>
                       </div>
                     </div>
-
-             
-                      
-
-
 
                     <div class="text-center">
-                      <button type="submit" class="btn btn-primary">Add concern</button>
+                      <button type="submit" class="btn btn-primary">Add inclusion</button>
                     </div>
-                  </form><!-- end Add New Concern Form -->
+                  </form><!-- end Add New inclusion Form -->
 
                 </div>
 

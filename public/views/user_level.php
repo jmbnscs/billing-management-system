@@ -9,12 +9,12 @@
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="dashboard.html">Home</a></li>
-          <li class="breadcrumb-item active">Concerns</li>
+          <li class="breadcrumb-item active">User-Level</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
 
-    <section class="section connection">
+    <section class="section User-Level">
       <div class="row">
 
         <div class="col-xl-12">
@@ -30,65 +30,53 @@
                 </li>
 
                 <li class="nav-item">
-                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#add-concern" id="edit-profile">Add Concern</button>
+                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#add-User-Level" id="edit-profile">Add User-Level</button>
                 </li>
 
               </ul>
               <div class="tab-content pt-2">
 
                 <div class="tab-pane fade show active profile-overview " id="profile-overview">
-                  <h5 class="card-title">Concern Details</h5>
+                  <h5 class="card-title">User-Level Details</h5>
 
-        <!-- Concern Details Table-->
+        <!-- User-Level Details Table-->
                 <div class="col-12">
-                <div class="card concern-details overflow-auto">
+                <div class="card User-Level-details overflow-auto">
                 <br>
                 <div class="card-body">
-                  <table class="table table-borderless" id="concern-table">
+                  <table class="table table-borderless" id="User-Levels-table">
                     <thead>
                       <tr>
-                        <th scope="col">Concern ID</th>
-                        <th scope="col">Concern Category</th>
+                        <th scope="col">User-Level ID</th>
+                        <th scope="col">User-Level Type</th>
                       </tr>
                     </thead>
-                    <tbody id="concern-data">
+                    <tbody id="User-Levels-data">
                   </tbody>
                 </table>
               </div>
 
               </div>
-     </div><!-- Concern Details Table -->
+     </div><!-- User-Level Details Table -->
 
                 </div>
 
-                <div class="tab-pane fade add-concern pt-3 " id="add-concern">
+                <div class="tab-pane fade add-User-Level pt-3 " id="add-User-Level">
 
-                  <!-- Add New Concern Form -->
+                  <!-- Add New User-Level Form -->
                   <form id="edit-form">
 
-                    <div class="row mb-3">  
-                      <label for="concern_name" class="col-md-4 col-lg-3 col-form-label">Concern Name</label>
-                      <div class="col-md-8 col-lg-9">
-                        <input name="concern_name" type="text" class="form-control" id="concern_name" value="" required>
-                      </div>
-                    </div>
-
                     <div class="row mb-3">
-                      <label for="" class="col-md-4 col-lg-3 col-form-label">Email</label>
+                      <label for="User-Level_name" class="col-md-4 col-lg-3 col-form-label">User-Level Name</label>
                       <div class="col-md-8 col-lg-9">
-                        <input name="email" type="email" class="form-control" id="edit-email" value="" >
+                        <input name="User-Level_name" type="text" class="form-control" id="User-Level_name" value="" required>
                       </div>
                     </div>
-
-             
-                      
-
-
 
                     <div class="text-center">
-                      <button type="submit" class="btn btn-primary">Add concern</button>
+                      <button type="submit" class="btn btn-primary">Add User-Level</button>
                     </div>
-                  </form><!-- end Add New Concern Form -->
+                  </form><!-- end Add New User-Level Form -->
 
                 </div>
 
