@@ -5,7 +5,7 @@
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>?</h1>
+      <h1>Advanced Options</h1>
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="dashboard.html">Home</a></li>
@@ -48,7 +48,7 @@
                     <thead>
                       <tr>
                         <th scope="col">Inclusion ID</th>
-                        <th scope="col">Inclusion Type</th>
+                        <th scope="col">Inclusion Name</th>
                       </tr>
                     </thead>
                     <tbody id="inclusions-data">
@@ -74,7 +74,7 @@
                     </div>
 
                     <div class="text-center">
-                      <button type="submit" class="btn btn-primary">Add inclusion</button>
+                      <button type="submit" class="btn btn-primary">Add Inclusion</button>
                     </div>
                   </form><!-- end Add New inclusion Form -->
 

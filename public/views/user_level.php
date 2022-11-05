@@ -5,7 +5,7 @@
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>?</h1>
+    <h1>Advanced Options</h1>
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="dashboard.html">Home</a></li>
@@ -41,17 +41,17 @@
 
         <!-- User-Level Details Table-->
                 <div class="col-12">
-                <div class="card User-Level-details overflow-auto">
+                <div class="card userlevel-details overflow-auto">
                 <br>
                 <div class="card-body">
-                  <table class="table table-borderless" id="User-Levels-table">
+                  <table class="table table-borderless" id="userlevel-table">
                     <thead>
                       <tr>
                         <th scope="col">User-Level ID</th>
-                        <th scope="col">User-Level Type</th>
+                        <th scope="col">User-Level</th>
                       </tr>
                     </thead>
-                    <tbody id="User-Levels-data">
+                    <tbody id="userlevel-data">
                   </tbody>
                 </table>
               </div>
@@ -67,7 +67,7 @@
                   <form id="edit-form">
 
                     <div class="row mb-3">
-                      <label for="User-Level_name" class="col-md-4 col-lg-3 col-form-label">User-Level Name</label>
+                      <label for="User-Level_name" class="col-md-4 col-lg-3 col-form-label">User Level Name</label>
                       <div class="col-md-8 col-lg-9">
                         <input name="User-Level_name" type="text" class="form-control" id="User-Level_name" value="" required>
                       </div>
