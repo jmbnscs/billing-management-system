@@ -63,12 +63,13 @@ async function setDefaults () {
     child[0].innerHTML = admin_data.first_name + ' ' + admin_data.last_name;
     child[1].innerHTML = user_id.user_role;
 
-    if (admin_data.user_level_id == 3) {
+    if (admin_data.user_level_id == 2) {
         const navbar = document.getElementById('sidebar-nav').children;
         for (var i = 0; i < navbar.length; i++) {
-            if (navbar[i].id == 'hide') {
-                navbar[i].classList.remove('hide');
-            }
+            navbar[i].classList.remove('hide');
+            // if (navbar[i].id == 'dashboard-page') {
+            //     navbar[i].classList.remove('hide');
+            // }
         }
     }
 
