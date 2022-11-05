@@ -21,13 +21,13 @@
       <div class="card">
         <div class="card-body pt-4">
             
-        <form id="add-customer">
+    <form id="add-customer">
         <div class="row mb-3">
-                    <label for="first_name" class="col-sm-2 col-form-label">First Name</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control" id="first_name" placeholder="Ex. Juan" required>
-                    </div>
-                </div>
+            <label for="first_name" class="col-sm-2 col-form-label">First Name</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="first_name" placeholder="Ex. Juan" required>
+            </div>
+        </div>
                 
                 <div class="row mb-3">
                     <label for="middle_name" class="col-sm-2 col-form-label">Middle Name</label>
@@ -141,7 +141,7 @@
                     <button type="submit" class="btn btn-primary">Create Account</button>
                 </div>
 
-            </form>
+    </form>
 
 
         </div>

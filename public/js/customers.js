@@ -15,6 +15,7 @@ $(document).ready(function () {
     }
     else {
         getCustomers();
+        setModal();
     }
 });
 // View Customer JS
@@ -39,15 +40,42 @@ async function getCustomers () {
         }
         t.row.add($(`
             <tr>
-                <th scope="row"><a href="#">${customer_data[i].account_id}</a></th>
+                <th scope="row"><a href="#" data-value="${customer_data[i].account_id}">${customer_data[i].account_id}</a></th>
                 <td>${customer_data[i].customer_name}</td>
                 <td><a href="#" class="text-primary">${customer_data[i].plan}</a></td>
                 <td>&#8369; ${customer_data[i].balance}</td>
                 <td><span class="badge ${tag}">${customer_data[i].status}</span></td>
+                <td><button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalDialogScrollable" data-bs-whatever="${customer_data[i].account_id}" id="try_lang"><i class="bi bi-collection"></i></button></td>
             </tr>
         `)).draw(false);
     }
 }
+
+async function setModal () {
+    var exampleModal = document.getElementById('modalDialogScrollable')
+    exampleModal.addEventListener('show.bs.modal', function (event) {
+      // Button that triggered the modal
+      var button = event.relatedTarget
+      // Extract info from data-bs-* attributes
+      var recipient = button.getAttribute('data-bs-whatever')
+      // If necessary, you could initiate an AJAX request here
+      // and then do the updating in a callback.
+      //
+      try_lang(recipient);
+    
+      async function try_lang (account_id) {
+        // Update the modal's content.
+        var modalTitle = exampleModal.querySelector('.modal-title')
+        //   var modalBodyInput = exampleModal.querySelector('.modal-body input')
+    
+        modalTitle.textContent = 'New message to ' + recipient
+        //   modalBodyInput.value = recipient
+    }
+    })
+}
+
+
+
 
 // Add Customer JS
 const getID = async () => {
