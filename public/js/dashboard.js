@@ -1,16 +1,15 @@
-$(document).ready( function () {
-    //to hash condition
-    // console.log(hashed);
-    if (hashed == 0) { 
-        window.location.replace('../views/profile.php');
-    }
+// On Boot Load
+$(document).ready(function () {
+    isDefault();
+
+    // if (DIR_CUR == DIR_MAIN + 'views/plans_add.php') {
+    //     setAddPlanPage();
+    // }
+    // else {
+    //     getPlans();
+    // }
     if (sessionStorage.getItem('error_message') !== null) {
         setToastrArgs(sessionStorage.getItem('error_message'), "Error");
         sessionStorage.setItem('error_message', null);
     }
 });
-
-// $(window).on('load', function () {
-
-// });
-
