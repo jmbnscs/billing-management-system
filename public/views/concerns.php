@@ -5,7 +5,7 @@
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>?</h1>
+    <h1>Advanced Options</h1>
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="dashboard.html">Home</a></li>
@@ -30,7 +30,7 @@
                 </li>
 
                 <li class="nav-item">
-                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#add-concern" id="edit-profile">Add Concern</button>
+                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#add-concern" id="edit-profile">Add Concern Category</button>
                 </li>
 
               </ul>
@@ -67,26 +67,14 @@
                   <form id="edit-form">
 
                     <div class="row mb-3">  
-                      <label for="concern_name" class="col-md-4 col-lg-3 col-form-label">Concern Name</label>
+                      <label for="concern_name" class="col-md-4 col-lg-3 col-form-label">Concern Category Name</label>
                       <div class="col-md-8 col-lg-9">
                         <input name="concern_name" type="text" class="form-control" id="concern_name" value="" required>
                       </div>
                     </div>
 
-                    <div class="row mb-3">
-                      <label for="" class="col-md-4 col-lg-3 col-form-label">Email</label>
-                      <div class="col-md-8 col-lg-9">
-                        <input name="email" type="email" class="form-control" id="edit-email" value="" >
-                      </div>
-                    </div>
-
-             
-                      
-
-
-
                     <div class="text-center">
-                      <button type="submit" class="btn btn-primary">Add concern</button>
+                      <button type="submit" class="btn btn-primary">Add Category</button>
                     </div>
                   </form><!-- end Add New Concern Form -->
 

@@ -221,5 +221,12 @@ $(() => {
             document.getElementById('icons-nav').classList.add('show');
             document.getElementById(id).classList.add('active');
         }
+        else if (id == 'nav-connection' || id == 'nav-concerns'
+                || id == 'nav-user_level' || id == 'nav-inclusions' 
+                || id == 'nav-area') {
+            document.getElementById('drop-icons').classList.remove('collapsed');
+            document.getElementById('icons-nav').classList.add('show');
+            document.getElementById(id).classList.add('active');
+        }
     }
   });

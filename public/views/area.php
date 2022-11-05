@@ -5,7 +5,7 @@
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>?</h1>
+    <h1>Advanced Options</h1>
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="dashboard.html">Home</a></li>
@@ -44,14 +44,14 @@
                 <div class="card Area-details overflow-auto">
                 <br>
                 <div class="card-body">
-                  <table class="table table-borderless" id="Areas-table">
+                  <table class="table table-borderless" id="areas-table">
                     <thead>
                       <tr>
                         <th scope="col">Area ID</th>
                         <th scope="col">Area Type</th>
                       </tr>
                     </thead>
-                    <tbody id="Areas-data">
+                    <tbody id="areas-data">
                   </tbody>
                 </table>
               </div>

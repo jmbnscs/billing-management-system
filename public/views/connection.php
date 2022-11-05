@@ -5,7 +5,7 @@
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>?</h1>
+    <h1>Advanced Options</h1>
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="dashboard.html">Home</a></li>
@@ -74,7 +74,7 @@
                     </div>
 
                     <div class="text-center">
-                      <button type="submit" class="btn btn-primary">Add connection</button>
+                      <button type="submit" class="btn btn-primary">Add Connection</button>
                     </div>
                   </form><!-- end Add New Connection Form -->
 
