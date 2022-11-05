@@ -10,17 +10,17 @@
         </a>
       </li><!-- End Dashboard Nav -->
 
-      <li class="nav-item ">
+      <li class="nav-item " id="customer-page">
         <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#" id="drop-components">
           <i class="bi bi-people"></i><span>Customers</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
+          <li id="customer-list">
             <a href="../views/customers.php" id="nav-customers">
               <i class="bi bi-circle"></i><span>Customer List</span>
             </a>
           </li>
-          <li>
+          <li id="customer-add">
             <a href="../views/customers_add.php"  id="nav-customers_add">
               <i class="bi bi-circle"></i><span>Add New Account</span>
             </a>
@@ -28,27 +28,27 @@
         </ul>
       </li><!-- End Customers Nav -->
 
-      <li class="nav-item">
+      <li class="nav-item " id="invoice-page">
         <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#" id="drop-forms">
           <i class="bi bi-file-earmark"></i><span>Invoice</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
+          <li id="invoice-view">
             <a href="../views/invoice.php"  id="nav-invoice">
               <i class="bi bi-circle"></i><span>View Invoices</span>
             </a>
           </li>
-          <li>
+          <li id="invoice-payment">
             <a href="invoice_payments.php" id="nav-invoice_payments">
               <i class="bi bi-circle"></i><span>Payment Records</span>
             </a>
           </li>
-          <li>
+          <li id="invoice-prorate">
             <a href="invoice_prorate.php" id="nav-invoice_prorate">
               <i class="bi bi-circle"></i><span>Prorate Charges</span>
             </a>
           </li>
-          <li>
+          <li id="invoice-payment-add">
             <a href="invoice_payments_add.php" id="nav-invoice_payments_add">
               <i class="bi bi-circle"></i><span>Add Payment Record</span>
             </a>
@@ -56,17 +56,17 @@
         </ul>
       </li><!-- End Invoice Nav -->
 
-      <li class="nav-item">
+      <li class="nav-item " id="plan-page">
         <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#" id="drop-tables">
           <i class="bi bi-wallet2"></i><span>Plans</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
+          <li id="plan-view">
             <a href="../views/plans.php"  id="nav-plans">
               <i class="bi bi-circle"></i><span>View Plans</span>
             </a>
           </li>
-          <li>
+          <li id="plan-add">
             <a href="../views/plans_add.php"  id="nav-plans_add">
               <i class="bi bi-circle"></i><span>Add New Plan</span>
             </a>
@@ -74,27 +74,27 @@
         </ul>
       </li><!-- End Plans Nav -->
 
-      <li class="nav-item">
+      <li class="nav-item " id="ticket-page">
         <a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#" id="drop-charts">
           <i class="bi bi-inboxes"></i><span>Tickets</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="charts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
+          <li id="ticket-active">
             <a href="../views/tickets.php"  id="nav-tickets">
               <i class="bi bi-circle"></i><span>Active Tickets</span>
             </a>
           </li>
-          <li>
+          <li id="ticket-resolved">
             <a href="../views/tickets_resolved.php"  id="nav-tickets_resolved">
               <i class="bi bi-circle"></i><span>Resolved Tickets</span>
             </a>
           </li>
-          <li>
+          <li id="ticket-categories">
             <a href="../views/tickets_categories.php"  id="nav-tickets_categories">
               <i class="bi bi-circle"></i><span>Active Ticket Categories</span>
             </a>
           </li>
-          <li>
+          <li id="ticket-create">
             <a href="../views/tickets_create.php"  id="nav-tickets_create">
               <i class="bi bi-circle"></i><span>Create a Ticket</span>
             </a>
@@ -107,12 +107,12 @@
           <i class="ri ri-admin-line"></i><span>Admins</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="icons-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
+          <li id="admin-view">
             <a href="../views/admins.php"  id="nav-admins">
               <i class="bi bi-circle"></i><span>View Admins</span>
             </a>
           </li>
-          <li>
+          <li id="admin-add">
             <a href="../views/admins_add.php"  id="nav-admins_add">
               <i class="bi bi-circle"></i><span>Add New Admin</span>
             </a>

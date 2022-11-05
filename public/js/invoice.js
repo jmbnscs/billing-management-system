@@ -3,13 +3,32 @@ $(document).ready(function () {
     isDefault();
 
     if (DIR_CUR == DIR_MAIN + 'views/invoice_payments_add.php') {
-        setAddPaymentPage();
+        if (sessionStorage.getItem("user_id") == 5 || 
+            sessionStorage.getItem("user_id") == 6) {
+            sessionStorage.setItem('error_message', "You don't have access to this page.");
+            window.location.replace("../views/dashboard.php");
+        }
+        else {
+            setAddPaymentPage();
+        }
     }
     else if (DIR_CUR == DIR_MAIN + 'views/invoice_payments.php') {
-        getPayments();
+        if (sessionStorage.getItem("user_id") == 6) {
+            sessionStorage.setItem('error_message', "You don't have access to this page.");
+            window.location.replace("../views/dashboard.php");
+        }
+        else {
+            getPayments();
+        }
     }
     else if (DIR_CUR == DIR_MAIN + 'views/invoice_prorate.php') {
-        getProrates();
+        if (sessionStorage.getItem("user_id") == 6) {
+            sessionStorage.setItem('error_message', "You don't have access to this page.");
+            window.location.replace("../views/dashboard.php");
+        }
+        else {
+            getProrates();
+        }
     }
     else {
         getInvoices();

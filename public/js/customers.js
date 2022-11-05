@@ -3,7 +3,15 @@ $(document).ready(function () {
     isDefault();
 
     if (DIR_CUR == DIR_MAIN + 'views/customers_add.php') {
-        setAddCustomerPage();
+        if(sessionStorage.getItem("user_id") == 4|| 
+            sessionStorage.getItem("user_id") == 5 || 
+            sessionStorage.getItem("user_id") == 6) {
+            sessionStorage.setItem('error_message', "You don't have access to this page.");
+            window.location.replace("../views/dashboard.php");
+        }
+        else {
+            setAddCustomerPage();
+        }
     }
     else {
         getCustomers();

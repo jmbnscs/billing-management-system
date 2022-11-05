@@ -57,19 +57,68 @@ async function setDefaults () {
     const admin_data = await getAdminData(admin_id);
     const user_id = await getUserLevel(admin_data.user_level_id);
 
+    sessionStorage.setItem("user_id", admin_data.user_level_id);
+
     const profile = document.getElementById('profile').children;
     const child = profile[0].children;
 
     child[0].innerHTML = admin_data.first_name + ' ' + admin_data.last_name;
     child[1].innerHTML = user_id.user_role;
 
-    if (admin_data.user_level_id == 2) {
+    if (admin_data.user_level_id == 4) {
         const navbar = document.getElementById('sidebar-nav').children;
         for (var i = 0; i < navbar.length; i++) {
-            navbar[i].classList.remove('hide');
-            // if (navbar[i].id == 'dashboard-page') {
-            //     navbar[i].classList.remove('hide');
-            // }
+            if (navbar[i].id == 'admin-page') {
+                document.getElementById('admin-add').classList.add('hide');
+            }
+            if (navbar[i].id == 'customer-page') {
+                document.getElementById('customer-add').classList.add('hide');
+            }
+            if (navbar[i].id == 'plan-page') {
+                document.getElementById('plan-add').classList.add('hide');
+            }
+            if (navbar[i].id == 'ticket-page') {
+                navbar[i].classList.add('hide');
+            }
+        }
+    }
+    else if (admin_data.user_level_id == 5) {
+        const navbar = document.getElementById('sidebar-nav').children;
+        for (var i = 0; i < navbar.length; i++) {
+            if (navbar[i].id == 'admin-page') {
+                document.getElementById('admin-add').classList.add('hide');
+            }
+            if (navbar[i].id == 'customer-page') {
+                document.getElementById('customer-add').classList.add('hide');
+            }
+            if (navbar[i].id == 'invoice-page') {
+                document.getElementById('invoice-payment-add').classList.add('hide');
+            }
+            if (navbar[i].id == 'plan-page') {
+                document.getElementById('plan-add').classList.add('hide');
+            }
+        }
+    }
+    else if (admin_data.user_level_id == 6) {
+        const navbar = document.getElementById('sidebar-nav').children;
+        for (var i = 0; i < navbar.length; i++) {
+            if (navbar[i].id == 'admin-page') {
+                document.getElementById('admin-add').classList.add('hide');
+            }
+            if (navbar[i].id == 'customer-page') {
+                document.getElementById('customer-add').classList.add('hide');
+            }
+            if (navbar[i].id == 'invoice-page') {
+                document.getElementById('invoice-payment').classList.add('hide');
+                document.getElementById('invoice-prorate').classList.add('hide');
+                document.getElementById('invoice-payment-add').classList.add('hide');
+            }
+            if (navbar[i].id == 'plan-page') {
+                document.getElementById('plan-add').classList.add('hide');
+            }
+            if (navbar[i].id == 'ticket-page') {
+                navbar[i].classList.add('hide');
+            }
         }
     }
 
@@ -142,7 +191,7 @@ function setToastrArgs(msg, title) {
 $(() => {
     const path = location.pathname.split('/')[4];
     const id = 'nav-' + path.split('.')[0];
-
+    
     if (id == 'nav-dashboard' || id == 'nav-profile') {
         document.getElementById(id).classList.remove('collapsed');
     }

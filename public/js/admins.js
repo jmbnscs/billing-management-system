@@ -2,7 +2,15 @@ $(document).ready( () => {
     isDefault();
 
     if (DIR_CUR == DIR_MAIN + 'views/admins_add.php') {
-        setAddAdminPage();
+        if(sessionStorage.getItem("user_id") == 4 || 
+            sessionStorage.getItem("user_id") == 5 || 
+            sessionStorage.getItem("user_id") == 6) {
+            sessionStorage.setItem('error_message', "You don't have access to this page.");
+            window.location.replace("../views/dashboard.php");
+        }
+        else {
+            setAddAdminPage();
+        }
     }
     else {
         getAdmins();

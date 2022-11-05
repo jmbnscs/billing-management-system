@@ -3,7 +3,15 @@ $(document).ready(function () {
     isDefault();
 
     if (DIR_CUR == DIR_MAIN + 'views/plans_add.php') {
+        if(sessionStorage.getItem("user_id") == 4 || 
+            sessionStorage.getItem("user_id") == 5 || 
+            sessionStorage.getItem("user_id") == 6) {
+            sessionStorage.setItem('error_message', "You don't have access to this page.");
+            window.location.replace("../views/dashboard.php");
+        }
+        else {
         setAddPlanPage();
+        }
     }
     else {
         getPlans();
