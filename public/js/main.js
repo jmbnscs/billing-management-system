@@ -142,8 +142,6 @@ $(() => {
     const path = location.pathname.split('/')[4];
     const id = 'nav-' + path.split('.')[0];
 
-    console.log(id);
-
     if (id == 'nav-dashboard' || id == 'nav-profile') {
         document.getElementById(id).classList.remove('collapsed');
     }
