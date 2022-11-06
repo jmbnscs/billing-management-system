@@ -65,7 +65,15 @@ async function setDefaults () {
     child[0].innerHTML = admin_data.first_name + ' ' + admin_data.last_name;
     child[1].innerHTML = user_id.user_role;
 
-    if (admin_data.user_level_id == 4) {
+    if (admin_data.user_level_id == 3) {
+        const navbar = document.getElementById('sidebar-nav').children;
+        for (var i = 0; i < navbar.length; i++) {
+            if (navbar[i].id == 'misc-page') {
+                navbar[i].classList.add('hide');
+            }
+        }
+    }
+    else if (admin_data.user_level_id == 4) {
         const navbar = document.getElementById('sidebar-nav').children;
         for (var i = 0; i < navbar.length; i++) {
             if (navbar[i].id == 'admin-page') {
@@ -78,6 +86,9 @@ async function setDefaults () {
                 document.getElementById('plan-add').classList.add('hide');
             }
             if (navbar[i].id == 'ticket-page') {
+                navbar[i].classList.add('hide');
+            }
+            if (navbar[i].id == 'misc-page') {
                 navbar[i].classList.add('hide');
             }
         }
@@ -96,6 +107,9 @@ async function setDefaults () {
             }
             if (navbar[i].id == 'plan-page') {
                 document.getElementById('plan-add').classList.add('hide');
+            }
+            if (navbar[i].id == 'misc-page') {
+                navbar[i].classList.add('hide');
             }
         }
     }
@@ -117,6 +131,9 @@ async function setDefaults () {
                 document.getElementById('plan-add').classList.add('hide');
             }
             if (navbar[i].id == 'ticket-page') {
+                navbar[i].classList.add('hide');
+            }
+            if (navbar[i].id == 'misc-page') {
                 navbar[i].classList.add('hide');
             }
         }
