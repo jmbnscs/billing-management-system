@@ -37,7 +37,8 @@
 
     </div>
   </div><!-- End Customer List Table -->
-
+  
+<form id="save-customer">
   <!-- Modal Dialog Scrollable -->
   <div class="modal fade" id="modalDialogScrollable" tabindex="-1">
       <div class="modal-dialog modal-dialog-scrollable modal-lg">
@@ -51,7 +52,6 @@
 
           <!-- Modal Body -->
           <div class="modal-body">
-            <form id="add-customer">
                 <div class="row mb-3">
                   <label for="gstech_id" class="col-sm-2 col-form-label">GSTech ID</label>
                   <div class="col-sm-10">
@@ -124,14 +124,14 @@
                   <div class="row mb-3">    
                       <label for="billing_day" class="col-sm-2 col-form-label">Billing Day</label>
                       <div class="col-sm-10">
-                          <input type="text" class="form-control" id="billing_day" required>
+                          <input type="number" class="form-control" id="billing_day" min="1" max="31" required>
                       </div>
                   </div>
 
                   <div class="row mb-3">
                       <label for="plan_id" class="col-sm-2 col-form-label">Subscription Plan</label>
                       <div class="col-sm-10">
-                          <select id="plan_id" class="form-select" required disabled>
+                          <select id="plan_id" class="form-select" required>
                           </select>
                       </div>
                   </div>
@@ -139,7 +139,7 @@
                   <div class="row mb-3">
                       <label for="connection_id" class="col-sm-2 col-form-label">Connection Type</label>
                       <div class="col-sm-10">
-                          <select id="connection_id" class="form-select" required disabled>
+                          <select id="connection_id" class="form-select" required>
                           </select>
                       </div>
                   </div>
@@ -147,7 +147,7 @@
                   <div class="row mb-3">
                       <label for="account_status_id" class="col-sm-2 col-form-label">Account Status</label>
                       <div class="col-sm-10">
-                          <select id="account_status_id" class="form-select" required disabled>
+                          <select id="account_status_id" class="form-select" required>
                           </select>
                       </div>
                   </div>
@@ -155,7 +155,7 @@
                   <div class="row mb-3">
                       <label for="area_id" class="col-sm-2 col-form-label">Area</label>
                       <div class="col-sm-10">
-                          <select id="area_id" class="form-select" required disabled>
+                          <select id="area_id" class="form-select" required>
                           </select>
                       </div>
                   </div>
@@ -170,7 +170,7 @@
                   <div class="row mb-3">
                       <label for="install_type_id" class="col-sm-2 col-form-label">Installation Type</label>
                       <div class="col-sm-10">
-                          <select id="install_type_id" class="form-select" required disabled>
+                          <select id="install_type_id" class="form-select" required>
                           </select>
                       </div>
                   </div>
@@ -188,17 +188,18 @@
                           <input type="text" class="form-control" id="account_id" readonly>
                       </div>
                   </div>
-            </form>
           </div>
 
           <!-- Modal Footer -->
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
+            <button type="button" class="btn btn-primary" id="edit-customer">Edit</button>
+            <button type="submit" class="btn btn-success" id="save-customer-btn" disabled>Save Changes</button>
           </div>
         </div>
       </div>
   </div><!-- End Modal Dialog Scrollable-->
+</form>
 
 </main><!-- End #main -->
 
