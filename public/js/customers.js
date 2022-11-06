@@ -15,6 +15,7 @@ $(document).ready(function () {
     }
     else {
         getCustomers();
+        setModal();
     }
 });
 
@@ -55,24 +56,24 @@ async function getCustomers () {
 async function setModal () {
     var exampleModal = document.getElementById('modalDialogScrollable')
     exampleModal.addEventListener('show.bs.modal', function (event) {
+
       // Button that triggered the modal
-      var button = event.relatedTarget
+      var button = event.relatedTarget;
+
       // Extract info from data-bs-* attributes
-      var recipient = button.getAttribute('data-bs-whatever')
-      // If necessary, you could initiate an AJAX request here
-      // and then do the updating in a callback.
-      //
+      var recipient = button.getAttribute('data-bs-whatever');
+
       try_lang(recipient);
     
       async function try_lang (account_id) {
         // Update the modal's content.
-        var modalTitle = exampleModal.querySelector('.modal-title')
+        var modalTitle = exampleModal.querySelector('.modal-title');
         //   var modalBodyInput = exampleModal.querySelector('.modal-body input')
     
-        modalTitle.textContent = 'New message to ' + recipient
+        modalTitle.textContent = account_id;
         //   modalBodyInput.value = recipient
     }
-    })
+    });
 }
 
 // Add Customer JS
