@@ -91,7 +91,7 @@ async function login () {
         localStorage.checked = false;
     }
 
-    let url = DIR_API + 'admin/login2.php';
+    let url = DIR_API + 'admin/login.php';
 
     const loginResponse = await fetch(url, {
         method : 'POST',
@@ -112,7 +112,7 @@ async function login () {
         window.location.replace('../views/dashboard.php');
     }
     else if (content.message == 'change password') {
-        sessionStorage.setItem('pw', 0);
+        sessionStorage.setItem('hashed', 0);
         sessionStorage.setItem('admin_id', content.admin_id);
         window.location.replace('../views/dashboard.php');
     }
