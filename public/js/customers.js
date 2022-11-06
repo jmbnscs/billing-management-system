@@ -82,6 +82,24 @@ async function setModal () {
                 console.log(error);
             }
 
+        url = DIR_API + 'account/read_single.php?account_id=' + account_id;
+        let account;
+            try {
+                let res = await fetch(url);
+                account = await res.json();
+            } catch (error) {
+                console.log(error);
+            }
+
+        url = DIR_API + 'installation/read_single.php?account_id=' + account_id;
+        let installation;
+            try {
+                let res = await fetch(url);
+                installation = await res.json();
+            } catch (error) {
+                console.log(error);
+            }
+
         setCustomerData('#gstech_id', customer.gstech_id);
         setCustomerData('#first_name', customer.first_name);
         setCustomerData('#middle_name', customer.middle_name);
@@ -90,15 +108,59 @@ async function setModal () {
         setCustomerData('#mobile_number', customer.mobile_number);
         setCustomerData('#email', customer.email);
         setCustomerData('#birthdate', customer.birthdate);
+        
+        setCustomerData('#start_date', account.start_date);
+        setCustomerData('#lockin_end_date', account.lockin_end_date);
+        setCustomerData('#billing_day', account.billing_day);
+        setCustomerData('#plan_id', account.plan_id);
+        setCustomerData('#connection_id', account.connection_id);
+        setCustomerData('#account_status_id', account.account_status_id);
+        setCustomerData('#area_id', account.area_id);
+        setCustomerData('#bill_count', account.bill_count);
+
+        setCustomerData('#install_type_id', installation.install_type_id);
+        setCustomerData('#installation_balance', installation.installation_balance);
+
         setCustomerData('#account_id', customer.account_id);
 
         // Display Default Dropdown Data
         const area = await displayArea();
-
         for (var i = 0; i < area.length; i++) {
-            if (area[i].area_id == 3) {
+            if (area[i].area_id == account.area_id) {
                 var opt = `<option selected disabled value='${area[i].area_id}'>${area[i].area_name}</option>`;
                 $("#area_id").append(opt);
+            }
+        }
+
+        const plan = await displayPlan();
+        for (var i = 0; i < plan.length; i++) {
+            if (plan[i].plan_id == account.plan_id) {
+                var opt = `<option value='${plan[i].plan_id}'>${plan[i].plan_name + " - " + plan[i].bandwidth + "mbps"}</option>`;
+                $("#plan_id").append(opt);
+            }
+        }
+    
+        const connection = await displayConnection();
+        for (var i = 0; i < connection.length; i++) {
+            if (connection[i].connection_id == account.connection_id) {
+                var opt = `<option value='${connection[i].connection_id}'>${connection[i].connection_name}</option>`;
+                $("#connection_id").append(opt);
+            }
+        }
+    
+        const account_status = await displayAccountStatus();
+        for (var i = 0; i < account_status.length; i++) {
+            if (account_status[i].status_id == account.account_status_id) {
+                var opt = `<option value='${account_status[i].status_id}'>${account_status[i].status_name}</option>`;
+                $("#account_status_id").append(opt);
+            }
+        }
+    
+        const install_type = await displayInstallation();
+        for (var i = 0; i < install_type.length; i++) {
+            if (install_type[i].install_type_id == installation.install_type_id) {
+                var opt = `<option value='${install_type[i].install_type_id}'>${install_type[i].install_type_name}</option>`;
+                $("#install_type_id").append(opt);
             }
         }
 
@@ -242,49 +304,31 @@ async function addCustomer() {
 
 async function displayPlan() {
     let url = DIR_API + 'plan/read.php';
-    let plan;
     try {
         let res = await fetch(url);
-        plan = await res.json();
+        return await res.json();
     } catch (error) {
         console.log(error);
-    }
-
-    for (var i = 0; i < plan.length; i++) {
-        var opt = `<option value='${plan[i].plan_id}'>${plan[i].plan_name + " - " + plan[i].bandwidth + "mbps"}</option>`;
-        $("#plan_id").append(opt);
     }
 }
 
 async function displayConnection() {
     let url = DIR_API + 'connection/read.php';
-    let connection;
     try {
         let res = await fetch(url);
-        connection = await res.json();
+        return await res.json();
     } catch (error) {
         console.log(error);
-    }
-
-    for (var i = 0; i < connection.length; i++) {
-        var opt = `<option value='${connection[i].connection_id}'>${connection[i].connection_name}</option>`;
-        $("#connection_id").append(opt);
     }
 }
 
 async function displayAccountStatus() {
     let url = DIR_API + 'statuses/read.php?status_table=account_status';
-    let account_status;
     try {
         let res = await fetch(url);
-        account_status = await res.json();
+        return await res.json();
     } catch (error) {
         console.log(error);
-    }
-
-    for (var i = 0; i < account_status.length; i++) {
-        var opt = `<option value='${account_status[i].status_id}'>${account_status[i].status_name}</option>`;
-        $("#account_status_id").append(opt);
     }
 }
 
@@ -296,8 +340,6 @@ async function displayArea() {
     } catch (error) {
         console.log(error);
     }
-
-    
 }
 
 async function displayInstallation() {
@@ -308,20 +350,37 @@ async function displayInstallation() {
     } catch (error) {
         console.log(error);
     }
-
 }
 
 async function setAddDropdown() {
-    const install_type = await displayInstallation();
-    for (var i = 0; i < install_type.length; i++) {
-        var opt = `<option value='${install_type[i].install_type_id}'>${install_type[i].install_type_name}</option>`;
-        $("#install_type_id").append(opt);
+    const plan = await displayPlan;
+    for (var i = 0; i < plan.length; i++) {
+        var opt = `<option value='${plan[i].plan_id}'>${plan[i].plan_name + " - " + plan[i].bandwidth + "mbps"}</option>`;
+        $("#plan_id").append(opt);
+    }
+
+    const connection = await displayConnection;
+    for (var i = 0; i < connection.length; i++) {
+        var opt = `<option value='${connection[i].connection_id}'>${connection[i].connection_name}</option>`;
+        $("#connection_id").append(opt);
+    }
+
+    const account_status = await displayAccountStatus;
+    for (var i = 0; i < account_status.length; i++) {
+        var opt = `<option value='${account_status[i].status_id}'>${account_status[i].status_name}</option>`;
+        $("#account_status_id").append(opt);
     }
 
     const area = await displayArea();
     for (var i = 0; i < area.length; i++) {
         var opt = `<option value='${area[i].area_id}'>${area[i].area_name}</option>`;
         $("#area_id").append(opt);
+    }
+
+    const install_type = await displayInstallation();
+    for (var i = 0; i < install_type.length; i++) {
+        var opt = `<option value='${install_type[i].install_type_id}'>${install_type[i].install_type_name}</option>`;
+        $("#install_type_id").append(opt);
     }
 }
 
@@ -332,10 +391,10 @@ function setAddCustomerPage () {
         $("#account_id").attr("value", result);
     });
 
-    displayPlan();
-    displayConnection();
-    displayAccountStatus();
-    displayArea();
+    // displayPlan();
+    // displayConnection();
+    // displayAccountStatus();
+    // displayArea();
     // displayInstallation();
     setAddDropdown();
 
