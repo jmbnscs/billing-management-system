@@ -68,110 +68,99 @@ $(document).ready(function () {
 });
 
 // -------------------------------- Backend JS --------------------------------
-const error = document.getElementById('error');
+const DIR_API = 'http://localhost/gstech_api/api/';
+
+async function login () {
+    const admin_username = $('#admin_username').val();
+    const admin_password = $('#admin_password').val();
+
+    if (localStorage.getItem('admin_username') == null) {
+        localStorage.setItem('admin_username', admin_username);
+    }
+    else if (localStorage.getItem('admin_username') != admin_username) {
+        localStorage.setItem('attempts', 3);
+        localStorage.setItem('admin_username', admin_username);
+    }
+
+    if (cb.checked) {
+        localStorage.un = admin_username;
+        localStorage.checked = true;
+    }
+    else {
+        localStorage.un = "";
+        localStorage.checked = false;
+    }
+
+    let url = DIR_API + 'admin/login2.php';
+
+    const loginResponse = await fetch(url, {
+        method : 'POST',
+        headers : {
+            'Content-Type' : 'application/json'
+        },
+        body : JSON.stringify({
+            'admin_username' : admin_username,
+            'admin_password' : admin_password
+        })
+    });
+
+    const content = await loginResponse.json();
+    var attempt;
+    
+    if (content.message == 'success') {
+        sessionStorage.setItem('admin_id', content.admin_id);
+        window.location.replace('../views/dashboard.php');
+    }
+    else if (content.message == 'change password') {
+        sessionStorage.setItem('pw', 0);
+        sessionStorage.setItem('admin_id', content.admin_id);
+        window.location.replace('../views/dashboard.php');
+    }
+    else if (content.message == 'Invalid Password'){
+        // console.log(localStorage.getItem('attempts'));
+        attempt = localStorage.getItem('attempts');
+        console.log(attempt);
+        localStorage.setItem('attempts', attempt - 1);
+        if ((content.login_attempts === 5) && (localStorage.getItem('attempts') <= 0)) {
+            let message = "3 attempts remaining before lockout.";
+            setToastr("Warning", message, "error");
+            disableLoginButton();
+            localStorage.setItem('attempts', 3);
+        }
+        else if (content.login_attempts === 5) {
+            let message = "3 attempts remaining before lockout.";
+            setToastr("Warning", message, "error");
+        }
+        else if (localStorage.getItem('attempts') <= 0) {
+            let message = "Please wait for 5 minutes to resume login.";
+            setToastr("Login Page Disabled", message, "error");
+            disableLoginButton();
+            localStorage.setItem('attempts', 3);
+        }
+        else if (localStorage.getItem('attempts') === 1) {
+            let message = localStorage.getItem('attempts') + " attempt remaining.";
+            setToastr(content.message, message, "warning");
+        }
+        else {
+            let message = localStorage.getItem('attempts') + " attempts remaining."
+            setToastr(content.message, message, "warning");
+        }
+    }
+    else if (content.message == 'Invalid Credentials'){
+        setToastr("Warning", content.message, "error");
+    }
+    else {
+        localStorage.setItem('attempts', 3);
+        localStorage.setItem('admin_username', admin_username);
+        setToastr(content.message, "Please contact the system administrator.", "error");
+    }
+}
 
 $(function () {
     $('form').on('submit', function(e) {
         e.preventDefault();
 
-        const admin_username = $('#admin_username').val();
-        const admin_password = $('#admin_password').val();
-
-        if (localStorage.getItem('admin_username') == null) {
-            localStorage.setItem('admin_username', admin_username);
-        }
-        else if (localStorage.getItem('admin_username') != admin_username) {
-            localStorage.setItem('attempts', 3);
-            localStorage.setItem('admin_username', admin_username);
-        }
-
-        // console.log(localStorage.getItem('attempts'));
-        // console.log(localStorage.getItem('admin_username'));
-
-        console.log(cb.checked);
-
-        if (cb.checked) {
-            localStorage.un = admin_username;
-            localStorage.checked = true;
-        }
-        else {
-            localStorage.un = "";
-            localStorage.checked = false;
-        }
-
-        $.ajax({
-            type: 'post',
-            url: '../../app/includes/login.inc.php',
-            data: {
-                admin_username: admin_username,
-                admin_password: admin_password
-            },
-            cache: false,
-            success: function(data) {
-                const admin_data = JSON.parse(data);
-                if (admin_data.message === 'Success') {
-                    const url = '../views/dashboard.php';
-                        sessionStorage.setItem("admin_id", admin_data.admin_id);
-                        sessionStorage.setItem("admin_password", admin_data.admin_password);
-                        sessionStorage.setItem("admin_status_id", admin_data.admin_status_id);
-                        sessionStorage.setItem("hashed", admin_data.hashed);
-                        window.location.replace(url);
-                }
-                else {
-                    if ((admin_data.login_attempts >= 8) || ((admin_data.admin_status_id > 1) && (admin_data.admin_status_id < 5))) {
-                        if (localStorage.getItem('attempts') <= 0) {
-                            let message = "The login page is disabled for 5 minutes.";
-                            let title = "The account has been " + admin_data.message + ".";
-                            setToastr(title, message, "error");
-                            disableLoginButton();
-                            localStorage.setItem('attempts', 3);
-                        }
-                        else {
-                            if (admin_data.admin_status_id === 3) {
-                                let message = "Please contact the system administrator.";
-                                let title = "The account has been " + admin_data.message + ".";
-                                setToastr(title, message, "warning");
-                            }
-                            else {
-                                let message = "The account is restricted from logging in.";
-                                let title = "The account has been " + admin_data.message + ".";
-                                setToastr(title, message, "warning");
-                            }
-                        }
-                    }
-                    else {
-                        localStorage.setItem('attempts', localStorage.getItem('attempts') - 1);
-                        if ((admin_data.login_attempts === 5) && (localStorage.getItem('attempts') <= 0)) {
-                            let message = "3 attempts remaining before lockout.";
-                            setToastr("Warning", message, "error");
-                            disableLoginButton();
-                            localStorage.setItem('attempts', 3);
-                        }
-                        else if (admin_data.login_attempts === 5) {
-                            let message = "3 attempts remaining before lockout.";
-                            setToastr("Warning", message, "error");
-                        }
-                        else if (localStorage.getItem('attempts') <= 0) {
-                            let message = "Please wait for 5 minutes to resume login.";
-                            setToastr("Login Page Disabled", message, "error");
-                            disableLoginButton();
-                            localStorage.setItem('attempts', 3);
-                        }
-                        else if (localStorage.getItem('attempts') === 1) {
-                            let message = localStorage.getItem('attempts') + " attempt remaining.";
-                            setToastr(admin_data.message, message, "warning");
-                        }
-                        else {
-                            let message = localStorage.getItem('attempts') + " attempts remaining."
-                            setToastr(admin_data.message, message, "warning");
-                        }
-                    }
-                }
-            },
-            error: function (xhr, status, error) {
-                console.error(xhr)
-            }
-        });
+        login();
     });
 });
 
