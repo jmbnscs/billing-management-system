@@ -46,7 +46,7 @@ async function getCustomers () {
                 <td><a href="#" class="text-primary">${customer_data[i].plan}</a></td>
                 <td>&#8369; ${customer_data[i].balance}</td>
                 <td><span class="badge ${tag}">${customer_data[i].status}</span></td>
-                <td><button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalDialogScrollable" data-bs-whatever="${customer_data[i].account_id}" id="try_lang"><i class="bi bi-collection"></i></button></td>
+                <td><button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalDialogScrollable" data-bs-whatever="${customer_data[i].account_id}" id="try_lang"><i class="ri ri-eye-fill"></i></button></td>
             </tr>
         `)).draw(false);
     }
@@ -72,7 +72,41 @@ async function setModal () {
     
         modalTitle.textContent = account_id;
         //   modalBodyInput.value = recipient
-    }
+
+        let url = DIR_API + 'customer/read_single.php?account_id=' + account_id;
+        let customer;
+            try {
+                let res = await fetch(url);
+                customer = await res.json();
+            } catch (error) {
+                console.log(error);
+            }
+
+        setCustomerData('#gstech_id', customer.gstech_id);
+        setCustomerData('#first_name', customer.first_name);
+        setCustomerData('#middle_name', customer.middle_name);
+        setCustomerData('#last_name', customer.last_name);
+        setCustomerData('#billing_address', customer.billing_address);
+        setCustomerData('#mobile_number', customer.mobile_number);
+        setCustomerData('#email', customer.email);
+        setCustomerData('#birthdate', customer.birthdate);
+        setCustomerData('#account_id', customer.account_id);
+
+        // Display Default Dropdown Data
+        const area = await displayArea();
+
+        for (var i = 0; i < area.length; i++) {
+            if (area[i].area_id == 3) {
+                var opt = `<option selected disabled value='${area[i].area_id}'>${area[i].area_name}</option>`;
+                $("#area_id").append(opt);
+            }
+        }
+
+        function setCustomerData (id, data) {
+            $(id).val(data);
+            $(id).attr('disabled', true);
+        }
+      }
     });
 }
 
@@ -256,33 +290,38 @@ async function displayAccountStatus() {
 
 async function displayArea() {
     let url = DIR_API + 'area/read.php';
-    let area;
     try {
         let res = await fetch(url);
-        area = await res.json();
+        return await res.json();
     } catch (error) {
         console.log(error);
     }
 
-    for (var i = 0; i < area.length; i++) {
-        var opt = `<option value='${area[i].area_id}'>${area[i].area_name}</option>`;
-        $("#area_id").append(opt);
-    }
+    
 }
 
 async function displayInstallation() {
     let url = DIR_API + 'installation_type/read.php';
-    let install_type;
     try {
         let res = await fetch(url);
-        install_type = await res.json();
+        return await res.json();
     } catch (error) {
         console.log(error);
     }
 
+}
+
+async function setAddDropdown() {
+    const install_type = await displayInstallation();
     for (var i = 0; i < install_type.length; i++) {
         var opt = `<option value='${install_type[i].install_type_id}'>${install_type[i].install_type_name}</option>`;
         $("#install_type_id").append(opt);
+    }
+
+    const area = await displayArea();
+    for (var i = 0; i < area.length; i++) {
+        var opt = `<option value='${area[i].area_id}'>${area[i].area_name}</option>`;
+        $("#area_id").append(opt);
     }
 }
 
@@ -297,7 +336,8 @@ function setAddCustomerPage () {
     displayConnection();
     displayAccountStatus();
     displayArea();
-    displayInstallation();
+    // displayInstallation();
+    setAddDropdown();
 
     // Form Submits -- onclick Triggers
     add_customer.onsubmit = (e) => {

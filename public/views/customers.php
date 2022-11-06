@@ -26,7 +26,7 @@
               <th scope="col">Plan</th>
               <th scope="col">Balance</th>
               <th scope="col">Status</th>
-              <th scope="col">Kahit Ano</th>
+              <th scope="col">View</th>
             </tr>
           </thead>
           <tbody id="customer-data">
@@ -52,6 +52,12 @@
           <!-- Modal Body -->
           <div class="modal-body">
             <form id="add-customer">
+                <div class="row mb-3">
+                  <label for="gstech_id" class="col-sm-2 col-form-label">GSTech ID</label>
+                  <div class="col-sm-10">
+                      <input type="text" class="form-control" id="gstech_id" placeholder="" required>
+                  </div>
+                </div>
                 <div class="row mb-3">
                   <label for="first_name" class="col-sm-2 col-form-label">First Name</label>
                       <div class="col-sm-10">
@@ -111,7 +117,7 @@
                   <div class="row mb-3">
                       <label for="plan_id" class="col-sm-2 col-form-label">Subscription Plan</label>
                       <div class="col-sm-10">
-                          <select id="plan_id" class="form-select" required>
+                          <select id="plan_id" class="form-select" required disabled>
                               <option selected disabled>Choose Subscription Plan</option>
                           </select>
                       </div>
@@ -120,7 +126,7 @@
                   <div class="row mb-3">
                       <label for="connection_id" class="col-sm-2 col-form-label">Connection Type</label>
                       <div class="col-sm-10">
-                          <select id="connection_id" class="form-select" required>
+                          <select id="connection_id" class="form-select" required disabled>
                               <option selected disabled value="">Choose Connection Type</option>
                           </select>
                       </div>
@@ -129,7 +135,7 @@
                   <div class="row mb-3">
                       <label for="account_status_id" class="col-sm-2 col-form-label">Account Status</label>
                       <div class="col-sm-10">
-                          <select id="account_status_id" class="form-select" required>
+                          <select id="account_status_id" class="form-select" required disabled>
                               <option selected disabled value="">Choose Account Status</option>
                           </select>
                       </div>
@@ -138,7 +144,7 @@
                   <div class="row mb-3">
                       <label for="area_id" class="col-sm-2 col-form-label">Area</label>
                       <div class="col-sm-10">
-                          <select id="area_id" class="form-select" required>
+                          <select id="area_id" class="form-select" required disabled>
                               <option selected disabled value="">Choose Area</option>
                           </select>
                       </div>
@@ -147,7 +153,7 @@
                   <div class="row mb-3">
                       <label for="install_type_id" class="col-sm-2 col-form-label">Installation Type</label>
                       <div class="col-sm-10">
-                          <select id="install_type_id" class="form-select" required>
+                          <select id="install_type_id" class="form-select" required disabled>
                               <option selected disabled value="">Choose Installation Type</option>
                           </select>
                       </div>
@@ -159,18 +165,6 @@
                           <input type="text" class="form-control" id="account_id" readonly>
                       </div>
                   </div>
-          
-                  <!-- <div class="row mb-3">
-                      <label for="customer_password" class="col-sm-2 col-form-label">Password</label>
-                      <div class="col-sm-10">
-                          <input type="customer_password" class="form-control" placeholder="Password" id="password" disabled>
-                      </div>
-                  </div> -->
-
-                  <div class ="text-center">
-                      <button type="submit" class="btn btn-primary">Create Account</button>
-                  </div>
-
             </form>
           </div>
 
