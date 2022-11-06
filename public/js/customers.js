@@ -45,6 +45,7 @@ async function getCustomers () {
                 <td><a href="#" class="text-primary">${customer_data[i].plan}</a></td>
                 <td>&#8369; ${customer_data[i].balance}</td>
                 <td><span class="badge ${tag}">${customer_data[i].status}</span></td>
+                <td><button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalDialogScrollable" data-bs-whatever="${customer_data[i].account_id}" id="try_lang"><i class="bi bi-collection"></i></button></td>
             </tr>
         `)).draw(false);
     }
