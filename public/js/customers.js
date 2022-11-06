@@ -17,6 +17,7 @@ $(document).ready(function () {
         getCustomers();
     }
 });
+
 // View Customer JS
 async function getCustomers () {
     let url = DIR_API + 'views/customer.php';
