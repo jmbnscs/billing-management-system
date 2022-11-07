@@ -273,9 +273,57 @@ async function setModal () {
 }
 
 async function updateCustomerData() {
-    const acct_id = $('#first_name').val();
-    console.log(acct_id);
-    toastr.success('success');
+    const billing_address = $('#billing_address').val();
+    const mobile_number = $('#mobile_number').val();
+    const email = $('#email').val();
+
+    const plan_id = $('#plan_id').val();
+    const connection_id = $('#connection_id').val();
+    const account_status_id = $('#account_status_id').val();
+    const area_id = $('#area_id').val();
+
+    const account_id = $('#account_id').val();
+
+    let url = DIR_API + 'customer/update.php';
+    const updateCustomerResponse = await fetch(url, {
+        method : 'PUT',
+        headers : {
+            'Content-Type' : 'application/json'
+        },
+        body : JSON.stringify({
+            'account_id' : account_id,
+            'billing_address' : billing_address,
+            'mobile_number' : mobile_number,
+            'email' : email
+        })
+    });
+    
+    url = DIR_API + 'account/update.php';
+    const updateAccountResponse = await fetch(url, {
+        method : 'PUT',
+        headers : {
+            'Content-Type' : 'application/json'
+        },
+        body : JSON.stringify({
+            'account_id' : account_id,
+            'plan_id' : plan_id,
+            'connection_id' : connection_id,
+            'account_status_id' : account_status_id,
+            'area_id' : area_id
+        })
+    });
+
+    const customer_content = await updateCustomerResponse.json();
+    const account_content = await updateAccountResponse.json();
+
+    if (customer_content.message == 'Customer Updated' && account_content.message == 'success') {
+        $("#modalDialogScrollable").modal('hide');
+        toastr.success('Customer Updated Successfully.');
+    }
+    else {
+        $("#modalDialogScrollable").modal('hide');
+        toastr.error(account_content.message + " " + customer_content.message);
+    }
 }
 
 // Add Customer JS
