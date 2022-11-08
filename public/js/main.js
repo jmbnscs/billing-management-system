@@ -7,20 +7,25 @@ const hashed = sessionStorage.getItem('hashed');
 
 // On Boot Load
 $(document).ready( () => {
-    if (admin_status_id == 3) {
-        let msg = "Please contact the system administrator.";
-        let title = "Your account has been locked!"
-        setToastrArgs(msg, title);
+    if (admin_id === undefined || admin_id === null) {
+        window.location.replace('../views/login.php');
     }
-
-    if (hashed == 0) { 
-        let msg = "Please change your password.";
-        let title = "Important!"
-        setToastrArgs(msg, title);
+    else {
+        if (admin_status_id == 3) {
+            let msg = "Please contact the system administrator.";
+            let title = "Your account has been locked!"
+            setToastrArgs(msg, title);
+        }
+    
+        if (hashed == 0) { 
+            let msg = "Please change your password.";
+            let title = "Important!"
+            setToastrArgs(msg, title);
+        }
+    
+        setDefaults();
+        setToastr();
     }
-
-    setDefaults();
-    setToastr();
 });
 
 // Check if Default Password

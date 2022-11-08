@@ -104,12 +104,27 @@ async function changePassword() {
     const currentPassword = $('#currentPassword').val();
     const newPassword = $('#newPassword').val();
     const renewPassword = $('#renewPassword').val();
+    var url;
 
-    const url = DIR_API + 'admin/update_password.php';
+    // Verify Password
+    url = DIR_API + 'admin/verify_password.php';
+    const verifyResponse = await fetch(url, {
+    method : 'POST',
+    headers : {
+        'Content-Type' : 'application/json'
+    },
+    body : JSON.stringify({
+        'admin_id' : admin_id,
+        'admin_password' : currentPassword
+    })
+    });
 
-    if (currentPassword == admin_password) {
+    const verify = await verifyResponse.json();
+
+    if (verify.message == 'success') {
         if (newPassword == renewPassword) {
-            const changeResponse = await fetch(url, {
+                url = DIR_API + 'admin/update_password.php';
+                const changeResponse = await fetch(url, {
                 method : 'POST',
                 headers : {
                     'Content-Type' : 'application/json'
