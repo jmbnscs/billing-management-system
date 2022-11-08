@@ -1,4 +1,7 @@
 // On Load
+const edit_customer = document.getElementById('edit-customer');
+const save_customer = document.getElementById('save-customer');
+
 $(document).ready(function () {
     isDefault();
 
@@ -14,7 +17,18 @@ $(document).ready(function () {
         }
     }
     else {
+        $("#modalDialogScrollable").on("hidden.bs.modal", function () {
+            $('#save-customer-btn').attr('disabled', true);
+            $('#edit-customer').attr('disabled', false);
+        });
+
         getCustomers();
+        setModal();
+
+        save_customer.onsubmit = (e) => {
+            e.preventDefault();
+            updateCustomerData();
+        };
     }
 });
 
@@ -45,9 +59,223 @@ async function getCustomers () {
                 <td><a href="#" class="text-primary">${customer_data[i].plan}</a></td>
                 <td>&#8369; ${customer_data[i].balance}</td>
                 <td><span class="badge ${tag}">${customer_data[i].status}</span></td>
+                <td><button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalDialogScrollable" data-bs-whatever="${customer_data[i].account_id}" id="try_lang"><i class="ri ri-eye-fill"></i></button></td>
             </tr>
         `)).draw(false);
     }
+}
+
+
+
+// Modal for Customer List
+async function setModal () {
+    var exampleModal = document.getElementById('modalDialogScrollable')
+    exampleModal.addEventListener('show.bs.modal', function (event) {
+
+      // Button that triggered the modal
+      var button = event.relatedTarget;
+
+      // Extract info from data-bs-* attributes
+      var recipient = button.getAttribute('data-bs-whatever');
+
+      try_lang(recipient);
+    
+      async function try_lang (account_id) {
+        // Update the modal's content.
+        var modalTitle = exampleModal.querySelector('.modal-title');
+        //   var modalBodyInput = exampleModal.querySelector('.modal-body input')
+    
+        modalTitle.textContent = account_id;
+        //   modalBodyInput.value = recipient
+
+        let url = DIR_API + 'customer/read_single.php?account_id=' + account_id;
+        let customer;
+            try {
+                let res = await fetch(url);
+                customer = await res.json();
+            } catch (error) {
+                console.log(error);
+            }
+
+        url = DIR_API + 'account/read_single.php?account_id=' + account_id;
+        let account;
+            try {
+                let res = await fetch(url);
+                account = await res.json();
+            } catch (error) {
+                console.log(error);
+            }
+
+        url = DIR_API + 'installation/read_single.php?account_id=' + account_id;
+        let installation;
+            try {
+                let res = await fetch(url);
+                installation = await res.json();
+            } catch (error) {
+                console.log(error);
+            }
+
+        const area = await displayArea();
+        const plan = await displayPlan();
+        const connection = await displayConnection();
+        const account_status = await displayAccountStatus();
+        const install_type = await displayInstallation();
+
+        toggleInputData('disabled', true);
+        toggleDefaultData('disabled', true);
+        setDefaultDropdown();
+
+        // Display Default Dropdown Data
+        async function setDefaultDropdown () {
+            for (var i = 0; i < area.length; i++) {
+                if (area[i].area_id == account.area_id) {
+                    var opt = `<option value='${area[i].area_id}'>${area[i].area_name}</option>`;
+                    $("#area_id").append(opt);
+                }
+            }
+    
+            for (var i = 0; i < plan.length; i++) {
+                if (plan[i].plan_id == account.plan_id) {
+                    var opt = `<option value='${plan[i].plan_id}'>${plan[i].plan_name + " - " + plan[i].bandwidth + "mbps"}</option>`;
+                    $("#plan_id").append(opt);
+                }
+            }
+        
+            for (var i = 0; i < connection.length; i++) {
+                if (connection[i].connection_id == account.connection_id) {
+                    var opt = `<option value='${connection[i].connection_id}'>${connection[i].connection_name}</option>`;
+                    $("#connection_id").append(opt);
+                }
+            }
+        
+            for (var i = 0; i < account_status.length; i++) {
+                if (account_status[i].status_id == account.account_status_id) {
+                    var opt = `<option value='${account_status[i].status_id}'>${account_status[i].status_name}</option>`;
+                    $("#account_status_id").append(opt);
+                }
+            }
+        
+            for (var i = 0; i < install_type.length; i++) {
+                if (install_type[i].install_type_id == installation.install_type_id) {
+                    var opt = `<option value='${install_type[i].install_type_id}'>${install_type[i].install_type_name}</option>`;
+                    $("#install_type_id").append(opt);
+                }
+            }
+        }
+
+        async function setDropdownData () {
+            $("#area_id").empty();
+            $("#area_id").append(`<option selected disabled value="">Choose Area</option>`);
+            for (var i = 0; i < area.length; i++) {
+                if (area[i].area_id == account.area_id) {
+                    var opt = `<option selected value='${area[i].area_id}' style='color: blue'>${area[i].area_name}</option>`;
+                }
+                else {
+                    var opt = `<option value='${area[i].area_id}'>${area[i].area_name}</option>`;
+                }
+                $("#area_id").append(opt);
+            }
+
+            $("#plan_id").empty();
+            $("#plan_id").append(`<option selected disabled>Choose Subscription Plan</option>`);
+            for (var i = 0; i < plan.length; i++) {
+                if (plan[i].plan_id == account.plan_id) {
+                    var opt = `<option selected value='${plan[i].plan_id}' style='color: blue'>${plan[i].plan_name + " - " + plan[i].bandwidth + "mbps"}</option>`;
+                }
+                else {
+                    var opt = `<option value='${plan[i].plan_id}'>${plan[i].plan_name + " - " + plan[i].bandwidth + "mbps"}</option>`;
+                }
+                $("#plan_id").append(opt);
+            }
+
+            $("#connection_id").empty();
+            $("#connection_id").append(`<option selected disabled value="">Choose Connection Type</option>`);
+            for (var i = 0; i < connection.length; i++) {
+                if (connection[i].connection_id == account.connection_id) {
+                    var opt = `<option selected value='${connection[i].connection_id}' style='color: blue'>${connection[i].connection_name}</option>`;
+                }
+                else {
+                    var opt = `<option value='${connection[i].connection_id}'>${connection[i].connection_name}</option>`;
+                }
+                $("#connection_id").append(opt);
+            }
+
+            $("#account_status_id").empty();
+            $("#account_status_id").append(`<option selected disabled value="">Choose Account Status</option>`);
+            for (var i = 0; i < account_status.length; i++) {
+                if (account_status[i].status_id == account.account_status_id) {
+                    var opt = `<option selected value='${account_status[i].status_id}' style='color: blue'>${account_status[i].status_name}</option>`;
+                }
+                else {
+                    var opt = `<option value='${account_status[i].status_id}'>${account_status[i].status_name}</option>`;
+                }
+                $("#account_status_id").append(opt);
+            }
+
+            $("#install_type_id").empty();
+            $("#install_type_id").append(`<option selected disabled value="">Choose Installation Type</option>`);
+            for (var i = 0; i < install_type.length; i++) {
+                if (install_type[i].install_type_id == installation.install_type_id) {
+                    var opt = `<option selected value='${install_type[i].install_type_id}' color: blue'>${install_type[i].install_type_name}</option>`;
+                }
+                else {
+                    var opt = `<option value='${install_type[i].install_type_id}'>${install_type[i].install_type_name}</option>`;
+                }
+                $("#install_type_id").append(opt);
+            }
+        }
+
+        function setCustomerData (id, data, setAttr, bool) {
+            $(id).val(data);
+            $(id).attr(setAttr, bool);
+        }
+
+        function toggleInputData (setAttr, bool) {
+            setCustomerData('#billing_address', customer.billing_address, setAttr, bool);
+            setCustomerData('#mobile_number', customer.mobile_number, setAttr, bool);
+            setCustomerData('#email', customer.email, setAttr, bool);
+
+            setCustomerData('#plan_id', account.plan_id, setAttr, bool);
+            setCustomerData('#connection_id', account.connection_id, setAttr, bool);
+            setCustomerData('#account_status_id', account.account_status_id, setAttr, bool);
+            setCustomerData('#area_id', account.area_id, setAttr, bool);
+
+            setCustomerData('#account_id', customer.account_id, setAttr, bool);
+        }
+
+        function toggleDefaultData (setAttr, bool) {
+            setCustomerData('#gstech_id', customer.gstech_id, setAttr, bool);
+            setCustomerData('#first_name', customer.first_name, setAttr, bool);
+            setCustomerData('#middle_name', customer.middle_name, setAttr, bool);
+            setCustomerData('#last_name', customer.last_name, setAttr, bool);
+            setCustomerData('#birthdate', customer.birthdate, setAttr, bool);
+            
+            setCustomerData('#billing_day', account.billing_day, setAttr, bool);
+            setCustomerData('#start_date', account.start_date, setAttr, bool);
+            setCustomerData('#lockin_end_date', account.lockin_end_date, setAttr, bool);
+            setCustomerData('#bill_count', account.bill_count, setAttr, bool);
+    
+            setCustomerData('#install_type_id', installation.install_type_id, setAttr, bool);
+            setCustomerData('#installation_balance', installation.installation_balance, setAttr, bool);
+        }
+
+        // Form Submits -- onclick Triggers
+        edit_customer.onclick = (e) => {
+            e.preventDefault();
+            $('#save-customer-btn').attr('disabled', false);
+            $('#edit-customer').attr('disabled', true);
+            toggleInputData('disabled', false);
+            setDropdownData();
+        };
+        
+      }
+    });
+}
+
+async function updateCustomerData() {
+    const acct_id = $('#first_name').val();
+    console.log(acct_id);
+    toastr.success('success');
 }
 
 // Add Customer JS
@@ -182,78 +410,80 @@ async function addCustomer() {
 
 async function displayPlan() {
     let url = DIR_API + 'plan/read.php';
-    let plan;
     try {
         let res = await fetch(url);
-        plan = await res.json();
+        return await res.json();
     } catch (error) {
         console.log(error);
-    }
-
-    for (var i = 0; i < plan.length; i++) {
-        var opt = `<option value='${plan[i].plan_id}'>${plan[i].plan_name + " - " + plan[i].bandwidth + "mbps"}</option>`;
-        $("#plan_id").append(opt);
     }
 }
 
 async function displayConnection() {
     let url = DIR_API + 'connection/read.php';
-    let connection;
     try {
         let res = await fetch(url);
-        connection = await res.json();
+        return await res.json();
     } catch (error) {
         console.log(error);
-    }
-
-    for (var i = 0; i < connection.length; i++) {
-        var opt = `<option value='${connection[i].connection_id}'>${connection[i].connection_name}</option>`;
-        $("#connection_id").append(opt);
     }
 }
 
 async function displayAccountStatus() {
     let url = DIR_API + 'statuses/read.php?status_table=account_status';
-    let account_status;
     try {
         let res = await fetch(url);
-        account_status = await res.json();
+        return await res.json();
     } catch (error) {
         console.log(error);
-    }
-
-    for (var i = 0; i < account_status.length; i++) {
-        var opt = `<option value='${account_status[i].status_id}'>${account_status[i].status_name}</option>`;
-        $("#account_status_id").append(opt);
     }
 }
 
 async function displayArea() {
     let url = DIR_API + 'area/read.php';
-    let area;
     try {
         let res = await fetch(url);
-        area = await res.json();
+        return await res.json();
     } catch (error) {
         console.log(error);
-    }
-
-    for (var i = 0; i < area.length; i++) {
-        var opt = `<option value='${area[i].area_id}'>${area[i].area_name}</option>`;
-        $("#area_id").append(opt);
     }
 }
 
 async function displayInstallation() {
     let url = DIR_API + 'installation_type/read.php';
-    let install_type;
     try {
         let res = await fetch(url);
-        install_type = await res.json();
+        return await res.json();
     } catch (error) {
         console.log(error);
     }
+}
 
+async function setAddDropdown() {
+    const plan = await displayPlan;
+    for (var i = 0; i < plan.length; i++) {
+        var opt = `<option value='${plan[i].plan_id}'>${plan[i].plan_name + " - " + plan[i].bandwidth + "mbps"}</option>`;
+        $("#plan_id").append(opt);
+    }
+
+    const connection = await displayConnection;
+    for (var i = 0; i < connection.length; i++) {
+        var opt = `<option value='${connection[i].connection_id}'>${connection[i].connection_name}</option>`;
+        $("#connection_id").append(opt);
+    }
+
+    const account_status = await displayAccountStatus;
+    for (var i = 0; i < account_status.length; i++) {
+        var opt = `<option value='${account_status[i].status_id}'>${account_status[i].status_name}</option>`;
+        $("#account_status_id").append(opt);
+    }
+
+    const area = await displayArea();
+    for (var i = 0; i < area.length; i++) {
+        var opt = `<option value='${area[i].area_id}'>${area[i].area_name}</option>`;
+        $("#area_id").append(opt);
+    }
+
+    const install_type = await displayInstallation();
     for (var i = 0; i < install_type.length; i++) {
         var opt = `<option value='${install_type[i].install_type_id}'>${install_type[i].install_type_name}</option>`;
         $("#install_type_id").append(opt);
@@ -267,11 +497,12 @@ function setAddCustomerPage () {
         $("#account_id").attr("value", result);
     });
 
-    displayPlan();
-    displayConnection();
-    displayAccountStatus();
-    displayArea();
-    displayInstallation();
+    // displayPlan();
+    // displayConnection();
+    // displayAccountStatus();
+    // displayArea();
+    // displayInstallation();
+    setAddDropdown();
 
     // Form Submits -- onclick Triggers
     add_customer.onsubmit = (e) => {

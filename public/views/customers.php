@@ -13,7 +13,7 @@
     </nav>
   </div><!-- End Page Title -->
 
-  <!-- Recent Sales -->
+  <!-- Customer List Table -->
   <div class="col-12">
     <div class="card recent-sales overflow-auto">
       <br>
@@ -26,6 +26,7 @@
               <th scope="col">Plan</th>
               <th scope="col">Balance</th>
               <th scope="col">Status</th>
+              <th scope="col">View</th>
             </tr>
           </thead>
           <tbody id="customer-data">
@@ -35,7 +36,171 @@
       </div>
 
     </div>
-  </div><!-- End Recent Sales -->
+  </div><!-- End Customer List Table -->
+  
+<form id="save-customer">
+  <!-- Modal Dialog Scrollable -->
+  <div class="modal fade" id="modalDialogScrollable" tabindex="-1">
+      <div class="modal-dialog modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h5 class="modal-title"></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+
+          <!-- Modal Body -->
+          <div class="modal-body">
+                <div class="row mb-3">
+                  <label for="gstech_id" class="col-sm-2 col-form-label">GSTech ID</label>
+                  <div class="col-sm-10">
+                      <input type="text" class="form-control" id="gstech_id" placeholder="" required>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label for="first_name" class="col-sm-2 col-form-label">First Name</label>
+                      <div class="col-sm-10">
+                          <input type="text" class="form-control" id="first_name" placeholder="Ex. Juan" required>
+                      </div>
+                  </div>
+                  
+                  <div class="row mb-3">
+                      <label for="middle_name" class="col-sm-2 col-form-label">Middle Name</label>
+                      <div class="col-sm-10">
+                          <input type="text" class="form-control" id="middle_name" placeholder="Ex. Santos">
+                      </div>
+                  </div>
+          
+                  <div class="row mb-3">    
+                      <label for="last_name" class="col-sm-2 col-form-label">Last Name</label>
+                      <div class="col-sm-10">
+                          <input type="text" class="form-control" id="last_name" placeholder="Ex. Dela Cruz" required>
+                      </div>
+                  </div>
+          
+                  <div class="row mb-3">
+                      <label for="billing_address" class="col-sm-2 col-form-label">Address</label>
+                      <div class="col-sm-10">
+                          <textarea class="form-control" id="billing_address" placeholder="Ex. 123 Kapasigan St. Pasig City" required></textarea>
+                      </div>
+                  </div>
+          
+                  <div class="row mb-3">
+                      <label for="mobile_number" class="col-sm-2 col-form-label">Mobile Number</label>
+                      <div class="col-sm-10">
+                          <input type="text" class="form-control" id="mobile_number" placeholder="Ex. 09XXXXXXXXX" pattern="[0]{1}[9]{1}[0-9]{9}" required>
+                      </div>
+                  </div>
+          
+                  <div class="row mb-3">
+                      <label for="email" class="col-sm-2 col-form-label">Email</label>
+                      <div class="col-sm-10">
+                          <input type="email" class="form-control" placeholder="Ex. name@example.com" id="email" required>
+                      </div>
+                  </div>
+          
+                  <div class="row mb-3">
+                      <label for="birthdate" class="col-sm-2 col-form-label">Birthdate</label>
+                      <div class="col-sm-10">
+                          <input type="date" class="form-control" id="birthdate" required>
+                      </div>
+                  </div>
+          
+                  <div class="row mb-3">
+                      <label for="start_date" class="col-sm-2 col-form-label">Start Date</label>
+                      <div class="col-sm-10">
+                          <input type="date" class="form-control" id="start_date" required>
+                      </div>
+                  </div>
+
+                  <div class="row mb-3">
+                      <label for="lockin_end_date" class="col-sm-2 col-form-label">Lock In End Date</label>
+                      <div class="col-sm-10">
+                          <input type="date" class="form-control" id="lockin_end_date" disabled>
+                      </div>
+                  </div>
+          
+                  <div class="row mb-3">    
+                      <label for="billing_day" class="col-sm-2 col-form-label">Billing Day</label>
+                      <div class="col-sm-10">
+                          <input type="number" class="form-control" id="billing_day" min="1" max="31" required>
+                      </div>
+                  </div>
+
+                  <div class="row mb-3">
+                      <label for="plan_id" class="col-sm-2 col-form-label">Subscription Plan</label>
+                      <div class="col-sm-10">
+                          <select id="plan_id" class="form-select" required>
+                          </select>
+                      </div>
+                  </div>
+
+                  <div class="row mb-3">
+                      <label for="connection_id" class="col-sm-2 col-form-label">Connection Type</label>
+                      <div class="col-sm-10">
+                          <select id="connection_id" class="form-select" required>
+                          </select>
+                      </div>
+                  </div>
+
+                  <div class="row mb-3">
+                      <label for="account_status_id" class="col-sm-2 col-form-label">Account Status</label>
+                      <div class="col-sm-10">
+                          <select id="account_status_id" class="form-select" required>
+                          </select>
+                      </div>
+                  </div>
+          
+                  <div class="row mb-3">
+                      <label for="area_id" class="col-sm-2 col-form-label">Area</label>
+                      <div class="col-sm-10">
+                          <select id="area_id" class="form-select" required>
+                          </select>
+                      </div>
+                  </div>
+
+                  <div class="row mb-3">    
+                      <label for="bill_count" class="col-sm-2 col-form-label">Bill Count</label>
+                      <div class="col-sm-10">
+                          <input type="text" class="form-control" id="bill_count" required>
+                      </div>
+                  </div>
+
+                  <div class="row mb-3">
+                      <label for="install_type_id" class="col-sm-2 col-form-label">Installation Type</label>
+                      <div class="col-sm-10">
+                          <select id="install_type_id" class="form-select" required>
+                          </select>
+                      </div>
+                  </div>
+          
+                  <div class="row mb-3">    
+                      <label for="installation_balance" class="col-sm-2 col-form-label">Installation Balance</label>
+                      <div class="col-sm-10">
+                          <input type="text" class="form-control" id="installation_balance" required>
+                      </div>
+                  </div>
+
+                  <div class="row mb-3">
+                      <label for="account_id" class="col-sm-2 col-form-label">Account ID</label>
+                      <div class="col-sm-10">
+                          <input type="text" class="form-control" id="account_id" readonly>
+                      </div>
+                  </div>
+          </div>
+
+          <!-- Modal Footer -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="edit-customer">Edit</button>
+            <button type="submit" class="btn btn-success" id="save-customer-btn" disabled>Save Changes</button>
+          </div>
+        </div>
+      </div>
+  </div><!-- End Modal Dialog Scrollable-->
+</form>
+
 </main><!-- End #main -->
 
   <!-- Vendor JS Files -->
