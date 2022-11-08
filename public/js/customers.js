@@ -17,6 +17,11 @@ $(document).ready(function () {
         }
     }
     else {
+        if (sessionStorage.getItem("save_message") == "Customer Updated Successfully.") {
+            toastr.success(sessionStorage.getItem("save_message"));
+            sessionStorage.removeItem("save_message");
+        }
+
         $("#modalDialogScrollable").on("hidden.bs.modal", function () {
             $('#save-customer-btn').attr('disabled', true);
             $('#edit-customer').attr('disabled', false);
@@ -317,12 +322,12 @@ async function updateCustomerData() {
     const account_content = await updateAccountResponse.json();
 
     if (customer_content.message == 'Customer Updated' && account_content.message == 'success') {
-        $("#modalDialogScrollable").modal('hide');
-        toastr.success('Customer Updated Successfully.');
+        // $("#modalDialogScrollable").modal('hide');
+        sessionStorage.setItem('save_message', "Customer Updated Successfully.");
+        window.location.reload();
     }
     else {
-        $("#modalDialogScrollable").modal('hide');
-        toastr.error(account_content.message + " " + customer_content.message);
+        toastr.error("Customer was not updated.");
     }
 }
 
