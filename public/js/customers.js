@@ -461,70 +461,20 @@ async function addCustomer() {
     }
 }
 
-async function displayPlan() {
-    let url = DIR_API + 'plan/read.php';
-    try {
-        let res = await fetch(url);
-        return await res.json();
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-async function displayConnection() {
-    let url = DIR_API + 'connection/read.php';
-    try {
-        let res = await fetch(url);
-        return await res.json();
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-async function displayAccountStatus() {
-    let url = DIR_API + 'statuses/read.php?status_table=account_status';
-    try {
-        let res = await fetch(url);
-        return await res.json();
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-async function displayArea() {
-    let url = DIR_API + 'area/read.php';
-    try {
-        let res = await fetch(url);
-        return await res.json();
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-async function displayInstallation() {
-    let url = DIR_API + 'installation_type/read.php';
-    try {
-        let res = await fetch(url);
-        return await res.json();
-    } catch (error) {
-        console.log(error);
-    }
-}
-
 async function setAddDropdown() {
-    const plan = await displayPlan;
+    const plan = await displayPlan();
     for (var i = 0; i < plan.length; i++) {
         var opt = `<option value='${plan[i].plan_id}'>${plan[i].plan_name + " - " + plan[i].bandwidth + "mbps"}</option>`;
         $("#plan_id").append(opt);
     }
 
-    const connection = await displayConnection;
+    const connection = await displayConnection();
     for (var i = 0; i < connection.length; i++) {
         var opt = `<option value='${connection[i].connection_id}'>${connection[i].connection_name}</option>`;
         $("#connection_id").append(opt);
     }
 
-    const account_status = await displayAccountStatus;
+    const account_status = await displayAccountStatus();
     for (var i = 0; i < account_status.length; i++) {
         var opt = `<option value='${account_status[i].status_id}'>${account_status[i].status_name}</option>`;
         $("#account_status_id").append(opt);

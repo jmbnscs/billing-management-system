@@ -57,6 +57,97 @@ async function getUserLevel(user_id) {
     }
 }
 
+// Display Dropdowns
+async function displayPlan() {
+    let url = DIR_API + 'plan/read.php';
+    try {
+        let res = await fetch(url);
+        return await res.json();
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function displayConnection() {
+    let url = DIR_API + 'connection/read.php';
+    try {
+        let res = await fetch(url);
+        return await res.json();
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function displayAccountStatus() {
+    let url = DIR_API + 'statuses/read.php?status_table=account_status';
+    try {
+        let res = await fetch(url);
+        return await res.json();
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function displayArea() {
+    let url = DIR_API + 'area/read.php';
+    try {
+        let res = await fetch(url);
+        return await res.json();
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function displayInstallation() {
+    let url = DIR_API + 'installation_type/read.php';
+    try {
+        let res = await fetch(url);
+        return await res.json();
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function displayInclusion() {
+    let url = DIR_API + 'inclusion/read.php';
+    try {
+        let res = await fetch(url);
+        return await res.json();
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function displayPlanStatus() {
+    let url = DIR_API + 'statuses/read.php?status_table=plan_status';
+    try {
+        let res = await fetch(url);
+        return await res.json();
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function displayPromo() {
+    let url = DIR_API + 'promo/read.php';
+    try {
+        let res = await fetch(url);
+        return await res.json();
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function displayPlanInclusion(plan_id) {
+    let url = DIR_API + 'views/plan_inclusions.php?plan_id=' + plan_id;
+    try {
+        let res = await fetch(url);
+        return await res.json();
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 // Display Default Data
 async function setDefaults () {
     const admin_data = await getAdminData(admin_id);

@@ -47,7 +47,7 @@
                       <label for="inclusion" class="col-sm-2 col-form-label">Inclusion(s)</label>
                       <div class="col-sm-10">
                       
-                          <select class="form-control selectpicker" id="inclusion" multiple aria-label="size 5 select example">
+                          <select class="form-control selectpicker" id="inclusion" multiple aria-label="size 5 select example" data-actions-box="true">
                             <option value="" disabled>Choose Inclusions</option>
                           </select>
                         
