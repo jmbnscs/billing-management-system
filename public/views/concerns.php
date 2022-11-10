@@ -16,78 +16,169 @@
 
     <section class="section connection">
       <div class="row">
-
         <div class="col-xl-12">
-
           <div class="card">
+            <!-- Bordered Tabs -->
             <div class="card-body pt-3">
               
-              <!-- Bordered Tabs -->
               <ul class="nav nav-tabs nav-tabs-bordered">
 
                 <li class="nav-item">
-                  <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview" id="overview-profile">Overview</button>
+                  <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#concern-overview" id="overview-concern">Overview</button>
                 </li>
 
                 <li class="nav-item">
-                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#add-concern" id="edit-profile">Add Concern Category</button>
+                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#add-concern-tab" id="edit-concern">Add Concern Category</button>
                 </li>
 
               </ul>
+
               <div class="tab-content pt-2">
 
-                <div class="tab-pane fade show active profile-overview " id="profile-overview">
+                <!-- Concern Details Table-->
+                <div class="tab-pane fade show active concern-overview " id="concern-overview">
                   <h5 class="card-title">Concern Details</h5>
 
-        <!-- Concern Details Table-->
-                <div class="col-12">
-                <div class="card concern-details overflow-auto">
-                <br>
-                <div class="card-body">
-                  <table class="table table-borderless" id="concern-table">
-                    <thead>
-                      <tr>
-                        <th scope="col">Concern ID</th>
-                        <th scope="col">Concern Category</th>
-                      </tr>
-                    </thead>
-                    <tbody id="concern-data">
-                  </tbody>
-                </table>
-              </div>
+                  <div class="col-12">
+                    <div class="card concern-details overflow-auto">
+                    <br>
+                    <div class="card-body">
+                        <table class="table table-borderless" id="concern-table">
+                          <thead>
+                            <tr>
+                              <th scope="col">Concern ID</th>
+                              <th scope="col">Concern Category</th>
+                              <th scope="col">Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody id="concern-data">
+                        </tbody>
+                      </table>
+                    </div>
 
-              </div>
-     </div><!-- Concern Details Table -->
+                    </div>
+                  </div>
 
-                </div>
+                </div><!-- Concern Details Table -->
 
-                <div class="tab-pane fade add-concern pt-3 " id="add-concern">
-
-                  <!-- Add New Concern Form -->
-                  <form id="edit-form">
+                <!-- Add New Concern Form -->
+                <div class="tab-pane fade add-concern-tab pt-3 " id="add-concern-tab">
+                  <form id="add-concern">
 
                     <div class="row mb-3">  
-                      <label for="concern_name" class="col-md-4 col-lg-3 col-form-label">Concern Category Name</label>
-                      <div class="col-md-8 col-lg-9">
-                        <input name="concern_name" type="text" class="form-control" id="concern_name" value="" required>
+                      <label for="concern_category" class="col-md-4 col-lg-3 col-form-label">Concern Category Name</label>
+                      <div class="col-md-8 col-lg-5">
+                        <input name="concern_category" type="text" class="form-control" id="concern_category" value="" required>
+                        <br>
+                        <div class="form-check form-switch">
+                          <input class="form-check-input" type="checkbox" id="customer_access" value="1">
+                          <label class="form-check-label" for="customer_access">Customer Access</label>
+                        </div>
                       </div>
+                      
                     </div>
 
                     <div class="text-center">
                       <button type="submit" class="btn btn-primary">Add Category</button>
                     </div>
-                  </form><!-- end Add New Concern Form -->
+                  </form>
 
-                </div>
+                </div><!-- End Add New Concern Form -->
 
-              </div><!-- End Bordered Tabs -->
+              </div>
 
-            </div>
+            </div><!-- End Bordered Tabs -->
           </div>
 
         </div>
       </div>
     </section>
+
+<!-- Concerns Modal -->
+<form id="save-concern">
+  <!-- Modal Dialog Scrollable -->
+  <div class="modal fade" id="editConcernMD" tabindex="-1">
+      <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg">
+        <div class="modal-content">
+
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h5 class="modal-title"></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+
+          <!-- Modal Body -->
+          <div class="modal-body">
+            <div class="row mb-3">
+                <label for="concern_id" class="col-sm-2 col-form-label">Concern ID</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="concern_id" readonly>
+                </div>
+            </div>
+
+            <div class="row mb-3">  
+              <label for="concern_category_md" class="col-md-4 col-lg-3 col-form-label">Concern Category Name</label>
+              <div class="col-md-8 col-lg-9">
+                <input type="text" class="form-control" id="concern_category_md" required>
+                <br>
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" id="customer_access_md" value="1">
+                  <label class="form-check-label" for="customer_access_md_d">Customer Access</label>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <!-- End Modal Body -->
+
+          <!-- Modal Footer -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="edit-concern-btn">Edit</button>
+            <button type="submit" class="btn btn-success" id="save-concern-btn" disabled>Save Changes</button>
+          </div>
+        </div>
+      </div>
+  </div>
+</form> <!-- End Concerns Modal -->
+
+<!-- Delete Concerns Modal -->
+<form id="delete-concern">
+  <div class="modal fade" id="deleteConcernMD" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row mb-3">
+                <label for="concern_id" class="col-md-4 col-lg-5 col-form-label">Concern ID</label>
+                <div class="col-md-8 col-lg-9">
+                    <input type="text" class="form-control" id="concern_id_d" readonly>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+              <label for="concern_category_md" class="col-md-4 col-lg-8 col-form-label">Concern Category Name</label>
+              <div class="col-md-8 col-lg-9">
+                <input type="text" class="form-control" id="concern_category_md_d" readonly>
+                <br>
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" id="customer_access_md_d" value="1" disabled>
+                  <label class="form-check-label" for="customer_access_md_d">Customer Access</label>
+                </div>
+              </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-danger">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div><!-- End Concerns Modal-->
+</form>
 
   </main><!-- End #main -->
 

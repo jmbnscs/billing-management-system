@@ -25,11 +25,11 @@
               <ul class="nav nav-tabs nav-tabs-bordered">
 
                 <li class="nav-item">
-                  <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview" id="overview-profile">Overview</button>
+                  <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#connection-overview" id="overview-connection">Overview</button>
                 </li>
 
                 <li class="nav-item">
-                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#add-connection" id="edit-profile">Add Connection</button>
+                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#add-connection-tab" id="edit-connection">Add Connection</button>
                 </li>
 
               </ul>
@@ -37,7 +37,7 @@
               <div class="tab-content pt-2">
 
                 <!-- Connection Details Table-->
-                <div class="tab-pane fade show active profile-overview " id="profile-overview">
+                <div class="tab-pane fade show active connection-overview " id="connection-overview">
                   <h5 class="card-title">Connection Details</h5>
 
                   <div class="col-12">
@@ -64,7 +64,7 @@
                 </div>
 
                 <!-- Add New Connection Form -->
-                <div class="tab-pane fade add-connection pt-3 " id="add-connection">
+                <div class="tab-pane fade add-connection-tab pt-3 " id="add-connection-tab">
                   <form id="add-connection">
                     <div class="row mb-3">
                       <label for="connection_name" class="col-md-4 col-lg-3 col-form-label">Connection Name</label>
@@ -124,7 +124,7 @@
           <!-- Modal Footer -->
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" id="edit-connection">Edit</button>
+            <button type="button" class="btn btn-primary" id="edit-connection-btn">Edit</button>
             <button type="submit" class="btn btn-success" id="save-connection-btn" disabled>Save Changes</button>
           </div>
         </div>
