@@ -5,7 +5,7 @@
   <main id="main" class="main">
 
     <div class="pagetitle">
-    <h1>Advanced Options</h1>
+      <h1>Advanced Options</h1>
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="dashboard.html">Home</a></li>
@@ -16,7 +16,6 @@
 
     <section class="section connection">
       <div class="row">
-
         <div class="col-xl-12">
 
           <div class="card">
@@ -26,46 +25,47 @@
               <ul class="nav nav-tabs nav-tabs-bordered">
 
                 <li class="nav-item">
-                  <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview" id="overview-profile">Overview</button>
+                  <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#connection-overview" id="overview-connection">Overview</button>
                 </li>
 
                 <li class="nav-item">
-                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#add-connection" id="edit-profile">Add Connection</button>
+                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#add-connection-tab" id="edit-connection">Add Connection</button>
                 </li>
 
               </ul>
+              
               <div class="tab-content pt-2">
 
-                <div class="tab-pane fade show active profile-overview " id="profile-overview">
+                <!-- Connection Details Table-->
+                <div class="tab-pane fade show active connection-overview " id="connection-overview">
                   <h5 class="card-title">Connection Details</h5>
 
-        <!-- Connection Details Table-->
-                <div class="col-12">
-                <div class="card connection-details overflow-auto">
-                <br>
-                <div class="card-body">
-                  <table class="table table-borderless" id="connections-table">
-                    <thead>
-                      <tr>
-                        <th scope="col">Connection ID</th>
-                        <th scope="col">Connection Type</th>
-                      </tr>
-                    </thead>
-                    <tbody id="connections-data">
-                  </tbody>
-                </table>
-              </div>
+                  <div class="col-12">
+                    <div class="card connection-details overflow-auto">
+                    <br>
+                    <div class="card-body">
+                      <table class="table table-borderless" id="connections-table">
+                        <thead>
+                          <tr>
+                            <th scope="col">Connection ID</th>
+                            <th scope="col">Connection Type</th>
+                            <th scope="col">Actions</th>
+                          </tr>
+                        </thead>
 
-              </div>
-     </div><!-- Connection Details Table -->
+                        <tbody id="connections-data">
+                        </tbody>
+                      
+                      </table>
+                    </div>
+                  </div>
+                </div><!-- Connection Details Table -->
 
                 </div>
 
-                <div class="tab-pane fade add-connection pt-3 " id="add-connection">
-
-                  <!-- Add New Connection Form -->
-                  <form id="edit-form">
-
+                <!-- Add New Connection Form -->
+                <div class="tab-pane fade add-connection-tab pt-3 " id="add-connection-tab">
+                  <form id="create-new">
                     <div class="row mb-3">
                       <label for="connection_name" class="col-md-4 col-lg-3 col-form-label">Connection Name</label>
                       <div class="col-md-8 col-lg-9">
@@ -76,9 +76,9 @@
                     <div class="text-center">
                       <button type="submit" class="btn btn-primary">Add Connection</button>
                     </div>
-                  </form><!-- end Add New Connection Form -->
+                  </form>
 
-                </div>
+                </div><!-- end Add New Connection Form -->
 
               </div><!-- End Bordered Tabs -->
 
@@ -88,6 +88,82 @@
         </div>
       </div>
     </section>
+
+<!-- Connection Modal -->
+<form id="update-data">
+  <!-- Modal Dialog Scrollable -->
+  <div class="modal fade" id="editModal" tabindex="-1">
+      <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg">
+        <div class="modal-content">
+
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h5 class="modal-title"></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+
+          <!-- Modal Body -->
+          <div class="modal-body">
+            <div class="row mb-3">
+                <label for="connection_id" class="col-sm-2 col-form-label">Connection ID</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="connection_id" readonly>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+              <label for="connection_name_md" class="col-md-4 col-lg-3 col-form-label">Connection Name</label>
+              <div class="col-md-8 col-lg-9">
+                <input type="text" class="form-control" id="connection_name_md" required>
+              </div>
+            </div>
+
+          </div>
+          <!-- End Modal Body -->
+
+          <!-- Modal Footer -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="edit-btn">Edit</button>
+            <button type="submit" class="btn btn-success" id="save-btn" disabled>Save Changes</button>
+          </div>
+        </div>
+      </div>
+  </div>
+</form> <!-- End Connection Modal -->
+
+<!-- Delete Connection Modal -->
+<form id="delete-data">
+  <div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row mb-3">
+                <label for="connection_id_d" class="col-md-4 col-lg-5 col-form-label">Connection ID</label>
+                <div class="col-md-8 col-lg-9">
+                    <input type="text" class="form-control" id="connection_id_d" readonly>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+              <label for="connection_name_md_d" class="col-md-4 col-lg-5 col-form-label">Connection Name</label>
+              <div class="col-md-8 col-lg-9">
+                <input type="text" class="form-control" id="connection_name_md_d" readonly>
+              </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-danger">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div><!-- End Connection Modal-->
+</form>
 
   </main><!-- End #main -->
 

@@ -9,12 +9,12 @@
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="dashboard.html">Home</a></li>
-          <li class="breadcrumb-item active">User-Level</li>
+          <li class="breadcrumb-item active">User Level</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
 
-    <section class="section User-Level">
+    <section class="section user-level">
       <div class="row">
 
         <div class="col-xl-12">
@@ -26,20 +26,20 @@
               <ul class="nav nav-tabs nav-tabs-bordered">
 
                 <li class="nav-item">
-                  <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview" id="overview-profile">Overview</button>
+                  <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#user-level-overview" id="overview-user-level">Overview</button>
                 </li>
 
                 <li class="nav-item">
-                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#add-User-Level" id="edit-profile">Add User-Level</button>
+                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#add-user-level-tab" id="edit-user-level">Add User Level</button>
                 </li>
 
               </ul>
               <div class="tab-content pt-2">
 
-                <div class="tab-pane fade show active profile-overview " id="profile-overview">
-                  <h5 class="card-title">User-Level Details</h5>
+                <div class="tab-pane fade show active user-level-overview " id="user-level-overview">
+                  <h5 class="card-title">User Level Details</h5>
 
-        <!-- User-Level Details Table-->
+        <!-- User Level Details Table-->
                 <div class="col-12">
                 <div class="card userlevel-details overflow-auto">
                 <br>
@@ -47,8 +47,9 @@
                   <table class="table table-borderless" id="userlevel-table">
                     <thead>
                       <tr>
-                        <th scope="col">User-Level ID</th>
-                        <th scope="col">User-Level</th>
+                        <th scope="col">User Level</th>
+                        <th scope="col">User Role</th>
+                        <th scope="col">Actions</th>
                       </tr>
                     </thead>
                     <tbody id="userlevel-data">
@@ -57,26 +58,26 @@
               </div>
 
               </div>
-     </div><!-- User-Level Details Table -->
+     </div><!-- User Level Details Table -->
 
                 </div>
 
-                <div class="tab-pane fade add-User-Level pt-3 " id="add-User-Level">
+                <div class="tab-pane fade add-user-level-tab pt-3 " id="add-user-level-tab">
 
-                  <!-- Add New User-Level Form -->
-                  <form id="edit-form">
+                  <!-- Add New User Level Form -->
+                  <form id="create-new">
 
                     <div class="row mb-3">
-                      <label for="User-Level_name" class="col-md-4 col-lg-3 col-form-label">User Level Name</label>
+                      <label for="user_role" class="col-md-4 col-lg-3 col-form-label">User Role</label>
                       <div class="col-md-8 col-lg-9">
-                        <input name="User-Level_name" type="text" class="form-control" id="User-Level_name" value="" required>
+                        <input name="user_role" type="text" class="form-control" id="user_role" value="" required>
                       </div>
                     </div>
 
                     <div class="text-center">
-                      <button type="submit" class="btn btn-primary">Add User-Level</button>
+                      <button type="submit" class="btn btn-primary">Add User Level</button>
                     </div>
-                  </form><!-- end Add New User-Level Form -->
+                  </form><!-- End Add New User Level Form -->
 
                 </div>
 
@@ -88,6 +89,82 @@
         </div>
       </div>
     </section>
+
+<!-- User Level Modal -->
+<form id="update-data">
+  <!-- Modal Dialog Scrollable -->
+  <div class="modal fade" id="editModal" tabindex="-1">
+      <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg">
+        <div class="modal-content">
+
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h5 class="modal-title"></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+
+          <!-- Modal Body -->
+          <div class="modal-body">
+            <div class="row mb-3">
+                <label for="user_id" class="col-sm-2 col-form-label">User Level</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="user_id" readonly>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+              <label for="user_role_md" class="col-md-4 col-lg-3 col-form-label">User Role</label>
+              <div class="col-md-8 col-lg-9">
+                <input type="text" class="form-control" id="user_role_md" required>
+              </div>
+            </div>
+
+          </div>
+          <!-- End Modal Body -->
+
+          <!-- Modal Footer -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="edit-btn">Edit</button>
+            <button type="submit" class="btn btn-success" id="save-btn" disabled>Save Changes</button>
+          </div>
+        </div>
+      </div>
+  </div>
+</form> <!-- End User Level Modal -->
+
+<!-- Delete User Level Modal -->
+<form id="delete-data">
+  <div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row mb-3">
+                <label for="user_id_d" class="col-md-4 col-lg-5 col-form-label">User Level</label>
+                <div class="col-md-8 col-lg-9">
+                    <input type="text" class="form-control" id="user_id_d" readonly>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+              <label for="user_role_md_d" class="col-md-4 col-lg-5 col-form-label">User Role</label>
+              <div class="col-md-8 col-lg-9">
+                <input type="text" class="form-control" id="user_role_md_d" readonly>
+              </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-danger">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div><!-- End User Level Modal-->
+</form>
 
   </main><!-- End #main -->
 

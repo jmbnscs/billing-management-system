@@ -1,3 +1,6 @@
+const edit_admin = document.getElementById('edit-admin');
+const save_admin = document.getElementById('save-admin');
+
 $(document).ready( () => {
     isDefault();
 
@@ -13,7 +16,23 @@ $(document).ready( () => {
         }
     }
     else {
+        if (sessionStorage.getItem("save_message") == "Admin Updated Successfully.") {
+            toastr.success(sessionStorage.getItem("save_message"));
+            sessionStorage.removeItem("save_message");
+        }
+
+        $("#modalDialogScrollable").on("hidden.bs.modal", function () {
+            $('#save-admin-btn').attr('disabled', true);
+            $('#edit-admin').attr('disabled', false);
+        });
+
         getAdmins();
+        setModal();
+
+        save_admin.onsubmit = (e) => {
+            e.preventDefault();
+            updateAdminData();
+        };
     }
 });
 
@@ -44,8 +63,177 @@ async function getAdmins () {
                 <td><a href="#" class="text-primary">${admin_data[i].role}</a></td>
                 <td>${admin_data[i].admin_email}</td>
                 <td><span class="badge ${tag}">${admin_data[i].status}</span></td>
+                <td><button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalDialogScrollable" data-bs-whatever="${admin_data[i].admin_id}" id="try_lang"><i class="ri ri-eye-fill"></i></button></td>
             </tr>
         `)).draw(false);
+    }
+}
+
+// Set Admin Modal
+async function setModal () {
+    var exampleModal = document.getElementById('modalDialogScrollable')
+    exampleModal.addEventListener('show.bs.modal', function (event) {
+
+      // Button that triggered the modal
+      var button = event.relatedTarget;
+
+      // Extract info from data-bs-* attributes
+      var recipient = button.getAttribute('data-bs-whatever');
+
+      displayModal(recipient);
+    
+      async function displayModal (admin_id) {
+        // Update the modal's content.
+        var modalTitle = exampleModal.querySelector('.modal-title');
+        //   var modalBodyInput = exampleModal.querySelector('.modal-body input')
+    
+        modalTitle.textContent = admin_id;
+        //   modalBodyInput.value = recipient
+
+        let url = DIR_API + 'admin/read_single.php?admin_id=' + admin_id;
+        let admin;
+            try {
+                let res = await fetch(url);
+                admin = await res.json();
+            } catch (error) {
+                console.log(error);
+            }
+
+        const user_levels = await displayUserLevels();
+        const admin_statuses = await displayAdminStatus();
+
+        toggleInputData('disabled', true);
+        toggleDefaultData('disabled', true);
+        setDefaultDropdown();
+
+        // Display Default Dropdown Data
+        function setDefaultDropdown () {
+            $("#role").empty();
+            for (var i = 0; i < user_levels.length; i++) {
+                if (user_levels[i].user_id == admin.user_level_id) {
+                    var opt = `<option value='${user_levels[i].user_id}'>${user_levels[i].user_role}</option>`;
+                    $("#role").append(opt);
+                }
+            }
+
+            for (var i = 0; i < admin_statuses.length; i++) {
+                if (admin_statuses[i].status_id == admin.admin_status_id) {
+                    var opt = `<option value='${admin_statuses[i].status_id}'>${admin_statuses[i].status_name}</option>`;
+                    $("#admin_status").append(opt);
+                }
+            }
+        }
+
+        async function setDropdownData () {
+            $("#role").empty();
+            $("#role").append(`<option selected disabled value="">Choose Admin Level</option>`);
+            for (var i = 1; i < user_levels.length; i++) {
+                if (user_levels[i].user_id == admin.user_level_id) {
+                    var opt = `<option selected value='${user_levels[i].user_id}' style='color: blue'>${user_levels[i].user_role}</option>`;
+                }
+                else {
+                    var opt = `<option value='${user_levels[i].user_id}'>${user_levels[i].user_role}</option>`;
+                }
+                $("#role").append(opt);
+            }
+
+            $("#admin_status").empty();
+            $("#admin_status").append(`<option selected disabled>Choose Admin Status</option>`);
+            for (var i = 0; i < admin_statuses.length; i++) {
+                if (admin_statuses[i].status_id == admin.admin_status_id) {
+                    var opt = `<option selected value='${admin_statuses[i].status_id}' style='color: blue'>${admin_statuses[i].status_name}</option>`;
+                }
+                else {
+                    var opt = `<option value='${admin_statuses[i].status_id}'>${admin_statuses[i].status_name}</option>`;
+                }
+                $("#admin_status").append(opt);
+            }
+        }
+
+        function setAdminData (id, data, setAttr, bool) {
+            $(id).val(data);
+            $(id).attr(setAttr, bool);
+        }
+
+        function toggleInputData (setAttr, bool) {
+            setAdminData('#admin_id', admin.admin_id, setAttr, bool);
+
+            setAdminData('#mobile_number', admin.mobile_number, setAttr, bool);
+            setAdminData('#admin_email', admin.admin_email, setAttr, bool);
+            setAdminData('#address', admin.address, setAttr, bool);
+
+            setAdminData('#role', admin.role, setAttr, bool);
+            setAdminData('#admin_status', admin.admin_status, setAttr, bool);
+        }
+
+        function toggleDefaultData (setAttr, bool) {
+            setAdminData('#admin_username', admin.admin_username, setAttr, bool);
+            setAdminData('#first_name', admin.first_name, setAttr, bool);
+            setAdminData('#middle_name', admin.middle_name, setAttr, bool);
+            setAdminData('#last_name', admin.last_name, setAttr, bool);
+            setAdminData('#admin_bday', admin.birthdate, setAttr, bool);
+            setAdminData('#employment_date', admin.employment_date, setAttr, bool);
+        }
+
+        // Form Submits -- onclick Triggers
+        edit_admin.onclick = (e) => {
+            e.preventDefault();
+            $('#save-admin-btn').attr('disabled', false);
+            $('#edit-admin').attr('disabled', true);
+            toggleInputData('disabled', false);
+            setDropdownData();
+        };
+        
+      }
+    });
+}
+
+async function updateAdminData() {
+    const admin_id = $('#admin_id').val();
+    const mobile_number = $('#mobile_number').val();
+    const admin_email = $('#admin_email').val();
+
+    const address = $('#address').val();
+    const user_level_id = $('#role').val();
+    const admin_status_id = $('#admin_status').val();
+
+    let url = DIR_API + 'admin/update.php';
+    const updateAdminResponse = await fetch(url, {
+        method : 'PUT',
+        headers : {
+            'Content-Type' : 'application/json'
+        },
+        body : JSON.stringify({
+            'admin_id' : admin_id,
+            'admin_email' : admin_email,
+            'mobile_number' : mobile_number,
+            'address' : address,
+            'user_level_id' : user_level_id
+        })
+    });
+    
+    url = DIR_API + 'admin/update_status.php';
+    const updateStatusResponse = await fetch(url, {
+        method : 'PUT',
+        headers : {
+            'Content-Type' : 'application/json'
+        },
+        body : JSON.stringify({
+            'admin_id' : admin_id,
+            'admin_status_id' : admin_status_id
+        })
+    });
+
+    const admin_content = await updateAdminResponse.json();
+    const status_content = await updateStatusResponse.json();
+
+    if (admin_content.message == 'success' && status_content.message == 'Admin Updated') {
+        // $("#modalDialogScrollable").modal('hide');
+        sessionStorage.setItem('save_message', "Admin Updated Successfully.");
+        window.location.reload();
+    }
+    else {
+        toastr.error("Admin was not updated.");
     }
 }
 
@@ -127,14 +315,26 @@ async function addAdmin() {
 
 async function displayUserLevels() {
     let url = DIR_API + 'user_level/read.php';
-    let user_levels;
     try {
         let res = await fetch(url);
-        user_levels = await res.json();
+        return await res.json();
     } catch (error) {
         console.log(error);
     }
+}
 
+async function displayAdminStatus() {
+    let url = DIR_API + 'statuses/read.php?status_table=admin_status';
+    try {
+        let res = await fetch(url);
+        return await res.json();
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function setAddDropdown() {
+    const user_levels = await displayUserLevels;
     for (var i = 1; i < user_levels.length; i++) {
         var opt = `<option value='${user_levels[i].user_id}'>${user_levels[i].user_role}</option>`;
         $("#role").append(opt);
@@ -148,7 +348,7 @@ function setAddAdminPage () {
         $("#admin_id").attr("value", result);
     });
 
-    displayUserLevels();
+    setAddDropdown();
 
     // Form Submits -- onclick Triggers
     add_admin.onsubmit = (e) => {
