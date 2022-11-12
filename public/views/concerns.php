@@ -63,7 +63,7 @@
 
                 <!-- Add New Concern Form -->
                 <div class="tab-pane fade add-concern-tab pt-3 " id="add-concern-tab">
-                  <form id="add-concern">
+                  <form id="create-new">
 
                     <div class="row mb-3">  
                       <label for="concern_category" class="col-md-4 col-lg-3 col-form-label">Concern Category Name</label>
@@ -95,9 +95,9 @@
     </section>
 
 <!-- Concerns Modal -->
-<form id="save-concern">
+<form id="update-data">
   <!-- Modal Dialog Scrollable -->
-  <div class="modal fade" id="editConcernMD" tabindex="-1">
+  <div class="modal fade" id="editModal" tabindex="-1">
       <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg">
         <div class="modal-content">
 
@@ -134,8 +134,8 @@
           <!-- Modal Footer -->
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" id="edit-concern-btn">Edit</button>
-            <button type="submit" class="btn btn-success" id="save-concern-btn" disabled>Save Changes</button>
+            <button type="button" class="btn btn-primary" id="edit-btn">Edit</button>
+            <button type="submit" class="btn btn-success" id="save-btn" disabled>Save Changes</button>
           </div>
         </div>
       </div>
@@ -143,8 +143,8 @@
 </form> <!-- End Concerns Modal -->
 
 <!-- Delete Concerns Modal -->
-<form id="delete-concern">
-  <div class="modal fade" id="deleteConcernMD" tabindex="-1">
+<form id="delete-data">
+  <div class="modal fade" id="deleteModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
@@ -160,7 +160,7 @@
             </div>
 
             <div class="row mb-3">
-              <label for="concern_category_md" class="col-md-4 col-lg-8 col-form-label">Concern Category Name</label>
+              <label for="concern_category_md_d" class="col-md-4 col-lg-8 col-form-label">Concern Category Name</label>
               <div class="col-md-8 col-lg-9">
                 <input type="text" class="form-control" id="concern_category_md_d" readonly>
                 <br>

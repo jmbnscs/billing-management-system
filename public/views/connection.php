@@ -65,7 +65,7 @@
 
                 <!-- Add New Connection Form -->
                 <div class="tab-pane fade add-connection-tab pt-3 " id="add-connection-tab">
-                  <form id="add-connection">
+                  <form id="create-new">
                     <div class="row mb-3">
                       <label for="connection_name" class="col-md-4 col-lg-3 col-form-label">Connection Name</label>
                       <div class="col-md-8 col-lg-9">
@@ -90,9 +90,9 @@
     </section>
 
 <!-- Connection Modal -->
-<form id="save-connection">
+<form id="update-data">
   <!-- Modal Dialog Scrollable -->
-  <div class="modal fade" id="editConnectionMD" tabindex="-1">
+  <div class="modal fade" id="editModal" tabindex="-1">
       <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg">
         <div class="modal-content">
 
@@ -124,8 +124,8 @@
           <!-- Modal Footer -->
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" id="edit-connection-btn">Edit</button>
-            <button type="submit" class="btn btn-success" id="save-connection-btn" disabled>Save Changes</button>
+            <button type="button" class="btn btn-primary" id="edit-btn">Edit</button>
+            <button type="submit" class="btn btn-success" id="save-btn" disabled>Save Changes</button>
           </div>
         </div>
       </div>
@@ -133,8 +133,8 @@
 </form> <!-- End Connection Modal -->
 
 <!-- Delete Connection Modal -->
-<form id="delete-connection">
-  <div class="modal fade" id="deleteConnectionMD" tabindex="-1">
+<form id="delete-data">
+  <div class="modal fade" id="deleteModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
@@ -143,14 +143,14 @@
         </div>
         <div class="modal-body">
           <div class="row mb-3">
-                <label for="connection_id" class="col-md-4 col-lg-5 col-form-label">Connection ID</label>
+                <label for="connection_id_d" class="col-md-4 col-lg-5 col-form-label">Connection ID</label>
                 <div class="col-md-8 col-lg-9">
                     <input type="text" class="form-control" id="connection_id_d" readonly>
                 </div>
             </div>
 
             <div class="row mb-3">
-              <label for="connection_name_md" class="col-md-4 col-lg-5 col-form-label">Connection Name</label>
+              <label for="connection_name_md_d" class="col-md-4 col-lg-5 col-form-label">Connection Name</label>
               <div class="col-md-8 col-lg-9">
                 <input type="text" class="form-control" id="connection_name_md_d" readonly>
               </div>

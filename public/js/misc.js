@@ -19,7 +19,7 @@ $(document).ready(function () {
         setConcernsPage();
     }
     else if (DIR_CUR == DIR_MAIN + 'views/user_level.php') {
-        getUserLevelMisc();
+        setUserLevelPage();
     }
     else if (DIR_CUR == DIR_MAIN + 'views/area.php') {
         getArea();
@@ -29,133 +29,136 @@ $(document).ready(function () {
     }
 });
 
+// Global Functions
 function displaySuccessMessage() {
-    toastr.success(sessionStorage.getItem("save_message"));
-    sessionStorage.removeItem("save_message");
+    const msg = sessionStorage.getItem('save_message');
+    if (msg !== null) {
+        toastr.success(sessionStorage.getItem("save_message"));
+        sessionStorage.removeItem("save_message");
+    }
+}
+
+let create_fn, edit_fn, update_fn, delete_fn;
+function setButtons() {
+    create_fn = document.getElementById('create-new');
+    edit_fn = document.getElementById('edit-btn');
+    update_fn = document.getElementById('update-data');
+    delete_fn = document.getElementById('delete-data');
+}
+
+async function getData(api) {
+    let url = DIR_API + api + '/read.php';
+    try {
+        let res = await fetch(url);
+        return await res.json();
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function setTable(api, table_name) {
+    let data = await getData(api);
+    let id = new Array(), info = new Array(), counter = 1;
+
+    for (var i = 0; i < data.length; i++) {
+        for (var item in data[i]) {
+            (counter % 2 !== 0) ? id.push(data[i][item]) : info.push(data[i][item]);
+            counter++;
+        }
+    }
+
+    var t = $(table_name).DataTable();
+
+    for (var i = 0; i < data.length; i++) {
+        t.row.add($(`
+            <tr>
+                <th scope="row"><a href="#">${id[i]}</a></th>
+                <td>${info[i]}</td>
+                <td>
+                    <button type="button" class="btn btn-outline-info m-1" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="${id[i]}" ><i class="bi bi-eye"></i></button>
+                    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-whatever="${id[i]}" ><i class="ri ri-delete-bin-5-fill"></i></button>
+                </td>
+            </tr>
+        `)).draw(false);
+    }
+}
+
+function setData (id, data, setAttr, bool) {
+    $(id).val(data);
+    $(id).attr(setAttr, bool);
 }
 
 // -------------------------------------------------------------------- Connection JS
-const edit_connection = document.getElementById('edit-connection-btn');
-const save_connection = document.getElementById('save-connection');
-const delete_connection = document.getElementById('delete-connection');
-const add_connection = document.getElementById('add-connection');
 function setConnectionPage() {
-    const msg = sessionStorage.getItem('save_message');
-    if (msg !== null) {
-        displaySuccessMessage();
-    }
+    displaySuccessMessage();
+    setButtons();
 
-    $("#editConnectionMD").on("hidden.bs.modal", function () {
-        $('#save-connection-btn').attr('disabled', true);
-        $('#edit-connection-btn').attr('disabled', false);
+    $("#editModal").on("hidden.bs.modal", function () {
+        $('#save-btn').attr('disabled', true);
+        $('#edit-btn').attr('disabled', false);
     });
 
-    getConnection();
-    setConnectionModal();
-    setDeleteConnectionModal();
+    setTable('connection', '#connections-table');
+    setUpdateModal();
+    setDeleteModal();
 
-    save_connection.onsubmit = (e) => {
+    update_fn.onsubmit = (e) => {
         e.preventDefault();
-        updateConnectionData();
+        updateData();
     };
 
-    delete_connection.onsubmit = (e) => {
+    delete_fn.onsubmit = (e) => {
         e.preventDefault();
-        deleteConnection();
+        deleteData();
     };
 
-    add_connection.onsubmit = (e) => {
+    create_fn.onsubmit = (e) => {
         e.preventDefault();
-        addConnection();
+        createData();
     };
 
-    async function getConnectionData() {
-        let url = DIR_API + 'connection/read.php';
-        try {
-            let res = await fetch(url);
-            return await res.json();
-        } catch (error) {
-            console.log(error);
-        }
-    }
-    
-    // Set Connection Table
-    async function getConnection () {
-        let conn_data = await getConnectionData();
-        var t = $('#connections-table').DataTable();
-    
-        for (var i = 0; i < conn_data.length; i++) {
-            t.row.add($(`
-                <tr>
-                    <th scope="row"><a href="#">${conn_data[i].connection_id}</a></th>
-                    <td>${conn_data[i].connection_name}</td>
-                    <td>
-                        <button type="button" class="btn btn-outline-info m-1" data-bs-toggle="modal" data-bs-target="#editConnectionMD" data-bs-whatever="${conn_data[i].connection_id}" ><i class="bi bi-eye"></i></button>
-                        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteConnectionMD" data-bs-whatever="${conn_data[i].connection_id}" ><i class="ri ri-delete-bin-5-fill"></i></button>
-                    </td>
-                </tr>
-            `)).draw(false);
-        }
-    }
-    
     // Set Connection Modal
-    async function setConnectionModal () {
-        var exampleModal = document.getElementById('editConnectionMD')
-        exampleModal.addEventListener('show.bs.modal', function (event) {
+    async function setUpdateModal () {
+        var updateModal = document.getElementById('editModal')
+        updateModal.addEventListener('show.bs.modal', async function (event) {
     
-          // Button that triggered the modal
-          var button = event.relatedTarget;
-    
-          // Extract info from data-bs-* attributes
-          var recipient = button.getAttribute('data-bs-whatever');
-    
-          displayModal(recipient);
-        
-          async function displayModal (connection_id) {
-            // Update the modal's content.
-            var modalTitle = exampleModal.querySelector('.modal-title');
-        
-            modalTitle.textContent = connection_id;
-    
-            let conn_data = await getConnectionData();
-    
+            var button = event.relatedTarget;
+            var connection_id = button.getAttribute('data-bs-whatever');
+            let conn_data = await getData('connection');
             let conn_id;
+
+            function toggleInputData (setAttr, bool) {
+                setData('#connection_id', conn_data[conn_id].connection_id, setAttr, bool);
+                setData('#connection_name_md', conn_data[conn_id].connection_name, setAttr, bool);
+            }
+
             for (var i = 0; i < conn_data.length; i++) {
                 if (connection_id == conn_data[i].connection_id) {
                     conn_id = i;
                 }
             }
-    
+
+            var modalTitle = updateModal.querySelector('.modal-title');
+            modalTitle.textContent = connection_id + ' - ' + conn_data[conn_id].connection_name;
+            
             toggleInputData('disabled', true);
     
-            function setConnectionData (id, data, setAttr, bool) {
-                $(id).val(data);
-                $(id).attr(setAttr, bool);
-            }
-    
-            function toggleInputData (setAttr, bool) {
-                setConnectionData('#connection_id', conn_data[conn_id].connection_id, setAttr, bool);
-                setConnectionData('#connection_name_md', conn_data[conn_id].connection_name, setAttr, bool);
-            }
-    
             // Form Submits -- onclick Triggers
-            edit_connection.onclick = (e) => {
+            edit_fn.onclick = (e) => {
                 e.preventDefault();
-                $('#save-connection-btn').attr('disabled', false);
-                $('#edit-connection-btn').attr('disabled', true);
+                $('#save-btn').attr('disabled', false);
+                $('#edit-btn').attr('disabled', true);
                 toggleInputData('disabled', false);
             };
-            
-          }
         });
     }
     
-    async function updateConnectionData() {
+    async function updateData() {
         const connection_id = $('#connection_id').val();
         const connection_name = $('#connection_name_md').val();
     
         let url = DIR_API + 'connection/update.php';
-        const updateConnectionResponse = await fetch(url, {
+        const updateDataResponse = await fetch(url, {
             method : 'PUT',
             headers : {
                 'Content-Type' : 'application/json'
@@ -166,7 +169,7 @@ function setConnectionPage() {
             })
         });
     
-        const conn_content = await updateConnectionResponse.json();
+        const conn_content = await updateDataResponse.json();
     
         if (conn_content.message == 'Connection Updated') {
             sessionStorage.setItem('save_message', "Connection Updated Successfully.");
@@ -178,52 +181,38 @@ function setConnectionPage() {
     }
     
     // Set Delete Connection Modal
-    async function setDeleteConnectionModal () {
-        var exampleModal = document.getElementById('deleteConnectionMD')
-        exampleModal.addEventListener('show.bs.modal', function (event) {
-    
-          // Button that triggered the modal
-          var button = event.relatedTarget;
-    
-          // Extract info from data-bs-* attributes
-          var recipient = button.getAttribute('data-bs-whatever');
-    
-          displayModal(recipient);
+    async function setDeleteModal () {
+        var deleteModal = document.getElementById('deleteModal')
+        deleteModal.addEventListener('show.bs.modal', async function (event) {
         
-          async function displayModal (connection_id) {
-            let conn_data = await getConnectionData();
+            var button = event.relatedTarget;
+            var connection_id = button.getAttribute('data-bs-whatever');
+            let conn_data = await getData('connection');
             let conn_id;
+
+            function toggleInputData (setAttr, bool) {
+                setData('#connection_id_d', conn_data[conn_id].connection_id, setAttr, bool);
+                setData('#connection_name_md_d', conn_data[conn_id].connection_name, setAttr, bool);
+            }
+
             for (var i = 0; i < conn_data.length; i++) {
                 if (connection_id == conn_data[i].connection_id) {
                     conn_id = i;
                 }
             }
     
-            // Update the modal's content.
-            var modalTitle = exampleModal.querySelector('.modal-title');
+            var modalTitle = deleteModal.querySelector('.modal-title');
             modalTitle.textContent = "Delete " + conn_data[conn_id].connection_name + "?";
     
             toggleInputData('disabled', true);
-    
-            function setConnectionData (id, data, setAttr, bool) {
-                $(id).val(data);
-                $(id).attr(setAttr, bool);
-            }
-    
-            function toggleInputData (setAttr, bool) {
-                setConnectionData('#connection_id_d', conn_data[conn_id].connection_id, setAttr, bool);
-                setConnectionData('#connection_name_md_d', conn_data[conn_id].connection_name, setAttr, bool);
-            }
-    
-          }
         });
     }
     
-    async function deleteConnection() {
+    async function deleteData() {
         const connection_id = $('#connection_id_d').val();
     
         let url = DIR_API + 'connection/delete.php';
-        const deleteConnectionResponse = await fetch(url, {
+        const deleteDataResponse = await fetch(url, {
             method : 'DELETE',
             headers : {
                 'Content-Type' : 'application/json'
@@ -233,7 +222,7 @@ function setConnectionPage() {
             })
         });
     
-        const content = await deleteConnectionResponse.json();
+        const content = await deleteDataResponse.json();
         
         if (content.message == 'Connection Deleted') {
             sessionStorage.setItem('save_message', "Connection Deleted Successfully.");
@@ -244,11 +233,11 @@ function setConnectionPage() {
         }
     }
     
-    async function addConnection() {
+    async function createData() {
         const connection_name = $('#connection_name').val();
     
         let url = DIR_API + 'connection/create.php';
-        const addConnectionResponse = await fetch(url, {
+        const createDataResponse = await fetch(url, {
             method : 'POST',
             headers : {
                 'Content-Type' : 'application/json'
@@ -258,7 +247,7 @@ function setConnectionPage() {
             })
         });
     
-        const content = await addConnectionResponse.json();
+        const content = await createDataResponse.json();
         
         if (content.message = 'Connection Created') {
             toastr.success('Connection Created Successfully.');
@@ -271,53 +260,37 @@ function setConnectionPage() {
 // End of Connection JS
 
 // -------------------------------------------------------------------- Concerns JS
-const edit_concern = document.getElementById('edit-concern-btn');
-const save_concern = document.getElementById('save-concern');
-const delete_concern = document.getElementById('delete-concern');
-const add_concern = document.getElementById('add-concern');
 function setConcernsPage() {
-    const msg = sessionStorage.getItem('save_message');
-    if (msg !== null) {
-        displaySuccessMessage();
-    }
+    displaySuccessMessage();
+    setButtons();
 
-    $("#editConcernMD").on("hidden.bs.modal", function () {
-        $('#save-concern-btn').attr('disabled', true);
-        $('#edit-concern-btn').attr('disabled', false);
+    $("#editModal").on("hidden.bs.modal", function () {
+        $('#save-btn').attr('disabled', true);
+        $('#edit-btn').attr('disabled', false);
     });
 
-    getConcerns();
-    setConcernModal();
-    setDeleteConcernModal();
+    setConcernsTable();
+    setUpdateModal();
+    setDeleteModal();
 
-    save_concern.onsubmit = (e) => {
+    update_fn.onsubmit = (e) => {
         e.preventDefault();
-        updateConcernData();
+        updateData();
     };
 
-    delete_concern.onsubmit = (e) => {
+    delete_fn.onsubmit = (e) => {
         e.preventDefault();
-        deleteConcern();
+        deleteData();
     };
 
-    add_concern.onsubmit = (e) => {
+    create_fn.onsubmit = (e) => {
         e.preventDefault();
-        addConcern();
+        createData();
     };
-
-    async function getConcernData() {
-        let url = DIR_API + 'concerns/read.php';
-        try {
-            let res = await fetch(url);
-            return await res.json();
-        } catch (error) {
-            console.log(error);
-        }
-    }
     
     // Set Concerns Table
-    async function getConcerns () {
-        let concern_data = await getConcernData();
+    async function setConcernsTable () {
+        let concern_data = await getData('concerns');
         var t = $('#concern-table').DataTable();
     
         for (var i = 0; i < concern_data.length; i++) {
@@ -326,8 +299,8 @@ function setConcernsPage() {
                     <th scope="row"><a href="#">${concern_data[i].concern_id}</a></th>
                     <td>${concern_data[i].concern_category}</td>
                     <td>
-                        <button type="button" class="btn btn-outline-info m-1" data-bs-toggle="modal" data-bs-target="#editConcernMD" data-bs-whatever="${concern_data[i].concern_id}" ><i class="bi bi-eye"></i></button>
-                        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteConcernMD" data-bs-whatever="${concern_data[i].concern_id}" ><i class="ri ri-delete-bin-5-fill"></i></button>
+                        <button type="button" class="btn btn-outline-info m-1" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="${concern_data[i].concern_id}" ><i class="bi bi-eye"></i></button>
+                        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-whatever="${concern_data[i].concern_id}" ><i class="ri ri-delete-bin-5-fill"></i></button>
                     </td>
                 </tr>
             `)).draw(false);
@@ -335,9 +308,9 @@ function setConcernsPage() {
     }
     
     // Set Concerns Modal
-    async function setConcernModal () {
-        var exampleModal = document.getElementById('editConcernMD')
-        exampleModal.addEventListener('show.bs.modal', function (event) {
+    async function setUpdateModal () {
+        var updateModal = document.getElementById('editModal')
+        updateModal.addEventListener('show.bs.modal', function (event) {
     
           // Button that triggered the modal
           var button = event.relatedTarget;
@@ -348,7 +321,7 @@ function setConcernsPage() {
           displayModal(recipient);
         
           async function displayModal (concern_id) {
-            let concern_data = await getConcernData();
+            let concern_data = await getData('concerns');
     
             let conc_id;
             for (var i = 0; i < concern_data.length; i++) {
@@ -358,7 +331,7 @@ function setConcernsPage() {
             }
 
             // Update the modal's content.
-            var modalTitle = exampleModal.querySelector('.modal-title');
+            var modalTitle = updateModal.querySelector('.modal-title');
         
             modalTitle.textContent = concern_data[conc_id].concern_category;
     
@@ -383,10 +356,10 @@ function setConcernsPage() {
             }
     
             // Form Submits -- onclick Triggers
-            edit_concern.onclick = (e) => {
+            edit_fn.onclick = (e) => {
                 e.preventDefault();
-                $('#save-concern-btn').attr('disabled', false);
-                $('#edit-concern-btn').attr('disabled', true);
+                $('#save-btn').attr('disabled', false);
+                $('#edit-btn').attr('disabled', true);
                 toggleInputData('disabled', false);
             };
             
@@ -399,7 +372,7 @@ function setConcernsPage() {
     $('#customer_access_md').on('change', function() {
         customer_switch_md = $(this).is(':checked');
     });
-    async function updateConcernData() {
+    async function updateData() {
         const concern_id = $('#concern_id').val();
         const concern_category = $('#concern_category_md').val();
 
@@ -432,8 +405,8 @@ function setConcernsPage() {
     }
     
     // Set Delete Concern Modal
-    async function setDeleteConcernModal () {
-        var deleteModal = document.getElementById('deleteConcernMD')
+    async function setDeleteModal () {
+        var deleteModal = document.getElementById('deleteModal')
         deleteModal.addEventListener('show.bs.modal', function (event) {
     
           // Button that triggered the modal
@@ -445,7 +418,7 @@ function setConcernsPage() {
           displayModal(recipient);
         
           async function displayModal (concern_id) {
-            let concern_data = await getConcernData();
+            let concern_data = await getData('concerns');
             let conc_id;
             for (var i = 0; i < concern_data.length; i++) {
                 if (concern_id == concern_data[i].concern_id) {
@@ -480,11 +453,11 @@ function setConcernsPage() {
     }
     
     // Delete Concern
-    async function deleteConcern() {
+    async function deleteData() {
         const concern_id = $('#concern_id_d').val();
     
         let url = DIR_API + 'concerns/delete.php';
-        const deleteConcernResponse = await fetch(url, {
+        const deleteDataResponse = await fetch(url, {
             method : 'DELETE',
             headers : {
                 'Content-Type' : 'application/json'
@@ -494,7 +467,7 @@ function setConcernsPage() {
             })
         });
     
-        const content = await deleteConcernResponse.json();
+        const content = await deleteDataResponse.json();
         
         if (content.message == 'Concern Deleted') {
             sessionStorage.setItem('save_message', "Concern Category Deleted Successfully.");
@@ -511,7 +484,7 @@ function setConcernsPage() {
         // console.log($(this).is(':checked'));
         customer_switch = $(this).is(':checked');
     });
-    async function addConcern() {
+    async function createData() {
         const concern_category = $('#concern_category').val();
 
         // Get customer access value
@@ -519,7 +492,7 @@ function setConcernsPage() {
         (customer_switch) ? customer_access = 1 : customer_access = 0;
 
         let url = DIR_API + 'concerns/create.php';
-        const addConcernResponse = await fetch(url, {
+        const createDataResponse = await fetch(url, {
             method : 'POST',
             headers : {
                 'Content-Type' : 'application/json'
@@ -530,7 +503,7 @@ function setConcernsPage() {
             })
         });
     
-        const content = await addConcernResponse.json();
+        const content = await createDataResponse.json();
         
         if (content.message = 'Concern Created') {
             toastr.success('Concern Category Created Successfully.');
@@ -545,31 +518,179 @@ function setConcernsPage() {
 }
 // End of Concerns JS
 
-// Add User Level
-// View User Level JS
-async function getUserLevelMisc () {
-    let url = DIR_API + 'user_level/read.php';
-    let userlevel_data;
-    var t = $('#userlevel-table').DataTable();
+// -------------------------------------------------------------------- User Level JS
+function setUserLevelPage() {
+    displaySuccessMessage();
+    setButtons();
 
-    try {
-        let res = await fetch(url);
-        userlevel_data = await res.json();
-    } catch (error) {
-        console.log(error);
+    $("#editModal").on("hidden.bs.modal", function () {
+        $('#save-btn').attr('disabled', true);
+        $('#edit-btn').attr('disabled', false);
+    });
+
+    setTable('user_level', '#userlevel-table');
+    setUpdateModal();
+    setDeleteModal();
+
+    update_fn.onsubmit = (e) => {
+        e.preventDefault();
+        updateData();
+    };
+
+    delete_fn.onsubmit = (e) => {
+        e.preventDefault();
+        deleteData();
+    };
+
+    create_fn.onsubmit = (e) => {
+        e.preventDefault();
+        createData();
+    };
+    
+    // Set User Level Modal
+    async function setUpdateModal () {
+        var updateModal = document.getElementById('editModal')
+        updateModal.addEventListener('show.bs.modal', async function (event) {
+    
+            var button = event.relatedTarget;
+            var user_id = button.getAttribute('data-bs-whatever');
+            let userlevel_data = await getData('user_level');
+            let ul_id;
+
+            function toggleInputData (setAttr, bool) {
+                setData('#user_id', userlevel_data[ul_id].user_id, setAttr, bool);
+                setData('#user_role_md', userlevel_data[ul_id].user_role, setAttr, bool);
+            }
+
+            for (var i = 0; i < userlevel_data.length; i++) {
+                if (user_id == userlevel_data[i].user_id) {
+                    ul_id = i;
+                }
+            }
+
+            var modalTitle = updateModal.querySelector('.modal-title');
+            modalTitle.textContent = userlevel_data[ul_id].user_role;
+
+            toggleInputData('disabled', true);
+
+            // Form Submits -- onclick Triggers
+            edit_fn.onclick = (e) => {
+                e.preventDefault();
+                $('#save-btn').attr('disabled', false);
+                $('#edit-btn').attr('disabled', true);
+                toggleInputData('disabled', false);
+            };
+        });
     }
+    
+    // Update User Level
+    async function updateData() {
+        const user_id = $('#user_id').val();
+        const user_role = $('#user_role_md').val();
+    
+        let url = DIR_API + 'user_level/update.php';
+        const updateUserLevelResponse = await fetch(url, {
+            method : 'PUT',
+            headers : {
+                'Content-Type' : 'application/json'
+            },
+            body : JSON.stringify({
+                'user_id' : user_id,
+                'user_role' : user_role
+            })
+        });
+    
+        const ul_content = await updateUserLevelResponse.json();
+    
+        if (ul_content.message == 'User Level Updated') {
+            sessionStorage.setItem('save_message', "User Role Updated Successfully.");
+            window.location.reload();
+        }
+        else {
+            toastr.error("User Role was not updated.");
+        }
+    }
+    
+    // Set Delete User Level Modal
+    async function setDeleteModal () {
+        var deleteModal = document.getElementById('deleteModal')
+        deleteModal.addEventListener('show.bs.modal', async function (event) {
+    
+            var button = event.relatedTarget;
+            var user_id = button.getAttribute('data-bs-whatever');
+            let userlevel_data = await getData('user_level');
+            let ul_id;
 
-    for (var i = 0; i < userlevel_data.length; i++) {
-        t.row.add($(`
-            <tr>
-                <th scope="row"><a href="#">${userlevel_data[i].user_id}</a></th>
-                <td>${userlevel_data[i].user_role}</td>
-            </tr>
-        `)).draw(false);
+            function toggleInputData (setAttr, bool) {
+                setData('#user_id_d', userlevel_data[ul_id].user_id, setAttr, bool);
+                setData('#user_role_md_d', userlevel_data[ul_id].user_role, setAttr, bool);
+            }
+
+            for (var i = 0; i < userlevel_data.length; i++) {
+                if (user_id == userlevel_data[i].user_id) {
+                    ul_id = i;
+                }
+            }
+    
+            var modalTitle = deleteModal.querySelector('.modal-title');
+            modalTitle.textContent = "Delete " + userlevel_data[ul_id].user_role + "?";
+    
+            toggleInputData('disabled', true);
+        });
+    }
+    
+    // Delete User Level
+    async function deleteData() {
+        const user_id = $('#user_id_d').val();
+    
+        let url = DIR_API + 'user_level/delete.php';
+        const deleteDataResponse = await fetch(url, {
+            method : 'DELETE',
+            headers : {
+                'Content-Type' : 'application/json'
+            },
+            body : JSON.stringify({
+                'user_id' : user_id
+            })
+        });
+    
+        const content = await deleteDataResponse.json();
+        
+        if (content.message == 'User Level Deleted') {
+            sessionStorage.setItem('save_message', "User Role Deleted Successfully.");
+            window.location.reload();
+        }
+        else {
+            toastr.error("User Role was not deleted.");
+        }
+    }
+    
+    // Add User Level
+    async function createData() {
+        const user_role = $('#user_role').val();
+    
+        let url = DIR_API + 'user_level/create.php';
+        const createDataResponse = await fetch(url, {
+            method : 'POST',
+            headers : {
+                'Content-Type' : 'application/json'
+            },
+            body : JSON.stringify({
+                'user_role' : user_role
+            })
+        });
+    
+        const content = await createDataResponse.json();
+        
+        if (content.message = 'User Level Created') {
+            toastr.success('User Role Created Successfully.');
+            setTimeout(function(){
+                window.location.replace('../views/user_level.php');
+             }, 2000);
+        }
     }
 }
-
-// End of Add User Level
+// End of User Level JS
 
 // Add Area
 // View Area JS
