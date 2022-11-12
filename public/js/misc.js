@@ -25,7 +25,7 @@ $(document).ready(function () {
         setAreaPage();
     }
     else if (DIR_CUR == DIR_MAIN + 'views/inclusions.php') {
-        getInclusion();
+        setInclusionPage();
     }
 });
 
@@ -310,51 +310,37 @@ function setConcernsPage() {
     // Set Concerns Modal
     async function setUpdateModal () {
         var updateModal = document.getElementById('editModal')
-        updateModal.addEventListener('show.bs.modal', function (event) {
+        updateModal.addEventListener('show.bs.modal', async function (event) {
     
-          // Button that triggered the modal
-          var button = event.relatedTarget;
-    
-          // Extract info from data-bs-* attributes
-          var recipient = button.getAttribute('data-bs-whatever');
-    
-          displayModal(recipient);
-        
-          async function displayModal (concern_id) {
+            var button = event.relatedTarget;
+            var concern_id = button.getAttribute('data-bs-whatever');
             let concern_data = await getData('concerns');
-    
             let conc_id;
+
+            function toggleInputData (setAttr, bool) {
+                setData('#concern_id', concern_data[conc_id].concern_id, setAttr, bool);
+                setData('#concern_category_md', concern_data[conc_id].concern_category, setAttr, bool);
+                if (concern_data[conc_id].customer_access == 0) {
+                    setData('#customer_access_md', concern_data[conc_id].customer_access, setAttr, bool);
+                    setData('#customer_access_md', concern_data[conc_id].customer_access, 'checked', false);
+                }
+                else {
+                    setData('#customer_access_md', concern_data[conc_id].customer_access, setAttr, bool);
+                    setData('#customer_access_md', concern_data[conc_id].customer_access, 'checked', true);
+                }
+            }
+
             for (var i = 0; i < concern_data.length; i++) {
                 if (concern_id == concern_data[i].concern_id) {
                     conc_id = i;
                 }
             }
 
-            // Update the modal's content.
             var modalTitle = updateModal.querySelector('.modal-title');
-        
             modalTitle.textContent = concern_data[conc_id].concern_category;
     
             toggleInputData('disabled', true);
-    
-            function setConcernData (id, data, setAttr, bool) {
-                $(id).val(data);
-                $(id).attr(setAttr, bool);
-            }
-    
-            function toggleInputData (setAttr, bool) {
-                setConcernData('#concern_id', concern_data[conc_id].concern_id, setAttr, bool);
-                setConcernData('#concern_category_md', concern_data[conc_id].concern_category, setAttr, bool);
-                if (concern_data[conc_id].customer_access == 0) {
-                    setConcernData('#customer_access_md', concern_data[conc_id].customer_access, setAttr, bool);
-                    setConcernData('#customer_access_md', concern_data[conc_id].customer_access, 'checked', false);
-                }
-                else {
-                    setConcernData('#customer_access_md', concern_data[conc_id].customer_access, setAttr, bool);
-                    setConcernData('#customer_access_md', concern_data[conc_id].customer_access, 'checked', true);
-                }
-            }
-    
+            
             // Form Submits -- onclick Triggers
             edit_fn.onclick = (e) => {
                 e.preventDefault();
@@ -362,8 +348,6 @@ function setConcernsPage() {
                 $('#edit-btn').attr('disabled', true);
                 toggleInputData('disabled', false);
             };
-            
-          }
         });
     }
     
@@ -381,7 +365,7 @@ function setConcernsPage() {
         (customer_switch_md) ? customer_access = 1 : customer_access = 0;
     
         let url = DIR_API + 'concerns/update.php';
-        const updateConcernResponse = await fetch(url, {
+        const updateDataResponse = await fetch(url, {
             method : 'PUT',
             headers : {
                 'Content-Type' : 'application/json'
@@ -393,7 +377,7 @@ function setConcernsPage() {
             })
         });
     
-        const content = await updateConcernResponse.json();
+        const content = await updateDataResponse.json();
     
         if (content.message == 'Concern Updated') {
             sessionStorage.setItem('save_message', "Concern Category Updated Successfully.");
@@ -407,48 +391,34 @@ function setConcernsPage() {
     // Set Delete Concern Modal
     async function setDeleteModal () {
         var deleteModal = document.getElementById('deleteModal')
-        deleteModal.addEventListener('show.bs.modal', function (event) {
+        deleteModal.addEventListener('show.bs.modal', async function (event) {
     
-          // Button that triggered the modal
-          var button = event.relatedTarget;
-    
-          // Extract info from data-bs-* attributes
-          var recipient = button.getAttribute('data-bs-whatever');
-    
-          displayModal(recipient);
-        
-          async function displayModal (concern_id) {
+            var button = event.relatedTarget;
+            var concern_id = button.getAttribute('data-bs-whatever');
             let concern_data = await getData('concerns');
             let conc_id;
+
+            function toggleInputData (setAttr, bool) {
+                setData('#concern_id_d', concern_data[conc_id].concern_id, setAttr, bool);
+                setData('#concern_category_md_d', concern_data[conc_id].concern_category, setAttr, bool);
+                if (concern_data[conc_id].customer_access == 0) {
+                    setData('#customer_access_md_d', concern_data[conc_id].customer_access, 'checked', false);
+                }
+                else {
+                    setData('#customer_access_md_d', concern_data[conc_id].customer_access, 'checked', true);
+                }
+            }
+
             for (var i = 0; i < concern_data.length; i++) {
                 if (concern_id == concern_data[i].concern_id) {
                     conc_id = i;
                 }
             }
     
-            // Update the modal's content.
             var modalTitle = deleteModal.querySelector('.modal-title');
             modalTitle.textContent = "Delete " + concern_data[conc_id].concern_category + "?";
     
             toggleInputData('disabled', true);
-    
-            function setConcernData (id, data, setAttr, bool) {
-                $(id).val(data);
-                $(id).attr(setAttr, bool);
-            }
-    
-            function toggleInputData (setAttr, bool) {
-                setConcernData('#concern_id_d', concern_data[conc_id].concern_id, setAttr, bool);
-                setConcernData('#concern_category_md_d', concern_data[conc_id].concern_category, setAttr, bool);
-                if (concern_data[conc_id].customer_access == 0) {
-                    setConcernData('#customer_access_md_d', concern_data[conc_id].customer_access, 'checked', false);
-                }
-                else {
-                    setConcernData('#customer_access_md_d', concern_data[conc_id].customer_access, 'checked', true);
-                }
-            }
-    
-          }
         });
     }
     
@@ -866,27 +836,196 @@ function setAreaPage() {
 }
 // End of Area JS
 
-// Add Inclusion
-// View inclusion JS
-async function getInclusion () {
-    let url = DIR_API + 'inclusion/read.php';
-    let inclusion_data;
-    var t = $('#inclusions-table').DataTable();
-    try {
-        let res = await fetch(url);
-        inclusion_data = await res.json();
-    } catch (error) {
-        console.log(error);
-    }
+// -------------------------------------------------------------------- Inclusion JS
+function setInclusionPage() {
+    displaySuccessMessage();
+    setButtons();
 
-    for (var i = 0; i < inclusion_data.length; i++) {
-        t.row.add($(`
-            <tr>
-                <th scope="row"><a href="#">${inclusion_data[i].inclusion_id}</a></th>
-                <td>${inclusion_data[i].inclusion_name}</td>
-            </tr>
-        `)).draw(false);
+    $("#editModal").on("hidden.bs.modal", function () {
+        $('#save-btn').attr('disabled', true);
+        $('#edit-btn').attr('disabled', false);
+    });
+
+    setInclusionTable();
+    setUpdateModal();
+    setDeleteModal();
+
+    update_fn.onsubmit = (e) => {
+        e.preventDefault();
+        updateData();
+    };
+
+    delete_fn.onsubmit = (e) => {
+        e.preventDefault();
+        deleteData();
+    };
+
+    create_fn.onsubmit = (e) => {
+        e.preventDefault();
+        createData();
+    };
+    
+    // Set Inclusion Table
+    async function setInclusionTable() {
+        let data = await getData('inclusion');
+        var t = $('#inclusions-table').DataTable();
+    
+        for (var i = 0; i < data.length; i++) {
+            t.row.add($(`
+                <tr>
+                    <th scope="row"><a href="#">${data[i].inclusion_id}</a></th>
+                    <td>${data[i].inclusion_name}</td>
+                    <td>
+                        <button type="button" class="btn btn-outline-info m-1" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="${data[i].inclusion_id}" ><i class="bi bi-eye"></i></button>
+                        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-whatever="${data[i].inclusion_id}" ><i class="ri ri-delete-bin-5-fill"></i></button>
+                    </td>
+                </tr>
+            `)).draw(false);
+        }
+    }
+    
+    // Set Inclusion Modal
+    async function setUpdateModal () {
+        var updateModal = document.getElementById('editModal')
+        updateModal.addEventListener('show.bs.modal', async function (event) {
+    
+            var button = event.relatedTarget;
+            var inclusion_id = button.getAttribute('data-bs-whatever');
+            let data = await getData('inclusion');
+            let inc_id;
+
+            function toggleInputData (setAttr, bool) {
+                setData('#inclusion_id', data[inc_id].inclusion_id, setAttr, bool);
+                setData('#inclusion_name_md', data[inc_id].inclusion_name, setAttr, bool);
+            }
+
+            for (var i = 0; i < data.length; i++) {
+                if (inclusion_id == data[i].inclusion_id) {
+                    inc_id = i;
+                }
+            }
+
+            var modalTitle = updateModal.querySelector('.modal-title');
+            modalTitle.textContent = data[inc_id].inclusion_name;
+    
+            toggleInputData('disabled', true);
+            
+            // Form Submits -- onclick Triggers
+            edit_fn.onclick = (e) => {
+                e.preventDefault();
+                $('#save-btn').attr('disabled', false);
+                $('#edit-btn').attr('disabled', true);
+                toggleInputData('disabled', false);
+            };
+        });
+    }
+    
+    async function updateData() {
+        const inclusion_id = $('#inclusion_id').val();
+        const inclusion_name = $('#inclusion_name_md').val();
+    
+        let url = DIR_API + 'inclusion/update.php';
+        const updateDataResponse = await fetch(url, {
+            method : 'PUT',
+            headers : {
+                'Content-Type' : 'application/json'
+            },
+            body : JSON.stringify({
+                'inclusion_id' : inclusion_id,
+                'inclusion_name' : inclusion_name
+            })
+        });
+    
+        const content = await updateDataResponse.json();
+    
+        if (content.message == 'Inclusion Updated') {
+            sessionStorage.setItem('save_message', "Inclusion Updated Successfully.");
+            window.location.reload();
+        }
+        else {
+            toastr.error("Inclusion was not updated.");
+        }
+    }
+    
+    // Set Delete Inclusion Modal
+    async function setDeleteModal () {
+        var deleteModal = document.getElementById('deleteModal')
+        deleteModal.addEventListener('show.bs.modal', async function (event) {
+    
+            var button = event.relatedTarget;
+            var inclusion_id = button.getAttribute('data-bs-whatever');
+            let data = await getData('inclusion');
+            let inc_id;
+
+            function toggleInputData (setAttr, bool) {
+                setData('#inclusion_id_d', data[inc_id].inclusion_id, setAttr, bool);
+                setData('#inclusion_name_md_d', data[inc_id].inclusion_name, setAttr, bool);
+            }
+
+            for (var i = 0; i < data.length; i++) {
+                if (inclusion_id == data[i].inclusion_id) {
+                    inc_id = i;
+                }
+            }
+    
+            var modalTitle = deleteModal.querySelector('.modal-title');
+            modalTitle.textContent = "Delete " + data[inc_id].inclusion_name + "?";
+    
+            toggleInputData('disabled', true);
+        });
+    }
+    
+    // Delete Inclusion
+    async function deleteData() {
+        const inclusion_id = $('#inclusion_id_d').val();
+    
+        let url = DIR_API + 'inclusion/delete.php';
+        const deleteDataResponse = await fetch(url, {
+            method : 'DELETE',
+            headers : {
+                'Content-Type' : 'application/json'
+            },
+            body : JSON.stringify({
+                'inclusion_id' : inclusion_id
+            })
+        });
+    
+        const content = await deleteDataResponse.json();
+        
+        if (content.message == 'Inclusion Deleted') {
+            sessionStorage.setItem('save_message', "Inclusion Deleted Successfully.");
+            window.location.reload();
+        }
+        else {
+            toastr.error("Inclusion was not deleted.");
+        }
+    }
+    
+    async function createData() {
+        const inclusion_name = $('#inclusion_name').val();
+
+        let url = DIR_API + 'inclusion/create.php';
+        const createDataResponse = await fetch(url, {
+            method : 'POST',
+            headers : {
+                'Content-Type' : 'application/json'
+            },
+            body : JSON.stringify({
+                'inclusion_name' : inclusion_name
+            })
+        });
+    
+        const content = await createDataResponse.json();
+        
+        if (content.message = 'Inclusion Created') {
+            toastr.success('Inclusion Created Successfully.');
+            setTimeout(function(){
+                window.location.replace('../views/inclusions.php');
+             }, 2000);
+        }
+        else {
+            toastr.error("Inclusion was not created.");
+        }
     }
 }
-
-// End of Area
+// End of Inclusion JS

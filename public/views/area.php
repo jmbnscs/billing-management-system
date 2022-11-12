@@ -14,7 +14,7 @@
       </nav>
     </div><!-- End Page Title -->
 
-    <section class="section Area">
+    <section class="section area">
       <div class="row">
 
         <div class="col-xl-12">
@@ -90,7 +90,7 @@
       </div>
     </section>
 
-  <!-- Area Modal -->
+<!-- Area Modal -->
 <form id="update-data">
   <!-- Modal Dialog Scrollable -->
   <div class="modal fade" id="editModal" tabindex="-1">
