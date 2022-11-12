@@ -22,7 +22,7 @@ $(document).ready(function () {
         setUserLevelPage();
     }
     else if (DIR_CUR == DIR_MAIN + 'views/area.php') {
-        getArea();
+        setAreaPage();
     }
     else if (DIR_CUR == DIR_MAIN + 'views/inclusions.php') {
         getInclusion();
@@ -692,32 +692,179 @@ function setUserLevelPage() {
 }
 // End of User Level JS
 
-// Add Area
-// View Area JS
-async function getArea () {
-    let url = DIR_API + 'area/read.php';
-    let area_data;
-    var t = $('#areas-table').DataTable();
-    console.log(t);
-    try {
-        let res = await fetch(url);
-        area_data = await res.json();
-    } catch (error) {
-        console.log(error);
-    }
-    console.log(area_data.length);
+// -------------------------------------------------------------------- Area JS
+function setAreaPage() {
+    displaySuccessMessage();
+    setButtons();
 
-    for (var i = 0; i < area_data.length; i++) {
-        t.row.add($(`
-            <tr>
-                <th scope="row"><a href="#">${area_data[i].area_id}</a></th>
-                <td>${area_data[i].area_name}</td>
-            </tr>
-        `)).draw(false);
+    $("#editModal").on("hidden.bs.modal", function () {
+        $('#save-btn').attr('disabled', true);
+        $('#edit-btn').attr('disabled', false);
+    });
+
+    setTable('area', '#areas-table');
+    setUpdateModal();
+    setDeleteModal();
+
+    update_fn.onsubmit = (e) => {
+        e.preventDefault();
+        updateData();
+    };
+
+    delete_fn.onsubmit = (e) => {
+        e.preventDefault();
+        deleteData();
+    };
+
+    create_fn.onsubmit = (e) => {
+        e.preventDefault();
+        createData();
+    };
+    
+    // Set Area Modal
+    async function setUpdateModal () {
+        var updateModal = document.getElementById('editModal')
+        updateModal.addEventListener('show.bs.modal', async function (event) {
+    
+            var button = event.relatedTarget;
+            var area_id = button.getAttribute('data-bs-whatever');
+            let area_data = await getData('area');
+            let ar_id;
+
+            function toggleInputData (setAttr, bool) {
+                setData('#area_id', area_data[ar_id].area_id, setAttr, bool);
+                setData('#area_name_md', area_data[ar_id].area_name, setAttr, bool);
+            }
+
+            for (var i = 0; i < area_data.length; i++) {
+                if (area_id == area_data[i].area_id) {
+                    ar_id = i;
+                }
+            }
+
+            var modalTitle = updateModal.querySelector('.modal-title');
+            modalTitle.textContent = area_data[ar_id].area_name;
+
+            toggleInputData('disabled', true);
+
+            // Form Submits -- onclick Triggers
+            edit_fn.onclick = (e) => {
+                e.preventDefault();
+                $('#save-btn').attr('disabled', false);
+                $('#edit-btn').attr('disabled', true);
+                toggleInputData('disabled', false);
+            };
+        });
+    }
+    
+    // Update Area
+    async function updateData() {
+        const area_id = $('#area_id').val();
+        const area_name = $('#area_name_md').val();
+    
+        let url = DIR_API + 'area/update.php';
+        const updateDataResponse = await fetch(url, {
+            method : 'PUT',
+            headers : {
+                'Content-Type' : 'application/json'
+            },
+            body : JSON.stringify({
+                'area_id' : area_id,
+                'area_name' : area_name
+            })
+        });
+    
+        const content = await updateDataResponse.json();
+    
+        if (content.message == 'Area Updated') {
+            sessionStorage.setItem('save_message', "Area Updated Successfully.");
+            window.location.reload();
+        }
+        else {
+            toastr.error("Area was not updated.");
+        }
+    }
+    
+    // Set Delete Area Modal
+    async function setDeleteModal () {
+        var deleteModal = document.getElementById('deleteModal')
+        deleteModal.addEventListener('show.bs.modal', async function (event) {
+    
+            var button = event.relatedTarget;
+            var area_id = button.getAttribute('data-bs-whatever');
+            let data = await getData('area');
+            let a_id;
+
+            function toggleInputData (setAttr, bool) {
+                setData('#area_id_d', data[a_id].area_id, setAttr, bool);
+                setData('#area_name_md_d', data[a_id].area_name, setAttr, bool);
+            }
+
+            for (var i = 0; i < data.length; i++) {
+                if (area_id == data[i].area_id) {
+                    a_id = i;
+                }
+            }
+    
+            var modalTitle = deleteModal.querySelector('.modal-title');
+            modalTitle.textContent = "Delete " + data[a_id].area_name + "?";
+    
+            toggleInputData('disabled', true);
+        });
+    }
+    
+    // Delete Area
+    async function deleteData() {
+        const area_id = $('#area_id_d').val();
+    
+        let url = DIR_API + 'area/delete.php';
+        const deleteDataResponse = await fetch(url, {
+            method : 'DELETE',
+            headers : {
+                'Content-Type' : 'application/json'
+            },
+            body : JSON.stringify({
+                'area_id' : area_id
+            })
+        });
+    
+        const content = await deleteDataResponse.json();
+        
+        if (content.message == 'Area Deleted') {
+            sessionStorage.setItem('save_message', "Area Deleted Successfully.");
+            window.location.reload();
+        }
+        else {
+            toastr.error("Area was not deleted.");
+        }
+    }
+    
+    // Add Area
+    async function createData() {
+        const area_name = $('#area_name').val();
+    
+        let url = DIR_API + 'area/create.php';
+        const createDataResponse = await fetch(url, {
+            method : 'POST',
+            headers : {
+                'Content-Type' : 'application/json'
+            },
+            body : JSON.stringify({
+                'area_name' : area_name
+            })
+        });
+    
+        const content = await createDataResponse.json();
+        
+        if (content.message = 'Area Created') {
+            toastr.success('Area Created Successfully.');
+            setTimeout(function(){
+                window.location.replace('../views/area.php');
+             }, 2000);
+        }
     }
 }
-
-// End of Area
+// End of Area JS
 
 // Add Inclusion
 // View inclusion JS
@@ -725,14 +872,12 @@ async function getInclusion () {
     let url = DIR_API + 'inclusion/read.php';
     let inclusion_data;
     var t = $('#inclusions-table').DataTable();
-    console.log(t);
     try {
         let res = await fetch(url);
         inclusion_data = await res.json();
     } catch (error) {
         console.log(error);
     }
-    console.log(inclusion_data.length);
 
     for (var i = 0; i < inclusion_data.length; i++) {
         t.row.add($(`
