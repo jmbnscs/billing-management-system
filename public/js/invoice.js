@@ -27,7 +27,7 @@ $(document).ready(function () {
             window.location.replace("../views/dashboard.php");
         }
         else {
-            getProrates();
+            setProrateRecordsPage();
         }
     }
     else {
@@ -107,8 +107,28 @@ async function getPaymentRecordData(payment_id) {
     }
 }
 
+async function getProrateRecordData(prorate_id) {
+    let url = DIR_API + 'views/prorate_single.php?prorate_id=' + prorate_id;
+    try {
+        let res = await fetch(url);
+        return await res.json();
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 async function getPaymentRecords () {
     let url = DIR_API + 'views/payment.php';
+    try {
+        let res = await fetch(url);
+        return await res.json();
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function getProrateRecords () {
+    let url = DIR_API + 'views/prorate.php';
     try {
         let res = await fetch(url);
         return await res.json();
@@ -588,39 +608,209 @@ async function setPaymentRecordsPage() {
     }
 } // End of Payment Records JS
 
+// -------------------------------------------------------------------- Prorate Records JS
+async function setProrateRecordsPage() {
+    displaySuccessMessage();
+    setButtons();
 
-// View Prorate JS
-async function getProrates () {
-    let url = DIR_API + 'views/prorate.php';
-    let prorate_data;
-    var t = $('#prorate-table').DataTable();
-    try {
-        let res = await fetch(url);
-        prorate_data = await res.json();
-    } catch (error) {
-        console.log(error);
+    $("#editModal").on("hidden.bs.modal", function () {
+        $('#save-btn').attr('disabled', true);
+        $('#edit-btn').attr('disabled', false);
+    });
+
+    setProrateRecordsTable();
+    setUpdateModal();
+    setDeleteModal();
+
+    update_fn.onsubmit = (e) => {
+        e.preventDefault();
+        updateData();
+    };
+
+    delete_fn.onsubmit = (e) => {
+        e.preventDefault();
+        deleteData();
+    };
+
+    // Set Prorate Records Table
+    async function setProrateRecordsTable() {
+        // Fetch Prorate Records
+        let data = await getProrateRecords();
+
+        var t = $('#prorate-table').DataTable();
+    
+        for (var i = 0; i < data.length; i++) {
+            var tag;
+            if (data[i].status == 'CHARGED') {
+                tag = 'bg-success';
+            }
+            else {
+                tag = 'bg-danger';
+            }
+            t.row.add($(`
+                <tr>
+                    <th scope="row"><a href="#">${data[i].prorate_id}</a></th>
+                    <td>${data[i].account_id}</td>
+                    <td><a href="#" class="text-primary">${data[i].customer_name}</a></td>
+                    <td>${data[i].duration}</td>
+                    <td>&#8369; ${data[i].amount}</td>
+                    <td><span class="badge ${tag}">${data[i].status}</span></td>
+                    <td>
+                        <button type="button" class="btn btn-outline-info m-1" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="${data[i].prorate_id}" ><i class="bi bi-eye"></i></button>
+                        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-whatever="${data[i].prorate_id}" ><i class="ri ri-delete-bin-5-fill"></i></button>
+                    </td>
+                </tr>
+            `)).draw(false);
+        }
     }
+    
+    // Set Prorate Records Modal
+    async function setUpdateModal () {
+        var updateModal = document.getElementById('editModal')
+        updateModal.addEventListener('show.bs.modal', async function (event) {
+    
+            var button = event.relatedTarget;
+            var prorate_id = button.getAttribute('data-bs-whatever');
+            let data = await getProrateRecordData(prorate_id);
 
-    for (var i = 0; i < prorate_data.length; i++) {
-        var tag;
-        if (prorate_data[i].status == 'CHARGED') {
-            tag = 'bg-success';
+            function toggleInputData (setAttr, bool) {
+                setData('#prorate_id', data.prorate_id, setAttr, bool);
+                setData('#account_id', data.account_id, setAttr, bool);
+                setData('#customer_name', data.customer_name, setAttr, bool);
+                setData('#duration', data.duration, setAttr, bool);
+                setData('#prorate_charge', data.amount, setAttr, bool);
+            }
+
+            var modalTitle = updateModal.querySelector('.modal-title');
+            modalTitle.textContent = data.customer_name;
+
+            if (data.status == 'CHARGED') {
+                toggleInputData('readonly', true);
+                document.getElementById('status').classList.remove('bg-danger');
+                document.getElementById('status').classList.add('bg-success');
+                document.getElementById('status').classList.add('text-white');
+                setData('#status', 'Charged', 'readonly', true);
+                $('#edit-btn').attr('hidden', true);
+                $('#save-btn').attr('hidden', true);
+            }
+            else {
+                toggleInputData('disabled', true);
+                setData('#status', 'Uncharged', 'disabled', true);
+                document.getElementById('status').classList.add('bg-danger');
+                document.getElementById('status').classList.add('text-white');
+                $('#edit-btn').attr('hidden', false);
+                $('#save-btn').attr('hidden', false);
+            }
+
+            // Form Submits -- onclick Triggers
+            edit_fn.onclick = (e) => {
+                e.preventDefault();
+                $('#save-btn').attr('disabled', false);
+                $('#edit-btn').attr('disabled', true);
+                toggleInputData('disabled', false);
+            };
+        });
+    }
+    
+    // Update Prorate Record
+    async function updateData() {
+        const prorate_id = $('#prorate_id').val();
+        const account_id = $('#account_id').val();
+        const duration = $('#duration').val();
+
+        let url = DIR_API + 'prorate/update.php';
+        const updateDataResponse = await fetch(url, {
+            method : 'PUT',
+            headers : {
+                'Content-Type' : 'application/json'
+            },
+            body : JSON.stringify({
+                'account_id' : account_id,
+                'prorate_id' : prorate_id,
+                'duration' : duration
+            })
+        });
+
+        const update_content = await updateDataResponse.json();
+    
+        if (update_content.message == 'Prorate Updated') {
+            sessionStorage.setItem('save_message', "Prorate Record Updated Successfully.");
+            window.location.reload();
         }
         else {
-            tag = 'bg-danger';
+            toastr.error("Prorate Record was not updated.");
         }
-        t.row.add($(`
-            <tr>
-                <th scope="row"><a href="#">${prorate_data[i].prorate_id}</a></th>
-                <td>${prorate_data[i].account_id}</td>
-                <td><a href="#" class="text-primary">${prorate_data[i].customer_name}</a></td>
-                <td>${prorate_data[i].duration}</td>
-                <td>&#8369; ${prorate_data[i].amount}</td>
-                <td><span class="badge ${tag}">${prorate_data[i].status}</span></td>
-            </tr>
-        `)).draw(false);
     }
-}
+    
+    // Set Delete Prorate Record Modal
+    async function setDeleteModal () {
+        var deleteModal = document.getElementById('deleteModal')
+        deleteModal.addEventListener('show.bs.modal', async function (event) {
+    
+            var button = event.relatedTarget;
+            var prorate_id = button.getAttribute('data-bs-whatever');
+            let data = await getProrateRecordData(prorate_id);
+
+            function toggleInputData (setAttr, bool) {
+                setData('#prorate_id_d', data.prorate_id, setAttr, bool);
+                setData('#account_id_d', data.account_id, setAttr, bool);
+                setData('#customer_name_d', data.customer_name, setAttr, bool);
+                setData('#duration_d', data.duration, setAttr, bool);
+                setData('#prorate_charge_d', data.amount, setAttr, bool);
+            }
+
+            var modalTitle = deleteModal.querySelector('.modal-title');
+
+            if (data.status == 'CHARGED') {
+                toggleInputData('readonly', true);
+                document.getElementById('status_d').classList.remove('bg-danger');
+                document.getElementById('status_d').classList.add('bg-success');
+                document.getElementById('status_d').classList.add('text-white');
+                setData('#status_d', 'Charged', 'readonly', true);
+                $('#dlt-btn').attr('hidden', true);
+                $('#cncl-btn').attr('hidden', true);
+                $('#cls-btn').attr('hidden', false);
+                modalTitle.textContent = "You can't delete already charged prorates.";
+            }
+            else {
+                toggleInputData('disabled', true);
+                setData('#status_d', 'Uncharged', 'disabled', true);
+                document.getElementById('status_d').classList.add('bg-danger');
+                document.getElementById('status_d').classList.add('text-white');
+                $('#dlt-btn').attr('hidden', false);
+                $('#cncl-btn').attr('hidden', false);
+                $('#cls-btn').attr('hidden', true);
+                modalTitle.textContent = data.prorate_id;
+            }
+        });
+    }
+    
+    // Delete Prorate Record
+    async function deleteData() {
+        const prorate_id = $('#prorate_id_d').val();
+    
+        let url = DIR_API + 'prorate/delete.php';
+        const deleteDataResponse = await fetch(url, {
+            method : 'DELETE',
+            headers : {
+                'Content-Type' : 'application/json'
+            },
+            body : JSON.stringify({
+                'prorate_id' : prorate_id
+            })
+        });
+    
+        const content = await deleteDataResponse.json();
+        
+        if (content.message == 'Prorate Deleted') {
+            sessionStorage.setItem('save_message', "Prorate Record Deleted Successfully.");
+            window.location.reload();
+        }
+        else {
+            toastr.error("Prorate Record was not deleted.");
+        }
+    }
+} // End of Prorate Records JS
 
 // -------------------------------------------------------------------- Add Payment Record JS
 async function setAddPaymentPage () {
