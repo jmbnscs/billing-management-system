@@ -131,7 +131,7 @@
                         </div>
                         <div class="col-md-4">
                           <label for="invoice_status_id" class="form-label">Invoice Status</label>
-                          <input type="text" class="form-control" id="invoice_status_id" readonly>
+                          <input type="text" class="form-control text-center " id="invoice_status_id" readonly>
                         </div>
                       </div> 
                     </div>

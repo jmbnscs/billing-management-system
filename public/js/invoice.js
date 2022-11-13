@@ -77,6 +77,16 @@ async function getInvoiceData(invoice_id) {
     }
 }
 
+async function getInvoiceStatus() {
+    let url = DIR_API + 'statuses/read.php?status_table=invoice_status';
+    try {
+        let res = await fetch(url);
+        return await res.json();
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 async function getCustomerData(account_id) {
     let url = DIR_API + 'customer/read_single.php?account_id=' + account_id;
     try {
@@ -214,7 +224,17 @@ async function setInvoicePage () {
             var button = event.relatedTarget;
             var invoice_id = button.getAttribute('data-bs-whatever');
             let data = await getInvoiceData(invoice_id);
+            let statuses = await getInvoiceStatus();
             let customer_data = await getCustomerData(data.account_id);
+            let status;
+
+            function getStatus() {
+                for (var i = 0; i < statuses.length; i++) {
+                    if (data.invoice_status_id == statuses[i].status_id) {
+                        status = statuses[i].status_name;
+                    }
+                }
+            }
 
             // Display Invoice Details
             $('#invoice_id').val(data.invoice_id);
@@ -230,15 +250,23 @@ async function setInvoicePage () {
             $('#prorated_charge').val(data.prorated_charge);
             $('#installation_charge').val(data.installation_charge);
             $('#total_bill').val(data.total_bill);
-            $('#invoice_status_id').val(data.invoice_status_id);
+
+            getStatus();
+
+            $('#invoice_status_id').val(status);
 
             if (data.invoice_status_id == 1) {
                 toggleInputData('readonly', true);
+                document.getElementById('invoice_status_id').classList.remove('bg-danger');
+                document.getElementById('invoice_status_id').classList.add('bg-success');
+                document.getElementById('invoice_status_id').classList.add('text-white');
                 $('#edit-btn').attr('hidden', true);
                 $('#save-btn').attr('hidden', true);
             }
             else {
                 toggleInputData('disabled', true);
+                document.getElementById('invoice_status_id').classList.add('bg-danger');
+                document.getElementById('invoice_status_id').classList.add('text-white');
                 $('#amount_paid').val(null);
             }
 
