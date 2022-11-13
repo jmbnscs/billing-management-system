@@ -46,7 +46,7 @@ function displaySuccessMessage() {
 
 let create_fn, edit_fn, update_fn, delete_fn;
 function setButtons() {
-    // create_fn = document.getElementById('create-new');
+    create_fn = document.getElementById('create-new');
     edit_fn = document.getElementById('edit-btn');
     update_fn = document.getElementById('update-data');
     delete_fn = document.getElementById('delete-data');
@@ -228,12 +228,6 @@ async function setInvoicePage () {
                 setData('#payment_date', data.payment_date, setAttr, bool);
             }
 
-            // for (var i = 0; i < data.length; i++) {
-            //     if (inclusion_id == data[i].inclusion_id) {
-            //         inc_id = i;
-            //     }
-            // }
-
             var modalTitle = updateModal.querySelector('.modal-title');
             modalTitle.textContent = customer_data.first_name + ' ' + customer_data.last_name + ' - ' + data.invoice_id;
     
@@ -255,79 +249,94 @@ async function setInvoicePage () {
         const amount_paid = $('#amount_paid').val();
         const payment_date = $('#payment_date').val();
 
-        let url = DIR_API + 'read_single/update.php?invoice_id=' + invoice_id;
-        let invoice_content;
-        try {
-            let res = await fetch(url);
-            invoice_content = await res.json();
-        } catch (error) {
-            console.log(error);
+        let ref_content = await getPaymentRecords();
+        let isExist = false;
+
+        for (var i = 0; i < ref_content.length; i++) {
+            if (payment_reference_id == ref_content[i].ref_id) {
+                isExist = true;
+            }
         }
-    
-        url = DIR_API + 'invoice/update.php';
-        const updateDataResponse = await fetch(url, {
-            method : 'PUT',
-            headers : {
-                'Content-Type' : 'application/json'
-            },
-            body : JSON.stringify({
-                'account_id' : account_id,
-                'payment_reference_id' : payment_reference_id,
-                'amount_paid' : amount_paid,
-                'payment_date' : payment_date
-            })
-        });
 
-        url = DIR_API + 'payment/create.php';
-        const addPaymentResponse = await fetch(url, {
-            method : 'POST',
-            headers : {
-                'Content-Type' : 'application/json'
-            },
-            body : JSON.stringify({
-                'amount_paid' : amount_paid,
-                'payment_reference_id' : payment_reference_id,
-                'payment_date' : payment_date
-            })
-        });
+        if (!isExist) {
+            let url = DIR_API + 'invoice/read_single.php?invoice_id=' + invoice_id;
+            let invoice_content;
+            try {
+                let res = await fetch(url);
+                invoice_content = await res.json();
+            } catch (error) {
+                console.log(error);
+            }
+        
+            url = DIR_API + 'invoice/update.php';
+            const updateDataResponse = await fetch(url, {
+                method : 'PUT',
+                headers : {
+                    'Content-Type' : 'application/json'
+                },
+                body : JSON.stringify({
+                    'account_id' : account_id,
+                    'payment_reference_id' : payment_reference_id,
+                    'amount_paid' : amount_paid,
+                    'payment_date' : payment_date
+                })
+            });
 
-        const content = await updateDataResponse.json();
-        const payment_content = await addPaymentResponse.json();
+            url = DIR_API + 'payment/create.php';
+            const addPaymentResponse = await fetch(url, {
+                method : 'POST',
+                headers : {
+                    'Content-Type' : 'application/json'
+                },
+                body : JSON.stringify({
+                    'amount_paid' : amount_paid,
+                    'payment_reference_id' : payment_reference_id,
+                    'payment_date' : payment_date
+                })
+            });
 
-        url = DIR_API + 'payment/update_tagged.php';
-        const updateTaggedResponse = await fetch(url, {
-            method : 'POST',
-            headers : {
-                'Content-Type' : 'application/json'
-            },
-            body : JSON.stringify({
-                'account_id' : account_id,
-                'invoice_id' : invoice_id,
-                'payment_id' : payment_content.payment_id
-            })
-        });
+            const content = await updateDataResponse.json();
+            const payment_content = await addPaymentResponse.json();
 
-        url = DIR_API + 'ratings/update.php';
-        const updateRatingsResponse = await fetch(url, {
-            method : 'POST',
-            headers : {
-                'Content-Type' : 'application/json'
-            },
-            body : JSON.stringify({
-                'account_id' : account_id,
-                'invoice_status' : invoice_content.invoice_status_id
-            })
-        });
+            url = DIR_API + 'payment/update_tagged.php';
+            const updateTaggedResponse = await fetch(url, {
+                method : 'POST',
+                headers : {
+                    'Content-Type' : 'application/json'
+                },
+                body : JSON.stringify({
+                    'account_id' : account_id,
+                    'invoice_id' : invoice_id,
+                    'payment_id' : payment_content.payment_id
+                })
+            });
 
-        const ratings_content = await updateRatingsResponse.json();
-        const tagged_content = await updateTaggedResponse.json();
-    
-        if (content.message == 'Invoice Updated' && payment_content.message == 'Payment Record Created' && tagged_content.message == 'Payment Tagged' && ratings_content == 'Rating Updated') {
-            sessionStorage.setItem('save_message', "Payment Updated Successfully.");
-            window.location.reload();
+            url = DIR_API + 'ratings/update.php';
+            const updateRatingsResponse = await fetch(url, {
+                method : 'POST',
+                headers : {
+                    'Content-Type' : 'application/json'
+                },
+                body : JSON.stringify({
+                    'account_id' : account_id,
+                    'invoice_status' : invoice_content.invoice_status_id
+                })
+            });
+
+            const ratings_content = await updateRatingsResponse.json();
+            const tagged_content = await updateTaggedResponse.json();
+        
+            if (content.message == 'Invoice Updated' && payment_content.message == 'Payment Record Created' && tagged_content.message == 'Payment Tagged' && ratings_content.message == 'Rating Updated') {
+                sessionStorage.setItem('save_message', "Payment Updated Successfully.");
+                window.location.reload();
+            }
+            else {
+                toastr.error("Payment was not updated.");
+            }
         }
         else {
-            toastr.error("Payment was not updated.");
+            toastr.error('Payment Reference ID already exist.');
+            $('#payment_reference_id').val(null);
         }
     }
 }
@@ -355,11 +364,6 @@ async function setPaymentRecordsPage() {
         e.preventDefault();
         deleteData();
     };
-
-    // create_fn.onsubmit = (e) => {
-    //     e.preventDefault();
-    //     createData();
-    // };
 
     // Set Payment Records Table
     async function setPaymentRecordsTable() {
@@ -420,6 +424,7 @@ async function setPaymentRecordsPage() {
             if (data.tagged == 1) {
                 toggleInputData('readonly', true);
                 setData('#invoice_id', data.invoice_id, 'hidden', false);
+                setData('#invoice_id_lbl', 'Invoice ID', 'hidden', false);
                 document.getElementById('tagged').classList.remove('bg-danger');
                 document.getElementById('tagged').classList.add('bg-success');
                 document.getElementById('tagged').classList.add('text-white');
@@ -429,13 +434,13 @@ async function setPaymentRecordsPage() {
             }
             else {
                 toggleInputData('disabled', true);
+                setData('#invoice_id_lbl', 'Invoice ID', 'hidden', true);
                 setData('#invoice_id', data.invoice_id, 'hidden', true);
                 setData('#tagged', 'Untagged', 'disabled', true);
                 document.getElementById('tagged').classList.add('bg-danger');
                 document.getElementById('tagged').classList.add('text-white');
                 $('#edit-btn').attr('hidden', false);
                 $('#save-btn').attr('hidden', false);
-                $('#amount_paid').val(null);
             }
 
             // Form Submits -- onclick Triggers
@@ -444,6 +449,7 @@ async function setPaymentRecordsPage() {
                 $('#save-btn').attr('disabled', false);
                 $('#edit-btn').attr('disabled', true);
                 toggleInputData('disabled', false);
+                // $('#amount_paid').val(null);
             };
         });
     }
@@ -451,7 +457,6 @@ async function setPaymentRecordsPage() {
     // Update Payment Record
     async function updateData() {
         const account_id = $('#account_id').val();
-        const invoice_id = $('#invoice_id').val();
         const payment_reference_id = $('#payment_reference_id').val();
         const amount_paid = $('#amount_paid').val();
         const payment_date = $('#payment_date').val();
@@ -550,13 +555,13 @@ async function setPaymentRecordsPage() {
                 $('#dlt-btn').attr('hidden', false);
                 $('#cncl-btn').attr('hidden', false);
                 $('#cls-btn').attr('hidden', true);
-                $('#amount_paid_d').val(null);
+                // $('#amount_paid_d').val(null);
                 modalTitle.textContent = data.payment_reference_id;
             }
         });
     }
     
-    // Delete Area
+    // Delete Payment Record
     async function deleteData() {
         const payment_id = $('#payment_id_d').val();
     
@@ -579,31 +584,6 @@ async function setPaymentRecordsPage() {
         }
         else {
             toastr.error("Payment Record was not deleted.");
-        }
-    }
-    
-    // Add Area
-    async function createData() {
-        const area_name = $('#area_name').val();
-    
-        let url = DIR_API + 'area/create.php';
-        const createDataResponse = await fetch(url, {
-            method : 'POST',
-            headers : {
-                'Content-Type' : 'application/json'
-            },
-            body : JSON.stringify({
-                'area_name' : area_name
-            })
-        });
-    
-        const content = await createDataResponse.json();
-        
-        if (content.message = 'Area Created') {
-            toastr.success('Area Created Successfully.');
-            setTimeout(function(){
-                window.location.replace('../views/area.php');
-             }, 2000);
         }
     }
 } // End of Payment Records JS
@@ -642,49 +622,60 @@ async function getProrates () {
     }
 }
 
-// Add Payment Record JS
-async function addPayment () {
-    const amount_paid = $('#amount_paid').val();
-    const payment_ref = $('#payment_ref').val();
-    const payment_date = $('#payment_date').val();
-
-    let url = DIR_API + 'payment/create.php';
-    const addPaymentResponse = await fetch(url, {
-        method : 'POST',
-        headers : {
-            'Content-Type' : 'application/json'
-        },
-        body : JSON.stringify({
-            'amount_paid' : amount_paid,
-            'payment_reference_id' : payment_ref,
-            'payment_date' : payment_date
-        })
-    });
-
-    const payment_content = await addPaymentResponse.json();
-
-    if (payment_content.message == 'Payment Record Created') {
-        toastr.success('Payment Created Successfully.');
-        setTimeout(function(){
-            window.location.replace('../views/invoice_payments.php');
-            // window.location.reload();
-            }, 2000);
-    }
-    else {
-        toastr.error(payment_content.message);
-        setTimeout(function(){
-            window.location.reload();
-            }, 2000);
-    }
-}
-
-
+// -------------------------------------------------------------------- Add Payment Record JS
 async function setAddPaymentPage () {
-    const add_record = document.getElementById('add-payment');
+    setButtons();
 
-    // Form Submits -- onclick Triggers
-    add_record.onsubmit = (e) => {
+    create_fn.onsubmit = (e) => {
         e.preventDefault();
         addPayment();
     };
+
+    async function addPayment () {
+        const amount_paid = $('#amount_paid').val();
+        const payment_ref = $('#payment_ref').val();
+        const payment_date = $('#payment_date').val();
+        let ref_content = await getPaymentRecords();
+        let isExist = false;
+
+        for (var i = 0; i < ref_content.length; i++) {
+            if (payment_ref == ref_content[i].ref_id) {
+                isExist = true;
+            }
+        }
+
+        if (!isExist) {
+            let url = DIR_API + 'payment/create.php';
+            const addPaymentResponse = await fetch(url, {
+                method : 'POST',
+                headers : {
+                    'Content-Type' : 'application/json'
+                },
+                body : JSON.stringify({
+                    'amount_paid' : amount_paid,
+                    'payment_reference_id' : payment_ref,
+                    'payment_date' : payment_date
+                })
+            });
+        
+            const payment_content = await addPaymentResponse.json();
+        
+            if (payment_content.message == 'Payment Record Created') {
+                toastr.success('Payment Record Created Successfully.');
+                setTimeout(function(){
+                    window.location.replace('../views/invoice_payments.php');
+                    }, 2000);
+            }
+            else {
+                toastr.error(payment_content.message);
+                setTimeout(function(){
+                    window.location.reload();
+                    }, 2000);
+            }
+        }
+        else {
+            toastr.error('Payment Reference ID already exist.');
+            $('#payment_ref').val(null);
+        }
+    }
 }

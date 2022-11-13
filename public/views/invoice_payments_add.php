@@ -21,7 +21,7 @@
         <div class="card">
           <div class="card-body pt-4">
               
-          <form id="add-payment">
+          <form id="create-new">
                   <div class="row mb-3">
                       <label for="payment_ref" class="col-sm-2 col-form-label">Payment Ref. ID</label>
                       <div class="col-sm-10">

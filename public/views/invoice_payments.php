@@ -88,7 +88,7 @@
             </div>
 
             <div class="row mb-3">
-              <label for="invoice_id" class="col-sm-2 col-form-label">Invoice ID</label>
+              <label for="invoice_id" class="col-sm-2 col-form-label" id="invoice_id_lbl">Invoice ID</label>
               <div class="col-sm-10">
                 <input type="text" class="form-control" id="invoice_id" value="" required readonly>
               </div>
