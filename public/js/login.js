@@ -108,12 +108,14 @@ async function login () {
     var attempt;
     
     if (content.message == 'success') {
-        sessionStorage.setItem('admin_id', content.admin_id);
+        localStorage.setItem('admin_id', content.admin_id);
+        localStorage.setItem('login', 'successful');
         window.location.replace('../views/dashboard.php');
     }
     else if (content.message == 'change password') {
-        sessionStorage.setItem('hashed', 0);
-        sessionStorage.setItem('admin_id', content.admin_id);
+        localStorage.setItem('hashed', 0);
+        localStorage.setItem('admin_id', content.admin_id);
+        localStorage.setItem('login', 'successful');
         window.location.replace('../views/dashboard.php');
     }
     else if (content.message == 'Invalid Password'){

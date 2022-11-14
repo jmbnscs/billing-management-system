@@ -1,17 +1,14 @@
-// const DIR_API = 'http://localhost/gstech_api/api/';
-(typeof DIR_API === 'undefined') ? DIR_API = 'http://localhost/gstech_api/api/' : DIR_API = 'http://localhost/gstech_api/api/';
+const DIR_API = 'http://localhost/gstech_api/api/';
 const DIR_MAIN = '/billing-management-system/public/';
 const DIR_CUR = window.location.pathname;
-const admin_id = sessionStorage.getItem('admin_id');
+const admin_id = localStorage.getItem('admin_id');
 const admin_status_id = sessionStorage.getItem('admin_status_id');
-const hashed = sessionStorage.getItem('hashed');
+const hashed = localStorage.getItem('hashed');
+const logged_in = localStorage.getItem('login');
 
 // On Boot Load
 $(document).ready( () => {
-    if (admin_id === undefined || admin_id === null) {
-        window.location.replace('../views/login.php');
-    }
-    else {
+    if (logged_in !== undefined || logged_in !== null && logged_in === 'successful') {
         if (admin_status_id == 3) {
             let msg = "Please contact the system administrator.";
             let title = "Your account has been locked!"
@@ -27,6 +24,25 @@ $(document).ready( () => {
         setDefaults();
         setToastr();
     }
+    else if (admin_id === undefined || admin_id === null) {
+        window.location.replace('../views/login.php');
+    }
+    // else {
+    //     if (admin_status_id == 3) {
+    //         let msg = "Please contact the system administrator.";
+    //         let title = "Your account has been locked!"
+    //         setToastrArgs(msg, title);
+    //     }
+    
+    //     if (hashed == 0) { 
+    //         let msg = "Please change your password.";
+    //         let title = "Important!"
+    //         setToastrArgs(msg, title);
+    //     }
+    
+    //     setDefaults();
+    //     setToastr();
+    // }
 });
 
 // Check if Default Password

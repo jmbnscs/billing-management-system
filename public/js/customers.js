@@ -59,7 +59,7 @@ async function getCustomers () {
         }
         t.row.add($(`
             <tr>
-                <th scope="row"><a href="#">${customer_data[i].account_id}</a></th>
+                <th scope="row"><a href="../views/customer_data.php?acct=${customer_data[i].account_id}">${customer_data[i].account_id}</a></th>
                 <td>${customer_data[i].customer_name}</td>
                 <td><a href="#" class="text-primary">${customer_data[i].plan}</a></td>
                 <td>&#8369; ${customer_data[i].balance}</td>

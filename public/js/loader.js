@@ -1,12 +1,16 @@
-const DIR_API = 'http://localhost/gstech_api/api/';
+const DIR_API_LOAD = 'http://localhost/gstech_api/api/';
 
-generateInvoice();
-updateUnpaidInvoice();
-updateOverdueInvoice();
-updateDisconnectionInvoice();
+autoload();
+
+async function autoload() {
+    generateInvoice();
+    updateUnpaidInvoice();
+    updateOverdueInvoice();
+    updateDisconnectionInvoice();
+}
 
 async function getAccountsData() {
-    let url = DIR_API + 'account/read.php';
+    let url = DIR_API_LOAD + 'account/read.php';
     try {
         let res = await fetch(url);
         return await res.json();
@@ -16,7 +20,7 @@ async function getAccountsData() {
 }
 
 async function getInvoicePerAcct(account_id) {
-    let url = DIR_API + 'invoice/read_single_account.php?account_id=' + account_id;
+    let url = DIR_API_LOAD + 'invoice/read_single_account.php?account_id=' + account_id;
     try {
         let res = await fetch(url);
         return await res.json();
@@ -26,7 +30,7 @@ async function getInvoicePerAcct(account_id) {
 }
 
 async function getInvoiceByStatus(status_id) {
-    let url = DIR_API + 'invoice/read_by_status.php?invoice_status_id=' + status_id;
+    let url = DIR_API_LOAD + 'invoice/read_by_status.php?invoice_status_id=' + status_id;
     try {
         let res = await fetch(url);
         return await res.json();
@@ -78,7 +82,7 @@ async function generateInvoice() {
     }
 
     async function createInvoice(account_id, account_status) {
-        let url = DIR_API + 'invoice/create.php';
+        let url = DIR_API_LOAD + 'invoice/create.php';
         const createResponse = await fetch(url, {
             method : 'POST',
             headers : {
@@ -103,7 +107,7 @@ async function generateInvoice() {
 }
 
 async function updateInvoiceStatus(invoice_id, status_id) {
-    let url = DIR_API + 'invoice/update_status.php';
+    let url = DIR_API_LOAD + 'invoice/update_status.php';
     const updateDataResponse = await fetch(url, {
         method : 'PUT',
         headers : {
@@ -137,11 +141,11 @@ async function updateUnpaidInvoice() {
 
 async function updateOverdueInvoice() {
     const unpaid_content = await getInvoiceByStatus(3);
-    var date_today = new Date();
+    var date_today = new Date(today_date);
 
     for (var i = 0; i < unpaid_content.length; i++) {
         let day_difference = getDaysDifference(date_today, new Date(unpaid_content[i].disconnection_date));
-        if (day_difference > 5 && day_difference < 7) {
+        if (day_difference >= 6 && day_difference <= 7) {
             updateInvoiceStatus(unpaid_content[i].invoice_id, 4);
             // console.log('Temp Disconnection: ' + unpaid_content[i].invoice_status_id);
         } 
@@ -150,13 +154,14 @@ async function updateOverdueInvoice() {
 
 async function updateDisconnectionInvoice() {
     const unpaid_content = await getInvoiceByStatus(4);
-    var date_today = new Date();
+    var date_today = new Date(today_date);
 
     for (var i = 0; i < unpaid_content.length; i++) {
         let day_difference = getDaysDifference(date_today, new Date(unpaid_content[i].disconnection_date));
-        if (day_difference >= 7) {
+        if (day_difference > 7) {
             // Create Ticket Here
             console.log('Disconnection: ' + unpaid_content[i].invoice_status_id);
+            console.log(new Date());
         } 
     }
 }

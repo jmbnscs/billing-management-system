@@ -2,7 +2,7 @@
   include '../models/header.html';
   include '../models/navbar.html'; ?>
 
-  <main id="main" class="main">
+<main id="main" class="main">
 
     <div class="pagetitle">
     <h1>Advanced Options</h1>

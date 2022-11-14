@@ -185,7 +185,7 @@ async function setInvoicePage () {
     };
 
     async function setInvoiceTable() {
-        let url = DIR_API + 'views/invoice.php';
+        let url = DIR_API + 'views/invoice_unpaid.php';
         let invoice_data;
         var t = $('#invoice-table').DataTable();
         try {
