@@ -405,14 +405,14 @@ h6 {
 
 .header .toggle-sidebar-btn {
   font-size: 32px;
-  padding-left: 20px;
   cursor: pointer;
   color: #012970;
 }
 
 .header .search-bar {
-  min-width: 360px;
-  padding: 0 20px;
+  min-width: 300px;
+  padding-left: 600px;
+  
 }
 
 @media (max-width: 1199px) {
@@ -421,9 +421,7 @@ h6 {
     top: 50px;
     left: 0;
     right: 0;
-    padding: 20px;
     box-shadow: 0px 0px 15px 0px rgba(1, 41, 112, 0.1);
-    background: white;
     z-index: 9999;
     transition: 0.3s;
     visibility: hidden;
@@ -607,7 +605,7 @@ h6 {
 }
 
 .header-nav .profile .dropdown-item:hover {
-  background-color: #f6f9ff;
+  background-color: #B6DDF8;
 }
 
 /*--------------------------------------------------------------
@@ -945,10 +943,11 @@ h6 {
 }
 
 .dashboard .recent-sales .table thead {
-  background: #f6f6fe;
+  background: #E4F6FA;
 }
 
 .dashboard .recent-sales .table thead th {
+  font-style: bold;
   border: 0;
 }
 
