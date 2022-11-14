@@ -14,12 +14,12 @@
 
 body {
   font-family: "Open Sans", sans-serif;
-  background: #f6f9ff;
+  background: #F0F7FD;
   color: #444444;
 }
 
 a {
-  color: #4154f1;
+  color: #0819A8;
   text-decoration: none;
 }
 
@@ -376,17 +376,17 @@ h6 {
 
 @media (min-width: 1200px) {
   .logo {
-    width: 280px;
+    width: 300px;
   }
 }
 
 .logo img {
-  max-height: 26px;
+  max-height: 55px;
   margin-right: 6px;
 }
 
 .logo span {
-  font-size: 26px;
+  font-size: 25px;
   font-weight: 700;
   color: #012970;
   font-family: "Nunito", sans-serif;
@@ -397,7 +397,7 @@ h6 {
   z-index: 997;
   height: 60px;
   box-shadow: 0px 2px 20px rgba(1, 41, 112, 0.1);
-  background-color: #fff;
+  background-color: #E4F6FA;
   padding-left: 20px;
   /* Toggle Sidebar Button */
   /* Search Bar */
@@ -405,7 +405,7 @@ h6 {
 
 .header .toggle-sidebar-btn {
   font-size: 32px;
-  padding-left: 10px;
+  padding-left: 20px;
   cursor: pointer;
   color: #012970;
 }
@@ -626,7 +626,7 @@ h6 {
   scrollbar-width: thin;
   scrollbar-color: #aab7cf transparent;
   box-shadow: 0px 0px 20px rgba(1, 41, 112, 0.1);
-  background-color: #fff;
+  background-color: #E4F6FA;
 }
 
 @media (max-width: 1199px) {
@@ -702,7 +702,7 @@ h6 {
   font-weight: 600;
   color: #4154f1;
   transition: 0.3;
-  background: #f6f9ff;
+  background: #E4F6FA;
   padding: 10px 15px;
   border-radius: 4px;
 }
@@ -715,7 +715,7 @@ h6 {
 
 .sidebar-nav .nav-link.collapsed {
   color: #012970;
-  background: #fff;
+  background: #E4F6FA;
 }
 
 .sidebar-nav .nav-link.collapsed i {
@@ -723,12 +723,13 @@ h6 {
 }
 
 .sidebar-nav .nav-link:hover {
-  color: #4154f1;
-  background: #f6f9ff;
+  color: #fff;
+  background: #0819A8;
 }
 
 .sidebar-nav .nav-link:hover i {
-  color: #4154f1;
+  color: #fff;
+  background:#0819A8;
 }
 
 .sidebar-nav .nav-link .bi-chevron-down {
@@ -766,11 +767,13 @@ h6 {
 
 .sidebar-nav .nav-content a:hover,
 .sidebar-nav .nav-content a.active {
-  color: #4154f1;
+  color: #fff;
+  background-color: #0819A8;
 }
 
 .sidebar-nav .nav-content a.active i {
-  background-color: #4154f1;
+  color: #fff;
+  background-color: #fff;
 }
 
 .hide {
