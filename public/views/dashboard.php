@@ -16,6 +16,7 @@
   <script src="../assets/js/main.js"></script>
 
   <!-- Backend JS File -->
+  <script src="../js/loader.js"></script>
   <script src="../js/main.js"></script>
   <script src="../js/dashboard.js"></script>
 

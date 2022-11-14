@@ -1,4 +1,5 @@
-const DIR_API = 'http://localhost/gstech_api/api/';
+// const DIR_API = 'http://localhost/gstech_api/api/';
+(typeof DIR_API === 'undefined') ? DIR_API = 'http://localhost/gstech_api/api/' : DIR_API = 'http://localhost/gstech_api/api/';
 const DIR_MAIN = '/billing-management-system/public/';
 const DIR_CUR = window.location.pathname;
 const admin_id = sessionStorage.getItem('admin_id');
