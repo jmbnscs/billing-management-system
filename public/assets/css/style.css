@@ -1048,7 +1048,7 @@ h6 {
 }
 
 /*--------------------------------------------------------------
-# Profie Page
+# Profile Page
 --------------------------------------------------------------*/
 .profile .profile-card img {
   max-width: 120px;
@@ -1078,16 +1078,19 @@ h6 {
   color: #012970;
 }
 
-.profile .profile-overview .row {
+.profile .profile-overview .row,
+.customer-data .customer-overview .row {
   margin-bottom: 20px;
   font-size: 15px;
 }
 
-.profile .profile-overview .card-title {
+.profile .profile-overview .card-title,
+.customer-data .customer-overview .card-title {
   color: #012970;
 }
 
-.profile .profile-overview .label {
+.profile .profile-overview .label,
+.customer-data .customer-overview .label {
   font-weight: 600;
   color: rgba(1, 41, 112, 0.6);
 }

@@ -51,6 +51,9 @@ async function getCustomers () {
 
     for (var i = 0; i < customer_data.length; i++) {
         var tag;
+
+        
+
         if (customer_data[i].status == 'VALUED') {
             tag = 'bg-success';
         }
