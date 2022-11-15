@@ -3,7 +3,6 @@
   include '../models/navbar.html'; ?>
 
 <main id="main" class="main">
-
 <div class="pagetitle">
   <h1>Dashboard</h1>
   <nav>
@@ -15,6 +14,7 @@
 </div><!-- End Page Title -->
 
 <section class="section dashboard">
+
   <div class="row">
 
     <!-- Left side columns -->
@@ -24,7 +24,7 @@
         <!-- Unpaid Invoices -->
         <div class="col-xxl-6 col-md-6">
           <!-- Change sales-card to unpaid-card then change in style.css -->
-          <div class="card info-card sales-card">
+          <div class="card info-card unpaid-invoices-card">
 
             <div class="filter">
               <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
@@ -43,7 +43,7 @@
 
               <div class="d-flex align-items-center">
                 <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                  <i class="ri ri-bill-line"></i>
+                  <i class="ri ri-file-list-3-line"></i>
                 </div>
                 <div class="ps-3" id="unpaid-invoice-data">
                   <!-- Apply Backend Here -->
@@ -59,7 +59,7 @@
 
         <!-- Uncharged Prorates -->
         <div class="col-xxl-6 col-md-6">
-          <div class="card info-card revenue-card">
+          <div class="card info-card uncharged-prorates-card">
 
             <div class="filter">
               <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
@@ -79,11 +79,11 @@
 
               <div class="d-flex align-items-center">
                 <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                  <i class="bi bi-currency-dollar"></i>
+                  <i class="ri ri-pie-chart-line"></i>
                 </div>
                 <div class="ps-3">
                   <!-- Apply Backend Here -->
-                  <h6>$3,264</h6>
+                  <h6>3,264</h6>
                   <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span>
 
                 </div>
@@ -95,7 +95,7 @@
 
         <!-- Active Tickets -->
         <div class="col-xxl-6 col-md-6">
-          <div class="card info-card sales-card">
+          <div class="card info-card active-tickets-card">
 
             <div class="filter">
               <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
@@ -115,7 +115,7 @@
 
               <div class="d-flex align-items-center">
                 <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                  <i class="bi bi-cart"></i>
+                  <i class="ri ri-file-text-line"></i>
                 </div>
                 <div class="ps-3">
                   <!-- Apply Backend Here -->
@@ -131,7 +131,7 @@
 
         <!-- Claimed Tickets -->
         <div class="col-xxl-6 col-md-6">
-          <div class="card info-card revenue-card">
+          <div class="card info-card claimed-tickets-card">
 
             <div class="filter">
               <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
@@ -151,11 +151,11 @@
 
               <div class="d-flex align-items-center">
                 <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                  <i class="bi bi-currency-dollar"></i>
+                  <i class="ri ri-draft-line"></i>
                 </div>
                 <div class="ps-3">
                   <!-- Apply Backend Here -->
-                  <h6>$3,264</h6>
+                  <h6>3,264</h6>
                   <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span>
 
                 </div>
@@ -165,89 +165,69 @@
           </div>
         </div><!-- End Claimed Tickets -->
 
-        <!-- Reports -->
+        <!-- Revenue Reports -->
         <div class="col-12">
           <div class="card">
-
-            <div class="filter">
-              <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                <li class="dropdown-header text-start">
-                  <h6>Filter</h6>
-                </li>
-
-                <li><a class="dropdown-item" href="#">Today</a></li>
-                <li><a class="dropdown-item" href="#">This Month</a></li>
-                <li><a class="dropdown-item" href="#">This Year</a></li>
-              </ul>
-            </div>
-
             <div class="card-body">
-              <h5 class="card-title">Reports <span>/Today</span></h5>
+              <h5 class="card-title">Revenue Reports <span>/Year 2022</span></h5>
 
-              <!-- Line Chart -->
-              <div id="reportsChart"></div>
-
+              <!-- Bar Chart -->
+              <canvas id="barChart" style="max-height: 400px;"></canvas>
               <script>
                 document.addEventListener("DOMContentLoaded", () => {
-                  new ApexCharts(document.querySelector("#reportsChart"), {
-                    series: [{
-                      name: 'Sales',
-                      data: [31, 40, 28, 51, 42, 82, 56],
-                    }, {
-                      name: 'Revenue',
-                      data: [11, 32, 45, 32, 34, 52, 41]
-                    }, {
-                      name: 'Customers',
-                      data: [15, 11, 32, 18, 9, 24, 11]
-                    }],
-                    chart: {
-                      height: 350,
-                      type: 'area',
-                      toolbar: {
-                        show: false
-                      },
+                  new Chart(document.querySelector('#barChart'), {
+                    type: 'bar',
+                    data: {
+                      labels: [ 'January', 
+                                'February', 
+                                'March', 
+                                'April', 
+                                'May', 
+                                'June', 
+                                'July'
+                              ],
+                      datasets: [{
+                        label: 'Bar Chart',
+                        data: [65, 59, 80, 81, 56, 55, 40],
+                        backgroundColor: [
+                          'rgba(255, 99, 132, 0.2)',
+                          'rgba(255, 159, 64, 0.2)',
+                          'rgba(255, 205, 86, 0.2)',
+                          'rgba(75, 192, 192, 0.2)',
+                          'rgba(54, 162, 235, 0.2)',
+                          'rgba(153, 102, 255, 0.2)'
+                          
+                        ],
+                        borderColor: [
+                          'rgb(255, 99, 132)',
+                          'rgb(255, 159, 64)',
+                          'rgb(255, 205, 86)',
+                          'rgb(75, 192, 192)',
+                          'rgb(54, 162, 235)',
+                          'rgb(153, 102, 255)'
+                          
+                        ],
+                        borderWidth: 1
+                      }]
                     },
-                    markers: {
-                      size: 4
-                    },
-                    colors: ['#4154f1', '#2eca6a', '#ff771d'],
-                    fill: {
-                      type: "gradient",
-                      gradient: {
-                        shadeIntensity: 1,
-                        opacityFrom: 0.3,
-                        opacityTo: 0.4,
-                        stops: [0, 90, 100]
+                    options: {
+                      scales: {
+                        y: {
+                          beginAtZero: true
+                        }
                       }
-                    },
-                    dataLabels: {
-                      enabled: false
-                    },
-                    stroke: {
-                      curve: 'smooth',
-                      width: 2
-                    },
-                    xaxis: {
-                      type: 'datetime',
-                      categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"]
-                    },
-                    tooltip: {
-                      x: {
-                        format: 'dd/MM/yy HH:mm'
-                      },
                     }
-                  }).render();
+                  });
                 });
               </script>
-              <!-- End Line Chart -->
+              <!-- End Bar CHart -->
 
             </div>
 
           </div>
-        </div><!-- End Reports -->
+        </div><!-- End Revenue Reports -->
 
-        <!-- Recent Sales -->
+        <!-- Plans Preview -->
         <div class="col-12">
           <div class="card recent-sales overflow-auto">
 
@@ -265,53 +245,59 @@
             </div>
 
             <div class="card-body">
-              <h5 class="card-title">Recent Sales <span>| Today</span></h5>
+              <h5 class="card-title">Plans Preview <span>| Today</span></h5>
 
               <table class="table table-borderless datatable">
                 <thead>
                   <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Customer</th>
-                    <th scope="col">Product</th>
+                    <th scope="col">Plan Name</th>
+                    <th scope="col">Bandwidth</th>
                     <th scope="col">Price</th>
+                    <th scope="col">Inclusions</th>
                     <th scope="col">Status</th>
+                    <th scope="col">Subscribers</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <th scope="row"><a href="#">#2457</a></th>
-                    <td>Brandon Jacob</td>
-                    <td><a href="#" class="text-primary">At praesentium minu</a></td>
-                    <td>$64</td>
+                    <th scope="row"><a href="#">Plan 1</a></th>
+                    <td>35 mbps</td>
+                    <td><a href="#" class="text-primary">1000</a></td>
+                    <td>None</td>
                     <td><span class="badge bg-success">Approved</span></td>
+                    <td>64</td>
                   </tr>
                   <tr>
-                    <th scope="row"><a href="#">#2147</a></th>
-                    <td>Bridie Kessler</td>
-                    <td><a href="#" class="text-primary">Blanditiis dolor omnis similique</a></td>
-                    <td>$47</td>
+                    <th scope="row"><a href="#">Plan 2</a></th>
+                    <td>50 mbps</td>
+                    <td><a href="#" class="text-primary">1250</a></td>
+                    <td>Fiber Switch</td>
                     <td><span class="badge bg-warning">Pending</span></td>
+                    <td>80</td>
                   </tr>
                   <tr>
-                    <th scope="row"><a href="#">#2049</a></th>
-                    <td>Ashleigh Langosh</td>
-                    <td><a href="#" class="text-primary">At recusandae consectetur</a></td>
-                    <td>$147</td>
+                    <th scope="row"><a href="#">Plan 3</a></th>
+                    <td>75 mbps</td>
+                    <td><a href="#" class="text-primary">1500/a></td>
+                    <td>Netflix, Fiber Switch</td>
                     <td><span class="badge bg-success">Approved</span></td>
+                    <td>200</td>
                   </tr>
                   <tr>
-                    <th scope="row"><a href="#">#2644</a></th>
-                    <td>Angus Grady</td>
-                    <td><a href="#" class="text-primar">Ut voluptatem id earum et</a></td>
-                    <td>$67</td>
+                    <th scope="row"><a href="#">Plan 4</a></th>
+                    <td>100 mbps</td>
+                    <td><a href="#" class="text-primar">1899</a></td>
+                    <td>Netflix, Fiber Switch</td>
                     <td><span class="badge bg-danger">Rejected</span></td>
+                    <td>300</td>
                   </tr>
                   <tr>
-                    <th scope="row"><a href="#">#2644</a></th>
-                    <td>Raheem Lehner</td>
-                    <td><a href="#" class="text-primary">Sunt similique distinctio</a></td>
-                    <td>$165</td>
+                    <th scope="row"><a href="#">Plan 5</a></th>
+                    <td>200</td>
+                    <td><a href="#" class="text-primary">2250</a></td>
+                    <td>Netflix, Fiber Switch</td>
                     <td><span class="badge bg-success">Approved</span></td>
+                    <td>50</td>
                   </tr>
                 </tbody>
               </table>
@@ -319,9 +305,60 @@
             </div>
 
           </div>
-        </div><!-- End Recent Sales -->
+        </div><!-- End Plans Preview -->
 
+        <!-- Customer Preview -->
+        <div class="col-12">
+          <div class="card">
+
+            <div class="filter">
+              <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                <li class="dropdown-header text-start">
+                  <h6>Filter</h6>
+                </li>
+                <li><a class="dropdown-item" href="#">Year 2021</a></li>
+                <li><a class="dropdown-item" href="#">Year 2020</a></li>
+                <li><a class="dropdown-item" href="#">Year 2019</a></li>
+              </ul>
+            </div>
+
+            <div class="card-body">
+              <h5 class="card-title">Customer Preview <span>| Year 2022</span></h5>
+
+              <!-- Pie Chart -->
+              <canvas id="pieChart" style="max-height: 400px;"></canvas>
+              <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                  new Chart(document.querySelector('#pieChart'), {
+                    type: 'pie',
+                    data: {
+                      labels: [
+                        'Valued',
+                        'Deliquent'
+                      ],
+                      datasets: [{
+                        label: 'Number of Customers',
+                        data: [150, 90],
+                        backgroundColor: [
+                          'rgb(119, 221, 119)',
+                          'rgb(250, 160, 160)'
+                        ],
+                        hoverOffset: 4
+                      }]
+                    }
+                  });
+                });
+              </script>
+              <!-- End Pie CHart -->
+
+            </div>
+
+          </div>
+        </div><!-- End Customer Preview -->
+P
       </div>
+
     </div><!-- End Left side columns -->
 
     <!-- Right side columns -->
@@ -400,6 +437,84 @@
         </div>
       </div><!-- End Recent Activity -->
 
+        <!-- Collection -->
+        <div class="card">
+        <div class="filter">
+          <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+            <li class="dropdown-header text-start">
+              <h6>Filter</h6>
+            </li>
+
+            <li><a class="dropdown-item" href="#">Today</a></li>
+            <li><a class="dropdown-item" href="#">This Month</a></li>
+            <li><a class="dropdown-item" href="#">This Year</a></li>
+          </ul>
+        </div>
+
+        <div class="card-body pb-0">
+          <h5 class="card-title">Collection <span>| January 2022</span></h5>
+
+          <div id="trafficChart" style="min-height: 400px;" class="echart"></div>
+
+          <script>
+            document.addEventListener("DOMContentLoaded", () => {
+              echarts.init(document.querySelector("#trafficChart")).setOption({
+                tooltip: {
+                  trigger: 'item'
+                },
+                legend: {
+                  top: '5%',
+                  left: 'center'
+                },
+                series: [{
+                  name: 'Access From',
+                  type: 'pie',
+                  radius: ['40%', '70%'],
+                  avoidLabelOverlap: false,
+                  label: {
+                    show: false,
+                    position: 'center'
+                  },
+                  emphasis: {
+                    label: {
+                      show: true,
+                      fontSize: '18',
+                      fontWeight: 'bold'
+                    }
+                  },
+                  labelLine: {
+                    show: false
+                  },
+                  data: [{
+                      value: 1048,
+                      name: 'Paid'
+                    },
+                    {
+                      value: 735,
+                      name: 'Unpaid'
+                    },
+                    {
+                      value: 580,
+                      name: 'Accounts Receivable'
+                    },
+                    {
+                      value: 484,
+                      name: 'Blank 1'
+                    },
+                    {
+                      value: 300,
+                      name: 'Blank 2'
+                    }
+                  ]
+                }]
+              });
+            });
+          </script>
+
+        </div>
+      </div><!-- End Collection -->
+
       <!-- Budget Report -->
       <div class="card">
         <div class="filter">
@@ -474,7 +589,7 @@
         </div>
       </div><!-- End Budget Report -->
 
-      <!-- Website Traffic -->
+      <!-- Ticket Overview -->
       <div class="card">
         <div class="filter">
           <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
@@ -490,67 +605,55 @@
         </div>
 
         <div class="card-body pb-0">
-          <h5 class="card-title">Website Traffic <span>| Today</span></h5>
+          <h5 class="card-title">Submitted Tickets <span>| This Month</span></h5>
+          
 
-          <div id="trafficChart" style="min-height: 400px;" class="echart"></div>
+              <!-- Radial Bar Chart -->
+              <div id="radialBarChart"></div>
 
-          <script>
-            document.addEventListener("DOMContentLoaded", () => {
-              echarts.init(document.querySelector("#trafficChart")).setOption({
-                tooltip: {
-                  trigger: 'item'
-                },
-                legend: {
-                  top: '5%',
-                  left: 'center'
-                },
-                series: [{
-                  name: 'Access From',
-                  type: 'pie',
-                  radius: ['40%', '70%'],
-                  avoidLabelOverlap: false,
-                  label: {
-                    show: false,
-                    position: 'center'
-                  },
-                  emphasis: {
-                    label: {
-                      show: true,
-                      fontSize: '18',
-                      fontWeight: 'bold'
-                    }
-                  },
-                  labelLine: {
-                    show: false
-                  },
-                  data: [{
-                      value: 1048,
-                      name: 'Search Engine'
+              <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                  new ApexCharts(document.querySelector("#radialBarChart"), {
+                    series: [44, 55, 83],
+                    chart: {
+                      height: 400,
+                      type: 'radialBar',
+                      toolbar: {
+                        show: true
+                      }
                     },
-                    {
-                      value: 735,
-                      name: 'Direct'
+                    plotOptions: {
+                      radialBar: {
+                        dataLabels: {
+                          name: {
+                            fontSize: '16px',
+                          },
+                          value: {
+                            fontSize: '22px',
+                          },
+                          total: {
+                            show: true,
+                            label: 'Total',
+                            formatter: function(w) {
+                              // By default this function returns the average of all series. The below is just an example to show the use of custom formatter function
+                              return 249 
+                            }
+                          }
+                        }
+                      }
                     },
-                    {
-                      value: 580,
-                      name: 'Email'
-                    },
-                    {
-                      value: 484,
-                      name: 'Union Ads'
-                    },
-                    {
-                      value: 300,
-                      name: 'Video Ads'
-                    }
-                  ]
-                }]
-              });
-            });
-          </script>
+                    labels: [ 'Network Interruption', 
+                              'Subscription Changes', 
+                              'Coffee Ticket'],
+                  }).render();
+                });
+              </script>
+              <!-- End Radial Bar Chart -->
 
         </div>
-      </div><!-- End Website Traffic -->
+      </div><!-- EndTicket Overview -->
+
+
 
     </div><!-- End Right side columns -->
 
@@ -558,7 +661,6 @@
 </section>
 
 </main><!-- End #main -->
-
   <!-- Vendor JS Files -->
   <script src="../assets/vendor/apexcharts/apexcharts.min.js"></script>
   <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -569,6 +671,8 @@
   <script src="../assets/vendor/tinymce/tinymce.min.js"></script>
   <script src="../assets/vendor/php-email-form/validate.js"></script>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
+
   <!-- Template Main JS File -->
   <script src="../assets/js/main.js"></script>
 
@@ -577,4 +681,5 @@
   <script src="../js/dashboard.js"></script>
 
 </body>
+
 </html>
