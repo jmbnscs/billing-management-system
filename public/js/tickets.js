@@ -1198,10 +1198,3 @@ function setCreateTicketPage () {
         createTicket();
     };
 }
-
-
-// db updates made
-// - changed date_created and date_resolved to date
-// - changed ticket_details view and ticket_resolved_details view and added ticket_pending_details
-// - Added Concern (3 - Disconnection)
-// - Added Ticket Status (4 - Invalid)
