@@ -64,7 +64,7 @@ async function getCustomers () {
             <tr>
                 <th scope="row"><a href="../views/customer_data.php?acct=${customer_data[i].account_id}">${customer_data[i].account_id}</a></th>
                 <td>${customer_data[i].customer_name}</td>
-                <td><a href="#" class="text-primary">${customer_data[i].plan}</a></td>
+                <td>${customer_data[i].plan}</td>
                 <td>&#8369; ${customer_data[i].balance}</td>
                 <td><span class="badge ${tag}">${customer_data[i].status}</span></td>
                 <td><button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalDialogScrollable" data-bs-whatever="${customer_data[i].account_id}" id="try_lang"><i class="ri ri-eye-fill"></i></button></td>

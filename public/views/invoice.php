@@ -21,7 +21,7 @@
         <table class="table table-borderless" id="invoice-table">
           <thead>
             <tr>
-              <th scope="col">ID</th>
+              <th scope="col">Invoice ID</th>
               <th scope="col">Customer</th>
               <th scope="col">Disconnection Date</th>
               <th scope="col">Total Bill</th>
