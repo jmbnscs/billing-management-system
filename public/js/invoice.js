@@ -107,25 +107,7 @@ async function getLatestInvoice(account_id) {
     }
 }
 
-async function getPaymentRecordData(payment_id) {
-    let url = DIR_API + 'payment/read_single.php?payment_id=' + payment_id;
-    try {
-        let res = await fetch(url);
-        return await res.json();
-    } catch (error) {
-        console.log(error);
-    }
-}
 
-async function getProrateRecordData(prorate_id) {
-    let url = DIR_API + 'views/prorate_single.php?prorate_id=' + prorate_id;
-    try {
-        let res = await fetch(url);
-        return await res.json();
-    } catch (error) {
-        console.log(error);
-    }
-}
 
 async function getPaymentRecords () {
     let url = DIR_API + 'views/payment.php';

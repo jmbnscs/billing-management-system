@@ -9,16 +9,20 @@ $(document).ready(function () {
     setDefaultSetting();
 });
 
+// Global Variables
+let customer_name;
+let account_id = (window.location.href).split("=")[1];
+
 async function setDefaultSetting() {
-    let account_id = (window.location.href).split("=")[1];
     const customer_data = await getCustomerData(account_id);
-    $('#customer-name').text(customer_data.first_name + " " + customer_data.last_name);
+    customer_name = customer_data.first_name + " " + customer_data.last_name;
+    $('#customer-name').text(customer_name);
 
     setCustomerData(customer_data);
-    setInvoiceHistory(account_id);
-    setPaymentHistory(account_id);
-    setProrateHistory(account_id);
-    setTicketHistory(account_id);
+    setInvoiceHistory();
+    setPaymentHistory();
+    setProrateHistory();
+    setTicketHistory();
 }
 
 async function setCustomerData(customer_data) {
@@ -56,10 +60,9 @@ async function setCustomerData(customer_data) {
     $('#rating_status').text(customer_data.rating_status);
 }
 
-async function setInvoiceHistory(account_id) {
+async function setInvoiceHistory() {
     let content = await getInvoiceHistory(account_id);
-    var t;
-    (content.length <= 0) ? t = $('#customer-invoice-tbl').DataTable() : t = $('#customer-invoice-tbl').DataTable();
+    var t = $('#customer-invoice-tbl').DataTable();
 
     for (var i = 0; i < content.length; i++) {
         var tag;
@@ -84,10 +87,9 @@ async function setInvoiceHistory(account_id) {
     }
 }
 
-async function setPaymentHistory(account_id) {
+async function setPaymentHistory() {
     let content = await getPaymentHistory(account_id);
-    var t;
-    (content.length <= 0) ? t = $('#customer-payment-tbl').DataTable() : t = $('#customer-payment-tbl').DataTable();
+    var t = $('#customer-payment-tbl').DataTable();
 
     for (var i = 0; i < content.length; i++) {
         var tag, payment_status;
@@ -105,16 +107,17 @@ async function setPaymentHistory(account_id) {
                 <td>${formatDateString(content[i].payment_date)}</td>
                 <td>${content[i].invoice_id}</td>
                 <td><span class="badge ${tag}">${payment_status}</span></td>
-                <td><button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="${content[i].payment_id}"><i class="ri ri-eye-fill"></i></button></td>
+                <td><button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#view-payment" data-bs-whatever="${content[i].payment_id}"><i class="ri ri-eye-fill"></i></button></td>
             </tr>
         `)).draw(false);
     }
+
+    setViewModal('view-payment')
 }
 
-async function setProrateHistory(account_id) {
+async function setProrateHistory() {
     let content = await getProrateHistory(account_id);
-    var t;
-    (content.length <= 0) ? t = $('#customer-prorate-tbl').DataTable() : t = $('#customer-prorate-tbl').DataTable();
+    var t = $('#customer-prorate-tbl').DataTable();
 
     for (var i = 0; i < content.length; i++) {
         var tag;
@@ -132,15 +135,17 @@ async function setProrateHistory(account_id) {
                 <td>&#8369; ${content[i].prorate_charge}</td>
                 <td>${content[i].ticket_num}</td>
                 <td><span class="badge ${tag}">${status.status_name}</span></td>
-            </tr>
+                <td><button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#view-prorate" data-bs-whatever="${content[i].prorate_id}"><i class="ri ri-eye-fill"></i></button></td>
+                </tr>
         `)).draw(false);
     }
+
+    setViewModal('view-prorate')
 }
 
-async function setTicketHistory(account_id) {
+async function setTicketHistory() {
     let content = await getTicketHistory(account_id);
-    var t;
-    (content.length <= 0) ? t = $('#customer-ticket-tbl').DataTable() : t = $('#customer-ticket-tbl').DataTable();
+    var t = $('#customer-ticket-tbl').DataTable();
 
     for (var i = 0; i < content.length; i++) {
         var tag;
@@ -157,13 +162,107 @@ async function setTicketHistory(account_id) {
                 <th scope="row">${content[i].ticket_num}</th>
                 <td>${concern.concern_category}</td>
                 <td>${formatDateString(content[i].date_filed)}</td>
-                <td>${formatDateString(content[i].date_resolved)}</td>
+                <td>${(content.date_resolved == null) ? 'N/A' : formatDateString(content.date_resolved)}</td>
                 <td>${content[i].ticket_num}</td>
                 <td><span class="badge ${tag}">${status.status_name}</span></td>
-                <td><button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="${content[i].ticket_num}"><i class="ri ri-eye-fill"></i></button></td>
+                <td><button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#view-ticket" data-bs-whatever="${content[i].ticket_num}"><i class="ri ri-eye-fill"></i></button></td>
                 </tr>
         `)).draw(false);
     }
+
+    setViewModal('view-ticket')
+}
+
+// Set View Modal
+async function setViewModal (table) {
+    var viewModal = document.getElementById(table)
+    viewModal.addEventListener('show.bs.modal', async function (event) {
+        var modalTitle = viewModal.querySelector('.modal-title');
+        modalTitle.textContent = customer_name;
+        var button = event.relatedTarget;
+        var data_id = button.getAttribute('data-bs-whatever');
+        let data, id, content;
+        if (table == 'view-payment') {
+            data = await getPaymentRecordData(data_id);
+            (data.tagged == 1) ? setTagElement('tagged', 1) : setTagElement('tagged', 2);
+            id = [
+                '#payment_reference_id', 
+                '#amount_paid', 
+                '#payment_date', 
+                '#invoice_id', 
+                '#tagged'
+            ];
+            content = [
+                data.payment_reference_id, 
+                data.amount_paid, 
+                formatDateString(data.payment_date), 
+                data.invoice_id, 
+                'Tagged'
+            ];
+        }
+        else if (table == 'view-prorate') {
+            data = await getSingleProrateRecord(data_id);
+            let status = await getStatusName('prorate_status', data.prorate_status_id);
+            (data.prorate_status_id == 2) ? setTagElement('prorate_status', 1) : setTagElement('prorate_status', 2);
+            id = [
+                '#prorate_id', 
+                '#duration', 
+                '#prorate_charge', 
+                '#invoice_id_pr', 
+                '#prorate_status'
+            ];
+            content = [
+                data.prorate_id, 
+                data.duration, 
+                '\u20B1 ' + data.prorate_charge, 
+                data.invoice_id, 
+                status.status_name
+            ];
+        }
+        else if (table == 'view-ticket') {
+            data = await getTicketData(data_id);
+            let status = await getStatusName('ticket_status', data.ticket_status_id);
+            let category = await getConcernCategory(data.concern_id);
+            let admin = await getAdminData(data.admin_id);
+            (data.ticket_status_id == 3) ? setTagElement('ticket_status', 1) : setTagElement('ticket_status', 2);
+            id = [
+                '#ticket_num', 
+                '#concern_category', 
+                '#concern_details', 
+                '#date_filed', 
+                '#resolution_details',
+                '#date_resolved',
+                '#admin_id',
+                '#ticket_status'
+            ];
+            content = [
+                data.ticket_num, 
+                category.concern_category, 
+                data.concern_details, 
+                formatDateString(data.date_filed),
+                (data.resolution_details == null) ? 'N/A' : data.resolution_details, 
+                (data.date_resolved == null) ? 'N/A' : formatDateString(data.date_resolved), 
+                (data.admin_id == null) ? 'N/A' : admin.first_name + ' ' + admin.last_name, 
+                status.status_name
+            ];
+        }
+
+        setContent();
+
+        function setTagElement(id, status) {
+            document.getElementById(id).classList.add('text-white');
+            document.getElementById(id).classList.remove('bg-danger');
+            document.getElementById(id).classList.remove('bg-success');
+
+            (status == 1) ? document.getElementById(id).classList.add('bg-success') : document.getElementById(id).classList.add('bg-danger');
+        }
+
+        function setContent () {
+            for (var i = 0; i < content.length; i++) {
+                $(id[i]).val(content[i]);
+            }
+        }
+    });
 }
 
 function formatDateString(date) {
@@ -173,7 +272,7 @@ function formatDateString(date) {
     return month + ' ' + temp.getDate() + ', ' + temp.getFullYear();
 }
 
-async function getCustomerData(account_id) {
+async function getCustomerData() {
     let url = DIR_API + 'views/customer_data.php?account_id=' + account_id;
     try {
         let res = await fetch(url);
@@ -183,7 +282,7 @@ async function getCustomerData(account_id) {
     }
 }
 
-async function getInvoiceHistory(account_id) {
+async function getInvoiceHistory() {
     let url = DIR_API + 'invoice/read_single_account.php?account_id=' + account_id;
     try {
         let res = await fetch(url);
@@ -193,7 +292,7 @@ async function getInvoiceHistory(account_id) {
     }
 }
 
-async function getPaymentHistory(account_id) {
+async function getPaymentHistory() {
     let url = DIR_API + 'payment/read_single_account.php?account_id=' + account_id;
     try {
         let res = await fetch(url);
@@ -203,7 +302,7 @@ async function getPaymentHistory(account_id) {
     }
 }
 
-async function getProrateHistory(account_id) {
+async function getProrateHistory() {
     let url = DIR_API + 'prorate/read_acct.php?account_id=' + account_id;
     try {
         let res = await fetch(url);
@@ -213,8 +312,18 @@ async function getProrateHistory(account_id) {
     }
 }
 
-async function getTicketHistory(account_id) {
+async function getTicketHistory() {
     let url = DIR_API + 'ticket/read_single_account.php?account_id=' + account_id;
+    try {
+        let res = await fetch(url);
+        return await res.json();        
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function getTicketData(ticket_num) {
+    let url = DIR_API + 'ticket/read_single.php?ticket_num=' + ticket_num;
     try {
         let res = await fetch(url);
         return await res.json();        

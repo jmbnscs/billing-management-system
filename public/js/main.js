@@ -165,6 +165,36 @@ async function displayPlanInclusion(plan_id) {
     }
 }
 
+async function getPaymentRecordData(payment_id) {
+    let url = DIR_API + 'payment/read_single.php?payment_id=' + payment_id;
+    try {
+        let res = await fetch(url);
+        return await res.json();
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function getProrateRecordData(prorate_id) {
+    let url = DIR_API + 'views/prorate_single.php?prorate_id=' + prorate_id;
+    try {
+        let res = await fetch(url);
+        return await res.json();
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function getSingleProrateRecord(prorate_id) {
+    let url = DIR_API + 'prorate/read_single.php?prorate_id=' + prorate_id;
+    try {
+        let res = await fetch(url);
+        return await res.json();
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 // Display Default Data
 async function setDefaults () {
     const admin_data = await getAdminData(admin_id);
