@@ -1,5 +1,5 @@
 const DIR_API_LOAD = 'http://localhost/gstech_api/api/';
-
+const today_date = new Date();
 autoload();
 
 async function autoload() {
