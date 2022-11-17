@@ -842,19 +842,48 @@ h6 {
   flex-grow: 0;
 }
 
-.dashboard .sales-card .card-icon {
-  color: #4154f1;
-  background: #f6f6fe;
+.dashboard .unpaid-invoices-card {
+  background: #fce7cc;
 }
 
-.dashboard .revenue-card .card-icon {
-  color: #2eca6a;
-  background: #e0f8e9;
+.dashboard .uncharged-prorates-card {
+  background: #f7f5bc;
 }
 
-.dashboard .customers-card .card-icon {
+.dashboard .active-tickets-card {
+  background: #ddead1;
+}
+
+.dashboard .claimed-tickets-card {
+  background: #caf0f8;
+}
+
+.dashboard .unpaid-invoices-card .card-icon {
+  width: 64px;
+  height: 64px;
   color: #ff771d;
-  background: #ffecdf;
+  background: #f9f6f2;
+}
+
+.dashboard .uncharged-prorates-card .card-icon {
+  width: 64px;
+  height: 64px;
+  color: #ffcc33;
+  background: #f9f6f2;
+}
+
+.dashboard .active-tickets-card .card-icon {
+  width: 64px;
+  height: 64px;
+  color: #4c9a2a;
+  background: #f9f6f2;
+}
+
+.dashboard .claimed-tickets-card .card-icon {
+  width: 64px;
+  height: 64px;
+  color: #4154f1;
+  background: #f9f6f2;
 }
 
 /* Activity */
