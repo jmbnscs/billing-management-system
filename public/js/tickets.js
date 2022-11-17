@@ -298,16 +298,14 @@ async function pendingModal () {
         // Will be changed if concerns were added
         if(ticket.concern_id == 1) {
             $('#pend-resolve-ticket-btn').attr('data-bs-target', 'networkModal');
-            pending_resolve_ticket_btn = document.getElementById('pend-resolve-ticket-btn');
         }
         else if (ticket.concern_id == 2) {
             $('#pend-resolve-ticket-btn').attr('data-bs-target', 'subscriptionModal');
-            pending_resolve_ticket_btn = document.getElementById('pend-resolve-ticket-btn');
         }
         else {
             $('#pend-resolve-ticket-btn').attr('data-bs-target', 'disconnectModal');
-            pending_resolve_ticket_btn = document.getElementById('pend-resolve-ticket-btn');
         }
+        pending_resolve_ticket_btn = document.getElementById('pend-resolve-ticket-btn');
 
         url = DIR_API + 'admin/read_single.php?admin_id=' + sessionStorage.getItem('admin_id');
         let admin;
@@ -401,9 +399,8 @@ async function pendingModal () {
             };
         }
         catch (e){
-            console.log(e);
+            console.log(e instanceof TypeError);
         }
-        
 
         invalid_ticket_btn.onclick = (e) => {
             e.preventDefault();
