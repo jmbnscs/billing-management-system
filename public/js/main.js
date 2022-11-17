@@ -371,7 +371,7 @@ $(() => {
             document.getElementById('plans-nav').classList.add('show');
             document.getElementById(id).classList.add('active');
         }
-        else if (id == 'nav-tickets' || id == 'nav-tickets_resolved' || id == 'nav-tickets_categories' || id == 'nav-tickets_create') {
+        else if (id == 'nav-tickets' || id == 'nav-tickets_resolved' || id == 'nav-tickets_pending' || id == 'nav-tickets_create') {
             document.getElementById('drop-ticket').classList.remove('collapsed');
             document.getElementById('ticket-nav').classList.add('show');
             document.getElementById(id).classList.add('active');
@@ -390,3 +390,43 @@ $(() => {
         }
     }
   });
+
+async function displayConcerns() {
+    let url = DIR_API + 'concerns/read.php';
+    try {
+        let res = await fetch(url);
+        return await res.json();
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function displayConcerns() {
+    let url = DIR_API + 'concerns/read.php';
+    try {
+        let res = await fetch(url);
+        return await res.json();
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function displayTicketStatus() {
+    let url = DIR_API + 'statuses/read.php?status_table=ticket_status';
+    try {
+        let res = await fetch(url);
+        return await res.json();
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function displayUserLevels() {
+    let url = DIR_API + 'user_level/read.php';
+    try {
+        let res = await fetch(url);
+        return await res.json();
+    } catch (error) {
+        console.log(error);
+    }
+}
