@@ -537,7 +537,7 @@ h6 {
 }
 
 .header-nav .notifications .notification-item:hover {
-  background-color: #f6f9ff;
+  background-color: #E4F6FA;
 }
 
 .header-nav .messages {
@@ -605,7 +605,7 @@ h6 {
 }
 
 .header-nav .profile .dropdown-item:hover {
-  background-color: #B6DDF8;
+  background-color: #E4F6FA;
 }
 
 /*--------------------------------------------------------------
