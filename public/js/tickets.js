@@ -363,44 +363,35 @@ async function pendingModal () {
             setCustomerData('#admin_role', ticket.user_level, setAttr, bool);
         }
         
-        try {
-            pending_resolve_ticket_btn.onclick = (e) => {
-                e.preventDefault();
-                $('#pendingModal').modal('hide');
-                $('#pendingModal').data('bs.modal', null);
+        pending_resolve_ticket_btn.onclick = (e) => {
+            e.preventDefault();
+            $('#pendingModal').modal('hide');
                 
-                if(ticket.concern_id == 1) {
-                    pendNetworkModal(ticket_num);
-                    $('#networkModal').modal('show');
+            if(ticket.concern_id == 1) {
+                pendNetworkModal(ticket_num);
 
-                    resolve_network.onsubmit = (e) => {
-                        e.preventDefault();
-                        networkTicketData();
-                    };
-                }
-                else if (ticket.concern_id == 2) {
-                    pendSubscriptionModal(ticket_num);
-                    $('#subscriptionModal').modal('show');
+                resolve_network.onsubmit = (e) => {
+                    e.preventDefault();
+                    networkTicketData();
+                };
+            }
+            else if (ticket.concern_id == 2) {
+                pendSubscriptionModal(ticket_num);
 
-                    resolve_subscription.onsubmit = (e) => {
-                        e.preventDefault();
-                        subscriptionTicketData();
-                    };
-                }
-                else {
-                    pendDisconnectModal(ticket_num);
-                    $('#disconnectModal').modal('show');
+                resolve_subscription.onsubmit = (e) => {
+                    e.preventDefault();
+                    subscriptionTicketData();
+                };
+            }
+            else {
+                pendDisconnectModal(ticket_num);
 
-                    resolve_disconnect.onsubmit = (e) => {
-                        e.preventDefault();
-                        disconnectTicketData();
-                    };
-                }
-            };
-        }
-        catch (e){
-            console.log(e instanceof TypeError);
-        }
+                resolve_disconnect.onsubmit = (e) => {
+                    e.preventDefault();
+                    disconnectTicketData();
+                };
+            }
+        };
 
         invalid_ticket_btn.onclick = (e) => {
             e.preventDefault();
