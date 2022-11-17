@@ -297,17 +297,17 @@ async function pendingModal () {
 
         // Will be changed if concerns were added
         if(ticket.concern_id == 1) {
-            $('#pend-resolve-ticket-btn').attr('data-bs-target', 'networkModal');
+            $('#pend-resolve-ticket-btn').attr('data-bs-target', '#networkModal');
         }
         else if (ticket.concern_id == 2) {
-            $('#pend-resolve-ticket-btn').attr('data-bs-target', 'subscriptionModal');
+            $('#pend-resolve-ticket-btn').attr('data-bs-target', '#subscriptionModal');
         }
         else {
-            $('#pend-resolve-ticket-btn').attr('data-bs-target', 'disconnectModal');
+            $('#pend-resolve-ticket-btn').attr('data-bs-target', '#disconnectModal');
         }
         pending_resolve_ticket_btn = document.getElementById('pend-resolve-ticket-btn');
 
-        url = DIR_API + 'admin/read_single.php?admin_id=' + sessionStorage.getItem('admin_id');
+        url = DIR_API + 'admin/read_single.php?admin_id=' + admin_id;
         let admin;
             try {
                 let res = await fetch(url);
@@ -439,7 +439,7 @@ async function claimModal (ticket_num) {
                 console.log(error);
             }
 
-        url = DIR_API + 'admin/read_single.php?admin_id=' + sessionStorage.getItem('admin_id');
+        url = DIR_API + 'admin/read_single.php?admin_id=' + admin_id;
         let admin;
             try {
                 let res = await fetch(url);
@@ -508,7 +508,7 @@ async function pendNetworkModal(ticket_num) {
                 console.log(error);
             }
 
-        url = DIR_API + 'admin/read_single.php?admin_id=' + sessionStorage.getItem('admin_id');
+        url = DIR_API + 'admin/read_single.php?admin_id=' + admin_id;
         let admin;
             try {
                 let res = await fetch(url);
@@ -587,7 +587,7 @@ async function pendSubscriptionModal(ticket_num) {
                 console.log(error);
             }
 
-        url = DIR_API + 'admin/read_single.php?admin_id=' + sessionStorage.getItem('admin_id');
+        url = DIR_API + 'admin/read_single.php?admin_id=' + admin_id;
         let admin;
             try {
                 let res = await fetch(url);
@@ -683,7 +683,7 @@ async function pendDisconnectModal(ticket_num) {
                 console.log(error);
             }
 
-        url = DIR_API + 'admin/read_single.php?admin_id=' + sessionStorage.getItem('admin_id');
+        url = DIR_API + 'admin/read_single.php?admin_id=' + admin_id;
         let admin;
             try {
                 let res = await fetch(url);
@@ -876,7 +876,6 @@ async function resolvedModal () {
 async function claimTicketData() {
     const ticket_num = $('#ticket_num_claim').val();
     const ticket_status_id = 2;
-    const admin_id = sessionStorage.getItem('admin_id');
 
     let url = DIR_API + 'ticket/claim.php';
     claimTicketResponse = await fetch(url, {
@@ -917,7 +916,6 @@ async function networkTicketData() {
     const resolution_details = $('#resolution_details_net').val();
     const date_resolved = today;
     const ticket_status_id = 3;
-    const admin_id = sessionStorage.getItem('admin_id');
 
     url = DIR_API + 'prorate/create.php';
     const updateProrateResponse = await fetch(url, {
@@ -988,7 +986,6 @@ async function subscriptionTicketData() {
     const resolution_details = $('#resolution_details_sub').val();
     const date_resolved = today;
     const ticket_status_id = 3;
-    const admin_id = sessionStorage.getItem('admin_id');
 
     url = DIR_API + 'account/update.php';
     const updateAccountResponse = await fetch(url, {
@@ -1044,7 +1041,6 @@ async function disconnectTicketData() {
     const resolution_details = $('#resolution_details_disc').val();
     const date_resolved = today;
     const ticket_status_id = 3;
-    const admin_id = sessionStorage.getItem('admin_id');
 
     url = DIR_API + 'ticket/update.php';
     updateTicketResponse = await fetch(url, {
@@ -1075,7 +1071,6 @@ async function disconnectTicketData() {
 async function invalidTicketData() {
     const ticket_num = $('#ticket_num_invalid').val();
     const ticket_status_id = 4;
-    const admin_id = sessionStorage.getItem('admin_id');
 
     let url = DIR_API + 'ticket/claim.php';
     claimTicketResponse = await fetch(url, {
