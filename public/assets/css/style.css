@@ -66,6 +66,16 @@ h6 {
   color: #012970;
 }
 
+/* Generate Report button */
+.pagetitle .report_generate_btn {
+  text-align: right;
+}
+
+.pagetitle .report_generate_btn .dropdown-item:hover {
+  background: #a5c5fe;
+
+}
+
 /*--------------------------------------------------------------
 # Back to top button
 --------------------------------------------------------------*/

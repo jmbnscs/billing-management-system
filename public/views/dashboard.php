@@ -11,6 +11,20 @@
       <li class="breadcrumb-item active">Dashboard</li>
     </ol>
   </nav>
+  
+  <!--Button for report generation-->
+  <div class="report_generate_btn">
+    <button type="button" class="btn btn-primary dropdown-toggle" 
+      data-bs-toggle="dropdown" aria-expanded="false">
+    Generate Report
+    </button>
+    <ul class="dropdown-menu">
+      <li><a class="dropdown-item" href="#">Download as PDF</a></li>
+      <li><a class="dropdown-item" href="#">Download as PNG</a></li>
+      <li><a class="dropdown-item" href="#">Download as JPG</a></li>
+    </ul>
+  </div>
+
 </div><!-- End Page Title -->
 
 <section class="section dashboard">
@@ -19,6 +33,7 @@
 
     <!-- Left side columns -->
     <div class="col-lg-8">
+
       <div class="row">
 
         <!-- Unpaid Invoices -->
@@ -356,14 +371,14 @@
 
           </div>
         </div><!-- End Customer Preview -->
-P
+
       </div>
 
     </div><!-- End Left side columns -->
 
     <!-- Right side columns -->
     <div class="col-lg-4">
-
+      
       <!-- Recent Activity -->
       <div class="card">
         <div class="filter">
