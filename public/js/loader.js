@@ -39,6 +39,70 @@ async function getInvoiceByStatus(status_id) {
     }
 }
 
+async function getAccount(account_id) {
+    let url = DIR_API + 'account/read_single.php?account_id=' + account_id;
+    try {
+        let res = await fetch(url);
+        return await res.json();
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function getTicketPerAcct(account_id) {
+    let url = DIR_API + 'ticket/read_single_account.php?account_id=' + account_id;
+    try {
+        let res = await fetch(url);
+        return await res.json();
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function getUserLevel(user_id) {
+    let url = DIR_API + 'user_level/read_single.php?user_id=' + user_id;
+    try {
+        let res = await fetch(url);
+        return await res.json();
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function generateTicketNum() {
+    let url = DIR_API + 'ticket/read.php';
+    try {
+        let res = await fetch(url);
+        response = await res.json();
+
+        let unique = false;
+        while(unique == false) {
+            let checker = 0;
+            let rand_num = "TN" + Math.round(Math.random() * 999999);
+            for(let i = 0; i < response.length; i++) {
+                if(rand_num == response[i]['ticket_num']) {
+                    checker++;
+                }
+            }
+            if (checker == 0) {
+                unique = true;
+                return rand_num;
+            }
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+function generateDateString() {
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); 
+    var yyyy = today.getFullYear();
+    today = yyyy + '-' + mm + '-' + dd;
+    return today;
+}
+
 function monthDiff(dateFrom, dateTo) {
     return dateTo.getMonth() - dateFrom.getMonth() + 
     (12 * (dateTo.getFullYear() - dateFrom.getFullYear()))
@@ -158,10 +222,72 @@ async function updateDisconnectionInvoice() {
 
     for (var i = 0; i < unpaid_content.length; i++) {
         let day_difference = getDaysDifference(date_today, new Date(unpaid_content[i].disconnection_date));
-        if (day_difference > 7) {
-            // Create Ticket Here
-            console.log('Disconnection: ' + unpaid_content[i].invoice_status_id);
-            console.log(new Date());
-        } 
+
+        if ((day_difference > 7) && (unpaid_content[i].invoice_status_id == 4)) {
+            const ticket_account = await getTicketPerAcct(unpaid_content[i].account_id);
+            const account_details = await getAccount(unpaid_content[i].account_id);
+
+            if(account_details.account_status_id !== 3) {
+                if(ticket_account.message == 'No Ticket Records Found') {
+                    // console.log("No Tickets - Disconnection: " + unpaid_content[i].account_id + " " + unpaid_content[i].invoice_id);
+                    createTicket(unpaid_content[i].account_id);
+                }
+                else {
+                    var ticket_resolved_dates = new Array();
+                    for(var j = 0; j < ticket_account.length; j++) {
+                        if(ticket_account[j].ticket_status_id == 3) {
+                            ticket_resolved_dates.push(ticket_account[j].date_resolved);
+                        }
+                    }
+
+                    if(ticket_resolved_dates.length > 0) {
+                        ticket_resolved_dates.sort();
+
+                        const thirtyDaysInMs = 30 * 24 * 60 * 60 * 1000;
+                        const pastDate = new Date (ticket_resolved_dates[ticket_resolved_dates.length - 1]);
+                        const timeDiffInMs = date_today.getTime() - pastDate.getTime();
+
+                        if(timeDiffInMs > thirtyDaysInMs) {
+                            //console.log("W/ Existing Tickets - Disconnection: " + unpaid_content[i].account_id + " " + unpaid_content[i].invoice_id);
+                            createTicket(unpaid_content[i].account_id);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    async function createTicket(account_id) {
+        const ticket_num = await generateTicketNum();
+        const date_filed = generateDateString();
+
+        // Set ticket details for disconnection
+        const concern_id = 3;
+        const concern_details = "Disconnection grace period has passed.";
+        const ticket_status_id = 1;
+        const user_level = 5;
+        
+        let url = DIR_API + 'ticket/create.php';
+        const createTicketResponse = await fetch(url, {
+            method : 'POST',
+            headers : {
+                'Content-Type' : 'application/json'
+            },
+            body : JSON.stringify({
+                'concern_id' : concern_id,
+                'concern_details' : concern_details,
+                'date_filed' : date_filed,
+                'ticket_status_id' : ticket_status_id,
+                'account_id' : account_id,
+                'ticket_num' : ticket_num,
+                'user_level' : user_level
+            })
+        });
+    
+        const ticket_content = await createTicketResponse.json();
+    
+        if (ticket_content.message == 'Ticket Created') {
+            console.log('Ticket Created Successfully.');
+        }
     }
 }
