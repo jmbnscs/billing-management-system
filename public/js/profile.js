@@ -75,6 +75,7 @@ async function updateAdmin() {
     const admin_email = $('#edit-email').val();
     const mobile_number = $('#edit-number').val();
     const address = $('#edit-address').val();
+    const user_level_id = sessionStorage.getItem("user_id");
 
     let url = DIR_API + 'admin/update.php';
 
@@ -87,13 +88,14 @@ async function updateAdmin() {
             'admin_id' : admin_id,
             'admin_email' : admin_email,
             'mobile_number' : mobile_number,
-            'address' : address
+            'address' : address,
+            'user_level_id' : user_level_id
         })
     });
 
     const content = await rawResponse.json();
     
-    if (content.message = 'Admin Updated') {
+    if (content.message = 'Admin Updated' && logActivity('Edited Profile Details', 'Profile')) {
         location.reload();
     }
 }
@@ -137,7 +139,7 @@ async function changePassword() {
 
             const content = await changeResponse.json();
             
-            if (content.message = 'Password Updated') {
+            if (content.message == 'Password Updated' && logActivity('Changed Password', 'Profile')) {
                 sessionStorage.setItem('admin_password', newPassword);
                 sessionStorage.setItem('hashed', 1);
                 toastr.success(content.message);
