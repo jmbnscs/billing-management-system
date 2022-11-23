@@ -183,7 +183,7 @@ async function setViewModal (table) {
         var data_id = button.getAttribute('data-bs-whatever');
         let data, id, content;
         if (table == 'view-payment') {
-            data = await getPaymentRecordData(data_id);
+            data = await fetchData('payment/read_single.php?payment_id=' + data_id);
             (data.tagged == 1) ? setTagElement('tagged', 1) : setTagElement('tagged', 2);
             id = [
                 '#payment_reference_id', 
@@ -201,7 +201,7 @@ async function setViewModal (table) {
             ];
         }
         else if (table == 'view-prorate') {
-            data = await getSingleProrateRecord(data_id);
+            data = await fetchData('prorate/read_single.php?prorate_id=' + data_id);
             let status = await getStatusName('prorate_status', data.prorate_status_id);
             (data.prorate_status_id == 2) ? setTagElement('prorate_status', 1) : setTagElement('prorate_status', 2);
             id = [

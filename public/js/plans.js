@@ -170,9 +170,9 @@ async function setModal () {
         modalTitle.textContent = plan.plan_name;
         //   modalBodyInput.value = recipient
 
-        const plan_status = await displayPlanStatus();
-        const inclusion = await displayInclusion();
-        const promo = await displayPromo();
+        const plan_status = await fetchData('statuses/read.php?status_table=plan_status');
+        const inclusion = await fetchData('inclusion/read.php');
+        const promo = await fetchData('promo/read.php');
 
         toggleInputData('disabled', true);
         toggleDefaultData('disabled', true);
@@ -309,8 +309,8 @@ async function updatePlanData() {
     const inclusion = $('#inclusion').val();
 
     // Initialize Inclusion Variables
-    const inclusion_data = await displayInclusion();
-    const existing_data = await displayPlanInclusion(plan_id);
+    const inclusion_data = await fetchData('inclusion/read.php');
+    const existing_data = await fetchData('views/plan_inclusions.php?plan_id=' + plan_id);
 
     let inclusion_code = new Array ();
     let compare_data = new Array ();
@@ -490,7 +490,7 @@ async function updatePlanData() {
 }
 
 async function setAddDropdown() {
-    const inclusion = await displayInclusion();
+    const inclusion = await fetchData('inclusion/read.php');
     for (var i = 0; i < inclusion.length; i++) {
         var opt = `<option value='${inclusion[i].inclusion_id}'>${inclusion[i].inclusion_name}</option>`;
         $("#inclusion").append(opt);

@@ -436,7 +436,7 @@ async function setPaymentRecordsPage() {
     
             var button = event.relatedTarget;
             var payment_id = button.getAttribute('data-bs-whatever');
-            let data = await getPaymentRecordData(payment_id);
+            let data = await fetchData('payment/read_single.php?payment_id=' + payment_id);
             let customer_data = await getAllCustomers();
             let cust = await getCustomerData(customer_data[1].account_id);
 
@@ -553,7 +553,7 @@ async function setPaymentRecordsPage() {
     
             var button = event.relatedTarget;
             var payment_id = button.getAttribute('data-bs-whatever');
-            let data = await getPaymentRecordData(payment_id);
+            let data = await fetchData('payment/read_single.php?payment_id=' + payment_id);
 
             function toggleInputData (setAttr, bool) {
                 setData('#payment_id_d', data.payment_id, setAttr, bool);
@@ -681,7 +681,7 @@ async function setProrateRecordsPage() {
     
             var button = event.relatedTarget;
             var prorate_id = button.getAttribute('data-bs-whatever');
-            let data = await getProrateRecordData(prorate_id);
+            let data = await fetchData('views/prorate_single.php?prorate_id=' + prorate_id);
 
             function toggleInputData (setAttr, bool) {
                 setData('#prorate_id', data.prorate_id, setAttr, bool);
@@ -759,7 +759,7 @@ async function setProrateRecordsPage() {
     
             var button = event.relatedTarget;
             var prorate_id = button.getAttribute('data-bs-whatever');
-            let data = await getProrateRecordData(prorate_id);
+            let data = await fetchData('views/prorate_single.php?prorate_id=' + prorate_id);
 
             function toggleInputData (setAttr, bool) {
                 setData('#prorate_id_d', data.prorate_id, setAttr, bool);

@@ -59,16 +59,6 @@ async function getTicketPerAcct(account_id) {
     }
 }
 
-async function getUserLevel(user_id) {
-    let url = DIR_API + 'user_level/read_single.php?user_id=' + user_id;
-    try {
-        let res = await fetch(url);
-        return await res.json();
-    } catch (error) {
-        console.log(error);
-    }
-}
-
 async function generateTicketNum() {
     let url = DIR_API + 'ticket/read.php';
     try {

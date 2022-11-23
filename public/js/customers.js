@@ -51,9 +51,6 @@ async function getCustomers () {
 
     for (var i = 0; i < customer_data.length; i++) {
         var tag;
-
-        
-
         if (customer_data[i].status == 'VALUED') {
             tag = 'bg-success';
         }
@@ -123,11 +120,8 @@ async function setModal () {
                 console.log(error);
             }
 
-        const area = await displayArea();
-        const plan = await displayPlan();
-        const connection = await displayConnection();
-        const account_status = await displayAccountStatus();
-        const install_type = await displayInstallation();
+
+        const [area, plan, connection, account_status, install_type] = await Promise.all ([fetchData('area/read.php'), fetchData('plan/read.php'), fetchData('connection/read.php'), fetchData('statuses/read.php?status_table=account_status'), fetchData('installation_type/read.php')]);
 
         toggleInputData('disabled', true);
         toggleDefaultData('disabled', true);
@@ -291,8 +285,59 @@ async function updateCustomerData() {
     const area_id = $('#area_id').val();
 
     const account_id = $('#account_id').val();
+    const first_name = $('#first_name').val();
+    const last_name = $('#last_name').val();
 
-    let url = DIR_API + 'customer/update.php';
+    let activity, log = true;
+
+    let url = DIR_API + 'customer/read_single.php?account_id=' + account_id;
+    let customer;
+        try {
+            let res = await fetch(url);
+            customer = await res.json();
+        } catch (error) {
+            console.log(error);
+        }
+
+    url = DIR_API + 'account/read_single.php?account_id=' + account_id;
+    let account;
+        try {
+            let res = await fetch(url);
+            account = await res.json();
+        } catch (error) {
+            console.log(error);
+        }
+
+    if (customer.mobile_number != mobile_number) {
+        activity = 'Updated customer mobile number [' + account_id + ' - ' + first_name + ' ' + last_name + '].';
+        log = await logActivity(activity, 'Customer List');
+    }
+    if (customer.email != email) {
+        activity = 'Updated customer email [' + account_id + ' - ' + first_name + ' ' + last_name + '].';
+        log = await logActivity(activity, 'Customer List');
+    }
+    if (customer.billing_address != billing_address) {
+        activity = 'Updated customer billing address [' + account_id + ' - ' + first_name + ' ' + last_name + '].';
+        log = await logActivity(activity, 'Customer List');
+    }
+    if (account.plan_id != plan_id) {
+        activity = 'Updated account subscription plan [' + account_id + ' - ' + first_name + ' ' + last_name + '].';
+        log = await logActivity(activity, 'Customer List');
+    }
+    if (account.connection_id != connection_id) {
+        activity = 'Updated account connection type [' + account_id + ' - ' + first_name + ' ' + last_name + '].';
+        log = await logActivity(activity, 'Customer List');
+    }
+    if (account.account_status_id != account_status_id) {
+        activity = 'Updated account status [' + account_id + ' - ' + first_name + ' ' + last_name + '].';
+        log = await logActivity(activity, 'Customer List');
+    }
+    if (account.area_id != area_id) {
+        activity = 'Updated account area [' + account_id + ' - ' + first_name + ' ' + last_name + '].';
+        log = await logActivity(activity, 'Customer List');
+    }
+
+    url = DIR_API + 'customer/update.php';
     const updateCustomerResponse = await fetch(url, {
         method : 'PUT',
         headers : {
@@ -324,8 +369,7 @@ async function updateCustomerData() {
     const customer_content = await updateCustomerResponse.json();
     const account_content = await updateAccountResponse.json();
 
-    if (customer_content.message == 'Customer Updated' && account_content.message == 'success') {
-        // $("#modalDialogScrollable").modal('hide');
+    if (customer_content.message == 'Customer Updated' && account_content.message == 'success' && log) {
         sessionStorage.setItem('save_message', "Customer Updated Successfully.");
         window.location.reload();
     }
@@ -446,13 +490,15 @@ async function addCustomer() {
     const customer_content = await addCustomerResponse.json();
     const installation_content = await addInstallationResponse.json();
     const ratings_content = await addRatingsResponse.json();
+
+    let activity = 'Created new customer account with Account ID # ' + account_id;
+    let log = await logActivity(activity, 'Customer - Add New Account')
     
     if (account_content.message == 'Account Created' && customer_content.message == 'Customer Created' 
-        && installation_content.message == 'Installation Created' && ratings_content.message == 'Ratings Created') {
+        && installation_content.message == 'Installation Created' && ratings_content.message == 'Ratings Created' && log) {
         toastr.success('Customer Created Successfully.');
         setTimeout(function(){
             window.location.replace('../views/customers.php');
-            // window.location.reload();
          }, 2000);
     }
     else {
@@ -465,31 +511,31 @@ async function addCustomer() {
 }
 
 async function setAddDropdown() {
-    const plan = await displayPlan();
+    const plan = await fetchData('plan/read.php');
     for (var i = 0; i < plan.length; i++) {
         var opt = `<option value='${plan[i].plan_id}'>${plan[i].plan_name + " - " + plan[i].bandwidth + "mbps"}</option>`;
         $("#plan_id").append(opt);
     }
 
-    const connection = await displayConnection();
+    const connection = await fetchData('connection/read.php');
     for (var i = 0; i < connection.length; i++) {
         var opt = `<option value='${connection[i].connection_id}'>${connection[i].connection_name}</option>`;
         $("#connection_id").append(opt);
     }
 
-    const account_status = await displayAccountStatus();
+    const account_status = await fetchData('statuses/read.php?status_table=account_status');
     for (var i = 0; i < account_status.length; i++) {
         var opt = `<option value='${account_status[i].status_id}'>${account_status[i].status_name}</option>`;
         $("#account_status_id").append(opt);
     }
 
-    const area = await displayArea();
+    const area = await fetchData('area/read.php');
     for (var i = 0; i < area.length; i++) {
         var opt = `<option value='${area[i].area_id}'>${area[i].area_name}</option>`;
         $("#area_id").append(opt);
     }
 
-    const install_type = await displayInstallation();
+    const install_type = await fetchData('installation_type/read.php');
     for (var i = 0; i < install_type.length; i++) {
         var opt = `<option value='${install_type[i].install_type_id}'>${install_type[i].install_type_name}</option>`;
         $("#install_type_id").append(opt);
@@ -503,11 +549,6 @@ function setAddCustomerPage () {
         $("#account_id").attr("value", result);
     });
 
-    // displayPlan();
-    // displayConnection();
-    // displayAccountStatus();
-    // displayArea();
-    // displayInstallation();
     setAddDropdown();
 
     // Form Submits -- onclick Triggers

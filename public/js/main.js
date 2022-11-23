@@ -1,13 +1,17 @@
+// Directories
 const DIR_API = 'http://localhost/gstech_api/api/';
 const DIR_MAIN = '/billing-management-system/public/';
+const DIR_APP = 'http://localhost/billing-management-system/app/includes/';
 const DIR_CUR = window.location.pathname;
+
+// Constant Variables
 const admin_id = localStorage.getItem('admin_id');
 const admin_status_id = sessionStorage.getItem('admin_status_id');
 const hashed = localStorage.getItem('hashed');
 const logged_in = localStorage.getItem('login');
 const admin_un = localStorage.getItem('admin_username');
+const user_id = localStorage.getItem('user_id');
 
-// On Boot Load
 $(document).ready( () => {
     if (logged_in !== undefined || logged_in !== null && logged_in === 'successful') {
         if (admin_status_id == 3) {
@@ -25,36 +29,21 @@ $(document).ready( () => {
         setDefaults();
         setToastr();
     }
-    else if (admin_id === undefined || admin_id === null) {
+    else if (admin_id == undefined || admin_id == null) {
         window.location.replace('../views/login.php');
     }
-    // else {
-    //     if (admin_status_id == 3) {
-    //         let msg = "Please contact the system administrator.";
-    //         let title = "Your account has been locked!"
-    //         setToastrArgs(msg, title);
-    //     }
-    
-    //     if (hashed == 0) { 
-    //         let msg = "Please change your password.";
-    //         let title = "Important!"
-    //         setToastrArgs(msg, title);
-    //     }
-    
-    //     setDefaults();
-    //     setToastr();
-    // }
 });
 
-// Check if Default Password
+// Check if still using Default Password
 function isDefault () {
     if (hashed == 0) { 
         window.location.replace('../views/profile.php');
     }
 }
 
+// Log Admin Activity
 async function logActivity(activity, page_accessed) {
-    let url = 'http://localhost/billing-management-system/app/includes/log_activity.php';
+    let url = DIR_APP + 'log_activity.php';
     let content;
     try {
         let res = await fetch(url);
@@ -81,11 +70,26 @@ async function logActivity(activity, page_accessed) {
 
     const logActivity = await logActivityResponse.json();
 
-    console.log(logActivity.message);
-    // console.log(content.user_agent);
+    if (logActivity.message) {
+        return true;
+    }
+    else {
+        return false;
+    }
 }
 
-// Get Data
+// Global Function to Fetch Data
+async function fetchData(page) {
+    let url = DIR_API + page;
+    try {
+        let res = await fetch(url);
+        return await res.json();
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+// Functions to Fetch Single Data
 async function getAdminData(admin_id) {
     let url = DIR_API + 'admin/read_single.php?admin_id=' + admin_id;
     try {
@@ -96,130 +100,8 @@ async function getAdminData(admin_id) {
     }
 }
 
-// Get User Level
 async function getUserLevel(user_id) {
     let url = DIR_API + 'user_level/read_single.php?user_id=' + user_id;
-    try {
-        let res = await fetch(url);
-        return await res.json();
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-// Display Dropdowns
-async function displayPlan() {
-    let url = DIR_API + 'plan/read.php';
-    try {
-        let res = await fetch(url);
-        return await res.json();
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-async function displayConnection() {
-    let url = DIR_API + 'connection/read.php';
-    try {
-        let res = await fetch(url);
-        return await res.json();
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-async function displayAccountStatus() {
-    let url = DIR_API + 'statuses/read.php?status_table=account_status';
-    try {
-        let res = await fetch(url);
-        return await res.json();
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-async function displayArea() {
-    let url = DIR_API + 'area/read.php';
-    try {
-        let res = await fetch(url);
-        return await res.json();
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-async function displayInstallation() {
-    let url = DIR_API + 'installation_type/read.php';
-    try {
-        let res = await fetch(url);
-        return await res.json();
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-async function displayInclusion() {
-    let url = DIR_API + 'inclusion/read.php';
-    try {
-        let res = await fetch(url);
-        return await res.json();
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-async function displayPlanStatus() {
-    let url = DIR_API + 'statuses/read.php?status_table=plan_status';
-    try {
-        let res = await fetch(url);
-        return await res.json();
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-async function displayPromo() {
-    let url = DIR_API + 'promo/read.php';
-    try {
-        let res = await fetch(url);
-        return await res.json();
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-async function displayPlanInclusion(plan_id) {
-    let url = DIR_API + 'views/plan_inclusions.php?plan_id=' + plan_id;
-    try {
-        let res = await fetch(url);
-        return await res.json();
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-async function getPaymentRecordData(payment_id) {
-    let url = DIR_API + 'payment/read_single.php?payment_id=' + payment_id;
-    try {
-        let res = await fetch(url);
-        return await res.json();
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-async function getProrateRecordData(prorate_id) {
-    let url = DIR_API + 'views/prorate_single.php?prorate_id=' + prorate_id;
-    try {
-        let res = await fetch(url);
-        return await res.json();
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-async function getSingleProrateRecord(prorate_id) {
-    let url = DIR_API + 'prorate/read_single.php?prorate_id=' + prorate_id;
     try {
         let res = await fetch(url);
         return await res.json();
@@ -231,95 +113,55 @@ async function getSingleProrateRecord(prorate_id) {
 // Display Default Data
 async function setDefaults () {
     const admin_data = await getAdminData(admin_id);
-    const user_id = await getUserLevel(admin_data.user_level_id);
+    const user = await getUserLevel(admin_data.user_level_id);
+    const level_id = admin_data.user_level_id;
 
     localStorage.setItem('admin_username', admin_data.admin_username);
+    localStorage.setItem("user_id", admin_data.user_level_id);
 
-    sessionStorage.setItem("user_id", admin_data.user_level_id);
+    // Dropdown Display
+    $('#display_name').text(admin_data.first_name + ' ' + admin_data.last_name);
+    $('#display_role').text(user.user_role);
+    $('#display_dd_name').text(admin_data.admin_username);
 
-    const profile = document.getElementById('profile').children;
-    const child = profile[0].children;
-
-    child[0].innerHTML = admin_data.first_name + ' ' + admin_data.last_name;
-    child[1].innerHTML = user_id.user_role;
-
-    if (admin_data.user_level_id == 3) {
-        const navbar = document.getElementById('sidebar-nav').children;
-        for (var i = 0; i < navbar.length; i++) {
-            if (navbar[i].id == 'misc-page') {
-                navbar[i].classList.add('hide');
-            }
-        }
+    // Set User Levels
+    if (level_id == 3) {
+        $('#misc-page').addClass('hide');
+        $('#admin-add').addClass('hide');
     }
-    else if (admin_data.user_level_id == 4) {
-        const navbar = document.getElementById('sidebar-nav').children;
-        for (var i = 0; i < navbar.length; i++) {
-            if (navbar[i].id == 'admin-page') {
-                document.getElementById('admin-add').classList.add('hide');
-            }
-            if (navbar[i].id == 'customer-page') {
-                document.getElementById('customer-add').classList.add('hide');
-            }
-            if (navbar[i].id == 'plan-page') {
-                document.getElementById('plan-add').classList.add('hide');
-            }
-            if (navbar[i].id == 'ticket-page') {
-                navbar[i].classList.add('hide');
-            }
-            if (navbar[i].id == 'misc-page') {
-                navbar[i].classList.add('hide');
-            }
-        }
+    else if (level_id == 4) {
+        $('#ticket-page').addClass('hide');
     }
-    else if (admin_data.user_level_id == 5) {
-        const navbar = document.getElementById('sidebar-nav').children;
-        for (var i = 0; i < navbar.length; i++) {
-            if (navbar[i].id == 'admin-page') {
-                document.getElementById('admin-add').classList.add('hide');
-            }
-            if (navbar[i].id == 'customer-page') {
-                document.getElementById('customer-add').classList.add('hide');
-            }
-            if (navbar[i].id == 'invoice-page') {
-                document.getElementById('invoice-payment-add').classList.add('hide');
-            }
-            if (navbar[i].id == 'plan-page') {
-                document.getElementById('plan-add').classList.add('hide');
-            }
-            if (navbar[i].id == 'misc-page') {
-                navbar[i].classList.add('hide');
-            }
-        }
+    else if (level_id == 5) {
+        $('#invoice-payment-add').addClass('hide');
     }
-    else if (admin_data.user_level_id == 6) {
-        const navbar = document.getElementById('sidebar-nav').children;
-        for (var i = 0; i < navbar.length; i++) {
-            if (navbar[i].id == 'admin-page') {
-                document.getElementById('admin-add').classList.add('hide');
-            }
-            if (navbar[i].id == 'customer-page') {
-                document.getElementById('customer-add').classList.add('hide');
-            }
-            if (navbar[i].id == 'invoice-page') {
-                document.getElementById('invoice-payment').classList.add('hide');
-                document.getElementById('invoice-prorate').classList.add('hide');
-                document.getElementById('invoice-payment-add').classList.add('hide');
-            }
-            if (navbar[i].id == 'plan-page') {
-                document.getElementById('plan-add').classList.add('hide');
-            }
-            if (navbar[i].id == 'ticket-page') {
-                navbar[i].classList.add('hide');
-            }
-            if (navbar[i].id == 'misc-page') {
-                navbar[i].classList.add('hide');
-            }
-        }
+    else if (level_id == 6) {
+        $('#invoice-payment-add').addClass('hide');
+        $('#invoice-payment').addClass('hide');
+        $('#invoice-prorate').addClass('hide');
+        $('#ticket-page').addClass('hide');
     }
 
-    const display = document.getElementById('displayName').children;
-    const display_name = display[0].children;
-    display_name[1].innerHTML = admin_data.first_name;
+    if (level_id == 4 || level_id == 5 || level_id == 6) {
+        $('#admin-add').addClass('hide');
+        $('#customer-add').addClass('hide');
+        $('#plan-add').addClass('hide');
+        $('#misc-page').addClass('hide');
+    }
+
+    // Navbar Active Config
+    const path = location.pathname.split('/')[4];
+    const id = 'nav-' + path.split('.')[0];
+    const nav_id = path.split('_')[0].split('.')[0];
+    console.log(nav_id);
+
+    $('#' + id).addClass('active');
+    $('#drop-' + nav_id).removeClass('collapsed');
+    $('#' + nav_id + '-nav').addClass('show');
+
+    if (id == 'nav-dashboard' || id == 'nav-profile') {
+        document.getElementById(id).classList.remove('collapsed');
+    }
 }
 
 // Logout Session
@@ -379,89 +221,5 @@ function setToastrArgs(msg, title) {
         "hideMethod": "fadeOut"
       };
       
-      toastr.error(msg, title);
-    }
-
-// Active NavBar Config
-$(() => {
-    const path = location.pathname.split('/')[4];
-    const id = 'nav-' + path.split('.')[0];
-
-    if (id == 'nav-dashboard' || id == 'nav-profile') {
-        document.getElementById(id).classList.remove('collapsed');
-    }
-    else {
-        if (id == 'nav-customers' || id == 'nav-customers_add') {
-            document.getElementById('drop-customers').classList.remove('collapsed');
-            document.getElementById('customers-nav').classList.add('show');
-            document.getElementById(id).classList.add('active');
-        }
-        else if (id == 'nav-invoice' || id == 'nav-invoice_payments' || id == 'nav-invoice_prorate' || id == 'nav-invoice_payments_add') {
-            document.getElementById('drop-invoice').classList.remove('collapsed');
-            document.getElementById('invoice-nav').classList.add('show');
-            document.getElementById(id).classList.add('active');
-        }
-        else if (id == 'nav-plans' || id == 'nav-plans_add') {
-            document.getElementById('drop-plans').classList.remove('collapsed');
-            document.getElementById('plans-nav').classList.add('show');
-            document.getElementById(id).classList.add('active');
-        }
-        else if (id == 'nav-tickets' || id == 'nav-tickets_resolved' || id == 'nav-tickets_pending' || id == 'nav-tickets_create') {
-            document.getElementById('drop-ticket').classList.remove('collapsed');
-            document.getElementById('ticket-nav').classList.add('show');
-            document.getElementById(id).classList.add('active');
-        }
-        else if (id == 'nav-admins' || id == 'nav-admins_add') {
-            document.getElementById('drop-admins').classList.remove('collapsed');
-            document.getElementById('admins-nav').classList.add('show');
-            document.getElementById(id).classList.add('active');
-        }
-        else if (id == 'nav-connection' || id == 'nav-concerns'
-                || id == 'nav-user_level' || id == 'nav-inclusions' 
-                || id == 'nav-area') {
-            document.getElementById('drop-options').classList.remove('collapsed');
-            document.getElementById('options-nav').classList.add('show');
-            document.getElementById(id).classList.add('active');
-        }
-    }
-  });
-
-async function displayConcerns() {
-    let url = DIR_API + 'concerns/read.php';
-    try {
-        let res = await fetch(url);
-        return await res.json();
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-async function displayConcerns() {
-    let url = DIR_API + 'concerns/read.php';
-    try {
-        let res = await fetch(url);
-        return await res.json();
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-async function displayTicketStatus() {
-    let url = DIR_API + 'statuses/read.php?status_table=ticket_status';
-    try {
-        let res = await fetch(url);
-        return await res.json();
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-async function displayUserLevels() {
-    let url = DIR_API + 'user_level/read.php';
-    try {
-        let res = await fetch(url);
-        return await res.json();
-    } catch (error) {
-        console.log(error);
-    }
+    toastr.error(msg, title);
 }

@@ -39,15 +39,15 @@ function setEventListener() {
     }, false);
 }
 
-async function fetchData(page) {
-    let url = DIR_API + page;
-    try {
-        let res = await fetch(url);
-        return await res.json();
-    } catch (error) {
-        console.log(error);
-    }
-}
+// async function fetchData(page) {
+//     let url = DIR_API + page;
+//     try {
+//         let res = await fetch(url);
+//         return await res.json();
+//     } catch (error) {
+//         console.log(error);
+//     }
+// }
 
 // Dashboard Cards
 async function setCards() {

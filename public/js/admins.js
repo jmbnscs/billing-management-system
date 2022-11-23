@@ -99,7 +99,7 @@ async function setModal () {
                 console.log(error);
             }
 
-        const user_levels = await displayUserLevels();
+        const user_levels = await fetchData('user_level/read.php');
         const admin_statuses = await displayAdminStatus();
 
         toggleInputData('disabled', true);
@@ -313,16 +313,6 @@ async function addAdmin() {
     }
 }
 
-async function displayUserLevels() {
-    let url = DIR_API + 'user_level/read.php';
-    try {
-        let res = await fetch(url);
-        return await res.json();
-    } catch (error) {
-        console.log(error);
-    }
-}
-
 async function displayAdminStatus() {
     let url = DIR_API + 'statuses/read.php?status_table=admin_status';
     try {
@@ -334,7 +324,7 @@ async function displayAdminStatus() {
 }
 
 async function setAddDropdown() {
-    const user_levels = await displayUserLevels;
+    const user_levels = await fetchData('user_level/read.php');
     for (var i = 1; i < user_levels.length; i++) {
         var opt = `<option value='${user_levels[i].user_id}'>${user_levels[i].user_role}</option>`;
         $("#role").append(opt);

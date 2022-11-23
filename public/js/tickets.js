@@ -200,9 +200,9 @@ async function activeModal () {
                 console.log(error);
             }
 
-        const concern = await displayConcerns();
-        const ticket_status = await displayTicketStatus();
-        const admin_role = await displayUserLevels();
+        const concern = await fetchData('concerns/read.php');
+        const ticket_status = await fetchData('statuses/read.php?status_table=ticket_status');
+        const admin_role = await fetchData('user_level/read.php');
 
         toggleDefaultData('disabled', true);
         setDefaultDropdown();
@@ -322,9 +322,9 @@ async function pendingModal () {
                 console.log(error);
             }
 
-        const concern = await displayConcerns();
-        const ticket_status = await displayTicketStatus();
-        const admin_role = await displayUserLevels();
+        const concern = await fetchData('concerns/read.php');
+        const ticket_status = await fetchData('statuses/read.php?status_table=ticket_status');
+        const admin_role = await fetchData('user_level/read.php');
 
         toggleDefaultData('disabled', true);
         setDefaultDropdown();
@@ -445,7 +445,7 @@ async function claimModal (ticket_num) {
                 console.log(error);
             }
 
-        const admin_role = await displayUserLevels();
+        const admin_role = await fetchData('user_level/read.php');
 
         toggleDefaultData('disabled', true);
         setDefaultDropdown();
@@ -514,7 +514,7 @@ async function pendNetworkModal(ticket_num) {
                 console.log(error);
             }
 
-        const admin_role = await displayUserLevels();
+        const admin_role = await fetchData('user_level/read.php');
 
         toggleDefaultData('disabled', true);
         setDefaultDropdown();
@@ -593,9 +593,9 @@ async function pendSubscriptionModal(ticket_num) {
                 console.log(error);
             }
 
-        const concern = await displayConcerns();
-        const admin_role = await displayUserLevels();
-        const plan = await displayPlan();
+        const concern = await fetchData('concerns/read.php');
+        const admin_role = await fetchData('user_level/read.php');
+        const plan = await fetchData('plan/read.php');
 
         toggleDefaultData('disabled', true);
         setDefaultDropdown();
@@ -689,8 +689,8 @@ async function pendDisconnectModal(ticket_num) {
                 console.log(error);
             }
 
-        const concern = await displayConcerns();
-        const admin_role = await displayUserLevels();
+        const concern = await fetchData('concerns/read.php');
+        const admin_role = await fetchData('user_level/read.php');
 
         toggleDefaultData('disabled', true);
         setDefaultDropdown();
@@ -751,7 +751,7 @@ async function invalidModal (ticket_num) {
                 console.log(error);
             }
 
-        const concern = await displayConcerns();
+        const concern = await fetchData('concerns/read.php');
 
         toggleDefaultData('disabled', true);
         setDefaultDropdown();
@@ -818,9 +818,9 @@ async function resolvedModal () {
                 console.log(error);
             }
 
-        const concern = await displayConcerns();
-        const ticket_status = await displayTicketStatus();
-        const admin_role = await displayUserLevels();
+        const concern = await fetchData('concerns/read.php');
+        const ticket_status = await fetchData('statuses/read.php?status_table=ticket_status');
+        const admin_role = await fetchData('user_level/read.php');
 
         toggleDefaultData('disabled', true);
         setDefaultDropdown();
@@ -1158,13 +1158,13 @@ async function createTicket() {
 }
 
 async function setAddDropdown() {
-    const concern = await displayConcerns();
+    const concern = await fetchData('concerns/read.php');
     for (var i = 0; i < concern.length; i++) {
         var opt = `<option value='${concern[i].concern_id}'>${concern[i].concern_category}</option>`;
         $("#concern_id").append(opt);
     }
 
-    const user_levels = await displayUserLevels();
+    const user_levels = await fetchData('user_level/read.php');
     for (var i = 2; i < user_levels.length; i++) {
         var opt = `<option value='${user_levels[i].user_id}'>${user_levels[i].user_role}</option>`;
         $("#admin_role").append(opt);
@@ -1183,8 +1183,6 @@ function setCreateTicketPage () {
         $("#ticket_num").attr("value", result);
     });
 
-    // displayUserLevels();
-    // displayConcern();
     setAddDropdown();
 
     // Form Submits -- onclick Triggers
