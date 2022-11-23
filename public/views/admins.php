@@ -41,7 +41,7 @@
 <!-- Admin Modal -->
 <form id="save-admin">
   <!-- Modal Dialog Scrollable -->
-  <div class="modal fade" id="modalDialogScrollable" tabindex="-1">
+  <div class="modal fade" id="view-admins" tabindex="-1">
       <div class="modal-dialog modal-dialog-scrollable modal-lg">
         <div class="modal-content">
 
@@ -54,86 +54,86 @@
           <!-- Modal Body -->
           <div class="modal-body">
             <div class="row mb-3">
-                <label for="admin_id" class="col-sm-2 col-form-label">Admin ID</label>
-                <div class="col-sm-10">
+                <label for="admin_id" class="col-sm-3 col-form-label">Admin ID</label>
+                <div class="col-sm-9">
                     <input type="text" class="form-control" id="admin_id" readonly>
                 </div>
             </div>
 
             <div class="row mb-3">
-                <label for="admin_username" class="col-sm-2 col-form-label">Username</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" id="admin_username" placeholder="admin_username" readonly>
+                <label for="admin_username" class="col-sm-3 col-form-label">Username</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="admin_username" placeholder="admin_username" disabled>
                 </div>
             </div>
 
             <div class="row mb-3">
-                <label for="first_name" class="col-sm-2 col-form-label">First Name</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" id="first_name" placeholder="Ex. Juan" required>
+                <label for="first_name" class="col-sm-3 col-form-label">First Name</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="first_name" placeholder="Ex. Juan" disabled>
                 </div>
             </div>
             
             <div class="row mb-3">
-                <label for="middle_name" class="col-sm-2 col-form-label">Middle Name</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" id="middle_name" placeholder="Ex. Santos" >
+                <label for="middle_name" class="col-sm-3 col-form-label">Middle Name</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="middle_name" placeholder="Ex. Santos" disabled>
                 </div>
             </div>
     
             <div class="row mb-3">    
-                <label for="last_name" class="col-sm-2 col-form-label">Last Name</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" id="last_name" placeholder="Ex. Dela Cruz" required>
+                <label for="last_name" class="col-sm-3 col-form-label">Last Name</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="last_name" placeholder="Ex. Dela Cruz" disabled>
                 </div>
             </div>
     
             <div class="row mb-3">
-                <label for="mobile_number" class="col-sm-2 col-form-label">Mobile Number</label>
-                <div class="col-sm-10">
+                <label for="admin_bday" class="col-sm-3 col-form-label">Birthday</label>
+                <div class="col-sm-9">
+                    <input type="date" class="form-control" id="admin_bday" placeholder="Ex. 03/02/2001" disabled>
+                </div>
+            </div>
+    
+            <div class="row mb-3">
+                <label for="employment_date" class="col-sm-3 col-form-label">Employment Date</label>
+                <div class="col-sm-9">
+                    <input type="date" class="form-control" id="employment_date" disabled>
+                </div>
+            </div>
+    
+            <div class="row mb-3">
+                <label for="mobile_number" class="col-sm-3 col-form-label">Mobile Number</label>
+                <div class="col-sm-9">
                     <input type="text" class="form-control" id="mobile_number" placeholder="Ex. 09XXXXXXXXX" pattern="[0]{1}[9]{1}[0-9]{9}" required>
                 </div>
             </div>
     
             <div class="row mb-3">
-                <label for="admin_email" class="col-sm-2 col-form-label">Email</label>
-                <div class="col-sm-10">
+                <label for="admin_email" class="col-sm-3 col-form-label">Email</label>
+                <div class="col-sm-9">
                     <input type="email" class="form-control" placeholder="Ex. name@example.com" id="admin_email" required>
                 </div>
             </div>
-    
-            <div class="row mb-3">
-                <label for="admin_bday" class="col-sm-2 col-form-label">Birthday</label>
-                <div class="col-sm-10">
-                    <input type="date" class="form-control" id="admin_bday" placeholder="Ex. 03/02/2001" required>
-                </div>
-            </div>
 
             <div class="row mb-3">
-                <label for="address" class="col-sm-2 col-form-label">Address</label>
-                    <div class="col-sm-10">
+                <label for="address" class="col-sm-3 col-form-label">Address</label>
+                    <div class="col-sm-9">
                         <textarea class="form-control" id="address" rows="2" placeholder="Ex. Anonas Street Sta. Mesa Manila" required></textarea>
                     </div>
             </div>
-    
-            <div class="row mb-3">
-                <label for="employment_date" class="col-sm-2 col-form-label">Employment Date</label>
-                <div class="col-sm-10">
-                    <input type="date" class="form-control" id="employment_date" required>
-                </div>
-            </div>
 
             <div class="row mb-3">
-                <label for="role" class="col-sm-2 col-form-label">Admin Level</label>
-                <div class="col-sm-10">
+                <label for="role" class="col-sm-3 col-form-label">Admin Level</label>
+                <div class="col-sm-9">
                     <select id="role" class="form-select" required>
                     </select>
                 </div>
             </div>
 
             <div class="row mb-3">
-                <label for="admin_status" class="col-sm-2 col-form-label">Admin Status</label>
-                <div class="col-sm-10">
+                <label for="admin_status" class="col-sm-3 col-form-label">Admin Status</label>
+                <div class="col-sm-9">
                     <select id="admin_status" class="form-select" required>
                     </select>
                 </div>

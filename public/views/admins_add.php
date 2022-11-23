@@ -21,6 +21,14 @@
       <div class="card">
         <div class="card-body pt-4">
             <form id="add-admin">
+
+                    <div class="row mb-3">
+                        <label for="admin_id" class="col-sm-2 col-form-label">Admin ID</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="admin_id" disabled>
+                        </div>
+                    </div>
+
                     <div class="row mb-3">
                         <label for="first_name" class="col-sm-2 col-form-label">First Name</label>
                         <div class="col-sm-10">
@@ -41,20 +49,6 @@
                             <input type="text" class="form-control" id="last_name" placeholder="Ex. Dela Cruz" required>
                         </div>
                     </div>
-            
-                    <!-- <div class="row mb-3">
-                        <label for="admin_username" class="col-sm-2 col-form-label">Username</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" id="admin_username" placeholder="admin_username" readonly>
-                        </div>
-                    </div>
-
-                    <div class="row mb-3">
-                        <label for="admin_password" class="col-sm-2 col-form-label">Password</label>
-                        <div class="col-sm-10">
-                            <input type="customer_password" class="form-control" placeholder="admin_password" id="password" readonly>
-                        </div>
-                    </div> -->
             
                     <div class="row mb-3">
                         <label for="mobile_number" class="col-sm-2 col-form-label">Mobile Number</label>
@@ -100,28 +94,8 @@
                         </div>
                     </div>
 
-                    <div class="row mb-3">
-                        <label for="admin_id" class="col-sm-2 col-form-label">Admin ID</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" id="admin_id" disabled>
-                        </div>
-                    </div>
-
-                    <!-- <div class="row mb-3">
-                        <label for="admin_status" class="col-sm-2 col-form-label">Employment Status</label>
-                        <div class="col-sm-10">
-                            <select id="admin_status" class="form-select" required>
-                                <option selected>Select employment status:</option>
-                                <option>Employed</option>
-                                <option>Suspended</option>
-                                <option>Locked</option>
-                                <option>Resigned</option>
-                            </select>
-                        </div>
-                    </div> -->
-
                     <div class ="text-center">
-                        <button type="submit" class="btn btn-primary">Create Account</button>
+                        <button type="submit" class="btn btn-success">Create Account</button>
                     </div>
 
                 </form>

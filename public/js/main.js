@@ -78,7 +78,20 @@ async function logActivity(activity, page_accessed) {
     }
 }
 
-// Global Function to Fetch Data
+// Global Function to Process Data
+async function createData(page, data) {
+    let url = DIR_API + page;
+    const createResponse = await fetch(url, {
+        method : 'POST',
+        headers : {
+            'Content-Type' : 'application/json'
+        },
+        body : data
+    });
+
+    return await createResponse.json();
+}
+
 async function fetchData(page) {
     let url = DIR_API + page;
     try {
@@ -87,6 +100,18 @@ async function fetchData(page) {
     } catch (error) {
         console.log(error);
     }
+}
+
+async function updateData(page, data) {
+    let url = DIR_API + page;
+    const updateResponse = await fetch(url, {
+        method : 'PUT',
+        headers : {
+            'Content-Type' : 'application/json'
+        },
+        body : data
+    });
+    return await updateResponse.json();
 }
 
 // Functions to Fetch Single Data
@@ -153,7 +178,6 @@ async function setDefaults () {
     const path = location.pathname.split('/')[4];
     const id = 'nav-' + path.split('.')[0];
     const nav_id = path.split('_')[0].split('.')[0];
-    console.log(nav_id);
 
     $('#' + id).addClass('active');
     $('#drop-' + nav_id).removeClass('collapsed');
