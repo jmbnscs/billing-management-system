@@ -55,11 +55,7 @@ async function setViewModal () {
         $('#edit-admin').attr('disabled', false);
     });
 
-    const save_admin = document.getElementById('save-admin');
-    save_admin.onsubmit = (e) => {
-        e.preventDefault();
-        updateAdminData();
-    };
+    
 
     var viewModal = document.getElementById('view-admins')
     viewModal.addEventListener('show.bs.modal', async function (event) {
@@ -142,6 +138,48 @@ async function setViewModal () {
             $('#admin_status').attr(setAttr, bool);
         }
 
+        
+        async function updateAdminData() {
+            const admin_id = $('#admin_id').val();
+        
+            let admin_data = JSON.stringify({
+                'admin_id' : admin_id,
+                'admin_email' : $('#admin_email').val(),
+                'mobile_number' : $('#mobile_number').val(),
+                'address' : $('#address').val(),
+                'user_level_id' : $('#role').val()
+            });
+        
+            let status_data = JSON.stringify({
+                'admin_id' : admin_id,
+                'admin_status_id' : $('#admin_status').val()
+            });
+
+            let activity, log = true;
+            if (admin.admin_status_id != $('#admin_status').val()) {
+                activity = 'Updated admin status [' + admin_id + ' - ' + admin.first_name + ' ' + admin.last_name + '].';
+                log = await logActivity(activity, 'View Admins');
+            }
+            if (admin.user_level_id != $('#role').val()) {
+                activity = 'Updated admin user level [' + admin_id + ' - ' + admin.first_name + ' ' + admin.last_name + '].';
+                log = await logActivity(activity, 'View Admins');
+            }
+            if (admin.admin_email != $('#admin_email').val() || admin.mobile_number != $('#mobile_number').val() || admin.address != $('#address').val()) {
+                activity = 'Updated admin general information [' + admin_id + ' - ' + admin.first_name + ' ' + admin.last_name + '].';
+                log = await logActivity(activity, 'View Admins');
+            }
+
+            const [admin_content, status_content] = await Promise.all ([updateData('admin/update.php', admin_data), updateData('admin/update_status.php', status_data)]);
+
+            if (admin_content.message == 'success' && status_content.message == 'Admin Updated' && log) {
+                sessionStorage.setItem('save_message', "Admin Updated Successfully.");
+                window.location.reload();
+            }
+            else {
+                toastr.error("Admin was not updated.");
+            }
+        }
+
         const edit_admin = document.getElementById('edit-admin');
         edit_admin.onclick = (e) => {
             e.preventDefault();
@@ -150,34 +188,14 @@ async function setViewModal () {
             toggleInputData('disabled', false);
             setDropdownData();
         };
+
+        const save_admin = document.getElementById('save-admin');
+        save_admin.onsubmit = (e) => {
+            e.preventDefault();
+            updateAdminData();
+        };
     });
 
-    async function updateAdminData() {
-        const admin_id = $('#admin_id').val();
-    
-        let admin_data = JSON.stringify({
-            'admin_id' : admin_id,
-            'admin_email' : $('#admin_email').val(),
-            'mobile_number' : $('#mobile_number').val(),
-            'address' : $('#address').val(),
-            'user_level_id' : $('#role').val()
-        });
-    
-        let status_data = JSON.stringify({
-            'admin_id' : admin_id,
-            'admin_status_id' : $('#admin_status').val()
-        });
-    
-        const [admin_content, status_content] = await Promise.all ([updateData('admin/update.php', admin_data), updateData('admin/update_status.php', status_data)]);
-    
-        if (admin_content.message == 'success' && status_content.message == 'Admin Updated') {
-            sessionStorage.setItem('save_message', "Admin Updated Successfully.");
-            window.location.reload();
-        }
-        else {
-            toastr.error("Admin was not updated.");
-        }
-    }
 }
 
 // -------------------------------------------------------------------- Add Admin
@@ -207,8 +225,9 @@ async function setAddAdminPage () {
         });
     
         let content = await createData('admin/create.php', data);
+        let log = await logActivity('Created new admin account with Admin ID # ' + $('#admin_id').val(), 'Add New Admin');
         
-        if (content.message = 'Admin Created') {
+        if (content.message = 'Admin Created' && log) {
             toastr.success('Admin Created Successfully.');
             setTimeout(function(){
                 window.location.replace('../views/admins.php');

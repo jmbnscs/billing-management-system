@@ -70,12 +70,7 @@ async function logActivity(activity, page_accessed) {
 
     const logActivity = await logActivityResponse.json();
 
-    if (logActivity.message) {
-        return true;
-    }
-    else {
-        return false;
-    }
+    return logActivity.message;
 }
 
 // Global Function to Process Data
