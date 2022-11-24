@@ -55,8 +55,6 @@ async function setViewModal () {
         $('#edit-admin').attr('disabled', false);
     });
 
-    
-
     var viewModal = document.getElementById('view-admins')
     viewModal.addEventListener('show.bs.modal', async function (event) {
 
@@ -84,7 +82,6 @@ async function setViewModal () {
 
         modalTitle.textContent = admin_id + ' - ' + admin.first_name + ' ' + admin.last_name + ' [' + admin_role + ']';
 
-        // Display Default Dropdown Data
         function setDefaultDropdown () {
             $("#role").empty();
             for (var i = 0; i < user_levels.length; i++) {
@@ -137,7 +134,6 @@ async function setViewModal () {
             $('#role').attr(setAttr, bool);
             $('#admin_status').attr(setAttr, bool);
         }
-
         
         async function updateAdminData() {
             const admin_id = $('#admin_id').val();

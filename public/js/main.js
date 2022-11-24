@@ -97,6 +97,22 @@ async function fetchData(page) {
     }
 }
 
+async function getStatusName(status_table, status_id) {
+    let url = DIR_API + 'statuses/read_single.php';
+    const statusResponse = await fetch(url, {
+        method : 'POST',
+        headers : {
+            'Content-Type' : 'application/json'
+        },
+        body : JSON.stringify({
+            'status_table' : status_table,
+            'status_id' : status_id
+        })
+    });
+
+    return await statusResponse.json();
+}
+
 async function updateData(page, data) {
     let url = DIR_API + page;
     const updateResponse = await fetch(url, {
@@ -128,6 +144,22 @@ async function getUserLevel(user_id) {
     } catch (error) {
         console.log(error);
     }
+}
+
+// Functions to format data display
+function setTagElement(id, status) {
+    document.getElementById(id).classList.add('text-white');
+    document.getElementById(id).classList.remove('bg-danger');
+    document.getElementById(id).classList.remove('bg-success');
+
+    (status == 1) ? document.getElementById(id).classList.add('bg-success') : document.getElementById(id).classList.add('bg-danger');
+}
+
+function formatDateString(date) {
+    var temp = new Date(date);
+    var month = ["January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"][temp.getMonth()];
+    return month + ' ' + temp.getDate() + ', ' + temp.getFullYear();
 }
 
 // Display Default Data
