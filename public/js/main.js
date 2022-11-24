@@ -5,6 +5,7 @@ const admin_id = localStorage.getItem('admin_id');
 const admin_status_id = sessionStorage.getItem('admin_status_id');
 const hashed = localStorage.getItem('hashed');
 const logged_in = localStorage.getItem('login');
+const admin_un = localStorage.getItem('admin_username');
 
 // On Boot Load
 $(document).ready( () => {
@@ -50,6 +51,38 @@ function isDefault () {
     if (hashed == 0) { 
         window.location.replace('../views/profile.php');
     }
+}
+
+async function logActivity(activity, page_accessed) {
+    let url = 'http://localhost/billing-management-system/app/includes/log_activity.php';
+    let content;
+    try {
+        let res = await fetch(url);
+        content = await res.json();
+    } catch (error) {
+        console.log(error);
+    }
+
+    url = DIR_API + 'logs/log_activity.php';
+    const logActivityResponse = await fetch(url, {
+        method : 'POST',
+        headers : {
+            'Content-Type' : 'application/json'
+        },
+        body : JSON.stringify({
+            'admin_id' : admin_id,
+            'username' : admin_un,
+            'page_accessed' : page_accessed,
+            'activity' : activity,
+            'ip_address' : content.ip_address,
+            'user_agent' : content.user_agent
+        })
+    });
+
+    const logActivity = await logActivityResponse.json();
+
+    console.log(logActivity.message);
+    // console.log(content.user_agent);
 }
 
 // Get Data
@@ -199,6 +232,8 @@ async function getSingleProrateRecord(prorate_id) {
 async function setDefaults () {
     const admin_data = await getAdminData(admin_id);
     const user_id = await getUserLevel(admin_data.user_level_id);
+
+    localStorage.setItem('admin_username', admin_data.admin_username);
 
     sessionStorage.setItem("user_id", admin_data.user_level_id);
 

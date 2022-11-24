@@ -24,11 +24,14 @@ $(document).ready(function () {
 
         $("#modalDialogScrollable").on("hidden.bs.modal", function () {
             $('#save-plan-btn').attr('disabled', true);
-            $('#edit-plan').attr('disabled', false);
         });
 
         getPlans();
         setModal();
+
+        if ((sessionStorage.getItem('user_id') == 2) || (sessionStorage.getItem('user_id') == 3)) {
+            $('#edit-plan').attr('disabled', false);
+        }
 
         save_plan.onsubmit = (e) => {
             e.preventDefault();
@@ -89,6 +92,7 @@ async function addPlan() {
     }
 
     if ((plan_content.message == 'Plan Created' && promo_content.message == 'Promo Created') 
+        && (logActivity('Created Plan' + " - " + plan_name, 'Add New Plan'))
         || (plan_content.message == 'Plan Created' && inclusion.length == 0)) {
         toastr.success('Plan Created Successfully.');
         setTimeout(function(){
@@ -130,7 +134,7 @@ async function getPlans () {
                 <td>&#8369; ${plan_data[i].price}</a></td>
                 <td>${plan_data[i].inclusions}</td>
                 <td><span class="badge ${tag}">${plan_data[i].status}</span></td>
-                <td><button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalDialogScrollable" data-bs-whatever="${plan_data[i].plan_id}" id="setName"><i class="ri ri-eye-fill"></i></button></td>
+                <td><button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalDialogScrollable" data-bs-whatever="${plan_data[i].plan_id}" id="edit-modal-btn"><i class="ri ri-eye-fill"></i></button></td>
             </tr>
         `)).draw(false);
     }
@@ -475,7 +479,8 @@ async function updatePlanData() {
 
     const plan_content = await updatePlanResponse.json();
 
-    if ((plan_content.message == 'Plan Updated') && (deletePromoMessage == 'Promo Deleted') && (createPromoMessage == 'Promo Created')) {
+    if ((plan_content.message == 'Plan Updated') && (deletePromoMessage == 'Promo Deleted') 
+        && (createPromoMessage == 'Promo Created') && (logActivity('Updated Plan' + " - " + plan_name, 'View Plans'))) {
         sessionStorage.setItem('save_message', "Plan Updated Successfully.");
         window.location.reload();
     }

@@ -87,8 +87,9 @@ async function getTickets () {
     }
 
     for (var i = 0; i < ticket_data.length; i++) {
-        var tag = 'bg-danger';
-        t.row.add($(`
+        var tag = 'bg-danger';                                                  // If manager display all 
+        if(ticket_data[i].user_level == sessionStorage.getItem('user_id') || sessionStorage.getItem('user_id') == 2) {
+            t.row.add($(`
             <tr>
                 <th scope="row"><a href="#">${ticket_data[i].ticket_num}</a></th>
                 <td>${ticket_data[i].concern}</td>
@@ -99,7 +100,8 @@ async function getTickets () {
                     <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#activeModal" data-bs-whatever="${ticket_data[i].ticket_num}" id="setName"><i class="bi bi-folder-fill"></i></button>
                 </td>
             </tr>
-        `)).draw(false);
+            `)).draw(false);
+        }
     }
 }
 
@@ -116,8 +118,9 @@ async function getPendingTickets () {
     }
 
     for (var i = 0; i < ticket_data.length; i++) {
-        var tag = 'bg-warning';
-        t.row.add($(`
+        var tag = 'bg-warning';                   // Manager ID
+        if(ticket_data[i].admin_id == admin_id || admin_id == '11674') {
+            t.row.add($(`
             <tr>
                 <th scope="row"><a href="#">${ticket_data[i].ticket_num}</a></th>
                 <td>${ticket_data[i].concern}</td>
@@ -130,7 +133,8 @@ async function getPendingTickets () {
                     <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#pendingModal" data-bs-whatever="${ticket_data[i].ticket_num}" id="setName"><i class="bi bi-folder-fill"></i></button>
                 </td>
             </tr>
-        `)).draw(false);
+            `)).draw(false);
+        }
     }
 }
 
@@ -147,21 +151,23 @@ async function getResolvedTickets () {
     }
 
     for (var i = 0; i < ticket_data.length; i++) {
-        var tag = 'bg-success';
-        t.row.add($(`
-            <tr>
-                <th scope="row"><a href="#">${ticket_data[i].ticket_num}</a></th>
-                <td>${ticket_data[i].concern}</td>
-                <td>${ticket_data[i].date_filed}</td>
-                <td>${ticket_data[i].date_resolved}</td>
-                <td><span class="badge ${tag}">${ticket_data[i].ticket_status}</span></td>
-                <td>${ticket_data[i].account_id}</td>
-                <td>${ticket_data[i].admin_username}</td>
-                <td>
-                    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#resolvedModal" data-bs-whatever="${ticket_data[i].ticket_num}" id="setName"><i class="ri ri-eye-fill"></i></button>
-                </td>
-            </tr>
-        `)).draw(false);
+        var tag = 'bg-success';                   // Manager ID
+        if(ticket_data[i].admin_id == admin_id || admin_id == '11674') {
+            t.row.add($(`
+                <tr>
+                    <th scope="row"><a href="#">${ticket_data[i].ticket_num}</a></th>
+                    <td>${ticket_data[i].concern}</td>
+                    <td>${ticket_data[i].date_filed}</td>
+                    <td>${ticket_data[i].date_resolved}</td>
+                    <td><span class="badge ${tag}">${ticket_data[i].ticket_status}</span></td>
+                    <td>${ticket_data[i].account_id}</td>
+                    <td>${ticket_data[i].admin_username}</td>
+                    <td>
+                        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#resolvedModal" data-bs-whatever="${ticket_data[i].ticket_num}" id="setName"><i class="ri ri-eye-fill"></i></button>
+                    </td>
+                </tr>
+            `)).draw(false);
+        }
     }
 }
 
@@ -259,7 +265,7 @@ async function activeModal () {
 
             invalid_ticket.onsubmit = (e) => {
                 e.preventDefault();
-                invalidTicketData();
+                invalidTicketData("Active");
             };
         };
       }
@@ -400,7 +406,7 @@ async function pendingModal () {
 
             invalid_ticket.onsubmit = (e) => {
                 e.preventDefault();
-                invalidTicketData();
+                invalidTicketData("Pending");
             };
         };
       }
@@ -883,7 +889,7 @@ async function claimTicketData() {
 
     const claim_content = await claimTicketResponse.json();
 
-    if (claim_content.message == 'Ticket Claimed') {
+    if (claim_content.message == 'Ticket Claimed' && logActivity('Claimed Ticket ' + ticket_num, 'Active Tickets')) {
         sessionStorage.setItem('save_message', "Ticket Claimed Successfully.");
         window.location.reload();
     }
@@ -939,7 +945,10 @@ async function networkTicketData() {
     const prorate_content = await updateProrateResponse.json();
     const ticket_content = await updateTicketResponse.json();
 
-    if ((prorate_content.message == 'Prorate Created') && (ticket_content.message == 'Ticket Updated')) {
+    if ((prorate_content.message == 'Prorate Created') 
+        && (ticket_content.message == 'Ticket Updated') 
+        && (logActivity('Resolved Ticket ' + ticket_num, 'Pending Tickets'))) {
+
         sessionStorage.setItem('save_message', "Ticket Resolved Successfully.");
         window.location.reload();
     }
@@ -1011,7 +1020,10 @@ async function subscriptionTicketData() {
     const account_content = await updateAccountResponse.json();
     const ticket_content = await updateTicketResponse.json();
 
-    if ((account_content.message == 'success') && (ticket_content.message == 'Ticket Updated')) {
+    if ((account_content.message == 'success') 
+        && (ticket_content.message == 'Ticket Updated') 
+        && (logActivity('Resolved Ticket ' + ticket_num, 'Pending Tickets'))) {
+
         sessionStorage.setItem('save_message', "Ticket Resolved Successfully.");
         window.location.reload();
     }
@@ -1050,7 +1062,7 @@ async function disconnectTicketData() {
 
     const ticket_content = await updateTicketResponse.json();
 
-    if (ticket_content.message == 'Ticket Updated') {
+    if (ticket_content.message == 'Ticket Updated' && logActivity('Resolved Ticket ' + ticket_num, 'Pending Tickets')) {
         sessionStorage.setItem('save_message', "Ticket Resolved Successfully.");
         window.location.reload();
     }
@@ -1059,7 +1071,7 @@ async function disconnectTicketData() {
     }
 }
 
-async function invalidTicketData() {
+async function invalidTicketData(page) {
     const ticket_num = $('#ticket_num_invalid').val();
     const ticket_status_id = 4;
 
@@ -1078,7 +1090,7 @@ async function invalidTicketData() {
 
     const claim_content = await claimTicketResponse.json();
 
-    if (claim_content.message == 'Ticket Claimed') {
+    if (claim_content.message == 'Ticket Claimed' && logActivity('Invalidated Ticket ' + ticket_num, page + ' Tickets')) {
         sessionStorage.setItem('save_message', "Ticket Invalidated Successfully.");
         window.location.reload();
     }
@@ -1131,7 +1143,7 @@ async function createTicket() {
 
     const ticket_content = await createTicketResponse.json();
 
-    if (ticket_content.message == 'Ticket Created') {
+    if (ticket_content.message == 'Ticket Created' && logActivity('Created Ticket ' + ticket_num, 'Create a Ticket')) {
         toastr.success('Ticket Created Successfully.');
         setTimeout(function(){
             window.location.reload();

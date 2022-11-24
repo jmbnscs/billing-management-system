@@ -103,7 +103,7 @@
           <!-- Modal Footer -->
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" id="edit-plan">Edit</button>
+            <button type="button" class="btn btn-primary" id="edit-plan" disabled>Edit</button>
             <button type="submit" class="btn btn-success" id="save-plan-btn" disabled>Save Changes</button>
           </div>
         </div>
