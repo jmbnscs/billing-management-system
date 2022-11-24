@@ -40,8 +40,8 @@
   
 <form id="save-customer">
   <!-- Modal Dialog Scrollable -->
-  <div class="modal fade" id="modalDialogScrollable" tabindex="-1">
-      <div class="modal-dialog modal-dialog-scrollable modal-lg">
+  <div class="modal fade" id="view-customers" tabindex="-1">
+      <div class="modal-dialog modal-dialog-scrollable modal-xl">
         <div class="modal-content">
 
           <!-- Modal Header -->
@@ -53,29 +53,87 @@
           <!-- Modal Body -->
           <div class="modal-body">
                 <div class="row mb-3">
+                    <label for="account_id" class="col-sm-2 col-form-label">Account ID</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="account_id" readonly>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
                   <label for="gstech_id" class="col-sm-2 col-form-label">GSTech ID</label>
                   <div class="col-sm-10">
-                      <input type="text" class="form-control" id="gstech_id" placeholder="" required>
+                      <input type="text" class="form-control" id="gstech_id" placeholder="" disabled>
                   </div>
                 </div>
+
                 <div class="row mb-3">
                   <label for="first_name" class="col-sm-2 col-form-label">First Name</label>
                       <div class="col-sm-10">
-                          <input type="text" class="form-control" id="first_name" placeholder="Ex. Juan" required>
+                          <input type="text" class="form-control" id="first_name" placeholder="Ex. Juan" disabled>
                       </div>
                   </div>
                   
                   <div class="row mb-3">
                       <label for="middle_name" class="col-sm-2 col-form-label">Middle Name</label>
                       <div class="col-sm-10">
-                          <input type="text" class="form-control" id="middle_name" placeholder="Ex. Santos">
+                          <input type="text" class="form-control" id="middle_name" placeholder="Ex. Santos" disabled>
                       </div>
                   </div>
           
                   <div class="row mb-3">    
                       <label for="last_name" class="col-sm-2 col-form-label">Last Name</label>
                       <div class="col-sm-10">
-                          <input type="text" class="form-control" id="last_name" placeholder="Ex. Dela Cruz" required>
+                          <input type="text" class="form-control" id="last_name" placeholder="Ex. Dela Cruz" disabled>
+                      </div>
+                  </div>
+          
+                  <div class="row mb-3">
+                      <label for="birthdate" class="col-sm-2 col-form-label">Birthdate</label>
+                      <div class="col-sm-10">
+                          <input type="date" class="form-control" id="birthdate" disabled>
+                      </div>
+                  </div>
+          
+                  <div class="row mb-3">
+                      <label for="start_date" class="col-sm-2 col-form-label">Start Date</label>
+                      <div class="col-sm-10">
+                          <input type="date" class="form-control" id="start_date" disabled>
+                      </div>
+                  </div>
+
+                  <div class="row mb-3">
+                      <label for="lockin_end_date" class="col-sm-2 col-form-label">Lock In End Date</label>
+                      <div class="col-sm-10">
+                          <input type="date" class="form-control" id="lockin_end_date" disabled>
+                      </div>
+                  </div>
+          
+                  <div class="row mb-3">    
+                      <label for="billing_day" class="col-sm-2 col-form-label">Billing Day</label>
+                      <div class="col-sm-10">
+                          <input type="number" class="form-control" id="billing_day" min="1" max="31" disabled>
+                      </div>
+                  </div>
+
+                  <div class="row mb-3">    
+                      <label for="bill_count" class="col-sm-2 col-form-label">Bill Count</label>
+                      <div class="col-sm-10">
+                          <input type="text" class="form-control" id="bill_count" disabled>
+                      </div>
+                  </div>
+
+                  <div class="row mb-3">
+                      <label for="install_type_id" class="col-sm-2 col-form-label">Installation Type</label>
+                      <div class="col-sm-10">
+                          <select id="install_type_id" class="form-select" disabled>
+                          </select>
+                      </div>
+                  </div>
+          
+                  <div class="row mb-3">    
+                      <label for="installation_balance" class="col-sm-2 col-form-label">Installation Balance</label>
+                      <div class="col-sm-10">
+                          <input type="text" class="form-control" id="installation_balance" disabled>
                       </div>
                   </div>
           
@@ -97,34 +155,6 @@
                       <label for="email" class="col-sm-2 col-form-label">Email</label>
                       <div class="col-sm-10">
                           <input type="email" class="form-control" placeholder="Ex. name@example.com" id="email" required>
-                      </div>
-                  </div>
-          
-                  <div class="row mb-3">
-                      <label for="birthdate" class="col-sm-2 col-form-label">Birthdate</label>
-                      <div class="col-sm-10">
-                          <input type="date" class="form-control" id="birthdate" required>
-                      </div>
-                  </div>
-          
-                  <div class="row mb-3">
-                      <label for="start_date" class="col-sm-2 col-form-label">Start Date</label>
-                      <div class="col-sm-10">
-                          <input type="date" class="form-control" id="start_date" required>
-                      </div>
-                  </div>
-
-                  <div class="row mb-3">
-                      <label for="lockin_end_date" class="col-sm-2 col-form-label">Lock In End Date</label>
-                      <div class="col-sm-10">
-                          <input type="date" class="form-control" id="lockin_end_date" disabled>
-                      </div>
-                  </div>
-          
-                  <div class="row mb-3">    
-                      <label for="billing_day" class="col-sm-2 col-form-label">Billing Day</label>
-                      <div class="col-sm-10">
-                          <input type="number" class="form-control" id="billing_day" min="1" max="31" required>
                       </div>
                   </div>
 
@@ -157,35 +187,6 @@
                       <div class="col-sm-10">
                           <select id="area_id" class="form-select" required>
                           </select>
-                      </div>
-                  </div>
-
-                  <div class="row mb-3">    
-                      <label for="bill_count" class="col-sm-2 col-form-label">Bill Count</label>
-                      <div class="col-sm-10">
-                          <input type="text" class="form-control" id="bill_count" required>
-                      </div>
-                  </div>
-
-                  <div class="row mb-3">
-                      <label for="install_type_id" class="col-sm-2 col-form-label">Installation Type</label>
-                      <div class="col-sm-10">
-                          <select id="install_type_id" class="form-select" required>
-                          </select>
-                      </div>
-                  </div>
-          
-                  <div class="row mb-3">    
-                      <label for="installation_balance" class="col-sm-2 col-form-label">Installation Balance</label>
-                      <div class="col-sm-10">
-                          <input type="text" class="form-control" id="installation_balance" required>
-                      </div>
-                  </div>
-
-                  <div class="row mb-3">
-                      <label for="account_id" class="col-sm-2 col-form-label">Account ID</label>
-                      <div class="col-sm-10">
-                          <input type="text" class="form-control" id="account_id" readonly>
                       </div>
                   </div>
           </div>

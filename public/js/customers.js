@@ -1,14 +1,8 @@
-// On Load
-const edit_customer = document.getElementById('edit-customer');
-const save_customer = document.getElementById('save-customer');
-
 $(document).ready(function () {
     isDefault();
 
     if (DIR_CUR == DIR_MAIN + 'views/customers_add.php') {
-        if(sessionStorage.getItem("user_id") == 4|| 
-            sessionStorage.getItem("user_id") == 5 || 
-            sessionStorage.getItem("user_id") == 6) {
+        if(user_id == 4|| user_id == 5 || user_id == 6) {
             sessionStorage.setItem('error_message', "You don't have access to this page.");
             window.location.replace("../views/dashboard.php");
         }
@@ -22,41 +16,24 @@ $(document).ready(function () {
             sessionStorage.removeItem("save_message");
         }
 
-        $("#modalDialogScrollable").on("hidden.bs.modal", function () {
-            $('#save-customer-btn').attr('disabled', true);
-            $('#edit-customer').attr('disabled', false);
-        });
+        setCustomerTable();
+        setViewModal();
 
-        getCustomers();
-        setModal();
-
-        save_customer.onsubmit = (e) => {
-            e.preventDefault();
-            updateCustomerData();
-        };
+        if (user_id != 2 && user_id != 3) {
+            $('#save-customer-btn').addClass('hide');
+            $('#edit-customer').addClass('hide');
+        }
     }
 });
 
-// View Customer JS
-async function getCustomers () {
-    let url = DIR_API + 'views/customer.php';
-    let customer_data;
-    var t = $('#customer-table').DataTable();
-    try {
-        let res = await fetch(url);
-        customer_data = await res.json();
-    } catch (error) {
-        console.log(error);
-    }
+// -------------------------------------------------------------------- View Customers
+async function setCustomerTable () {
+    let customer_data = await fetchData('views/customer.php');
+    var t = $('#customer-table').DataTable(), tag;
 
     for (var i = 0; i < customer_data.length; i++) {
-        var tag;
-        if (customer_data[i].status == 'VALUED') {
-            tag = 'bg-success';
-        }
-        else {
-            tag = 'bg-danger';
-        }
+        (customer_data[i].status == 'VALUED') ? tag = 'bg-success' : tag = 'bg-danger';
+
         t.row.add($(`
             <tr>
                 <th scope="row"><a href="../views/customer_data.php?acct=${customer_data[i].account_id}">${customer_data[i].account_id}</a></th>
@@ -64,70 +41,51 @@ async function getCustomers () {
                 <td>${customer_data[i].plan}</td>
                 <td>&#8369; ${customer_data[i].balance}</td>
                 <td><span class="badge ${tag}">${customer_data[i].status}</span></td>
-                <td><button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalDialogScrollable" data-bs-whatever="${customer_data[i].account_id}" id="try_lang"><i class="ri ri-eye-fill"></i></button></td>
+                <td><button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#view-customers" data-bs-whatever="${customer_data[i].account_id}"><i class="ri ri-eye-fill"></i></button></td>
             </tr>
         `)).draw(false);
     }
 }
 
+async function setViewModal () {
+    $("#view-customers").on("hidden.bs.modal", function () {
+        $('#save-customer-btn').attr('disabled', true);
+        $('#edit-customer').attr('disabled', false);
+    });
 
+    var viewModal = document.getElementById('view-customers')
+    viewModal.addEventListener('show.bs.modal', async function (event) {
 
-// Modal for Customer List
-async function setModal () {
-    var exampleModal = document.getElementById('modalDialogScrollable')
-    exampleModal.addEventListener('show.bs.modal', function (event) {
-
-      // Button that triggered the modal
-      var button = event.relatedTarget;
-
-      // Extract info from data-bs-* attributes
-      var recipient = button.getAttribute('data-bs-whatever');
-
-      try_lang(recipient);
-    
-      async function try_lang (account_id) {
-        // Update the modal's content.
-        var modalTitle = exampleModal.querySelector('.modal-title');
-        //   var modalBodyInput = exampleModal.querySelector('.modal-body input')
-    
+        var button = event.relatedTarget;
+        var account_id = button.getAttribute('data-bs-whatever');
+        var modalTitle = viewModal.querySelector('.modal-title');
         modalTitle.textContent = account_id;
-        //   modalBodyInput.value = recipient
 
-        let url = DIR_API + 'customer/read_single.php?account_id=' + account_id;
-        let customer;
-            try {
-                let res = await fetch(url);
-                customer = await res.json();
-            } catch (error) {
-                console.log(error);
-            }
+        const [customer, account, installation] = await Promise.all ([fetchData('customer/read_single.php?account_id=' + account_id), fetchData('account/read_single.php?account_id=' + account_id), fetchData('installation/read_single.php?account_id=' + account_id)]);
 
-        url = DIR_API + 'account/read_single.php?account_id=' + account_id;
-        let account;
-            try {
-                let res = await fetch(url);
-                account = await res.json();
-            } catch (error) {
-                console.log(error);
-            }
+        $('#account_id').val(account_id);
+        $('#gstech_id').val(customer.gstech_id);
+        $('#first_name').val(customer.first_name);
+        $('#middle_name').val(customer.middle_name);
+        $('#last_name').val(customer.last_name);
+        $('#birthdate').val(customer.birthdate);
 
-        url = DIR_API + 'installation/read_single.php?account_id=' + account_id;
-        let installation;
-            try {
-                let res = await fetch(url);
-                installation = await res.json();
-            } catch (error) {
-                console.log(error);
-            }
+        $('#billing_day').val(account.billing_day);
+        $('#start_date').val(account.start_date);
+        $('#lockin_end_date').val(account.lockin_end_date);
+        $('#bill_count').val(account.bill_count);
 
+        $('#installation_balance').val(installation.installation_balance);
+
+        $('#billing_address').val(customer.billing_address);
+        $('#mobile_number').val(customer.mobile_number);
+        $('#email').val(customer.email);
 
         const [area, plan, connection, account_status, install_type] = await Promise.all ([fetchData('area/read.php'), fetchData('plan/read.php'), fetchData('connection/read.php'), fetchData('statuses/read.php?status_table=account_status'), fetchData('installation_type/read.php')]);
 
         toggleInputData('disabled', true);
-        toggleDefaultData('disabled', true);
         setDefaultDropdown();
 
-        // Display Default Dropdown Data
         async function setDefaultDropdown () {
             for (var i = 0; i < area.length; i++) {
                 if (area[i].area_id == account.area_id) {
@@ -227,41 +185,77 @@ async function setModal () {
             }
         }
 
-        function setCustomerData (id, data, setAttr, bool) {
-            $(id).val(data);
-            $(id).attr(setAttr, bool);
-        }
-
         function toggleInputData (setAttr, bool) {
-            setCustomerData('#billing_address', customer.billing_address, setAttr, bool);
-            setCustomerData('#mobile_number', customer.mobile_number, setAttr, bool);
-            setCustomerData('#email', customer.email, setAttr, bool);
+            $('#billing_address').attr(setAttr, bool);
+            $('#mobile_number').attr(setAttr, bool);
+            $('#email').attr(setAttr, bool);
 
-            setCustomerData('#plan_id', account.plan_id, setAttr, bool);
-            setCustomerData('#connection_id', account.connection_id, setAttr, bool);
-            setCustomerData('#account_status_id', account.account_status_id, setAttr, bool);
-            setCustomerData('#area_id', account.area_id, setAttr, bool);
-
-            setCustomerData('#account_id', customer.account_id, setAttr, bool);
+            $('#plan_id').attr(setAttr, bool);
+            $('#connection_id').attr(setAttr, bool);
+            $('#account_status_id').attr(setAttr, bool);
+            $('#area_id').attr(setAttr, bool);
         }
 
-        function toggleDefaultData (setAttr, bool) {
-            setCustomerData('#gstech_id', customer.gstech_id, setAttr, bool);
-            setCustomerData('#first_name', customer.first_name, setAttr, bool);
-            setCustomerData('#middle_name', customer.middle_name, setAttr, bool);
-            setCustomerData('#last_name', customer.last_name, setAttr, bool);
-            setCustomerData('#birthdate', customer.birthdate, setAttr, bool);
+        async function updateCustomerData() {
+            const account_id = $('#account_id').val();
+
+            let customer_data = JSON.stringify({
+                'account_id' : account_id,
+                'billing_address' : $('#billing_address').val(),
+                'mobile_number' : $('#mobile_number').val(),
+                'email' : $('#email').val()
+            });
+
+            let account_data = JSON.stringify({
+                'account_id' : account_id,
+                'plan_id' : $('#plan_id').val(),
+                'connection_id' : $('#connection_id').val(),
+                'account_status_id' : $('#account_status_id').val(),
+                'area_id' : $('#area_id').val()
+            });
+        
+            let activity, log = true, details = account_id + ' - ' + $('#first_name').val() + ' ' + $('#last_name').val();
+            if (customer.mobile_number != $('#mobile_number').val()) {
+                activity = 'Updated customer mobile number [' + details + '].';
+                log = await logActivity(activity, 'Customer List');
+            }
+            if (customer.email != $('#email').val()) {
+                activity = 'Updated customer email [' + details + '].';
+                log = await logActivity(activity, 'Customer List');
+            }
+            if (customer.billing_address != $('#billing_address').val()) {
+                activity = 'Updated customer billing address [' + details + '].';
+                log = await logActivity(activity, 'Customer List');
+            }
+            if (account.plan_id != $('#plan_id').val()) {
+                activity = 'Updated account subscription plan [' + details + '].';
+                log = await logActivity(activity, 'Customer List');
+            }
+            if (account.connection_id != $('#connection_id').val()) {
+                activity = 'Updated account connection type [' + details + '].';
+                log = await logActivity(activity, 'Customer List');
+            }
+            if (account.account_status_id != $('#account_status_id').val()) {
+                activity = 'Updated account status [' + details + '].';
+                log = await logActivity(activity, 'Customer List');
+            }
+            if (account.area_id != $('#area_id').val()) {
+                activity = 'Updated account area [' + details + '].';
+                log = await logActivity(activity, 'Customer List');
+            }
             
-            setCustomerData('#billing_day', account.billing_day, setAttr, bool);
-            setCustomerData('#start_date', account.start_date, setAttr, bool);
-            setCustomerData('#lockin_end_date', account.lockin_end_date, setAttr, bool);
-            setCustomerData('#bill_count', account.bill_count, setAttr, bool);
-    
-            setCustomerData('#install_type_id', installation.install_type_id, setAttr, bool);
-            setCustomerData('#installation_balance', installation.installation_balance, setAttr, bool);
+            const [customer_content, account_content] = await Promise.all ([updateData('customer/update.php', customer_data), updateData('account/update.php', account_data)]);
+        
+            if (customer_content.message == 'Customer Updated' && account_content.message == 'success' && log) {
+                sessionStorage.setItem('save_message', "Customer Updated Successfully.");
+                window.location.reload();
+            }
+            else {
+                toastr.error("Customer was not updated.");
+            }
         }
 
-        // Form Submits -- onclick Triggers
+        const edit_customer = document.getElementById('edit-customer');
         edit_customer.onclick = (e) => {
             e.preventDefault();
             $('#save-customer-btn').attr('disabled', false);
@@ -269,291 +263,127 @@ async function setModal () {
             toggleInputData('disabled', false);
             setDropdownData();
         };
-        
-      }
+
+        const save_customer = document.getElementById('save-customer');
+        save_customer.onsubmit = (e) => {
+            e.preventDefault();
+            updateCustomerData();
+        };
     });
 }
 
-async function updateCustomerData() {
-    const billing_address = $('#billing_address').val();
-    const mobile_number = $('#mobile_number').val();
-    const email = $('#email').val();
-
-    const plan_id = $('#plan_id').val();
-    const connection_id = $('#connection_id').val();
-    const account_status_id = $('#account_status_id').val();
-    const area_id = $('#area_id').val();
-
-    const account_id = $('#account_id').val();
-    const first_name = $('#first_name').val();
-    const last_name = $('#last_name').val();
-
-    let activity, log = true;
-
-    let url = DIR_API + 'customer/read_single.php?account_id=' + account_id;
-    let customer;
-        try {
-            let res = await fetch(url);
-            customer = await res.json();
-        } catch (error) {
-            console.log(error);
-        }
-
-    url = DIR_API + 'account/read_single.php?account_id=' + account_id;
-    let account;
-        try {
-            let res = await fetch(url);
-            account = await res.json();
-        } catch (error) {
-            console.log(error);
-        }
-
-    if (customer.mobile_number != mobile_number) {
-        activity = 'Updated customer mobile number [' + account_id + ' - ' + first_name + ' ' + last_name + '].';
-        log = await logActivity(activity, 'Customer List');
-    }
-    if (customer.email != email) {
-        activity = 'Updated customer email [' + account_id + ' - ' + first_name + ' ' + last_name + '].';
-        log = await logActivity(activity, 'Customer List');
-    }
-    if (customer.billing_address != billing_address) {
-        activity = 'Updated customer billing address [' + account_id + ' - ' + first_name + ' ' + last_name + '].';
-        log = await logActivity(activity, 'Customer List');
-    }
-    if (account.plan_id != plan_id) {
-        activity = 'Updated account subscription plan [' + account_id + ' - ' + first_name + ' ' + last_name + '].';
-        log = await logActivity(activity, 'Customer List');
-    }
-    if (account.connection_id != connection_id) {
-        activity = 'Updated account connection type [' + account_id + ' - ' + first_name + ' ' + last_name + '].';
-        log = await logActivity(activity, 'Customer List');
-    }
-    if (account.account_status_id != account_status_id) {
-        activity = 'Updated account status [' + account_id + ' - ' + first_name + ' ' + last_name + '].';
-        log = await logActivity(activity, 'Customer List');
-    }
-    if (account.area_id != area_id) {
-        activity = 'Updated account area [' + account_id + ' - ' + first_name + ' ' + last_name + '].';
-        log = await logActivity(activity, 'Customer List');
-    }
-
-    url = DIR_API + 'customer/update.php';
-    const updateCustomerResponse = await fetch(url, {
-        method : 'PUT',
-        headers : {
-            'Content-Type' : 'application/json'
-        },
-        body : JSON.stringify({
-            'account_id' : account_id,
-            'billing_address' : billing_address,
-            'mobile_number' : mobile_number,
-            'email' : email
-        })
-    });
-    
-    url = DIR_API + 'account/update.php';
-    const updateAccountResponse = await fetch(url, {
-        method : 'PUT',
-        headers : {
-            'Content-Type' : 'application/json'
-        },
-        body : JSON.stringify({
-            'account_id' : account_id,
-            'plan_id' : plan_id,
-            'connection_id' : connection_id,
-            'account_status_id' : account_status_id,
-            'area_id' : area_id
-        })
-    });
-
-    const customer_content = await updateCustomerResponse.json();
-    const account_content = await updateAccountResponse.json();
-
-    if (customer_content.message == 'Customer Updated' && account_content.message == 'success' && log) {
-        sessionStorage.setItem('save_message', "Customer Updated Successfully.");
-        window.location.reload();
-    }
-    else {
-        toastr.error("Customer was not updated.");
-    }
-}
-
-// Add Customer JS
-const getID = async () => {
-    const result = await generateAccountID();
-    return result;
-}
-
-async function generateAccountID() {
-    let url = DIR_API + 'account/read.php';
-    try {
-        let res = await fetch(url);
-        response = await res.json();
-
-        let unique = false;
-        while(unique == false) {
-            let checker = 0;
-            let rand_num = Math.round(Math.random() * 99999999);
-            for(let i = 0; i < response.length; i++) {
-                if(rand_num == response[i]['account_id']) {
-                    checker++;
-                }
-            }
-            if (checker == 0) {
-                unique = true;
-                return rand_num.toString();
-            }
-        }
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-async function addCustomer() {
-    const account_id = $('#account_id').val();
-
-    const first_name = $('#first_name').val();
-    const middle_name = $('#middle_name').val();
-    const last_name = $('#last_name').val();
-
-    const billing_address = $('#billing_address').val();
-    const mobile_number = $('#mobile_number').val();
-    const email = $('#email').val();
-    const birthdate = $('#birthdate').val();
-
-    const start_date = $('#start_date').val();
-    const plan_id = $('#plan_id').val();
-    const connection_id = $('#connection_id').val();
-    const account_status_id = $('#account_status_id').val();
-    const area_id = $('#area_id').val();
-
-    const install_type_id = $('#install_type_id').val();
-
-    let url = DIR_API + 'account/create.php';
-    const addAccountResponse = await fetch(url, {
-        method : 'POST',
-        headers : {
-            'Content-Type' : 'application/json'
-        },
-        body : JSON.stringify({
-            'account_id' : account_id,
-            'start_date' : start_date,
-            'plan_id' : plan_id,
-            'connection_id' : connection_id,
-            'account_status_id' : account_status_id,
-            'area_id' : area_id
-        })
-    });
-
-    url = DIR_API + 'customer/create.php';
-    const addCustomerResponse = await fetch(url, {
-        method : 'POST',
-        headers : {
-            'Content-Type' : 'application/json'
-        },
-        body : JSON.stringify({
-            'account_id' : account_id,
-            'first_name' : first_name,
-            'middle_name' : middle_name,
-            'last_name' : last_name,
-            'billing_address' : billing_address,
-            'mobile_number' : mobile_number,
-            'email' : email,
-            'birthdate' : birthdate
-        })
-    });
-
-    url = DIR_API + 'installation/create.php';
-    const addInstallationResponse = await fetch(url, {
-        method : 'POST',
-        headers : {
-            'Content-Type' : 'application/json'
-        },
-        body : JSON.stringify({
-            'install_type_id' : install_type_id,
-            'account_id' : account_id
-        })
-    });
-
-    url = DIR_API + 'ratings/create.php';
-    const addRatingsResponse = await fetch(url, {
-        method : 'POST',
-        headers : {
-            'Content-Type' : 'application/json'
-        },
-        body : JSON.stringify({
-            'account_id' : account_id
-        })
-    });
-
-    const account_content = await addAccountResponse.json();
-    const customer_content = await addCustomerResponse.json();
-    const installation_content = await addInstallationResponse.json();
-    const ratings_content = await addRatingsResponse.json();
-
-    let activity = 'Created new customer account with Account ID # ' + account_id;
-    let log = await logActivity(activity, 'Customer - Add New Account')
-    
-    if (account_content.message == 'Account Created' && customer_content.message == 'Customer Created' 
-        && installation_content.message == 'Installation Created' && ratings_content.message == 'Ratings Created' && log) {
-        toastr.success('Customer Created Successfully.');
-        setTimeout(function(){
-            window.location.replace('../views/customers.php');
-         }, 2000);
-    }
-    else {
-        toastr.error(account_content.message + " " + customer_content.message + " " 
-        + installation_content.message + " " + ratings_content.message);
-        setTimeout(function(){
-            window.location.reload();
-         }, 2000);
-    }
-}
-
-async function setAddDropdown() {
-    const plan = await fetchData('plan/read.php');
-    for (var i = 0; i < plan.length; i++) {
-        var opt = `<option value='${plan[i].plan_id}'>${plan[i].plan_name + " - " + plan[i].bandwidth + "mbps"}</option>`;
-        $("#plan_id").append(opt);
-    }
-
-    const connection = await fetchData('connection/read.php');
-    for (var i = 0; i < connection.length; i++) {
-        var opt = `<option value='${connection[i].connection_id}'>${connection[i].connection_name}</option>`;
-        $("#connection_id").append(opt);
-    }
-
-    const account_status = await fetchData('statuses/read.php?status_table=account_status');
-    for (var i = 0; i < account_status.length; i++) {
-        var opt = `<option value='${account_status[i].status_id}'>${account_status[i].status_name}</option>`;
-        $("#account_status_id").append(opt);
-    }
-
-    const area = await fetchData('area/read.php');
-    for (var i = 0; i < area.length; i++) {
-        var opt = `<option value='${area[i].area_id}'>${area[i].area_name}</option>`;
-        $("#area_id").append(opt);
-    }
-
-    const install_type = await fetchData('installation_type/read.php');
-    for (var i = 0; i < install_type.length; i++) {
-        var opt = `<option value='${install_type[i].install_type_id}'>${install_type[i].install_type_name}</option>`;
-        $("#install_type_id").append(opt);
-    }
-}
-
-function setAddCustomerPage () {
+// -------------------------------------------------------------------- Add Customer
+async function setAddCustomerPage () {
     const add_customer = document.getElementById('add-customer');
-
-    getID().then(result => {
-        $("#account_id").attr("value", result);
-    });
+    $('#account_id').val(await generateAccountID());
 
     setAddDropdown();
 
-    // Form Submits -- onclick Triggers
     add_customer.onsubmit = (e) => {
         e.preventDefault();
         addCustomer();
     };
+
+    async function addCustomer() {
+        const account_id = $('#account_id').val();
+
+        let account_data = JSON.stringify({
+            'account_id' : account_id,
+            'start_date' : $('#start_date').val(),
+            'plan_id' : $('#plan_id').val(),
+            'connection_id' : $('#connection_id').val(),
+            'account_status_id' : $('#account_status_id').val(),
+            'area_id' : $('#area_id').val()
+        });
+
+        let customer_data = JSON.stringify({
+            'account_id' : account_id,
+            'first_name' : $('#first_name').val(),
+            'middle_name' : $('#middle_name').val(),
+            'last_name' : $('#last_name').val(),
+            'billing_address' : $('#billing_address').val(),
+            'mobile_number' : $('#mobile_number').val(),
+            'email' : $('#email').val(),
+            'birthdate' : $('#birthdate').val()
+        });
+
+        let install_data = JSON.stringify({
+            'install_type_id' : $('#install_type_id').val(),
+            'account_id' : account_id
+        });
+
+        let rating_data = JSON.stringify({
+            'account_id' : account_id
+        });
+
+        const [account_content, customer_content, installation_content, ratings_content] = await Promise.all ([createData('account/create.php', account_data), createData('customer/create.php', customer_data), createData('installation/create.php', install_data), createData('ratings/create.php', rating_data)]);
+    
+        let log = await logActivity('Created new customer account with Account ID # ' + account_id, 'Customer - Add New Account');
+
+        if (account_content.message == 'Account Created' && customer_content.message == 'Customer Created' 
+            && installation_content.message == 'Installation Created' && ratings_content.message == 'Ratings Created' && log) {
+            toastr.success('Customer Created Successfully.');
+            setTimeout(function(){
+                window.location.replace('../views/customers.php');
+             }, 2000);
+        }
+        else {
+            toastr.error(account_content.message + " " + customer_content.message + " " 
+            + installation_content.message + " " + ratings_content.message);
+            console.log(log);
+            setTimeout(function(){
+                window.location.reload();
+             }, 2000);
+        }
+
+    }
+
+    async function setAddDropdown() {
+        const [area, plan, connection, account_status, install_type] = await Promise.all ([fetchData('area/read.php'), fetchData('plan/read.php'), fetchData('connection/read.php'), fetchData('statuses/read.php?status_table=account_status'), fetchData('installation_type/read.php')]);
+
+        for (var i = 0; i < plan.length; i++) {
+            var opt = `<option value='${plan[i].plan_id}'>${plan[i].plan_name + " - " + plan[i].bandwidth + "mbps"}</option>`;
+            $("#plan_id").append(opt);
+        }
+    
+        for (var i = 0; i < connection.length; i++) {
+            var opt = `<option value='${connection[i].connection_id}'>${connection[i].connection_name}</option>`;
+            $("#connection_id").append(opt);
+        }
+    
+        for (var i = 0; i < account_status.length; i++) {
+            var opt = `<option value='${account_status[i].status_id}'>${account_status[i].status_name}</option>`;
+            $("#account_status_id").append(opt);
+        }
+    
+        for (var i = 0; i < area.length; i++) {
+            var opt = `<option value='${area[i].area_id}'>${area[i].area_name}</option>`;
+            $("#area_id").append(opt);
+        }
+    
+        for (var i = 0; i < install_type.length; i++) {
+            var opt = `<option value='${install_type[i].install_type_id}'>${install_type[i].install_type_name}</option>`;
+            $("#install_type_id").append(opt);
+        }
+    }
+}
+
+async function generateAccountID() {
+    let content = fetchData('account/read.php');
+    let unique = false;
+
+    while(unique == false) {
+        let checker = 0;
+        let rand_num = Math.round(Math.random() * 99999999);
+
+        for(let i = 0; i < content.length; i++) {
+            if(rand_num == content[i].account_id) {
+                checker++;
+            }
+        }
+
+        if (checker == 0) {
+            return rand_num.toString();
+        }
+    }
 }
