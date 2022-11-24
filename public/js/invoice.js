@@ -3,8 +3,7 @@ $(document).ready(function () {
     isDefault();
 
     if (DIR_CUR == DIR_MAIN + 'views/invoice_payments_add.php') {
-        if (sessionStorage.getItem("user_id") == 5 || 
-            sessionStorage.getItem("user_id") == 6) {
+        if (user_id == 5 || user_id == 6) {
             sessionStorage.setItem('error_message', "You don't have access to this page.");
             window.location.replace("../views/dashboard.php");
         }
@@ -13,7 +12,7 @@ $(document).ready(function () {
         }
     }
     else if (DIR_CUR == DIR_MAIN + 'views/invoice_payments.php') {
-        if (sessionStorage.getItem("user_id") == 6) {
+        if (user_id == 6) {
             sessionStorage.setItem('error_message', "You don't have access to this page.");
             window.location.replace("../views/dashboard.php");
         }
@@ -22,7 +21,7 @@ $(document).ready(function () {
         }
     }
     else if (DIR_CUR == DIR_MAIN + 'views/invoice_prorate.php') {
-        if (sessionStorage.getItem("user_id") == 6) {
+        if (user_id == 6) {
             sessionStorage.setItem('error_message', "You don't have access to this page.");
             window.location.replace("../views/dashboard.php");
         }
@@ -36,13 +35,7 @@ $(document).ready(function () {
 });
 
 // Global Functions
-function displaySuccessMessage() {
-    const msg = sessionStorage.getItem('save_message');
-    if (msg !== null) {
-        toastr.success(sessionStorage.getItem("save_message"));
-        sessionStorage.removeItem("save_message");
-    }
-}
+
 
 let create_fn, edit_fn, update_fn, delete_fn;
 function setButtons() {
@@ -107,8 +100,6 @@ async function getLatestInvoice(account_id) {
     }
 }
 
-
-
 async function getPaymentRecords () {
     let url = DIR_API + 'views/payment.php';
     try {
@@ -167,32 +158,20 @@ async function setInvoicePage () {
     };
 
     async function setInvoiceTable() {
-        let url = DIR_API + 'views/invoice_unpaid.php';
-        let invoice_data;
-        var t = $('#invoice-table').DataTable();
-        try {
-            let res = await fetch(url);
-            invoice_data = await res.json();
-        } catch (error) {
-            console.log(error);
-        }
+        let content = await fetchData('views/invoice_unpaid.php');
+        var t = $('#invoice-table').DataTable(), tag;
     
-        for (var i = 0; i < invoice_data.length; i++) {
-            var tag;
-            if (invoice_data[i].status == 'PAID') {
-                tag = 'bg-success';
-            }
-            else {
-                tag = 'bg-danger';
-            }
+        for (var i = 0; i < content.length; i++) {
+            (content[i].status == 'PAID') ? tag = 'bg-success' : tag = 'bg-danger';
+            
             t.row.add($(`
                 <tr>
-                    <th scope="row"><a href="#">${invoice_data[i].invoice_id}</a></th>
-                    <td><a href="#" class="text-primary">${invoice_data[i].customer_name}</a></td>
-                    <td>${invoice_data[i].disconnection_date}</td>
-                    <td>&#8369; ${invoice_data[i].total_bill}</td>
-                    <td><span class="badge ${tag}">${invoice_data[i].status}</span></td>
-                    <td><button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="${invoice_data[i].invoice_id}"><i class="ri ri-eye-fill"></i></button></td>
+                    <th scope="row" style="color: #012970;"><strong>${content[i].invoice_id}</strong></th>
+                    <td>${content[i].customer_name}</td>
+                    <td>${content[i].disconnection_date}</td>
+                    <td>&#8369; ${content[i].total_bill}</td>
+                    <td><span class="badge ${tag}">${content[i].status}</span></td>
+                    <td><button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="${content[i].invoice_id}"><i class="ri ri-eye-fill"></i></button></td>
                 </tr>
             `)).draw(false);
         }
@@ -205,9 +184,10 @@ async function setInvoicePage () {
     
             var button = event.relatedTarget;
             var invoice_id = button.getAttribute('data-bs-whatever');
-            let data = await getInvoiceData(invoice_id);
+            
+            let data = await fetchData('invoice/read_single.php?invoice_id=' + invoice_id);
+            let customer_data = await fetchData('customer/read_single.php?account_id=' + data.account_id);
             let statuses = await getInvoiceStatus();
-            let customer_data = await getCustomerData(data.account_id);
             let status;
 
             function getStatus() {
@@ -235,7 +215,9 @@ async function setInvoicePage () {
 
             getStatus();
 
-            $('#invoice_status_id').val(status);
+            console.log(await getStatusName('invoice_status', data.invoice_status_id));
+
+            $('#invoice_status_id').val(await getStatusName('invoice_status', data.invoice_status_id));
 
             if (data.invoice_status_id == 1) {
                 toggleInputData('readonly', true);

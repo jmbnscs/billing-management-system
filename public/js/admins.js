@@ -11,11 +11,7 @@ $(document).ready( () => {
         }
     }
     else {
-        if (sessionStorage.getItem("save_message") == "Admin Updated Successfully.") {
-            toastr.success(sessionStorage.getItem("save_message"));
-            sessionStorage.removeItem("save_message");
-        }
-
+        displaySuccessMessage();
         setAdminTable();
         setViewModal();
 

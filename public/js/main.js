@@ -97,22 +97,6 @@ async function fetchData(page) {
     }
 }
 
-async function getStatusName(status_table, status_id) {
-    let url = DIR_API + 'statuses/read_single.php';
-    const statusResponse = await fetch(url, {
-        method : 'POST',
-        headers : {
-            'Content-Type' : 'application/json'
-        },
-        body : JSON.stringify({
-            'status_table' : status_table,
-            'status_id' : status_id
-        })
-    });
-
-    return await statusResponse.json();
-}
-
 async function updateData(page, data) {
     let url = DIR_API + page;
     const updateResponse = await fetch(url, {
@@ -146,6 +130,24 @@ async function getUserLevel(user_id) {
     }
 }
 
+async function getStatusName(status_table, status_id) {
+    let url = DIR_API + 'statuses/read_single.php';
+    const statusResponse = await fetch(url, {
+        method : 'POST',
+        headers : {
+            'Content-Type' : 'application/json'
+        },
+        body : JSON.stringify({
+            'status_table' : status_table,
+            'status_id' : status_id
+        })
+    });
+
+    let content = await statusResponse.json();
+
+    return content.status_name;
+}
+
 // Functions to format data display
 function setTagElement(id, status) {
     document.getElementById(id).classList.add('text-white');
@@ -160,6 +162,14 @@ function formatDateString(date) {
     var month = ["January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"][temp.getMonth()];
     return month + ' ' + temp.getDate() + ', ' + temp.getFullYear();
+}
+
+function displaySuccessMessage() {
+    const msg = sessionStorage.getItem('save_message');
+    if (msg !== null) {
+        toastr.success(sessionStorage.getItem("save_message"));
+        sessionStorage.removeItem("save_message");
+    }
 }
 
 // Display Default Data

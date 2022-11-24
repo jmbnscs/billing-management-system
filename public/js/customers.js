@@ -11,11 +11,7 @@ $(document).ready(function () {
         }
     }
     else {
-        if (sessionStorage.getItem("save_message") == "Customer Updated Successfully.") {
-            toastr.success(sessionStorage.getItem("save_message"));
-            sessionStorage.removeItem("save_message");
-        }
-
+        displaySuccessMessage();
         setCustomerTable();
         setViewModal();
 
