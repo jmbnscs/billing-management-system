@@ -24,7 +24,7 @@
               <th scope="col">Invoice ID</th>
               <th scope="col">Customer</th>
               <th scope="col">Disconnection Date</th>
-              <th scope="col">Total Bill</th>
+              <th scope="col">Running Balance</th>
               <th scope="col">Status</th>
               <th scope="col">View</th>
             </tr>
@@ -163,7 +163,7 @@
                     </div>
 
                     <div class="mt-5 d-grid gap-2 col-8 mx-auto">
-                      <button type="submit" class="btn btn-outline-primary" id="save-btn" disabled>Save Changes</button>
+                      <button type="submit" class="btn btn-outline-primary" id="save-btn" hidden>Save Changes</button>
                     </div>
 
                     <div class="mt-5 d-grid gap-2 col-8 mx-auto">

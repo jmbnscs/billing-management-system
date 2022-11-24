@@ -3,7 +3,7 @@ $(document).ready( () => {
 
     if (DIR_CUR == DIR_MAIN + 'views/admins_add.php') {
         if(user_id == 4 || user_id == 5 || user_id == 6) {
-            sessionStorage.setItem('error_message', "You don't have access to this page.");
+            setErrorMessage();
             window.location.replace("../views/dashboard.php");
         }
         else {

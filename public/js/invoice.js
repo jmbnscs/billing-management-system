@@ -4,7 +4,7 @@ $(document).ready(function () {
 
     if (DIR_CUR == DIR_MAIN + 'views/invoice_payments_add.php') {
         if (user_id == 5 || user_id == 6) {
-            sessionStorage.setItem('error_message', "You don't have access to this page.");
+            setErrorMessage();
             window.location.replace("../views/dashboard.php");
         }
         else {
@@ -13,7 +13,7 @@ $(document).ready(function () {
     }
     else if (DIR_CUR == DIR_MAIN + 'views/invoice_payments.php') {
         if (user_id == 6) {
-            sessionStorage.setItem('error_message', "You don't have access to this page.");
+            setErrorMessage();
             window.location.replace("../views/dashboard.php");
         }
         else {
@@ -22,7 +22,7 @@ $(document).ready(function () {
     }
     else if (DIR_CUR == DIR_MAIN + 'views/invoice_prorate.php') {
         if (user_id == 6) {
-            sessionStorage.setItem('error_message', "You don't have access to this page.");
+            setErrorMessage();
             window.location.replace("../views/dashboard.php");
         }
         else {
@@ -34,40 +34,9 @@ $(document).ready(function () {
     }
 });
 
-// Global Functions
-
-
-let create_fn, edit_fn, update_fn, delete_fn;
-function setButtons() {
-    create_fn = document.getElementById('create-new');
-    edit_fn = document.getElementById('edit-btn');
-    update_fn = document.getElementById('update-data');
-    delete_fn = document.getElementById('delete-data');
-}
-
 function setData (id, data, setAttr, bool) {
     $(id).val(data);
     $(id).attr(setAttr, bool);
-}
-
-async function getAllCustomers() {
-    let url = DIR_API + 'customer/read.php';
-    try {
-        let res = await fetch(url);
-        return await res.json();
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-async function getInvoiceData(invoice_id) {
-    let url = DIR_API + 'invoice/read_single.php?invoice_id=' + invoice_id;
-    try {
-        let res = await fetch(url);
-        return await res.json();
-    } catch (error) {
-        console.log(error);
-    }
 }
 
 async function getInvoiceStatus() {
@@ -148,14 +117,9 @@ async function setInvoicePage () {
     setUpdateModal();
     
     $("#editModal").on("hidden.bs.modal", function () {
-        $('#save-btn').attr('disabled', true);
-        $('#edit-btn').attr('disabled', false);
+        $('#edit-btn').attr('hidden', false);
+        $('#save-btn').attr('hidden', true);
     });
-
-    update_fn.onsubmit = (e) => {
-        e.preventDefault();
-        updateData();
-    };
 
     async function setInvoiceTable() {
         let content = await fetchData('views/invoice_unpaid.php');
@@ -169,7 +133,7 @@ async function setInvoicePage () {
                     <th scope="row" style="color: #012970;"><strong>${content[i].invoice_id}</strong></th>
                     <td>${content[i].customer_name}</td>
                     <td>${content[i].disconnection_date}</td>
-                    <td>&#8369; ${content[i].total_bill}</td>
+                    <td>&#8369; ${content[i].running_balance}</td>
                     <td><span class="badge ${tag}">${content[i].status}</span></td>
                     <td><button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="${content[i].invoice_id}"><i class="ri ri-eye-fill"></i></button></td>
                 </tr>
@@ -187,16 +151,10 @@ async function setInvoicePage () {
             
             let data = await fetchData('invoice/read_single.php?invoice_id=' + invoice_id);
             let customer_data = await fetchData('customer/read_single.php?account_id=' + data.account_id);
-            let statuses = await getInvoiceStatus();
-            let status;
+            toggleInputData('disabled', true);
 
-            function getStatus() {
-                for (var i = 0; i < statuses.length; i++) {
-                    if (data.invoice_status_id == statuses[i].status_id) {
-                        status = statuses[i].status_name;
-                    }
-                }
-            }
+            var modalTitle = updateModal.querySelector('.modal-title');
+            modalTitle.textContent = customer_data.first_name + ' ' + customer_data.last_name + ' - ' + data.invoice_id;
 
             // Display Invoice Details
             $('#invoice_id').val(data.invoice_id);
@@ -213,143 +171,89 @@ async function setInvoicePage () {
             $('#installation_charge').val(data.installation_charge);
             $('#total_bill').val(data.total_bill);
 
-            getStatus();
-
-            console.log(await getStatusName('invoice_status', data.invoice_status_id));
+            $('#payment_reference_id').val(data.payment_reference_id);
+            $('#amount_paid').val(null);
+            $('#payment_date').val(data.payment_date);
 
             $('#invoice_status_id').val(await getStatusName('invoice_status', data.invoice_status_id));
+            setTagElement('invoice_status_id', data.invoice_status_id);
 
-            if (data.invoice_status_id == 1) {
-                toggleInputData('readonly', true);
-                document.getElementById('invoice_status_id').classList.remove('bg-danger');
-                document.getElementById('invoice_status_id').classList.add('bg-success');
-                document.getElementById('invoice_status_id').classList.add('text-white');
-                $('#edit-btn').attr('hidden', true);
-                $('#save-btn').attr('hidden', true);
-            }
-            else {
-                toggleInputData('disabled', true);
-                document.getElementById('invoice_status_id').classList.add('bg-danger');
-                document.getElementById('invoice_status_id').classList.add('text-white');
-                $('#amount_paid').val(null);
-            }
-
+            
             function toggleInputData (setAttr, bool) {
-                setData('#payment_reference_id', data.payment_reference_id, setAttr, bool);
-                setData('#amount_paid', data.amount_paid, setAttr, bool);
-                setData('#payment_date', data.payment_date, setAttr, bool);
+                $('#payment_reference_id').attr(setAttr, bool);
+                $('#amount_paid').attr(setAttr, bool);
+                $('#payment_date').attr(setAttr, bool);
             }
 
-            var modalTitle = updateModal.querySelector('.modal-title');
-            modalTitle.textContent = customer_data.first_name + ' ' + customer_data.last_name + ' - ' + data.invoice_id;
-    
-            // Form Submits -- onclick Triggers
             edit_fn.onclick = (e) => {
                 e.preventDefault();
-                $('#save-btn').attr('disabled', false);
-                $('#edit-btn').attr('disabled', true);
                 toggleInputData('disabled', false);
-                $('#amount_paid').val(null);
+                $('#edit-btn').attr('hidden', true);
+                $('#save-btn').attr('hidden', false);
             };
+
+            update_fn.onsubmit = (e) => {
+                e.preventDefault();
+                processData();
+            };
+
+            async function processData() {
+                const account_id = $('#account_id').val();
+                let ref_content = await fetchData('views/payment.php');
+                let isExist = false;
+        
+                for (var i = 0; i < ref_content.length; i++) {
+                    if ($('#payment_reference_id').val() == ref_content[i].ref_id) {
+                        isExist = true;
+                    }
+                }
+        
+                if (!isExist) {
+
+                    let update_data = JSON.stringify({
+                        'account_id' : $('#account_id').val(),
+                        'payment_reference_id' : $('#payment_reference_id').val(),
+                        'amount_paid' : $('#amount_paid').val(),
+                        'payment_date' : $('#payment_date').val()
+                    });
+
+                    let payment_data = JSON.stringify({
+                        'amount_paid' : $('#amount_paid').val(),
+                        'payment_reference_id' : $('#payment_reference_id').val(),
+                        'payment_date' : $('#payment_date').val()
+                    })
+
+                    let rating_data = JSON.stringify({
+                        'account_id' : account_id,
+                        'invoice_status' : data.invoice_status_id
+                    });
+
+                    const [update_content, payment_content, rating_content] = await Promise.all ([updateData('invoice/update.php', update_data), createData('payment/create.php', payment_data), updateData('ratings/update.php', rating_data)]);
+
+                    let tag_data = JSON.stringify({
+                        'account_id' : account_id,
+                        'invoice_id' : invoice_id,
+                        'payment_id' : payment_content.payment_id
+                    });
+
+                    const tag_content = await updateData('payment/update_tagged.php', tag_data);
+
+                    let log = await logActivity('Updated payment for ' + account_id + ' with Invoice # ' + invoice_id, 'Unpaid Invoices');
+
+                    if (update_content.message == 'Invoice Updated' && payment_content.message == 'Payment Record Created' && tag_content.message == 'Payment Tagged' && rating_content.message == 'Rating Updated' && log) {
+                        sessionStorage.setItem('save_message', "Payment Updated Successfully.");
+                        window.location.reload();
+                    }
+                    else {
+                        toastr.error("Payment was not updated.");
+                    }
+                }
+                else {
+                    toastr.error('Payment Reference ID already exist.');
+                    $('#payment_reference_id').val(null);
+                }
+            }
         });
-    }
-
-    async function updateData() {
-        const account_id = $('#account_id').val();
-        const invoice_id = $('#invoice_id').val();
-        const payment_reference_id = $('#payment_reference_id').val();
-        const amount_paid = $('#amount_paid').val();
-        const payment_date = $('#payment_date').val();
-
-        let ref_content = await getPaymentRecords();
-        let isExist = false;
-
-        for (var i = 0; i < ref_content.length; i++) {
-            if (payment_reference_id == ref_content[i].ref_id) {
-                isExist = true;
-            }
-        }
-
-        if (!isExist) {
-            let url = DIR_API + 'invoice/read_single.php?invoice_id=' + invoice_id;
-            let invoice_content;
-            try {
-                let res = await fetch(url);
-                invoice_content = await res.json();
-            } catch (error) {
-                console.log(error);
-            }
-        
-            url = DIR_API + 'invoice/update.php';
-            const updateDataResponse = await fetch(url, {
-                method : 'PUT',
-                headers : {
-                    'Content-Type' : 'application/json'
-                },
-                body : JSON.stringify({
-                    'account_id' : account_id,
-                    'payment_reference_id' : payment_reference_id,
-                    'amount_paid' : amount_paid,
-                    'payment_date' : payment_date
-                })
-            });
-
-            url = DIR_API + 'payment/create.php';
-            const addPaymentResponse = await fetch(url, {
-                method : 'POST',
-                headers : {
-                    'Content-Type' : 'application/json'
-                },
-                body : JSON.stringify({
-                    'amount_paid' : amount_paid,
-                    'payment_reference_id' : payment_reference_id,
-                    'payment_date' : payment_date
-                })
-            });
-
-            const content = await updateDataResponse.json();
-            const payment_content = await addPaymentResponse.json();
-
-            url = DIR_API + 'payment/update_tagged.php';
-            const updateTaggedResponse = await fetch(url, {
-                method : 'POST',
-                headers : {
-                    'Content-Type' : 'application/json'
-                },
-                body : JSON.stringify({
-                    'account_id' : account_id,
-                    'invoice_id' : invoice_id,
-                    'payment_id' : payment_content.payment_id
-                })
-            });
-
-            url = DIR_API + 'ratings/update.php';
-            const updateRatingsResponse = await fetch(url, {
-                method : 'POST',
-                headers : {
-                    'Content-Type' : 'application/json'
-                },
-                body : JSON.stringify({
-                    'account_id' : account_id,
-                    'invoice_status' : invoice_content.invoice_status_id
-                })
-            });
-
-            const ratings_content = await updateRatingsResponse.json();
-            const tagged_content = await updateTaggedResponse.json();
-        
-            if (content.message == 'Invoice Updated' && payment_content.message == 'Payment Record Created' && tagged_content.message == 'Payment Tagged' && ratings_content.message == 'Rating Updated') {
-                sessionStorage.setItem('save_message', "Payment Updated Successfully.");
-                window.location.reload();
-            }
-            else {
-                toastr.error("Payment was not updated.");
-            }
-        }
-        else {
-            toastr.error('Payment Reference ID already exist.');
-            $('#payment_reference_id').val(null);
-        }
     }
 }
 
@@ -369,7 +273,7 @@ async function setPaymentRecordsPage() {
 
     update_fn.onsubmit = (e) => {
         e.preventDefault();
-        updateData();
+        processData();
     };
 
     delete_fn.onsubmit = (e) => {
@@ -419,7 +323,7 @@ async function setPaymentRecordsPage() {
             var button = event.relatedTarget;
             var payment_id = button.getAttribute('data-bs-whatever');
             let data = await fetchData('payment/read_single.php?payment_id=' + payment_id);
-            let customer_data = await getAllCustomers();
+            let customer_data = await fetchData('customer/read.php');
             let cust = await getCustomerData(customer_data[1].account_id);
 
             function toggleInputData (setAttr, bool) {
@@ -467,7 +371,7 @@ async function setPaymentRecordsPage() {
     }
     
     // Update Payment Record
-    async function updateData() {
+    async function processData() {
         const account_id = $('#account_id').val();
         const payment_reference_id = $('#payment_reference_id').val();
         const amount_paid = $('#amount_paid').val();
@@ -477,7 +381,7 @@ async function setPaymentRecordsPage() {
         const invoice_content = await getLatestInvoice(account_id);
 
         let url = DIR_API + 'invoice/update.php';
-        const updateDataResponse = await fetch(url, {
+        const processDataResponse = await fetch(url, {
             method : 'PUT',
             headers : {
                 'Content-Type' : 'application/json'
@@ -515,7 +419,7 @@ async function setPaymentRecordsPage() {
             })
         });
 
-        const update_content = await updateDataResponse.json();
+        const update_content = await processDataResponse.json();
         const ratings_content = await updateRatingsResponse.json();
         const tagged_content = await updateTaggedResponse.json();
     
@@ -616,7 +520,7 @@ async function setProrateRecordsPage() {
 
     update_fn.onsubmit = (e) => {
         e.preventDefault();
-        updateData();
+        processData();
     };
 
     delete_fn.onsubmit = (e) => {
@@ -705,13 +609,13 @@ async function setProrateRecordsPage() {
     }
     
     // Update Prorate Record
-    async function updateData() {
+    async function processData() {
         const prorate_id = $('#prorate_id').val();
         const account_id = $('#account_id').val();
         const duration = $('#duration').val();
 
         let url = DIR_API + 'prorate/update.php';
-        const updateDataResponse = await fetch(url, {
+        const processDataResponse = await fetch(url, {
             method : 'PUT',
             headers : {
                 'Content-Type' : 'application/json'
@@ -723,7 +627,7 @@ async function setProrateRecordsPage() {
             })
         });
 
-        const update_content = await updateDataResponse.json();
+        const update_content = await processDataResponse.json();
     
         if (update_content.message == 'Prorate Updated') {
             sessionStorage.setItem('save_message', "Prorate Record Updated Successfully.");

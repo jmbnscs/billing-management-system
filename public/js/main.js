@@ -172,6 +172,18 @@ function displaySuccessMessage() {
     }
 }
 
+function setErrorMessage() {
+    sessionStorage.setItem('error_message', "You don't have access to this page.");
+}
+
+let create_fn, edit_fn, update_fn, delete_fn;
+function setButtons() {
+    create_fn = document.getElementById('create-new');
+    edit_fn = document.getElementById('edit-btn');
+    update_fn = document.getElementById('update-data');
+    delete_fn = document.getElementById('delete-data');
+}
+
 // Display Default Data
 async function setDefaults () {
     const admin_data = await getAdminData(admin_id);
