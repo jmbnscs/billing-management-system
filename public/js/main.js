@@ -109,6 +109,18 @@ async function updateData(page, data) {
     return await updateResponse.json();
 }
 
+async function deleteData(page, data) {
+    let url = DIR_API + page;
+    const deleteResponse = await fetch(url, {
+        method : 'DELETE',
+        headers : {
+            'Content-Type' : 'application/json'
+        },
+        body : data
+    });
+    return await deleteResponse.json();
+}
+
 // Functions to Fetch Single Data
 async function getAdminData(admin_id) {
     let url = DIR_API + 'admin/read_single.php?admin_id=' + admin_id;

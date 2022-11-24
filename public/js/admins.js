@@ -149,15 +149,15 @@ async function setViewModal () {
 
             let activity, log = true;
             if (admin.admin_status_id != $('#admin_status').val()) {
-                activity = 'Updated admin status [' + admin_id + ' - ' + admin.first_name + ' ' + admin.last_name + '].';
+                activity = 'Updated admin status [' + admin_id + ' - ' + admin.first_name + ' ' + admin.last_name + ']';
                 log = await logActivity(activity, 'View Admins');
             }
             if (admin.user_level_id != $('#role').val()) {
-                activity = 'Updated admin user level [' + admin_id + ' - ' + admin.first_name + ' ' + admin.last_name + '].';
+                activity = 'Updated admin user level [' + admin_id + ' - ' + admin.first_name + ' ' + admin.last_name + ']';
                 log = await logActivity(activity, 'View Admins');
             }
             if (admin.admin_email != $('#admin_email').val() || admin.mobile_number != $('#mobile_number').val() || admin.address != $('#address').val()) {
-                activity = 'Updated admin general information [' + admin_id + ' - ' + admin.first_name + ' ' + admin.last_name + '].';
+                activity = 'Updated admin general information [' + admin_id + ' - ' + admin.first_name + ' ' + admin.last_name + ']';
                 log = await logActivity(activity, 'View Admins');
             }
 
