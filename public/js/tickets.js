@@ -87,8 +87,8 @@ async function getTickets () {
     }
 
     for (var i = 0; i < ticket_data.length; i++) {
-        var tag = 'bg-danger';                                                  // If manager display all 
-        if(ticket_data[i].user_level == sessionStorage.getItem('user_id') || sessionStorage.getItem('user_id') == 2) {
+        var tag = 'bg-danger';              
+        if(ticket_data[i].user_level == user_id || user_id == 2) {
             t.row.add($(`
             <tr>
                 <th scope="row"><a href="#">${ticket_data[i].ticket_num}</a></th>

@@ -23,7 +23,7 @@
               
           <form id="create-new">
                   <div class="row mb-3">
-                      <label for="payment_ref" class="col-sm-2 col-form-label">Payment Ref. ID</label>
+                      <label for="payment_ref" class="col-sm-2 col-form-label">Reference ID</label>
                       <div class="col-sm-10">
                           <input type="text" class="form-control" id="payment_ref" required>
                       </div>
@@ -32,7 +32,7 @@
                   <div class="row mb-3">
                       <label for="amount_paid" class="col-sm-2 col-form-label">Amount Paid</label>
                       <div class="col-sm-10">
-                          <input type="text" class="form-control" id="amount_paid" required>
+                          <input type="number" class="form-control" id="amount_paid" required>
                       </div>
                   </div>
 
@@ -44,7 +44,7 @@
                 </div>
 
                 <div class ="text-center">
-                  <button type="submit" class="btn btn-primary">Create Record</button>
+                  <button type="submit" class="btn btn-success">Create Record</button>
                 </div>
 
 
