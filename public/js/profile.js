@@ -1,11 +1,5 @@
-const overview = document.getElementById('profile-overview').children;
-const edit = document.getElementById('edit-profile');
-const edit_profile = document.getElementById('edit-form');
-const change_password = document.getElementById('change-password');
-
-// On Boot Load
 $(document).ready( () => {
-    displayData();
+    setProfilePage();
 
     if (hashed == 0) {
         document.getElementById('password-change').click();
@@ -16,158 +10,105 @@ $(document).ready( () => {
 });
 
 // Display Data
-async function displayData() {
+async function setProfilePage() {
     const data = await getAdminData(admin_id);
     const user = await getUserLevel(data.user_level_id);
-    $(".profile-card h2").html(data.first_name + ' ' + data.last_name);
-    $(".profile-card h3").html(user.user_role);
-    document.getElementById('admin_password').value = data.admin_password;
-    
-    for (var i = 0; i < overview.length; i++) {
-        // console.log(overview[i]);
-        var row = overview[i].children;
-        // console.log(row);
-        for (var j = 0; j < row.length; j++) {
-            if (row[j].id == 'full_name') {
-                row[j].innerHTML = data.first_name + ' ' + data.last_name;
-            }
-            else if (row[j].id == 'email') {
-                row[j].innerHTML =  data.admin_email;
-            }
-            else if (row[j].id == 'mobile_number') {
-                row[j].innerHTML =  data.mobile_number;
-            }
-            else if (row[j].id == 'first_name') {
-                row[j].innerHTML =  data.first_name;
-            }
-            else if (row[j].id == 'middle_name') {
-                row[j].innerHTML =  data.middle_name;
-            }
-            else if (row[j].id == 'last_name') {
-                row[j].innerHTML =  data.last_name;
-            }
-            else if (row[j].id == 'birthdate') {
-                row[j].innerHTML =  data.birthdate;
-            }
-            else if (row[j].id == 'address') {
-                row[j].innerHTML =  data.address;
-            }
-            else if (row[j].id == 'employment_date') {
-                row[j].innerHTML =  data.employment_date;
-            }
+    $('#profile-name').text(data.first_name + ' ' + data.last_name);
+    $('#profile-role').text(user.user_role);
+
+    // Overview
+    $('#full_name').text(data.first_name + ' ' + data.last_name);
+    $('#email').text(data.admin_email);
+    $('#mobile_number').text(data.mobile_number);
+    $('#first_name').text(data.first_name);
+    $('#middle_name').text(data.middle_name);
+    $('#last_name').text(data.last_name);
+    $('#birthdate').text(data.birthdate);
+    $('#address').text(data.address);
+    $('#employment_date').text(data.employment_date);
+
+    // Edit Profile
+    $('#fullName').val(data.first_name + ' ' + data.last_name);
+    $('#edit-email').val(data.admin_email);
+    $('#edit-number').val(data.mobile_number);
+    $('#edit-bday').val(data.birthdate);
+    $('#edit-address').val(data.address);
+
+    const edit_profile = document.getElementById('edit-form');
+    edit_profile.onsubmit = (e) => {
+        e.preventDefault();
+        processUpdate();
+    };
+
+    async function processUpdate() {
+        const update_data = JSON.stringify({
+            'admin_id' : admin_id,
+            'admin_email' : $('#edit-email').val(),
+            'mobile_number' : $('#edit-number').val(),
+            'address' : $('#edit-address').val(),
+            'user_level_id' : user_id
+        });
+
+        const [content, log] = await Promise.all ([updateData('admin/update.php', update_data), logActivity('Edited Profile Details', 'Profile')]);
+        
+        if (content.message = 'Admin Updated' && log) {
+            toastr.success('Profile Updated Successfully.');
+            setTimeout( () => {
+                location.reload();
+            }, 2000);
         }
     }
-}
 
-async function displayEditData () {
-    const data = await getAdminData(admin_id);
-    document.getElementById('fullName').value = data.first_name + ' ' + data.last_name; 
-    document.getElementById('edit-email').value = data.admin_email;
-    document.getElementById('edit-number').value = data.mobile_number;
-    document.getElementById('edit-bday').value = data.birthdate;
-    document.getElementById('edit-address').value = data.address;
-    document.getElementById('edit-emp-date').value = data.employment_date;
-}
-
-// API Updates
-async function updateAdmin() {
-    // Fetch Data
-    const admin_email = $('#edit-email').val();
-    const mobile_number = $('#edit-number').val();
-    const address = $('#edit-address').val();
-    const user_level_id = sessionStorage.getItem("user_id");
-
-    let url = DIR_API + 'admin/update.php';
-
-    const rawResponse = await fetch(url, {
-        method : 'POST',
-        headers : {
-            'Content-Type' : 'application/json'
-        },
-        body : JSON.stringify({
-            'admin_id' : admin_id,
-            'admin_email' : admin_email,
-            'mobile_number' : mobile_number,
-            'address' : address,
-            'user_level_id' : user_level_id
-        })
-    });
-
-    const content = await rawResponse.json();
-    
-    if (content.message = 'Admin Updated' && logActivity('Edited Profile Details', 'Profile')) {
-        location.reload();
+    const change_password = document.getElementById('change-password');
+    change_password.onsubmit = (e) => {
+        e.preventDefault();
+        changePassword();
     }
-}
 
-async function changePassword() {
-    // Fetch Data
-    const admin_password = document.getElementById('admin_password').value;
-    const currentPassword = $('#currentPassword').val();
-    const newPassword = $('#newPassword').val();
-    const renewPassword = $('#renewPassword').val();
-    var url;
-
-    // Verify Password
-    url = DIR_API + 'admin/verify_password.php';
-    const verifyResponse = await fetch(url, {
-    method : 'POST',
-    headers : {
-        'Content-Type' : 'application/json'
-    },
-    body : JSON.stringify({
-        'admin_id' : admin_id,
-        'admin_password' : currentPassword
-    })
-    });
-
-    const verify = await verifyResponse.json();
-
-    if (verify.message == 'success') {
-        if (newPassword == renewPassword) {
-                url = DIR_API + 'admin/update_password.php';
-                const changeResponse = await fetch(url, {
-                method : 'POST',
-                headers : {
-                    'Content-Type' : 'application/json'
-                },
-                body : JSON.stringify({
+    async function changePassword() {
+        const currentPassword = $('#current-password').val();
+        const newPassword = $('#new-password').val();
+        const renewPassword = $('#re-new-password').val();
+    
+        // Verify Password
+        let url = DIR_API + 'admin/verify_password.php';
+        const verifyResponse = await fetch(url, {
+            method : 'POST',
+            headers : {
+                'Content-Type' : 'application/json'
+            },
+            body : JSON.stringify({
+                'admin_id' : admin_id,
+                'admin_password' : currentPassword
+            })
+        });
+    
+        const verify = await verifyResponse.json();
+    
+        if (verify.message == 'success') {
+            if (newPassword == renewPassword) {
+                const update_data = JSON.stringify({
                     'admin_id' : admin_id,
                     'admin_password' : newPassword
-                })
-            });
+                });
 
-            const content = await changeResponse.json();
-            
-            if (content.message == 'Password Updated' && logActivity('Changed Password', 'Profile')) {
-                sessionStorage.setItem('admin_password', newPassword);
-                sessionStorage.setItem('hashed', 1);
-                toastr.success(content.message);
-                // location.reload();
-                setTimeout(function(){
-                    logout();
-                    // window.location.reload();
-                 }, 2000);
+                const [content, log] = await Promise.all ([updateData('admin/update_password.php', update_data), logActivity('Changed Password', 'Profile')]);
+                
+                if (content.message == 'Password Updated' && logActivity('Changed Password', 'Profile')) {
+                    localStorage.setItem('hashed', 1);
+                    toastr.success(content.message);
+
+                    setTimeout(function(){
+                        logout();
+                     }, 2000);
+                }
+            }
+            else {
+                toastr.error('New Password do not match.');
             }
         }
         else {
-            toastr.error('New Password do not match.');
+            toastr.error('Current Password do not match.');
         }
     }
-    else {
-        toastr.error('Current Password do not match.');
-    }
-}
-
-// Form Submits -- onclick Triggers
-edit.onclick = () => {displayEditData()};
-
-edit_profile.onsubmit = (e) => {
-    e.preventDefault();
-    updateAdmin();
-};
-
-change_password.onsubmit = (e) => {
-    e.preventDefault();
-    changePassword();
 }

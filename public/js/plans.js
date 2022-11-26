@@ -15,7 +15,7 @@ $(document).ready(function () {
         setPlansTable();
         setViewModal();
 
-        if (user_id != 2) {
+        if (user_id != 2 && user_id != 3) {
             $('#edit-plan').addClass('hide');
             $('#save-plan-btn').addClass('hide');
         }

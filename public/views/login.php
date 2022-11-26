@@ -44,6 +44,7 @@
                                     type="password"
                                     name="admin_password"
                                     id="admin_password"
+                                    autocomplete="off"
                                     required>
                             </div>
 
