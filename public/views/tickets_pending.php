@@ -13,7 +13,7 @@
     </nav>
   </div><!-- End Page Title -->
 
-  <!-- Recent Sales -->
+  <!-- Pending Tickets Table -->
   <div class="col-12">
     <div class="card recent-sales overflow-auto">
       <br>
@@ -37,10 +37,10 @@
 
       </div>
     </div>
-  </div><!-- End Recent Sales -->
+  </div><!-- End Pending Tickets Table -->
 
-  <form id="pending-ticket">
-  <!-- Modal Dialog Scrollable -->
+<!-- Pending Ticket Modal -->
+<form id="pending-ticket">
   <div class="modal fade" id="pendingModal" tabindex="-1">
       <div class="modal-dialog modal-dialog-scrollable modal-lg">
         <div class="modal-content">
@@ -55,62 +55,45 @@
           <div class="modal-body">
 
                   <div class="row mb-3">
-                      <label for="ticket_num" class="col-sm-2 col-form-label">Ticket Number</label>
+                      <label for="account_id" class="col-sm-2 col-form-label">Account ID</label>
                       <div class="col-sm-10">
-                          <input type="text" class="form-control" id="ticket_num" required>
+                          <input type="text" class="form-control" id="account_id" readonly>
                       </div>
                   </div>
 
                   <div class="row mb-3">
                       <label for="concern_id" class="col-sm-2 col-form-label">Concern</label>
                       <div class="col-sm-10">
-                          <select id="concern_id" class="form-select" required>
-                          </select>
+                          <input type="text" class="form-control" id="concern_id" readonly>
                       </div>
                   </div>
 
                   <div class="row mb-3">    
                       <label for="concern_details" class="col-sm-2 col-form-label">Concern Details</label>
                       <div class="col-sm-10">
-                          <textarea class="form-control" id="concern_details" required></textarea>
+                          <textarea class="form-control" id="concern_details" readonly></textarea>
                       </div>
                   </div>
 
                   <div class="row mb-3">
                       <label for="date_filed" class="col-sm-2 col-form-label">Date Filed</label>
                       <div class="col-sm-10">
-                          <input type="date" class="form-control" id="date_filed" required>
+                          <input type="date" class="form-control" id="date_filed" readonly>
+                      </div>
+                  </div>
+
+                  <div class="row mb-3">
+                      <label for="admin_id" class="col-sm-2 col-form-label">Claimed By</label>
+                      <div class="col-sm-10">
+                          <input type="text" class="form-control" id="admin_id" readonly>
                       </div>
                   </div>
 
                   <div class="row mb-3">
                     <label for="ticket_status_id" class="col-sm-2 col-form-label">Ticket Status</label>
-                    <div class="col-sm-10">
-                        <select id="ticket_status_id" class="form-select" required>
-                        </select>
+                    <div class="col-sm-5">
+                        <input type="text" class="form-control text-center " id="ticket_status_id" value="" disabled>
                     </div>
-                  </div>
-
-                  <div class="row mb-3">
-                      <label for="account_id" class="col-sm-2 col-form-label">Account ID</label>
-                      <div class="col-sm-10">
-                          <input type="text" class="form-control" id="account_id" required>
-                      </div>
-                  </div>
-
-                  <div class="row mb-3">
-                      <label for="admin_id" class="col-sm-2 col-form-label">Assigned to</label>
-                      <div class="col-sm-10">
-                          <input type="text" class="form-control" id="admin_id" required>
-                      </div>
-                  </div>
-
-                  <div class="row mb-3">
-                      <label for="admin_role" class="col-sm-2 col-form-label">User Role</label>
-                      <div class="col-sm-10">
-                          <select id="admin_role" class="form-select" required>
-                          </select>
-                      </div>
                   </div>
 
           </div>
@@ -123,11 +106,11 @@
           </div>
         </div>
       </div>
-  </div><!-- End Modal Dialog Scrollable-->
+  </div>
 </form>
 
+<!-- Resolve Network Modal -->
 <form id="network-ticket-modal">
-  <!-- Modal Dialog Scrollable -->
   <div class="modal fade" id="networkModal" tabindex="-1">
       <div class="modal-dialog modal-dialog-scrollable modal-lg">
         <div class="modal-content">
@@ -140,39 +123,18 @@
 
           <!-- Modal Body -->
           <div class="modal-body">
-                  <div class="row mb-3">
-                      <label for="ticket_num_net" class="col-sm-2 col-form-label">Ticket Number</label>
-                      <div class="col-sm-10">
-                          <input type="text" class="form-control" id="ticket_num_net" required>
-                      </div>
-                  </div>
 
                   <div class="row mb-3">
                       <label for="account_id_net" class="col-sm-2 col-form-label">Account ID</label>
                       <div class="col-sm-10">
-                          <input type="text" class="form-control" id="account_id_net" required>
+                          <input type="text" class="form-control" id="account_id_net" readonly>
                       </div>
                   </div>
 
                   <div class="row mb-3">
                       <label for="customer_name_net" class="col-sm-2 col-form-label">Customer Name</label>
                       <div class="col-sm-10">
-                          <input type="text" class="form-control" id="customer_name_net" required>
-                      </div>
-                  </div>
-
-                  <div class="row mb-3">
-                      <label for="admin_username_net" class="col-sm-2 col-form-label">Assigned to</label>
-                      <div class="col-sm-10">
-                          <input type="text" class="form-control" id="admin_username_net" required>
-                      </div>
-                  </div>
-
-                  <div class="row mb-3">
-                      <label for="admin_role_net" class="col-sm-2 col-form-label">User Role</label>
-                      <div class="col-sm-10">
-                          <select id="admin_role_net" class="form-select" required>
-                          </select>
+                          <input type="text" class="form-control" id="customer_name_net" readonly>
                       </div>
                   </div>
 
@@ -194,15 +156,15 @@
           <!-- Modal Footer -->
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-success" id="resolve-subscription-btn">Resolve</button>
+            <button type="submit" class="btn btn-success" id="resolve-network-btn">Resolve</button>
           </div>
         </div>
       </div>
-  </div><!-- End Modal Dialog Scrollable-->
+  </div>
 </form>
 
+<!-- Resolve Subscription Modal -->
 <form id="subscription-ticket-modal">
-  <!-- Modal Dialog Scrollable -->
   <div class="modal fade" id="subscriptionModal" tabindex="-1">
       <div class="modal-dialog modal-dialog-scrollable modal-lg">
         <div class="modal-content">
@@ -215,54 +177,18 @@
 
           <!-- Modal Body -->
           <div class="modal-body">
-                  <div class="row mb-3">
-                      <label for="ticket_num_sub" class="col-sm-2 col-form-label">Ticket Number</label>
-                      <div class="col-sm-10">
-                          <input type="text" class="form-control" id="ticket_num_sub" required>
-                      </div>
-                  </div>
-
-                  <div class="row mb-3">
-                      <label for="concern_id_sub" class="col-sm-2 col-form-label">Concern</label>
-                      <div class="col-sm-10">
-                          <select id="concern_id_sub" class="form-select" required>
-                          </select>
-                      </div>
-                  </div>
-
-                  <div class="row mb-3">    
-                      <label for="concern_details_sub" class="col-sm-2 col-form-label">Concern Details</label>
-                      <div class="col-sm-10">
-                          <textarea class="form-control" id="concern_details_sub" required></textarea>
-                      </div>
-                  </div>
 
                   <div class="row mb-3">
                       <label for="account_id_sub" class="col-sm-2 col-form-label">Account ID</label>
                       <div class="col-sm-10">
-                          <input type="text" class="form-control" id="account_id_sub" required>
+                          <input type="text" class="form-control" id="account_id_sub" readonly>
                       </div>
                   </div>
 
                   <div class="row mb-3">
                       <label for="customer_name_sub" class="col-sm-2 col-form-label">Customer Name</label>
                       <div class="col-sm-10">
-                          <input type="text" class="form-control" id="customer_name_sub" required>
-                      </div>
-                  </div>
-
-                  <div class="row mb-3">
-                      <label for="admin_username_sub" class="col-sm-2 col-form-label">Assigned to</label>
-                      <div class="col-sm-10">
-                          <input type="text" class="form-control" id="admin_username_sub" required>
-                      </div>
-                  </div>
-
-                  <div class="row mb-3">
-                      <label for="admin_role_sub" class="col-sm-2 col-form-label">User Role</label>
-                      <div class="col-sm-10">
-                          <select id="admin_role_sub" class="form-select" required>
-                          </select>
+                          <input type="text" class="form-control" id="customer_name_sub" readonly>
                       </div>
                   </div>
 
@@ -289,9 +215,10 @@
           </div>
         </div>
       </div>
-  </div><!-- End Modal Dialog Scrollable-->
+  </div>
 </form>
 
+<!-- Resolve Disconnection Modal -->
 <form id="disconnect-ticket-modal">
   <!-- Modal Dialog Scrollable -->
   <div class="modal fade" id="disconnectModal" tabindex="-1">
@@ -306,54 +233,18 @@
 
           <!-- Modal Body -->
           <div class="modal-body">
-                  <div class="row mb-3">
-                      <label for="ticket_num_disc" class="col-sm-2 col-form-label">Ticket Number</label>
-                      <div class="col-sm-10">
-                          <input type="text" class="form-control" id="ticket_num_disc" required>
-                      </div>
-                  </div>
-
-                  <div class="row mb-3">
-                      <label for="concern_id_disc" class="col-sm-2 col-form-label">Concern</label>
-                      <div class="col-sm-10">
-                          <select id="concern_id_disc" class="form-select" required>
-                          </select>
-                      </div>
-                  </div>
-
-                  <div class="row mb-3">    
-                      <label for="concern_details_disc" class="col-sm-2 col-form-label">Concern Details</label>
-                      <div class="col-sm-10">
-                          <textarea class="form-control" id="concern_details_disc" required></textarea>
-                      </div>
-                  </div>
 
                   <div class="row mb-3">
                       <label for="account_id_disc" class="col-sm-2 col-form-label">Account ID</label>
                       <div class="col-sm-10">
-                          <input type="text" class="form-control" id="account_id_disc" required>
+                          <input type="text" class="form-control" id="account_id_disc" readonly>
                       </div>
                   </div>
 
                   <div class="row mb-3">
                       <label for="customer_name_disc" class="col-sm-2 col-form-label">Customer Name</label>
                       <div class="col-sm-10">
-                          <input type="text" class="form-control" id="customer_name_disc" required>
-                      </div>
-                  </div>
-
-                  <div class="row mb-3">
-                      <label for="admin_username_disc" class="col-sm-2 col-form-label">Assigned to</label>
-                      <div class="col-sm-10">
-                          <input type="text" class="form-control" id="admin_username_disc" required>
-                      </div>
-                  </div>
-
-                  <div class="row mb-3">
-                      <label for="admin_role_disc" class="col-sm-2 col-form-label">User Role</label>
-                      <div class="col-sm-10">
-                          <select id="admin_role_disc" class="form-select" required>
-                          </select>
+                          <input type="text" class="form-control" id="customer_name_disc" readonly>
                       </div>
                   </div>
 
@@ -376,15 +267,15 @@
   </div><!-- End Modal Dialog Scrollable-->
 </form>
 
+<!-- Invalid Ticket Modal -->
 <form id="invalid-ticket-modal">
-  <!-- Modal Dialog Scrollable -->
   <div class="modal fade" id="invalidModal" tabindex="-1">
       <div class="modal-dialog">
         <div class="modal-content">
 
           <!-- Modal Header -->
           <div class="modal-header">
-            <h5 class="modal-title"></h5>
+            <h5 class="modal-title">Invalidate Ticket?</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
 
@@ -393,25 +284,23 @@
                   <div class="row mb-3">
                       <label for="ticket_num_invalid" class="col-sm-2 col-form-label">Ticket Number</label>
                       <div class="col-sm-10">
-                          <input type="text" class="form-control" id="ticket_num_invalid" required>
+                          <input type="text" class="form-control" id="ticket_num_invalid" readonly>
                       </div>
                   </div>
 
                   <div class="row mb-3">
                       <label for="concern_id_invalid" class="col-sm-2 col-form-label">Concern</label>
                       <div class="col-sm-10">
-                          <select id="concern_id_invalid" class="form-select" required>
-                          </select>
+                          <input type="text" class="form-control" id="concern_id_invalid" readonly>
                       </div>
                   </div>
 
                   <div class="row mb-3">    
                       <label for="concern_details_invalid" class="col-sm-2 col-form-label">Concern Details</label>
                       <div class="col-sm-10">
-                          <textarea class="form-control" id="concern_details_invalid" required></textarea>
+                          <textarea class="form-control" id="concern_details_invalid" readonly></textarea>
                       </div>
                   </div>
-
           </div>
 
           <!-- Modal Footer -->
@@ -421,9 +310,8 @@
           </div>
         </div>
       </div>
-  </div><!-- End Modal Dialog Scrollable-->
+  </div>
 </form>
-
 
 </main><!-- End #main -->
 

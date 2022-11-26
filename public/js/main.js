@@ -166,7 +166,25 @@ function setTagElement(id, status) {
     document.getElementById(id).classList.remove('bg-danger');
     document.getElementById(id).classList.remove('bg-success');
 
-    (status == 1) ? document.getElementById(id).classList.add('bg-success') : document.getElementById(id).classList.add('bg-danger');
+    if (status == 1) {
+        document.getElementById(id).classList.add('bg-success');
+    }
+    else if (status == 2) {
+        document.getElementById(id).classList.add('bg-danger');
+    }
+    else {
+        document.getElementById(id).classList.add('bg-warning');
+    }
+}
+
+function getDateToday() {
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); 
+    var yyyy = today.getFullYear();
+    today = yyyy + '-' + mm + '-' + dd;
+
+    return today;
 }
 
 function formatDateString(date) {
