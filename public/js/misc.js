@@ -5,11 +5,9 @@ $(document).ready(function () {
         setErrorMessage();
         window.location.replace("../views/dashboard.php");
     }
-    // Connection
     else if (DIR_CUR == DIR_MAIN + 'views/connection.php') {
         setConnectionPage();
     }
-    // Concerns
     else if (DIR_CUR == DIR_MAIN + 'views/concerns.php') {
         setConcernsPage();
     }
@@ -59,11 +57,6 @@ async function setTable(api, table_name) {
             </tr>
         `)).draw(false);
     }
-}
-
-function setData (id, data, setAttr, bool) {
-    $(id).val(data);
-    $(id).attr(setAttr, bool);
 }
 
 // -------------------------------------------------------------------- Connection Page

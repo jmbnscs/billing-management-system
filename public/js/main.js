@@ -247,6 +247,10 @@ async function setDefaults () {
     if (id == 'nav-dashboard' || id == 'nav-profile') {
         document.getElementById(id).classList.remove('collapsed');
     }
+    if (nav_id == 'connection' || nav_id == 'concerns' || nav_id == 'user' || nav_id == 'inclusions' || nav_id == 'area') {
+        $('#drop-options').removeClass('collapsed');
+        $('#options-nav').addClass('show');
+    }
 }
 
 // Logout Session
