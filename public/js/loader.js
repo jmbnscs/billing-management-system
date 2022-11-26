@@ -1,6 +1,7 @@
 const DIR_API_LOAD = 'http://localhost/gstech_api/api/';
 const DIR_APP_LOAD = 'http://localhost/billing-management-system/app/includes/';
 const today_date = new Date();
+// const today_date = new Date('2022-11-30');
 
 if (localStorage.getItem('admin_id') == '11674') {
     autoload();
@@ -232,12 +233,79 @@ async function generateInvoice() {
         const log = await logAutomation('Created Invoice for Account # ' + account_id + ' - Invoice # ' + content.invoice_id, 'Automated System');
     
         if (content.message == 'Invoice Created' && log) {
-            // console.log(account_id + ' - success');
+            sendEmail(content.invoice_id);
             if (account_status == 3) {
                 updateInvoiceStatus(content.invoice_id, 4);
             }
         }
     }
+}
+
+function sendEmail (invoice_id) {
+    let url = 'http://localhost/billing-management-system/app/includes/encrypt_pdf.php';
+    fetch(url, {
+        method : 'POST',
+        headers : {
+            'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'
+        },
+        body : `invoice_id=${invoice_id}`,
+    });
+    // .then((response) => response.text())
+    // .then((res) => console.log(res));
+}
+
+function sendNotice (invoice_id, status_id) {
+    let url = 'http://localhost/billing-management-system/app/includes/send_notice.php';
+    fetch(url, {
+        method : 'POST',
+        headers : {
+            'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'
+        },
+        body : `invoice_id=${invoice_id}&status_id=${status_id}`,
+    });
+    // .then((response) => response.text())
+    // .then((res) => console.log(res));
+}
+
+async function checkEmailLog (invoice_id, status_id) {
+    let url = DIR_API_LOAD + 'logs/isSent.php';
+        const checkEmailResponse = await fetch(url, {
+            method : 'POST',
+            headers : {
+                'Content-Type' : 'application/json'
+            },
+            body : JSON.stringify({
+                'invoice_id' : invoice_id,
+                'status_id' : status_id,
+                'today_date' : generateDateString()
+            })
+        });
+    
+        const content = await checkEmailResponse.json();
+
+        return content.message;
+}
+
+async function createEmailLog (account_id, invoice_id, status_id, email_sent) {
+    let url = DIR_API_LOAD + 'logs/log_email.php';
+        const createEmailLogResponse = await fetch(url, {
+            method : 'POST',
+            headers : {
+                'Content-Type' : 'application/json'
+            },
+            body : JSON.stringify({
+                'account_id' : account_id,
+                'invoice_id' : invoice_id,
+                'email_sent' : email_sent,
+                'status_id' : status_id
+            })
+        });
+    
+        const content = await createEmailLogResponse.json();
+
+        if (content.message) {
+            console.log('Email Log Recorded');
+        }
 }
 
 async function updateInvoiceStatus(invoice_id, status_id) {
@@ -271,6 +339,19 @@ async function updateUnpaidInvoice() {
             updateInvoiceStatus(unpaid_content[i].invoice_id, 3);
             // console.log('Overdue: ' + unpaid_content[i].invoice_status_id);
         }
+
+        if (day_difference == -6) {
+            if (!await checkEmailLog(unpaid_content[i].invoice_id, 1)) {
+                sendNotice(unpaid_content[i].invoice_id, 1);
+                createEmailLog(unpaid_content[i].account_id, unpaid_content[i].invoice_id, 1, 'Payment Reminder for Account # ' + unpaid_content[i].account_id + ' - 5 days before due');
+            }
+        }
+        else if (day_difference == -1) {
+            if (!await checkEmailLog(unpaid_content[i].invoice_id, 2)) {
+                sendNotice(unpaid_content[i].invoice_id, 2);
+                createEmailLog(unpaid_content[i].account_id, unpaid_content[i].invoice_id, 2, 'Payment Reminder for Account # ' + unpaid_content[i].account_id + ' - Due Today');
+            }
+        }
     }
 }
 
@@ -284,6 +365,12 @@ async function updateOverdueInvoice() {
             updateInvoiceStatus(unpaid_content[i].invoice_id, 4);
             // console.log('Temp Disconnection: ' + unpaid_content[i].invoice_status_id);
         } 
+        if (day_difference == 5) {
+            if (!await checkEmailLog(unpaid_content[i].invoice_id, 3)) {
+                sendNotice(unpaid_content[i].invoice_id, 3);
+                createEmailLog(unpaid_content[i].account_id, unpaid_content[i].invoice_id, 3, 'Temporary Disconnection Notice for Account # ' + unpaid_content[i].account_id + ' - Within 24-48 Hours');
+            }
+        }
     }
 }
 
@@ -302,6 +389,10 @@ async function updateDisconnectionInvoice() {
                 if(ticket_account.message == 'No Ticket Records Found') {
                     // console.log("No Tickets - Disconnection: " + unpaid_content[i].account_id + " " + unpaid_content[i].invoice_id);
                     createTicket(unpaid_content[i].account_id);
+                    if (!await checkEmailLog(unpaid_content[i].invoice_id, 4)) {
+                        sendNotice(unpaid_content[i].invoice_id, 4);
+                        createEmailLog(unpaid_content[i].account_id, unpaid_content[i].invoice_id, 4, 'Disconnection Notice for Account # ' + unpaid_content[i].account_id + ' - Disconnected Account');
+                    }
                 }
                 else {
                     var ticket_resolved_dates = new Array();
@@ -321,6 +412,10 @@ async function updateDisconnectionInvoice() {
                         if(timeDiffInMs > thirtyDaysInMs) {
                             //console.log("W/ Existing Tickets - Disconnection: " + unpaid_content[i].account_id + " " + unpaid_content[i].invoice_id);
                             createTicket(unpaid_content[i].account_id);
+                            if (!await checkEmailLog(unpaid_content[i].invoice_id, 4)) {
+                                sendNotice(unpaid_content[i].invoice_id, 4);
+                                createEmailLog(unpaid_content[i].account_id, unpaid_content[i].invoice_id, 4, 'Disconnection Notice for Account # ' + unpaid_content[i].account_id + ' - Disconnected Account');
+                            }
                         }
                     }
                 }
