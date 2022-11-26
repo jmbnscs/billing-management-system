@@ -23,8 +23,6 @@ async function getAccountsData() {
     }
 }
 
-
-
 async function getInvoicePerAcct(account_id) {
     let url = DIR_API_LOAD + 'invoice/read_single_account.php?account_id=' + account_id;
     try {
