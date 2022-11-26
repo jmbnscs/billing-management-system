@@ -153,7 +153,7 @@
             <div class="row mb-3">
               <label for="inclusion_name_md_d" class="col-md-4 col-lg-3 col-form-label">Inclusion Name</label>
               <div class="col-md-8 col-lg-9">
-                <input name="inclusion_name_md_d" type="text" class="form-control" id="inclusion_name_md_d" value="" required>
+                <input name="inclusion_name_md_d" type="text" class="form-control" id="inclusion_name_md_d" value="" readonly>
               </div>
             </div>
         </div>

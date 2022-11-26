@@ -153,7 +153,7 @@
             <div class="row mb-3">
               <label for="area_name_md_d" class="col-md-4 col-lg-3 col-form-label">Area Name</label>
               <div class="col-md-8 col-lg-9">
-                <input name="area_name_md_d" type="text" class="form-control" id="area_name_md_d" value="" required>
+                <input name="area_name_md_d" type="text" class="form-control" id="area_name_md_d" value="" readonly>
               </div>
             </div>
         </div>
