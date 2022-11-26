@@ -1,13 +1,8 @@
-// On Boot Load
 $(document).ready(function () {
     isDefault();
 
-    // User Level
-    if(sessionStorage.getItem("user_id") == 3 || 
-        sessionStorage.getItem("user_id") == 4 || 
-        sessionStorage.getItem("user_id") == 5 || 
-        sessionStorage.getItem("user_id") == 6) {
-            setErrorMessage();
+    if(user_id == 3 || user_id == 4 || user_id == 5 || user_id == 6) {
+        setErrorMessage();
         window.location.replace("../views/dashboard.php");
     }
     // Connection
@@ -28,23 +23,6 @@ $(document).ready(function () {
         setInclusionPage();
     }
 });
-
-// Global Functions
-function displaySuccessMessage() {
-    const msg = sessionStorage.getItem('save_message');
-    if (msg !== null) {
-        toastr.success(sessionStorage.getItem("save_message"));
-        sessionStorage.removeItem("save_message");
-    }
-}
-
-let create_fn, edit_fn, update_fn, delete_fn;
-function setButtons() {
-    create_fn = document.getElementById('create-new');
-    edit_fn = document.getElementById('edit-btn');
-    update_fn = document.getElementById('update-data');
-    delete_fn = document.getElementById('delete-data');
-}
 
 async function getData(api) {
     let url = DIR_API + api + '/read.php';
@@ -88,176 +66,139 @@ function setData (id, data, setAttr, bool) {
     $(id).attr(setAttr, bool);
 }
 
-// -------------------------------------------------------------------- Connection JS
+// -------------------------------------------------------------------- Connection Page
 function setConnectionPage() {
     displaySuccessMessage();
     setButtons();
+    setTable('connection', '#connections-table');
+    setUpdateModal();
+    setDeleteModal();
 
     $("#editModal").on("hidden.bs.modal", function () {
         $('#save-btn').attr('disabled', true);
         $('#edit-btn').attr('disabled', false);
     });
 
-    setTable('connection', '#connections-table');
-    setUpdateModal();
-    setDeleteModal();
-
-    update_fn.onsubmit = (e) => {
-        e.preventDefault();
-        updateData();
-    };
-
-    delete_fn.onsubmit = (e) => {
-        e.preventDefault();
-        deleteData();
-    };
-
     create_fn.onsubmit = (e) => {
         e.preventDefault();
-        createData();
+        processCreate();
     };
 
-    // Set Connection Modal
     async function setUpdateModal () {
         var updateModal = document.getElementById('editModal')
         updateModal.addEventListener('show.bs.modal', async function (event) {
     
             var button = event.relatedTarget;
             var connection_id = button.getAttribute('data-bs-whatever');
-            let conn_data = await getData('connection');
-            let conn_id;
-
-            function toggleInputData (setAttr, bool) {
-                setData('#connection_id', conn_data[conn_id].connection_id, setAttr, bool);
-                setData('#connection_name_md', conn_data[conn_id].connection_name, setAttr, bool);
-            }
-
-            for (var i = 0; i < conn_data.length; i++) {
-                if (connection_id == conn_data[i].connection_id) {
-                    conn_id = i;
-                }
-            }
+            let connection = await fetchData('connection/read_single.php?connection_id=' + connection_id);
 
             var modalTitle = updateModal.querySelector('.modal-title');
-            modalTitle.textContent = connection_id + ' - ' + conn_data[conn_id].connection_name;
-            
+            modalTitle.textContent = connection_id + ' - ' + connection.connection_name;
+
+            $('#connection_id').val(connection_id);
+            $('#connection_name_md').val(connection.connection_name);
+
             toggleInputData('disabled', true);
-    
-            // Form Submits -- onclick Triggers
+
+            function toggleInputData (setAttr, bool) {
+                $('#connection_id').attr(setAttr, bool);
+                $('#connection_name_md').attr(setAttr, bool);
+            }
+
             edit_fn.onclick = (e) => {
                 e.preventDefault();
                 $('#save-btn').attr('disabled', false);
                 $('#edit-btn').attr('disabled', true);
                 toggleInputData('disabled', false);
             };
+
+            update_fn.onsubmit = (e) => {
+                e.preventDefault();
+                processUpdate();
+            };
+
+            async function processUpdate() {
+                const update_data = JSON.stringify({
+                    'connection_id' : connection_id,
+                    'connection_name' : $('#connection_name_md').val()
+                });
+
+                const [content, log] = await Promise.all ([updateData('connection/update.php', update_data), logActivity('Updated Connection # ' + connection_id, 'Connection - Overview')]);
+            
+                if (content.message == 'Connection Updated' && log) {
+                    sessionStorage.setItem('save_message', "Connection Updated Successfully.");
+                    window.location.reload();
+                }
+                else {
+                    toastr.error("Connection was not updated.");
+                }
+            }
         });
     }
     
-    async function updateData() {
-        const connection_id = $('#connection_id').val();
-        const connection_name = $('#connection_name_md').val();
-    
-        let url = DIR_API + 'connection/update.php';
-        const updateDataResponse = await fetch(url, {
-            method : 'PUT',
-            headers : {
-                'Content-Type' : 'application/json'
-            },
-            body : JSON.stringify({
-                'connection_id' : connection_id,
-                'connection_name' : connection_name
-            })
-        });
-    
-        const conn_content = await updateDataResponse.json();
-    
-        if (conn_content.message == 'Connection Updated') {
-            sessionStorage.setItem('save_message', "Connection Updated Successfully.");
-            window.location.reload();
-        }
-        else {
-            toastr.error("Connection was not updated.");
-        }
-    }
-    
-    // Set Delete Connection Modal
     async function setDeleteModal () {
         var deleteModal = document.getElementById('deleteModal')
         deleteModal.addEventListener('show.bs.modal', async function (event) {
-        
+
             var button = event.relatedTarget;
             var connection_id = button.getAttribute('data-bs-whatever');
-            let conn_data = await getData('connection');
-            let conn_id;
+            let connection = await fetchData('connection/read_single.php?connection_id=' + connection_id);
+
+            var modalTitle = deleteModal.querySelector('.modal-title');
+            modalTitle.textContent = "Delete " + connection.connection_name + "?";
+
+            $('#connection_id_d').val(connection_id);
+            $('#connection_name_md_d').val(connection.connection_name);
+
+            toggleInputData('disabled', true);
 
             function toggleInputData (setAttr, bool) {
-                setData('#connection_id_d', conn_data[conn_id].connection_id, setAttr, bool);
-                setData('#connection_name_md_d', conn_data[conn_id].connection_name, setAttr, bool);
+                $('#connection_id_d').attr(setAttr, bool);
+                $('#connection_name_md_d').attr(setAttr, bool);
             }
 
-            for (var i = 0; i < conn_data.length; i++) {
-                if (connection_id == conn_data[i].connection_id) {
-                    conn_id = i;
+            delete_fn.onsubmit = (e) => {
+                e.preventDefault();
+                processDelete();
+            };
+
+            async function processDelete() {
+                const delete_data = JSON.stringify({
+                    'connection_id' : connection_id
+                });
+
+                const [content, log] = await Promise.all ([deleteData('connection/delete.php', delete_data), logActivity('Deleted Connection # ' + connection_id, 'Connection - Overview')]);
+                
+                if (content.message == 'Connection Deleted' && log) {
+                    sessionStorage.setItem('save_message', "Connection Deleted Successfully.");
+                    window.location.reload();
+                }
+                else {
+                    toastr.error("Connection was not deleted.");
                 }
             }
-    
-            var modalTitle = deleteModal.querySelector('.modal-title');
-            modalTitle.textContent = "Delete " + conn_data[conn_id].connection_name + "?";
-    
-            toggleInputData('disabled', true);
         });
     }
     
-    async function deleteData() {
-        const connection_id = $('#connection_id_d').val();
-    
-        let url = DIR_API + 'connection/delete.php';
-        const deleteDataResponse = await fetch(url, {
-            method : 'DELETE',
-            headers : {
-                'Content-Type' : 'application/json'
-            },
-            body : JSON.stringify({
-                'connection_id' : connection_id
-            })
+    async function processCreate() {
+        const create_data = JSON.stringify({
+            'connection_name' : $('#connection_name').val()
         });
+
+        const [content, log] = await Promise.all ([createData('connection/create.php', create_data), logActivity('Created new Connection - ' + $('#connection_name').val(), 'Connection - Add Connection')]);
     
-        const content = await deleteDataResponse.json();
-        
-        if (content.message == 'Connection Deleted') {
-            sessionStorage.setItem('save_message', "Connection Deleted Successfully.");
-            window.location.reload();
-        }
-        else {
-            toastr.error("Connection was not deleted.");
-        }
-    }
-    
-    async function createData() {
-        const connection_name = $('#connection_name').val();
-    
-        let url = DIR_API + 'connection/create.php';
-        const createDataResponse = await fetch(url, {
-            method : 'POST',
-            headers : {
-                'Content-Type' : 'application/json'
-            },
-            body : JSON.stringify({
-                'connection_name' : connection_name
-            })
-        });
-    
-        const content = await createDataResponse.json();
-        
-        if (content.message = 'Connection Created') {
+        if (content.message = 'Connection Created' && log) {
             toastr.success('Connection Created Successfully.');
             setTimeout(function(){
                 window.location.replace('../views/connection.php');
              }, 2000);
         }
+        else {
+            toastr.error("Connection was not created.");
+        }
     }
 }
-// End of Connection JS
+// End of Connection Page
 
 // -------------------------------------------------------------------- Concerns JS
 function setConcernsPage() {
@@ -275,17 +216,17 @@ function setConcernsPage() {
 
     update_fn.onsubmit = (e) => {
         e.preventDefault();
-        updateData();
+        processUpdate();
     };
 
     delete_fn.onsubmit = (e) => {
         e.preventDefault();
-        deleteData();
+        processDelete();
     };
 
     create_fn.onsubmit = (e) => {
         e.preventDefault();
-        createData();
+        processCreate();
     };
     
     // Set Concerns Table
@@ -356,7 +297,7 @@ function setConcernsPage() {
     $('#customer_access_md').on('change', function() {
         customer_switch_md = $(this).is(':checked');
     });
-    async function updateData() {
+    async function processUpdate() {
         const concern_id = $('#concern_id').val();
         const concern_category = $('#concern_category_md').val();
 
@@ -365,7 +306,7 @@ function setConcernsPage() {
         (customer_switch_md) ? customer_access = 1 : customer_access = 0;
     
         let url = DIR_API + 'concerns/update.php';
-        const updateDataResponse = await fetch(url, {
+        const processUpdateResponse = await fetch(url, {
             method : 'PUT',
             headers : {
                 'Content-Type' : 'application/json'
@@ -377,7 +318,7 @@ function setConcernsPage() {
             })
         });
     
-        const content = await updateDataResponse.json();
+        const content = await processUpdateResponse.json();
     
         if (content.message == 'Concern Updated') {
             sessionStorage.setItem('save_message', "Concern Category Updated Successfully.");
@@ -423,11 +364,11 @@ function setConcernsPage() {
     }
     
     // Delete Concern
-    async function deleteData() {
+    async function processDelete() {
         const concern_id = $('#concern_id_d').val();
     
         let url = DIR_API + 'concerns/delete.php';
-        const deleteDataResponse = await fetch(url, {
+        const processDeleteResponse = await fetch(url, {
             method : 'DELETE',
             headers : {
                 'Content-Type' : 'application/json'
@@ -437,7 +378,7 @@ function setConcernsPage() {
             })
         });
     
-        const content = await deleteDataResponse.json();
+        const content = await processDeleteResponse.json();
         
         if (content.message == 'Concern Deleted') {
             sessionStorage.setItem('save_message', "Concern Category Deleted Successfully.");
@@ -454,7 +395,7 @@ function setConcernsPage() {
         // console.log($(this).is(':checked'));
         customer_switch = $(this).is(':checked');
     });
-    async function createData() {
+    async function processCreate() {
         const concern_category = $('#concern_category').val();
 
         // Get customer access value
@@ -462,7 +403,7 @@ function setConcernsPage() {
         (customer_switch) ? customer_access = 1 : customer_access = 0;
 
         let url = DIR_API + 'concerns/create.php';
-        const createDataResponse = await fetch(url, {
+        const processCreateResponse = await fetch(url, {
             method : 'POST',
             headers : {
                 'Content-Type' : 'application/json'
@@ -473,7 +414,7 @@ function setConcernsPage() {
             })
         });
     
-        const content = await createDataResponse.json();
+        const content = await processCreateResponse.json();
         
         if (content.message = 'Concern Created') {
             toastr.success('Concern Category Created Successfully.');
@@ -504,17 +445,17 @@ function setUserLevelPage() {
 
     update_fn.onsubmit = (e) => {
         e.preventDefault();
-        updateData();
+        processUpdate();
     };
 
     delete_fn.onsubmit = (e) => {
         e.preventDefault();
-        deleteData();
+        processDelete();
     };
 
     create_fn.onsubmit = (e) => {
         e.preventDefault();
-        createData();
+        processCreate();
     };
     
     // Set User Level Modal
@@ -554,7 +495,7 @@ function setUserLevelPage() {
     }
     
     // Update User Level
-    async function updateData() {
+    async function processUpdate() {
         const user_id = $('#user_id').val();
         const user_role = $('#user_role_md').val();
     
@@ -610,11 +551,11 @@ function setUserLevelPage() {
     }
     
     // Delete User Level
-    async function deleteData() {
+    async function processDelete() {
         const user_id = $('#user_id_d').val();
     
         let url = DIR_API + 'user_level/delete.php';
-        const deleteDataResponse = await fetch(url, {
+        const processDeleteResponse = await fetch(url, {
             method : 'DELETE',
             headers : {
                 'Content-Type' : 'application/json'
@@ -624,7 +565,7 @@ function setUserLevelPage() {
             })
         });
     
-        const content = await deleteDataResponse.json();
+        const content = await processDeleteResponse.json();
         
         if (content.message == 'User Level Deleted') {
             sessionStorage.setItem('save_message', "User Role Deleted Successfully.");
@@ -636,11 +577,11 @@ function setUserLevelPage() {
     }
     
     // Add User Level
-    async function createData() {
+    async function processCreate() {
         const user_role = $('#user_role').val();
     
         let url = DIR_API + 'user_level/create.php';
-        const createDataResponse = await fetch(url, {
+        const processCreateResponse = await fetch(url, {
             method : 'POST',
             headers : {
                 'Content-Type' : 'application/json'
@@ -650,7 +591,7 @@ function setUserLevelPage() {
             })
         });
     
-        const content = await createDataResponse.json();
+        const content = await processCreateResponse.json();
         
         if (content.message = 'User Level Created') {
             toastr.success('User Role Created Successfully.');
@@ -678,17 +619,17 @@ function setAreaPage() {
 
     update_fn.onsubmit = (e) => {
         e.preventDefault();
-        updateData();
+        processUpdate();
     };
 
     delete_fn.onsubmit = (e) => {
         e.preventDefault();
-        deleteData();
+        processDelete();
     };
 
     create_fn.onsubmit = (e) => {
         e.preventDefault();
-        createData();
+        processCreate();
     };
     
     // Set Area Modal
@@ -728,12 +669,12 @@ function setAreaPage() {
     }
     
     // Update Area
-    async function updateData() {
+    async function processUpdate() {
         const area_id = $('#area_id').val();
         const area_name = $('#area_name_md').val();
     
         let url = DIR_API + 'area/update.php';
-        const updateDataResponse = await fetch(url, {
+        const processUpdateResponse = await fetch(url, {
             method : 'PUT',
             headers : {
                 'Content-Type' : 'application/json'
@@ -744,7 +685,7 @@ function setAreaPage() {
             })
         });
     
-        const content = await updateDataResponse.json();
+        const content = await processUpdateResponse.json();
     
         if (content.message == 'Area Updated') {
             sessionStorage.setItem('save_message', "Area Updated Successfully.");
@@ -784,11 +725,11 @@ function setAreaPage() {
     }
     
     // Delete Area
-    async function deleteData() {
+    async function processDelete() {
         const area_id = $('#area_id_d').val();
     
         let url = DIR_API + 'area/delete.php';
-        const deleteDataResponse = await fetch(url, {
+        const processDeleteResponse = await fetch(url, {
             method : 'DELETE',
             headers : {
                 'Content-Type' : 'application/json'
@@ -798,7 +739,7 @@ function setAreaPage() {
             })
         });
     
-        const content = await deleteDataResponse.json();
+        const content = await processDeleteResponse.json();
         
         if (content.message == 'Area Deleted') {
             sessionStorage.setItem('save_message', "Area Deleted Successfully.");
@@ -810,11 +751,11 @@ function setAreaPage() {
     }
     
     // Add Area
-    async function createData() {
+    async function processCreate() {
         const area_name = $('#area_name').val();
     
         let url = DIR_API + 'area/create.php';
-        const createDataResponse = await fetch(url, {
+        const processCreateResponse = await fetch(url, {
             method : 'POST',
             headers : {
                 'Content-Type' : 'application/json'
@@ -824,7 +765,7 @@ function setAreaPage() {
             })
         });
     
-        const content = await createDataResponse.json();
+        const content = await processCreateResponse.json();
         
         if (content.message = 'Area Created') {
             toastr.success('Area Created Successfully.');
@@ -852,17 +793,17 @@ function setInclusionPage() {
 
     update_fn.onsubmit = (e) => {
         e.preventDefault();
-        updateData();
+        processUpdate();
     };
 
     delete_fn.onsubmit = (e) => {
         e.preventDefault();
-        deleteData();
+        processDelete();
     };
 
     create_fn.onsubmit = (e) => {
         e.preventDefault();
-        createData();
+        processCreate();
     };
     
     // Set Inclusion Table
@@ -920,12 +861,12 @@ function setInclusionPage() {
         });
     }
     
-    async function updateData() {
+    async function processUpdate() {
         const inclusion_id = $('#inclusion_id').val();
         const inclusion_name = $('#inclusion_name_md').val();
     
         let url = DIR_API + 'inclusion/update.php';
-        const updateDataResponse = await fetch(url, {
+        const processUpdateResponse = await fetch(url, {
             method : 'PUT',
             headers : {
                 'Content-Type' : 'application/json'
@@ -936,7 +877,7 @@ function setInclusionPage() {
             })
         });
     
-        const content = await updateDataResponse.json();
+        const content = await processUpdateResponse.json();
     
         if (content.message == 'Inclusion Updated') {
             sessionStorage.setItem('save_message', "Inclusion Updated Successfully.");
@@ -976,11 +917,11 @@ function setInclusionPage() {
     }
     
     // Delete Inclusion
-    async function deleteData() {
+    async function processDelete() {
         const inclusion_id = $('#inclusion_id_d').val();
     
         let url = DIR_API + 'inclusion/delete.php';
-        const deleteDataResponse = await fetch(url, {
+        const processDeleteResponse = await fetch(url, {
             method : 'DELETE',
             headers : {
                 'Content-Type' : 'application/json'
@@ -990,7 +931,7 @@ function setInclusionPage() {
             })
         });
     
-        const content = await deleteDataResponse.json();
+        const content = await processDeleteResponse.json();
         
         if (content.message == 'Inclusion Deleted') {
             sessionStorage.setItem('save_message', "Inclusion Deleted Successfully.");
@@ -1001,11 +942,11 @@ function setInclusionPage() {
         }
     }
     
-    async function createData() {
+    async function processCreate() {
         const inclusion_name = $('#inclusion_name').val();
 
         let url = DIR_API + 'inclusion/create.php';
-        const createDataResponse = await fetch(url, {
+        const processCreateResponse = await fetch(url, {
             method : 'POST',
             headers : {
                 'Content-Type' : 'application/json'
@@ -1015,7 +956,7 @@ function setInclusionPage() {
             })
         });
     
-        const content = await createDataResponse.json();
+        const content = await processCreateResponse.json();
         
         if (content.message = 'Inclusion Created') {
             toastr.success('Inclusion Created Successfully.');
