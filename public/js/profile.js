@@ -94,7 +94,7 @@ async function setProfilePage() {
 
                 const [content, log] = await Promise.all ([updateData('admin/update_password.php', update_data), logActivity('Changed Password', 'Profile')]);
                 
-                if (content.message == 'Password Updated' && logActivity('Changed Password', 'Profile')) {
+                if (content.message == 'Password Updated' && log) {
                     localStorage.setItem('hashed', 1);
                     toastr.success(content.message);
 

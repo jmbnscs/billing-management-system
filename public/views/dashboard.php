@@ -281,55 +281,43 @@
         <div class="card-body">
           <h5 class="card-title">Recent Activity <span>| Today</span></h5>
 
-          <div class="activity">
+          <div class="activity" id="activity-panel">
 
-            <div class="activity-item d-flex">
-              <div class="activite-label">32 min</div>
+            <!-- <div class="activity-item d-flex">
+              <div class="activite-label" id="activity-6-time"></div>
               <i class='bi bi-circle-fill activity-badge text-success align-self-start'></i>
-              <div class="activity-content">
-                Quia quae rerum <a href="#" class="fw-bold text-dark">explicabo officiis</a> beatae
-              </div>
-            </div><!-- End activity item-->
+              <div class="activity-content" id="activity-6-content"></div>
+            </div>
 
             <div class="activity-item d-flex">
-              <div class="activite-label">56 min</div>
+              <div class="activite-label" id="activity-5-time"></div>
               <i class='bi bi-circle-fill activity-badge text-danger align-self-start'></i>
-              <div class="activity-content">
-                Voluptatem blanditiis blanditiis eveniet
-              </div>
-            </div><!-- End activity item-->
+              <div class="activity-content" id="activity-5-content"></div>
+            </div>
 
             <div class="activity-item d-flex">
-              <div class="activite-label">2 hrs</div>
+              <div class="activite-label" id="activity-4-time"></div>
               <i class='bi bi-circle-fill activity-badge text-primary align-self-start'></i>
-              <div class="activity-content">
-                Voluptates corrupti molestias voluptatem
-              </div>
-            </div><!-- End activity item-->
+              <div class="activity-content" id="activity-4-content"></div>
+            </div>
 
             <div class="activity-item d-flex">
-              <div class="activite-label">1 day</div>
+              <div class="activite-label" id="activity-3-time"></div>
               <i class='bi bi-circle-fill activity-badge text-info align-self-start'></i>
-              <div class="activity-content">
-                Tempore autem saepe <a href="#" class="fw-bold text-dark">occaecati voluptatem</a> tempore
-              </div>
-            </div><!-- End activity item-->
+              <div class="activity-content" id="activity-3-content"></div>
+            </div>
 
             <div class="activity-item d-flex">
-              <div class="activite-label">2 days</div>
+              <div class="activite-label" id="activity-2-time"></div>
               <i class='bi bi-circle-fill activity-badge text-warning align-self-start'></i>
-              <div class="activity-content">
-                Est sit eum reiciendis exercitationem
-              </div>
-            </div><!-- End activity item-->
+              <div class="activity-content" id="activity-2-content"></div>
+            </div>
 
             <div class="activity-item d-flex">
-              <div class="activite-label">4 weeks</div>
+              <div class="activite-label" id="activity-1-time"></div>
               <i class='bi bi-circle-fill activity-badge text-muted align-self-start'></i>
-              <div class="activity-content">
-                Dicta dolorem harum nulla eius. Ut quidem quidem sit quas
-              </div>
-            </div><!-- End activity item-->
+              <div class="activity-content" id="activity-1-content"></div>
+            </div> -->
 
           </div>
 

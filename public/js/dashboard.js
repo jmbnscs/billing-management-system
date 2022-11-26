@@ -1,4 +1,3 @@
-// On Boot Load
 $(document).ready(function () {
     isDefault();
 
@@ -14,6 +13,7 @@ $(document).ready(function () {
     setCustomerPreview();
     setCollection();
     setTicketOverview();
+    setRecentActivity();
 });
 
 const currentMonth = new Date().getMonth() + 1;
@@ -37,6 +37,69 @@ function setEventListener() {
     uncharged_this_year.addEventListener('click', (e) => {
         filterProrateCard('year');
     }, false);
+}
+
+// Recent Activity
+async function setRecentActivity() {
+    const content = await fetchData('logs/read_admin_log.php?admin_id=' + admin_id);
+    
+    if (content.length > 0) {
+        for (var i = content.length; i > 0; i--) {
+            const activity_panel = document.getElementById('activity-panel');
+    
+            // Main Div
+            const activity_div = document.createElement('div');
+            activity_div.classList.add('activity-item', 'd-flex');
+    
+            const activity_label = document.createElement('div');
+            activity_label.classList.add('activite-label');
+    
+            const act_icon = document.createElement('i');
+            if (i % 2 == 0) {
+                act_icon.classList.add('bi', 'bi-circle-fill', 'activity-badge', 'text-success', 'align-self-start');
+            }
+            else {
+                act_icon.classList.add('bi', 'bi-circle-fill', 'activity-badge', 'text-danger', 'align-self-start');
+            }
+    
+            const activity_content = document.createElement('div');
+            activity_content.classList.add('activity-content');
+    
+            const seconds = (new Date() - new Date(content[i - 1].date_accessed)) / 1000;
+        
+            var d = Math.floor(seconds / (3600*24));
+            var h = Math.floor(seconds % (3600*24) / 3600);
+            var m = Math.floor(seconds % 3600 / 60);
+            var s = Math.floor(seconds % 60);
+    
+            if (d >= 1) {
+                activity_label.textContent = d + ' day/s';
+                activity_content.textContent = content[i - 1].activity;
+            }
+            else if (h >= 1) {
+                activity_label.textContent = h + ' hr/s';
+                activity_content.textContent = content[i - 1].activity;
+            }
+            else if (m >= 1) {
+                activity_label.textContent = m + ' min/s';
+                activity_content.textContent = content[i - 1].activity;
+            }
+            else {
+                activity_label.textContent = s + ' sec/s';
+                activity_content.textContent = content[i - 1].activity;
+            }
+    
+            activity_div.append(activity_label);
+            activity_div.append(act_icon);
+            activity_div.append(activity_content);
+    
+            activity_panel.append(activity_div);
+        }
+    }
+    else {
+        const activity_panel = document.getElementById('activity-panel');
+        activity_panel.textContent = 'No recent activity to show.';
+    }
 }
 
 // Dashboard Cards
