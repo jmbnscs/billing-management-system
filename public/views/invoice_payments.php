@@ -4,7 +4,7 @@
 
 <main id="main" class="main">
   <div class="pagetitle">
-    <h1>Payment Records</h1>
+    <h1>Untagged Payment Records</h1>
     <nav>
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="dashboard.php">Home</a></li>
@@ -21,11 +21,9 @@
         <table class="table table-borderless" id="payments-table">
           <thead>
             <tr>
-              <th scope="col">ID</th>
-              <th scope="col">Amount</th>
               <th scope="col">Payment Ref. ID</th>
+              <th scope="col">Amount</th>
               <th scope="col">Payment Date</th>
-              <th scope="col">Account ID</th>
               <th scope="col">Status</th>
               <th scope="col">Actions</th>
             </tr>
@@ -60,16 +58,16 @@
             </div>
 
             <div class="row mb-3">
-              <label for="amount_paid" class="col-sm-2 col-form-label">Amount Paid</label>
+              <label for="payment_reference_id" class="col-sm-2 col-form-label">Reference ID</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" id="amount_paid" value="" required>
+                <input type="text" class="form-control" id="payment_reference_id" value="" required>
               </div>
             </div>
 
             <div class="row mb-3">
-              <label for="payment_reference_id" class="col-sm-2 col-form-label">Reference ID</label>
+              <label for="amount_paid" class="col-sm-2 col-form-label">Amount Paid</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" id="payment_reference_id" value="" required>
+                <input type="number" class="form-control" id="amount_paid" value="" required>
               </div>
             </div>
 
@@ -83,21 +81,14 @@
             <div class="row mb-3">
               <label for="account_id" class="col-sm-2 col-form-label">Account ID</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" id="account_id" value="" required>
-              </div>
-            </div>
-
-            <div class="row mb-3">
-              <label for="invoice_id" class="col-sm-2 col-form-label" id="invoice_id_lbl">Invoice ID</label>
-              <div class="col-sm-10">
-                <input type="text" class="form-control" id="invoice_id" value="" required readonly>
+                <input type="number" class="form-control" id="account_id" value="" required>
               </div>
             </div>
 
             <div class="row mb-3">
               <label for="tagged" class="col-sm-2 col-form-label">Status</label>
               <div class="col-sm-3">
-                <input type="text" class="form-control text-center " id="tagged" value="" required>
+                <input type="text" class="form-control text-center " id="tagged" value="" disabled>
               </div>
             </div>
 
@@ -154,29 +145,14 @@
             </div>
 
             <div class="row mb-3">
-              <label for="account_id_d" class="col-sm-3 col-form-label">Account ID</label>
-              <div class="col-sm-8">
-                <input type="text" class="form-control" id="account_id_d" value="" required>
-              </div>
-            </div>
-
-            <div class="row mb-3">
-              <label for="invoice_id_d" class="col-sm-3 col-form-label">Invoice ID</label>
-              <div class="col-sm-8">
-                <input type="text" class="form-control" id="invoice_id_d" value="" required>
-              </div>
-            </div>
-
-            <div class="row mb-3">
               <label for="tagged_d" class="col-sm-3 col-form-label">Status</label>
               <div class="col-sm-3">
-                <input type="text" class="form-control text-center " id="tagged_d" value="" required>
+                <input type="text" class="form-control text-center " id="tagged_d" value="" disabled>
               </div>
             </div>
 
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="cls-btn">Close</button>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="cncl-btn">Cancel</button>
           <button type="submit" class="btn btn-danger" id="dlt-btn">Delete</button>
         </div>

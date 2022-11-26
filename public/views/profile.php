@@ -22,8 +22,8 @@
             <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
 
               <!-- <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle"> -->
-              <h2></h2>
-              <h3></h3>
+              <h2 id="profile-name"></h2>
+              <h3 id="profile-role"></h3>
             </div>
           </div>
 
@@ -114,6 +114,13 @@
                     </div>
 
                     <div class="row mb-3">
+                      <label for="edit-bday" class="col-md-4 col-lg-3 col-form-label">Birthdate</label>
+                      <div class="col-md-8 col-lg-9">
+                        <input name="edit-bday" type="date" class="form-control" id="edit-bday" value="" disabled>
+                      </div>
+                    </div>
+
+                    <div class="row mb-3">
                       <label for="email" class="col-md-4 col-lg-3 col-form-label">Email</label>
                       <div class="col-md-8 col-lg-9">
                         <input name="email" type="email" class="form-control" id="edit-email" value="" >
@@ -128,23 +135,9 @@
                     </div>
 
                     <div class="row mb-3">
-                      <label for="edit-bday" class="col-md-4 col-lg-3 col-form-label">Birthdate</label>
-                      <div class="col-md-8 col-lg-9">
-                        <input name="edit-bday" type="date" class="form-control" id="edit-bday" value="" disabled>
-                      </div>
-                    </div>
-
-                    <div class="row mb-3">
                       <label for="Address" class="col-md-4 col-lg-3 col-form-label">Address</label>
                       <div class="col-md-8 col-lg-9">
                         <input name="address" type="text" class="form-control" id="edit-address" value="">
-                      </div>
-                    </div>
-
-                    <div class="row mb-3">
-                      <label for="employment_date" class="col-md-4 col-lg-3 col-form-label">Employment Date</label>
-                      <div class="col-md-8 col-lg-9">
-                        <input name="employment_date" type="date" class="form-control" id="edit-emp-date" value="" disabled>
                       </div>
                     </div>
 
@@ -159,26 +152,24 @@
                   <!-- Change Password Form -->
                   <form id="change-password">
 
-                    <input type="text" id="admin_password" hidden>
-
                     <div class="row mb-3">
-                      <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Current Password</label>
+                      <label for="current-password" class="col-md-4 col-lg-3 col-form-label">Current Password</label>
                       <div class="col-md-8 col-lg-9">
-                        <input name="password" type="password" class="form-control" id="currentPassword" required>
+                        <input name="current-password" type="password" class="form-control" id="current-password" autocomplete="off" required>
                       </div>
                     </div>
 
                     <div class="row mb-3">
-                      <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">New Password</label>
+                      <label for="new-password" class="col-md-4 col-lg-3 col-form-label">New Password</label>
                       <div class="col-md-8 col-lg-9">
-                        <input name="newpassword" type="password" class="form-control" id="newPassword" required>
+                        <input name="new-password" type="password" class="form-control" id="new-password" autocomplete="off" required>
                       </div>
                     </div>
 
                     <div class="row mb-3">
-                      <label for="renewPassword" class="col-md-4 col-lg-3 col-form-label">Re-enter New Password</label>
+                      <label for="re-new-password" class="col-md-4 col-lg-3 col-form-label">Re-enter New Password</label>
                       <div class="col-md-8 col-lg-9">
-                        <input name="renewpassword" type="password" class="form-control" id="renewPassword" required>
+                        <input name="re-new-password" type="password" class="form-control" id="re-new-password" autocomplete="off" required>
                       </div>
                     </div>
 

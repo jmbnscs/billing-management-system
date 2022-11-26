@@ -698,9 +698,9 @@ h6 {
   align-items: center;
   font-size: 17px;
   font-weight: 600;
-  color: #4154f1;
+  color: #fff;
   transition: 0.3;
-  background: #E4F6FA;
+  background: #0819A8;
   padding: 10px 15px;
   border-radius: 4px;
 }
@@ -708,7 +708,7 @@ h6 {
 .sidebar-nav .nav-link i {
   font-size: 25px;
   margin-right: 10px;
-  color: #4154f1;
+  color: #fff;
 }
 
 .sidebar-nav .nav-link.collapsed {
@@ -728,6 +728,7 @@ h6 {
 .sidebar-nav .nav-link:hover i {
   color: #fff;
   background:#0819A8;
+
 }
 
 .sidebar-nav .nav-link .bi-chevron-down {
@@ -767,6 +768,7 @@ h6 {
 .sidebar-nav .nav-content a.active {
   color: #fff;
   background-color: #0819A8;
+  border-radius: 30px;
 }
 
 .sidebar-nav .nav-content a.active i {
@@ -775,7 +777,6 @@ h6 {
 }
 
 .hide {
-  /* margin-bottom: 5px; */
   display: none;
 }
 
@@ -1075,7 +1076,7 @@ h6 {
 --------------------------------------------------------------*/
 .admin-add label {
   font-weight: 600;
-  color: rgba(131, 134, 140, 0.6);
+  color: #012970;
 }
 
 /*--------------------------------------------------------------

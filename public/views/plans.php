@@ -13,7 +13,7 @@
     </nav>
   </div><!-- End Page Title -->
 
-  <!-- Recent Sales -->
+  <!-- Plans Table -->
   <div class="col-12">
     <div class="card recent-sales overflow-auto">
       <br>
@@ -36,79 +36,78 @@
       </div>
 
     </div>
-  </div><!-- End Recent Sales -->
+  </div><!-- End Plans Table -->
 
-  <form id="save-plan">
-  <!-- Modal Dialog Scrollable -->
-  <div class="modal fade" id="modalDialogScrollable" tabindex="-1">
-      <div class="modal-dialog modal-dialog-scrollable modal-lg">
-        <div class="modal-content">
+<!-- Update Plan Modal -->
+<form id="save-plan">
+    <div class="modal fade" id="view-plans" tabindex="-1">
+        <div class="modal-dialog modal-dialog-scrollable modal-lg">
+          <div class="modal-content">
 
-          <!-- Modal Header -->
-          <div class="modal-header">
-            <h5 class="modal-title"></h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
+            <div class="modal-header">
+              <h5 class="modal-title"></h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
 
-          <!-- Modal Body -->
-          <div class="modal-body">
+            <!-- Modal Body -->
+            <div class="modal-body">
 
-                  <div class="row mb-3">
-                      <label for="plan_id" class="col-sm-2 col-form-label">Plan ID</label>
-                      <div class="col-sm-10">
-                          <input type="text" class="form-control" id="plan_id" required>
-                      </div>
-                  </div>
+                    <div class="row mb-3">
+                        <label for="plan_id" class="col-sm-2 col-form-label">Plan ID</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="plan_id" required>
+                        </div>
+                    </div>
 
-                  <div class="row mb-3">
-                      <label for="plan_name" class="col-sm-2 col-form-label">Plan Name</label>
-                      <div class="col-sm-10">
-                          <input type="text" class="form-control" id="plan_name" required>
-                      </div>
-                  </div>
+                    <div class="row mb-3">
+                        <label for="plan_name" class="col-sm-2 col-form-label">Plan Name</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="plan_name" required>
+                        </div>
+                    </div>
 
-                  <div class="row mb-3">
-                      <label for="bandwidth" class="col-sm-2 col-form-label">Bandwidth</label>
-                      <div class="col-sm-10">
-                          <input type="text" class="form-control" id="bandwidth" required>
-                      </div>
-                  </div>
+                    <div class="row mb-3">
+                        <label for="bandwidth" class="col-sm-2 col-form-label">Bandwidth</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="bandwidth" required>
+                        </div>
+                    </div>
 
-                  <div class="row mb-3">
-                      <label for="price" class="col-sm-2 col-form-label">Price</label>
-                      <div class="col-sm-10">
-                          <input type="text" class="form-control" id="price" required>
-                      </div>
-                  </div>
+                    <div class="row mb-3">
+                        <label for="price" class="col-sm-2 col-form-label">Price</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="price" required>
+                        </div>
+                    </div>
 
-                  <div class="row mb-3">
-                      <label for="plan_status_id" class="col-sm-2 col-form-label">Status</label>
-                      <div class="col-sm-10">
-                          <select id="plan_status_id" class="form-select" required>
-                          </select>
-                      </div>
-                  </div>
+                    <div class="row mb-3">
+                        <label for="plan_status_id" class="col-sm-2 col-form-label">Status</label>
+                        <div class="col-sm-10">
+                            <select id="plan_status_id" class="form-select" required>
+                            </select>
+                        </div>
+                    </div>
 
-                  <div class="row mb-3">
-                      <label for="inclusion" class="col-sm-2 col-form-label">Inclusion(s)</label>
-                      <div class="col-sm-10">
-                      
-                          <select class="form-control selectpicker" id="inclusion" multiple aria-label="size 5 select example" data-actions-box="true">
-                          </select>
+                    <div class="row mb-3">
+                        <label for="inclusion" class="col-sm-2 col-form-label">Inclusion(s)</label>
+                        <div class="col-sm-10">
                         
-                      </div>
-                  </div>
-          </div>
+                            <select class="form-control selectpicker" id="inclusion" multiple aria-label="size 5 select example" data-actions-box="true">
+                            </select>
+                          
+                        </div>
+                    </div>
+            </div>
 
-          <!-- Modal Footer -->
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" id="edit-plan" disabled>Edit</button>
-            <button type="submit" class="btn btn-success" id="save-plan-btn" disabled>Save Changes</button>
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" id="edit-plan">Edit</button>
+              <button type="submit" class="btn btn-success" id="save-plan-btn" disabled>Save Changes</button>
+            </div>
           </div>
         </div>
-      </div>
-  </div><!-- End Modal Dialog Scrollable-->
+    </div><!-- End Modal Dialog Scrollable-->
 </form>
 
 </main><!-- End #main -->

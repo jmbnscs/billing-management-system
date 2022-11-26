@@ -1,6 +1,10 @@
 const DIR_API_LOAD = 'http://localhost/gstech_api/api/';
+const DIR_APP_LOAD = 'http://localhost/billing-management-system/app/includes/';
 const today_date = new Date();
-autoload();
+
+if (localStorage.getItem('admin_id') == '11674') {
+    autoload();
+}
 
 async function autoload() {
     generateInvoice();
@@ -59,16 +63,6 @@ async function getTicketPerAcct(account_id) {
     }
 }
 
-async function getUserLevel(user_id) {
-    let url = DIR_API + 'user_level/read_single.php?user_id=' + user_id;
-    try {
-        let res = await fetch(url);
-        return await res.json();
-    } catch (error) {
-        console.log(error);
-    }
-}
-
 async function generateTicketNum() {
     let url = DIR_API + 'ticket/read.php';
     try {
@@ -118,31 +112,108 @@ function getDaysDifference(today, disconnection_date) {
     return days(today, disconnection_date)
 }
 
+function getDaysInMonth(year, month) {
+    return new Date(year, month, 0).getDate();
+}
+
+// Date.prototype.addDays = function(days) {
+//     var date = new Date(this.valueOf());
+//     date.setDate(date.getDate() + days);
+//     return date;
+// } 
+// var date = new Date();
+// console.log(date.addDays(10));
+
+async function logAutomation(activity, page_accessed) {
+    let admin_content;
+    let url = DIR_API_LOAD + 'admin/read_single.php?admin_id=' + localStorage.getItem('admin_id');
+        try {
+            let res = await fetch(url);
+            admin_content = await res.json();
+        } catch (error) {
+            console.log(error);
+        }
+
+    url = DIR_APP_LOAD + 'log_activity.php';
+    let content;
+    try {
+        let res = await fetch(url);
+        content = await res.json();
+    } catch (error) {
+        console.log(error);
+    }
+
+    url = DIR_API_LOAD + 'logs/log_activity.php';
+    const logActivityResponse = await fetch(url, {
+        method : 'POST',
+        headers : {
+            'Content-Type' : 'application/json'
+        },
+        body : JSON.stringify({
+            'admin_id' : admin_content.admin_id,
+            'username' : admin_content.admin_username,
+            'page_accessed' : page_accessed,
+            'activity' : activity,
+            'ip_address' : content.ip_address,
+            'user_agent' : content.user_agent
+        })
+    });
+
+    const logAutomation = await logActivityResponse.json();
+
+    return logAutomation.message;
+}
+
 async function generateInvoice() {
     let account_content = await getAccountsData();
     var day_today = new Date().getDate();
+    const currentYear = today_date.getFullYear();
+    const currentMonth = today_date.getMonth() + 1
+    const daysInCurrentMonth = getDaysInMonth(currentYear, currentMonth);
 
     for (var i = 0; i < account_content.length; i++) {
         var month_diff = monthDiff(new Date(account_content[i].start_date), new Date());
         let bill_count = 0;
-        
-        if (month_diff > account_content[i].bill_count) {
-            bill_count = account_content[i].bill_count;
-            if (day_today == account_content[i].billing_day - 10) {
-                while (bill_count != month_diff) {
-                    if (account_content[i].account_status_id == 2) {
-                        break;
+
+        if (10 - account_content[i].billing_day >= 0) {
+            if (month_diff <= account_content[i].bill_count) {
+                bill_count = account_content[i].bill_count;
+                if (day_today >= (daysInCurrentMonth - (10 - account_content[i].billing_day))) {
+                    while (bill_count <= month_diff) {
+                        if (account_content[i].account_status_id == 2) {
+                            break;
+                        }
+                        else if (account_content[i].account_status_id == 3) {
+                            createInvoice(account_content[i].account_id, 3);
+                        }
+                        else if (account_content[i].account_status_id !== 2) {
+                            createInvoice(account_content[i].account_id, 1);
+                        }
+                        bill_count = bill_count + 1;
                     }
-                    else if (account_content[i].account_status_id == 3) {
-                        createInvoice(account_content[i].account_id, 3);
-                    }
-                    else if (account_content[i].account_status_id !== 2) {
-                        createInvoice(account_content[i].account_id, 1);
-                    }
-                    bill_count = bill_count + 1;
                 }
             }
         }
+        else {
+            if (month_diff > account_content[i].bill_count) {
+                bill_count = account_content[i].bill_count;
+                if (day_today == account_content[i].billing_day - 10) {
+                    while (bill_count != month_diff) {
+                        if (account_content[i].account_status_id == 2) {
+                            break;
+                        }
+                        else if (account_content[i].account_status_id == 3) {
+                            createInvoice(account_content[i].account_id, 3);
+                        }
+                        else if (account_content[i].account_status_id !== 2) {
+                            createInvoice(account_content[i].account_id, 1);
+                        }
+                        bill_count = bill_count + 1;
+                    }
+                }
+            }
+        }
+        
     }
 
     async function createInvoice(account_id, account_status) {
@@ -158,16 +229,15 @@ async function generateInvoice() {
         });
     
         const content = await createResponse.json();
+        const log = await logAutomation('Created Invoice for Account # ' + account_id + ' - Invoice # ' + content.invoice_id, 'Automated System');
     
-        if (content.message == 'Invoice Created') {
-            console.log(account_id + ' - success');
+        if (content.message == 'Invoice Created' && log) {
+            // console.log(account_id + ' - success');
             if (account_status == 3) {
                 updateInvoiceStatus(content.invoice_id, 4);
             }
         }
     }
-    
-    
 }
 
 async function updateInvoiceStatus(invoice_id, status_id) {
@@ -186,7 +256,8 @@ async function updateInvoiceStatus(invoice_id, status_id) {
     const update_content = await updateDataResponse.json();
 
     if (update_content.message == 'Invoice Updated') {
-        console.log('Invoice Updated');
+        // console.log('Invoice Updated');
+        const log = await logAutomation('Updated Status of Invoice # ' + invoice_id, 'Automated System');
     }
 }
 
@@ -196,7 +267,7 @@ async function updateUnpaidInvoice() {
 
     for (var i = 0; i < unpaid_content.length; i++) {
         let day_difference = getDaysDifference(date_today, new Date(unpaid_content[i].disconnection_date));
-        if (day_difference >= 0 && day_difference <= 5) {
+        if (day_difference >= 0) {
             updateInvoiceStatus(unpaid_content[i].invoice_id, 3);
             // console.log('Overdue: ' + unpaid_content[i].invoice_status_id);
         }
@@ -209,7 +280,7 @@ async function updateOverdueInvoice() {
 
     for (var i = 0; i < unpaid_content.length; i++) {
         let day_difference = getDaysDifference(date_today, new Date(unpaid_content[i].disconnection_date));
-        if (day_difference >= 6 && day_difference <= 7) {
+        if (day_difference >= 7) {
             updateInvoiceStatus(unpaid_content[i].invoice_id, 4);
             // console.log('Temp Disconnection: ' + unpaid_content[i].invoice_status_id);
         } 
@@ -287,7 +358,8 @@ async function updateDisconnectionInvoice() {
         const ticket_content = await createTicketResponse.json();
     
         if (ticket_content.message == 'Ticket Created') {
-            console.log('Ticket Created Successfully.');
+            // console.log('Ticket Created Successfully.');
+            const log = await logAutomation('Disconnection Ticket created for Account # ' + account_id, 'Automated System');
         }
     }
 }

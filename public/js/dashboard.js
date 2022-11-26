@@ -39,16 +39,6 @@ function setEventListener() {
     }, false);
 }
 
-async function fetchData(page) {
-    let url = DIR_API + page;
-    try {
-        let res = await fetch(url);
-        return await res.json();
-    } catch (error) {
-        console.log(error);
-    }
-}
-
 // Dashboard Cards
 async function setCards() {
     filterInvoiceCard('month');
@@ -97,7 +87,8 @@ async function filterProrateCard(filter_name) {
     let data = await fetchData('prorate/read_status.php?prorate_status_id=1');
     if (filter_name == 'month') {
         for (var i = 0; i < data.length; i++) {
-            if (currentMonth == new Date(data[i].created_at.getMonth() + 1)) {
+            let created_at = new Date(data[i].created_at);
+            if (currentMonth == created_at.getMonth() + 1) {
                 uncharged = parseFloat(uncharged) + parseFloat(data[i].prorate_charge);
             }
         }
@@ -106,7 +97,8 @@ async function filterProrateCard(filter_name) {
     }
     else if (filter_name == 'year') {
         for (var i = 0; i < data.length; i++) {
-            if (currentYear == new Date(data[i].created_at.getFullYear())) {
+            let created_at = new Date(data[i].created_at);
+            if (currentYear == created_at.getFullYear()) {
                 uncharged = parseFloat(uncharged) + parseFloat(data[i].prorate_charge);
             }
         }

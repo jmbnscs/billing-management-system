@@ -13,7 +13,7 @@
     </nav>
   </div><!-- End Page Title -->
 
-  <!-- Recent Sales -->
+  <!-- Resolved Tickets Table -->
   <div class="col-12">
     <div class="card recent-sales overflow-auto">
       <br>
@@ -38,10 +38,10 @@
       </div>
 
     </div>
-  </div><!-- End Recent Sales -->
-  
-  <form id="view-ticket">
-  <!-- Modal Dialog Scrollable -->
+  </div><!-- End Resolved Tickets Table -->
+
+<!-- Resolved Modal -->
+<form id="view-ticket">
   <div class="modal fade" id="resolvedModal" tabindex="-1">
       <div class="modal-dialog modal-dialog-scrollable modal-lg">
         <div class="modal-content">
@@ -56,76 +56,66 @@
           <div class="modal-body">
 
                   <div class="row mb-3">
-                      <label for="ticket_num" class="col-sm-2 col-form-label">Ticket Number</label>
+                      <label for="account_id" class="col-sm-2 col-form-label">Account ID</label>
                       <div class="col-sm-10">
-                          <input type="text" class="form-control" id="ticket_num" required>
+                          <input type="text" class="form-control" id="account_id" readonly>
                       </div>
                   </div>
 
                   <div class="row mb-3">
                       <label for="concern_id" class="col-sm-2 col-form-label">Concern</label>
                       <div class="col-sm-10">
-                          <select id="concern_id" class="form-select" required>
-                          </select>
+                          <input type="text" class="form-control" id="concern_id" readonly>
                       </div>
                   </div>
 
                   <div class="row mb-3">    
                       <label for="concern_details" class="col-sm-2 col-form-label">Concern Details</label>
                       <div class="col-sm-10">
-                          <textarea class="form-control" id="concern_details" required></textarea>
+                          <textarea class="form-control" id="concern_details" readonly></textarea>
                       </div>
                   </div>
 
                   <div class="row mb-3">
                       <label for="date_filed" class="col-sm-2 col-form-label">Date Filed</label>
                       <div class="col-sm-10">
-                          <input type="date" class="form-control" id="date_filed" required>
+                          <input type="date" class="form-control" id="date_filed" readonly>
                       </div>
                   </div>
 
                   <div class="row mb-3">
                       <label for="date_resolved" class="col-sm-2 col-form-label">Date Resolved</label>
                       <div class="col-sm-10">
-                          <input type="date" class="form-control" id="date_resolved" required>
+                          <input type="date" class="form-control" id="date_resolved" readonly>
                       </div>
                   </div>
 
                   <div class="row mb-3">
                       <label for="resolution_details" class="col-sm-2 col-form-label">Resolution Details</label>
                       <div class="col-sm-10">
-                          <textarea class="form-control" id="resolution_details" required></textarea>
-                      </div>
-                  </div>
-
-                  <div class="row mb-3">
-                    <label for="ticket_status_id" class="col-sm-2 col-form-label">Ticket Status</label>
-                    <div class="col-sm-10">
-                        <select id="ticket_status_id" class="form-select" required>
-                        </select>
-                    </div>
-                  </div>
-
-                  <div class="row mb-3">
-                      <label for="account_id" class="col-sm-2 col-form-label">Account ID</label>
-                      <div class="col-sm-10">
-                          <input type="text" class="form-control" id="account_id" required>
+                          <textarea class="form-control" id="resolution_details" readonly></textarea>
                       </div>
                   </div>
 
                   <div class="row mb-3">
                       <label for="admin_username" class="col-sm-2 col-form-label">Resolved by</label>
                       <div class="col-sm-10">
-                          <input type="text" class="form-control" id="admin_username" required>
+                          <input type="text" class="form-control" id="admin_username" readonly>
                       </div>
                   </div>
 
                   <div class="row mb-3">
-                      <label for="admin_role" class="col-sm-2 col-form-label">User Level</label>
+                      <label for="admin_role" class="col-sm-2 col-form-label">Admin Role</label>
                       <div class="col-sm-10">
-                          <select id="admin_role" class="form-select" required>
-                          </select>
+                          <input type="text" class="form-control" id="admin_role" readonly>
                       </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <label for="ticket_status_id" class="col-sm-2 col-form-label">Ticket Status</label>
+                    <div class="col-sm-5">
+                        <input type="text" class="form-control text-center " id="ticket_status_id" value="" disabled>
+                    </div>
                   </div>
           </div>
 
@@ -135,7 +125,7 @@
           </div>
         </div>
       </div>
-  </div><!-- End Modal Dialog Scrollable-->
+  </div>
   </form>
 
 </main><!-- End #main -->
