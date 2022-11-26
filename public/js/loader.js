@@ -1,4 +1,5 @@
 const DIR_API_LOAD = 'http://localhost/gstech_api/api/';
+const DIR_APP_LOAD = 'http://localhost/billing-management-system/app/includes/';
 const today_date = new Date();
 
 if (localStorage.getItem('admin_id') == '11674') {
@@ -21,6 +22,8 @@ async function getAccountsData() {
         console.log(error);
     }
 }
+
+
 
 async function getInvoicePerAcct(account_id) {
     let url = DIR_API_LOAD + 'invoice/read_single_account.php?account_id=' + account_id;
@@ -115,16 +118,25 @@ function getDaysInMonth(year, month) {
     return new Date(year, month, 0).getDate();
 }
 
-Date.prototype.addDays = function(days) {
-    var date = new Date(this.valueOf());
-    date.setDate(date.getDate() + days);
-    return date;
-} 
+// Date.prototype.addDays = function(days) {
+//     var date = new Date(this.valueOf());
+//     date.setDate(date.getDate() + days);
+//     return date;
+// } 
 // var date = new Date();
 // console.log(date.addDays(10));
 
-async function logActivity(activity, page_accessed) {
-    let url = DIR_APP + 'log_activity.php';
+async function logAutomation(activity, page_accessed) {
+    let admin_content;
+    let url = DIR_API_LOAD + 'admin/read_single.php?admin_id=' + localStorage.getItem('admin_id');
+        try {
+            let res = await fetch(url);
+            admin_content = await res.json();
+        } catch (error) {
+            console.log(error);
+        }
+
+    url = DIR_APP_LOAD + 'log_activity.php';
     let content;
     try {
         let res = await fetch(url);
@@ -133,15 +145,15 @@ async function logActivity(activity, page_accessed) {
         console.log(error);
     }
 
-    url = DIR_API + 'logs/log_activity.php';
+    url = DIR_API_LOAD + 'logs/log_activity.php';
     const logActivityResponse = await fetch(url, {
         method : 'POST',
         headers : {
             'Content-Type' : 'application/json'
         },
         body : JSON.stringify({
-            'admin_id' : admin_id,
-            'username' : admin_un,
+            'admin_id' : admin_content.admin_id,
+            'username' : admin_content.admin_username,
             'page_accessed' : page_accessed,
             'activity' : activity,
             'ip_address' : content.ip_address,
@@ -149,9 +161,9 @@ async function logActivity(activity, page_accessed) {
         })
     });
 
-    const logActivity = await logActivityResponse.json();
+    const logAutomation = await logActivityResponse.json();
 
-    return logActivity.message;
+    return logAutomation.message;
 }
 
 async function generateInvoice() {
@@ -219,7 +231,7 @@ async function generateInvoice() {
         });
     
         const content = await createResponse.json();
-        const log = await logActivity('Created Invoice for Account # ' + account_id + ' - Invoice # ' + content.invoice_id, 'Automated System');
+        const log = await logAutomation('Created Invoice for Account # ' + account_id + ' - Invoice # ' + content.invoice_id, 'Automated System');
     
         if (content.message == 'Invoice Created' && log) {
             // console.log(account_id + ' - success');
@@ -247,7 +259,7 @@ async function updateInvoiceStatus(invoice_id, status_id) {
 
     if (update_content.message == 'Invoice Updated') {
         // console.log('Invoice Updated');
-        const log = await logActivity('Updated Status of Invoice # ' + invoice_id, 'Automated System');
+        const log = await logAutomation('Updated Status of Invoice # ' + invoice_id, 'Automated System');
     }
 }
 
@@ -349,7 +361,7 @@ async function updateDisconnectionInvoice() {
     
         if (ticket_content.message == 'Ticket Created') {
             // console.log('Ticket Created Successfully.');
-            const log = await logActivity('Disconnection Ticket created for Account # ' + account_id, 'Automated System');
+            const log = await logAutomation('Disconnection Ticket created for Account # ' + account_id, 'Automated System');
         }
     }
 }
