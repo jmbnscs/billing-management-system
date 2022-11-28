@@ -53,7 +53,7 @@
           <!-- Modal Body -->
           <div class="modal-body row g-3">
             <!-- Left -->
-            <div class="col-sm-6 ">
+            <div class="col-sm-6">
               <div class="col-md-9 pt-2">
                 <div class="form-floating">
                   <input type="text" class="form-control" id="admin_id" placeholder="Admin ID" readonly>

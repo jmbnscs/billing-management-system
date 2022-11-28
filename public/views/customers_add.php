@@ -73,7 +73,7 @@
                     <div class="row mb-3">
                         <label for="birthdate" class="col-sm-2 col-form-label">Birthdate</label>
                         <div class="col-sm-10">
-                            <input type="date" class="form-control" id="birthdate" required>
+                            <input type="date" class="form-control custom-bday" id="birthdate" required>
                         </div>
                     </div>
 
@@ -154,6 +154,10 @@
 
   <!-- Template Main JS File -->
   <script src="../assets/js/main.js"></script>
+
+  <!-- Datepicker -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 
   <!-- Backend JS File -->
   <script src="../js/main.js"></script>

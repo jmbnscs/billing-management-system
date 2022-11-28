@@ -197,11 +197,11 @@ h6 {
 }
 
 /* Add Admin Page */
-.admin_bday::-webkit-calendar-picker-indicator{
+.custom-bday::-webkit-calendar-picker-indicator{
   display: none;
 }
 
-.admin_bday::-webkit-input-placeholder{ 
+.custom-bday::-webkit-input-placeholder{ 
   visibility: hidden !important;
 }
 

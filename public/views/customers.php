@@ -41,7 +41,7 @@
 <form id="save-customer">
   <!-- Modal Dialog Scrollable -->
   <div class="modal fade" id="view-customers" tabindex="-1">
-      <div class="modal-dialog modal-dialog-scrollable modal-xl">
+      <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-xl">
         <div class="modal-content">
 
           <!-- Modal Header -->
@@ -51,144 +51,181 @@
           </div>
 
           <!-- Modal Body -->
-          <div class="modal-body">
-                <div class="row mb-3">
-                    <label for="account_id" class="col-sm-2 col-form-label">Account ID</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control" id="account_id" readonly>
+          <div class="modal-body row g-3">
+            <!-- Left -->
+            <div class="col-sm-6">
+                <div class="col-md-10">
+                    <h5 style="border-bottom: 1px solid grey;">General Information</h5>
+                </div>
+
+                <div class="row pt-2">
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                        <input type="text" class="form-control" id="account_id" placeholder="Account ID" readonly>
+                        <label for="account_id">Account ID</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                        <input type="text" class="form-control" id="gstech_id" placeholder="GSTech ID" readonly>
+                        <label for="gstech_id">GSTech ID</label>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row pt-2">
+
+                    <div class="col-md-4">
+                        <div class="form-floating">
+                        <input type="text" class="form-control" id="first_name" placeholder="First Name" readonly>
+                        <label for="first_name">First Name</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-floating">
+                        <input type="text" class="form-control" id="middle_name" placeholder="Middle Name" readonly>
+                        <label for="middle_name">Middle Name</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-floating">
+                        <input type="text" class="form-control" id="last_name" placeholder="Last Name" readonly>
+                        <label for="last_name">Last Name</label>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row pt-2">
+
+                    <div class="col-md-4">
+                        <div class="form-floating">
+                        <input type="date" class="form-control" id="birthdate" placeholder="Birthdate" readonly>
+                        <label for="birthdate">Birthdate</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-floating">
+                        <input type="date" class="form-control" id="start_date" placeholder="Start Date" readonly>
+                        <label for="start_date">Start Date</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-floating">
+                        <input type="date" class="form-control" id="lockin_end_date" placeholder="Lock In End Date" readonly>
+                        <label for="lockin_end_date">Lock In End Date</label>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row pt-2">
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                        <input type="text" class="form-control" id="billing_day" placeholder="Billing Day" readonly>
+                        <label for="billing_day">Billing Day</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                        <input type="text" class="form-control" id="bill_count" placeholder="Bill Count" readonly>
+                        <label for="bill_count">Bill Count</label>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row pt-2">
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                        <select id="install_type_id" class="form-select" disabled></select>
+                        <label for="install_type_id">Installation Type</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                        <input type="text" class="form-control" id="installation_balance" placeholder="Installation Balance" readonly>
+                        <label for="installation_balance">Installation Balance</label>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+                
+            <!-- Right -->
+            <div class="col-sm-6">
+                <div class="col-md-10">
+                    <h5 style="border-bottom: 1px solid grey;">Edit Information</h5>
+                </div>
+
+                <div class="row pt-2">
+                    <div class="col-md-12">
+                        <div class="form-floating">
+                        <input type="text" class="form-control" id="billing_address" placeholder="Address" required>
+                        <label for="billing_address">Address</label>
+                        </div>
                     </div>
                 </div>
 
-                <div class="row mb-3">
-                  <label for="gstech_id" class="col-sm-2 col-form-label">GSTech ID</label>
-                  <div class="col-sm-10">
-                      <input type="text" class="form-control" id="gstech_id" placeholder="" disabled>
-                  </div>
+                <div class="row pt-2">
+                    <div class="col-md-12">
+                        <div class="form-floating">
+                        <input type="text" class="form-control" id="mobile_number" placeholder="Mobile Number" pattern="[0]{1}[9]{1}[0-9]{9}" required>
+                        <label for="mobile_number">Mobile Number</label>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="row mb-3">
-                  <label for="first_name" class="col-sm-2 col-form-label">First Name</label>
-                      <div class="col-sm-10">
-                          <input type="text" class="form-control" id="first_name" placeholder="Ex. Juan" disabled>
-                      </div>
-                  </div>
-                  
-                  <div class="row mb-3">
-                      <label for="middle_name" class="col-sm-2 col-form-label">Middle Name</label>
-                      <div class="col-sm-10">
-                          <input type="text" class="form-control" id="middle_name" placeholder="Ex. Santos" disabled>
-                      </div>
-                  </div>
-          
-                  <div class="row mb-3">    
-                      <label for="last_name" class="col-sm-2 col-form-label">Last Name</label>
-                      <div class="col-sm-10">
-                          <input type="text" class="form-control" id="last_name" placeholder="Ex. Dela Cruz" disabled>
-                      </div>
-                  </div>
-          
-                  <div class="row mb-3">
-                      <label for="birthdate" class="col-sm-2 col-form-label">Birthdate</label>
-                      <div class="col-sm-10">
-                          <input type="date" class="form-control" id="birthdate" disabled>
-                      </div>
-                  </div>
-          
-                  <div class="row mb-3">
-                      <label for="start_date" class="col-sm-2 col-form-label">Start Date</label>
-                      <div class="col-sm-10">
-                          <input type="date" class="form-control" id="start_date" disabled>
-                      </div>
-                  </div>
+                <div class="row pt-2">
+                    <div class="col-md-12">
+                        <div class="form-floating">
+                        <input type="email" class="form-control" id="email" placeholder="Email" required>
+                        <label for="email">Email</label>
+                        </div>
+                    </div>
+                </div>
 
-                  <div class="row mb-3">
-                      <label for="lockin_end_date" class="col-sm-2 col-form-label">Lock In End Date</label>
-                      <div class="col-sm-10">
-                          <input type="date" class="form-control" id="lockin_end_date" disabled>
-                      </div>
-                  </div>
-          
-                  <div class="row mb-3">    
-                      <label for="billing_day" class="col-sm-2 col-form-label">Billing Day</label>
-                      <div class="col-sm-10">
-                          <input type="number" class="form-control" id="billing_day" min="1" max="31" disabled>
-                      </div>
-                  </div>
+                <div class="row pt-2">
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                        <select id="plan_id" class="form-select" required></select>
+                        <label for="plan_id">Subscription Plan</label>
+                        </div>
+                    </div>
 
-                  <div class="row mb-3">    
-                      <label for="bill_count" class="col-sm-2 col-form-label">Bill Count</label>
-                      <div class="col-sm-10">
-                          <input type="text" class="form-control" id="bill_count" disabled>
-                      </div>
-                  </div>
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                        <select id="connection_id" class="form-select" required></select>
+                        <label for="connection_id">Connection Type</label>
+                        </div>
+                    </div>
+                </div>
 
-                  <div class="row mb-3">
-                      <label for="install_type_id" class="col-sm-2 col-form-label">Installation Type</label>
-                      <div class="col-sm-10">
-                          <select id="install_type_id" class="form-select" disabled>
-                          </select>
-                      </div>
-                  </div>
-          
-                  <div class="row mb-3">    
-                      <label for="installation_balance" class="col-sm-2 col-form-label">Installation Balance</label>
-                      <div class="col-sm-10">
-                          <input type="text" class="form-control" id="installation_balance" disabled>
-                      </div>
-                  </div>
-          
-                  <div class="row mb-3">
-                      <label for="billing_address" class="col-sm-2 col-form-label">Address</label>
-                      <div class="col-sm-10">
-                          <textarea class="form-control" id="billing_address" placeholder="Ex. 123 Kapasigan St. Pasig City" required></textarea>
-                      </div>
-                  </div>
-          
-                  <div class="row mb-3">
-                      <label for="mobile_number" class="col-sm-2 col-form-label">Mobile Number</label>
-                      <div class="col-sm-10">
-                          <input type="text" class="form-control" id="mobile_number" placeholder="Ex. 09XXXXXXXXX" pattern="[0]{1}[9]{1}[0-9]{9}" required>
-                      </div>
-                  </div>
-          
-                  <div class="row mb-3">
-                      <label for="email" class="col-sm-2 col-form-label">Email</label>
-                      <div class="col-sm-10">
-                          <input type="email" class="form-control" placeholder="Ex. name@example.com" id="email" required>
-                      </div>
-                  </div>
+                <div class="row pt-2">
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                        <select id="account_status_id" class="form-select" required></select>
+                        <label for="account_status_id">Account Status</label>
+                        </div>
+                    </div>
 
-                  <div class="row mb-3">
-                      <label for="plan_id" class="col-sm-2 col-form-label">Subscription Plan</label>
-                      <div class="col-sm-10">
-                          <select id="plan_id" class="form-select" required>
-                          </select>
-                      </div>
-                  </div>
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                        <select id="area_id" class="form-select" required></select>
+                        <label for="area_id">Area</label>
+                        </div>
+                    </div>
+                </div>
 
-                  <div class="row mb-3">
-                      <label for="connection_id" class="col-sm-2 col-form-label">Connection Type</label>
-                      <div class="col-sm-10">
-                          <select id="connection_id" class="form-select" required>
-                          </select>
-                      </div>
-                  </div>
-
-                  <div class="row mb-3">
-                      <label for="account_status_id" class="col-sm-2 col-form-label">Account Status</label>
-                      <div class="col-sm-10">
-                          <select id="account_status_id" class="form-select" required>
-                          </select>
-                      </div>
-                  </div>
-          
-                  <div class="row mb-3">
-                      <label for="area_id" class="col-sm-2 col-form-label">Area</label>
-                      <div class="col-sm-10">
-                          <select id="area_id" class="form-select" required>
-                          </select>
-                      </div>
-                  </div>
+            </div>
           </div>
 
           <!-- Modal Footer -->
