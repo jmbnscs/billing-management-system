@@ -288,7 +288,9 @@ async function setDefaults () {
         $('#plan-add').addClass('hide');
         $('#misc-page').addClass('hide');
     }
+}
 
+$(() => {
     // Navbar Active Config
     const path = location.pathname.split('/')[4];
     const id = 'nav-' + path.split('.')[0];
@@ -305,7 +307,7 @@ async function setDefaults () {
         $('#drop-options').removeClass('collapsed');
         $('#options-nav').addClass('show');
     }
-}
+})
 
 // Logout Session
 function logout() {
