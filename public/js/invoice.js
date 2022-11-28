@@ -92,10 +92,9 @@ async function setInvoicePage () {
             
             let data = await fetchData('invoice/read_single.php?invoice_id=' + invoice_id);
             let customer_data = await fetchData('customer/read_single.php?account_id=' + data.account_id);
-            toggleInputData('disabled', true);
 
             var modalTitle = updateModal.querySelector('.modal-title');
-            modalTitle.textContent = customer_data.first_name + ' ' + customer_data.last_name + ' - ' + data.invoice_id;
+            modalTitle.textContent = customer_data.first_name + ' ' + customer_data.last_name + ' - Invoice Details';
 
             // Display Invoice Details
             $('#invoice_id').val(data.invoice_id);
@@ -112,90 +111,82 @@ async function setInvoicePage () {
             $('#installation_charge').val(data.installation_charge);
             $('#total_bill').val(data.total_bill);
 
-            $('#payment_reference_id').val(data.payment_reference_id);
-            $('#amount_paid').val(null);
-            $('#payment_date').val(data.payment_date);
-
             $('#invoice_status_id').val(await getStatusName('invoice_status', data.invoice_status_id));
-            setTagElement('invoice_status_id', data.invoice_status_id);
-
-            function toggleInputData (setAttr, bool) {
-                $('#payment_reference_id').attr(setAttr, bool);
-                $('#amount_paid').attr(setAttr, bool);
-                $('#payment_date').attr(setAttr, bool);
-            }
+            setTagElement('invoice_status_id', 2);
 
             edit_fn.onclick = (e) => {
                 e.preventDefault();
-                toggleInputData('disabled', false);
-                $('#edit-btn').attr('hidden', true);
-                $('#save-btn').attr('hidden', false);
+                $('#editModal').modal('hide');
+                setAddPaymentModal(data.account_id, invoice_id);
             };
 
-            update_fn.onsubmit = (e) => {
-                e.preventDefault();
-                processUpdate();
-            };
-
-            async function processUpdate() {
-                const account_id = $('#account_id').val();
-                let ref_content = await fetchData('views/payment.php');
-                let isExist = false;
-        
-                for (var i = 0; i < ref_content.length; i++) {
-                    if ($('#payment_reference_id').val() == ref_content[i].ref_id) {
-                        isExist = true;
+            async function setAddPaymentModal (account_id, invoice_id) {
+                var addPaymentModal = document.getElementById('add-payment-md');
+            
+                update_fn.onsubmit = (e) => {
+                    e.preventDefault();
+                    processUpdate();
+                };
+    
+                async function processUpdate() {
+                    let ref_content = await fetchData('views/payment.php');
+                    let isExist = false;
+            
+                    for (var i = 0; i < ref_content.length; i++) {
+                        if ($('#payment_reference_id').val() == ref_content[i].ref_id) {
+                            isExist = true;
+                        }
                     }
-                }
-        
-                if (!isExist) {
-
-                    let update_data = JSON.stringify({
-                        'account_id' : $('#account_id').val(),
-                        'payment_reference_id' : $('#payment_reference_id').val(),
-                        'amount_paid' : $('#amount_paid').val(),
-                        'payment_date' : $('#payment_date').val()
-                    });
-
-                    let payment_data = JSON.stringify({
-                        'amount_paid' : $('#amount_paid').val(),
-                        'payment_reference_id' : $('#payment_reference_id').val(),
-                        'payment_date' : $('#payment_date').val()
-                    })
-
-                    let rating_data = JSON.stringify({
-                        'account_id' : account_id,
-                        'invoice_status' : data.invoice_status_id
-                    });
-
-                    const [update_content, payment_content, rating_content] = await Promise.all ([updateData('invoice/update.php', update_data), createData('payment/create.php', payment_data), updateData('ratings/update.php', rating_data)]);
-
-                    let tag_data = JSON.stringify({
-                        'account_id' : account_id,
-                        'invoice_id' : invoice_id,
-                        'payment_id' : payment_content.payment_id
-                    });
-
-                    const tag_content = await updateData('payment/update_tagged.php', tag_data);
-
-                    let log = await logActivity('Updated payment for ' + account_id + ' with Invoice # ' + invoice_id, 'Unpaid Invoices');
-
-                    if (update_content.message == 'Invoice Updated' && payment_content.message == 'Payment Record Created' && tag_content.message == 'Payment Tagged' && rating_content.message == 'Rating Updated' && log) {
-                        sessionStorage.setItem('save_message', "Payment Updated Successfully.");
-                        window.location.reload();
+            
+                    if (!isExist) {
+    
+                        let update_data = JSON.stringify({
+                            'account_id' : account_id,
+                            'payment_reference_id' : $('#payment_reference_id').val(),
+                            'amount_paid' : $('#amount_paid').val(),
+                            'payment_date' : $('#payment_date').val()
+                        });
+    
+                        let payment_data = JSON.stringify({
+                            'amount_paid' : $('#amount_paid').val(),
+                            'payment_reference_id' : $('#payment_reference_id').val(),
+                            'payment_date' : $('#payment_date').val()
+                        })
+    
+                        let rating_data = JSON.stringify({
+                            'account_id' : account_id,
+                            'invoice_status' : data.invoice_status_id
+                        });
+    
+                        const [update_content, payment_content, rating_content] = await Promise.all ([updateData('invoice/update.php', update_data), createData('payment/create.php', payment_data), updateData('ratings/update.php', rating_data)]);
+    
+                        let tag_data = JSON.stringify({
+                            'account_id' : account_id,
+                            'invoice_id' : invoice_id,
+                            'payment_id' : payment_content.payment_id
+                        });
+    
+                        const tag_content = await updateData('payment/update_tagged.php', tag_data);
+    
+                        let log = await logActivity('Updated payment for ' + account_id + ' with Invoice # ' + invoice_id, 'Unpaid Invoices');
+    
+                        if (update_content.message == 'Invoice Updated' && payment_content.message == 'Payment Record Created' && tag_content.message == 'Payment Tagged' && rating_content.message == 'Rating Updated' && log) {
+                            sessionStorage.setItem('save_message', "Payment Updated Successfully.");
+                            window.location.reload();
+                        }
+                        else {
+                            toastr.error("Payment was not updated.");
+                        }
                     }
                     else {
-                        toastr.error("Payment was not updated.");
+                        toastr.error('Payment Reference ID already exist.');
+                        $('#payment_reference_id').val(null);
                     }
-                }
-                else {
-                    toastr.error('Payment Reference ID already exist.');
-                    $('#payment_reference_id').val(null);
                 }
             }
         });
     }
-} // End of Invoice Records
+}  // End of Invoice Records
 
 // -------------------------------------------------------------------- Payment Records JS
 async function setPaymentRecordsPage() {
@@ -451,7 +442,7 @@ async function setProrateRecordsPage() {
             $('#prorate_charge').val(data.amount);
             $('#status').val('Uncharged');
 
-            setTagElement('status', 2);
+            setTagElement('status', 1);
             toggleInputData('disabled', true);
 
             function toggleInputData (setAttr, bool) {
