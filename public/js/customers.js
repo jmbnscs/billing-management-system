@@ -271,7 +271,7 @@ async function setViewModal () {
 // -------------------------------------------------------------------- Add Customer
 async function setAddCustomerPage () {
     const add_customer = document.getElementById('add-customer');
-    $('#account_id').val(await generateAccountID());
+    $('#account_id').val(await generateID('account/read.php', "", 8));
 
     setAddDropdown();
 
@@ -360,26 +360,6 @@ async function setAddCustomerPage () {
         for (var i = 0; i < install_type.length; i++) {
             var opt = `<option value='${install_type[i].install_type_id}'>${install_type[i].install_type_name}</option>`;
             $("#install_type_id").append(opt);
-        }
-    }
-}
-
-async function generateAccountID() {
-    let content = fetchData('account/read.php');
-    let unique = false;
-
-    while(unique == false) {
-        let checker = 0;
-        let rand_num = Math.round(Math.random() * 99999999);
-
-        for(let i = 0; i < content.length; i++) {
-            if(rand_num == content[i].account_id) {
-                checker++;
-            }
-        }
-
-        if (checker == 0) {
-            return rand_num.toString();
         }
     }
 }

@@ -330,3 +330,21 @@ function setToastrArgs(msg, title) {
       
     toastr.error(msg, title);
 }
+
+async function generateID(fetch_page, added_string, size) {
+    const content = fetchData(fetch_page);
+
+    while (true) {
+        let checker = 0;
+        let rand_num = added_string + Math.round(Math.random() * Number((9).toString().repeat(size)));
+        console.log(rand_num)
+        for(let i = 0; i < content.length; i++) {
+            if(rand_num == content[i].ticket_num) {
+                checker++;
+            }
+        }
+        if ((checker == 0) && (rand_num.length == (size + added_string.length))) {
+            return rand_num;
+        }
+    }
+}

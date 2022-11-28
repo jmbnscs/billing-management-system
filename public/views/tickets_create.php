@@ -65,16 +65,6 @@
                         <input type="text" class="form-control" id="account_id">
                     </div>
                 </div>
-
-                <!--Dropdown for Admin ID - Assign  to... -->
-                <div class="row mb-3">
-                    <label for="admin_role" class="col-sm-2 col-form-label">Assign to</label>
-                    <div class="col-sm-10">
-                        <select id="admin_role" class="form-select" required>
-                            <option selected disabled value="">Choose Admin</option>
-                        </select>
-                    </div>
-                </div>
         
                 <div class ="text-center">
                     <button type="submit" class="btn btn-primary">Submit Ticket</button>

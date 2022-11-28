@@ -10,6 +10,8 @@ $(document).ready(function () {
             setCreateTicketPage();
         }
         else if (DIR_CUR == DIR_MAIN + 'views/tickets_resolved.php') {
+            displaySuccessMessage();
+
             setResolvedTicketsTable();
             resolvedModal();
         }
@@ -75,7 +77,7 @@ async function activeModal () {
         $('#admin_role').val(admin_role.user_role);
         $('#ticket_status_id').val(ticket_status);
 
-        setTagElement('ticket_status_id', 2);
+        setTagElement('ticket_status_id', 3);
 
         const claim_ticket_btn = document.getElementById('claim-ticket-btn');
         claim_ticket_btn.onclick = (e) => {
@@ -110,7 +112,7 @@ async function activeModal () {
             
                 if (claim_content.message == 'Ticket Claimed' && log) {
                     sessionStorage.setItem('save_message', "Ticket Claimed Successfully.");
-                    window.location.reload();
+                    window.location.replace('../views/tickets_pending.php');
                 }
                 else {
                     toastr.error("Ticket was not claimed. " + claim_content.message);
@@ -214,7 +216,7 @@ async function pendingModal () {
         $('#admin_id').val(admin_un);
         $('#ticket_status_id').val(ticket_status);
 
-        setTagElement('ticket_status_id', 3);
+        setTagElement('ticket_status_id', 2);
 
         const pending_resolve_ticket_btn = document.getElementById('pend-resolve-ticket-btn');
         pending_resolve_ticket_btn.onclick = (e) => {
@@ -283,7 +285,7 @@ async function pendNetworkModal(ticket_num) {
     
         if ((prorate_content.message == 'Prorate Created') && (ticket_content.message == 'Ticket Updated') && log) {
             sessionStorage.setItem('save_message', "Ticket Resolved Successfully.");
-            window.location.reload();
+            window.location.replace('../views/tickets_resolved.php');
         }
         else {
             toastr.error("Ticket was not updated. " + ticket_content.message + " " + prorate_content.message);
@@ -348,7 +350,7 @@ async function pendSubscriptionModal(ticket_num) {
     
         if (account_content.message == 'success' && ticket_content.message == 'Ticket Updated' && log) {
             sessionStorage.setItem('save_message', "Ticket Resolved Successfully.");
-            window.location.reload();
+            window.location.replace('../views/tickets_resolved.php');
         }
         else {
             toastr.error("Ticket was not updated. " + ticket_content.message + " " + account_content.message);
@@ -386,7 +388,7 @@ async function pendDisconnectModal(ticket_num) {
     
         if (ticket_content.message == 'Ticket Updated' && log) {
             sessionStorage.setItem('save_message', "Ticket Resolved Successfully.");
-            window.location.reload();
+            window.location.replace('../views/tickets_resolved.php');
         }
         else {
             toastr.error("Ticket was not resolved. " + ticket_content.message);
@@ -451,7 +453,7 @@ async function resolvedModal () {
 // -------------------------------------------------------------------- Add Ticket Page
 async function setCreateTicketPage () {
     const create_ticket = document.getElementById('create-ticket');
-    $('#ticket_num').val(await generateTicketNum());
+    $('#ticket_num').val(await generateID('ticket/read.php', "TN", 6));
 
     setAddDropdown();
 
@@ -462,24 +464,24 @@ async function setCreateTicketPage () {
 
     async function createTicket() {
         const ticket_num = $('#ticket_num').val();
+        const concern_id = $('#concern_id').val();
+        const user_level = (concern_id == 1 || concern_id == 2) ? 3 : 5;
 
         const create_data = JSON.stringify({
-            'concern_id' : $('#concern_id').val(),
+            'concern_id' : concern_id,
             'concern_details' : $('#concern_details').val(),
             'date_filed' : $('#date_filed').val(),
             'ticket_status_id' : 1,
             'account_id' : $('#account_id').val(),
             'ticket_num' : ticket_num,
-            'user_level' : $('#admin_role').val()
+            'user_level' : user_level
         });
 
         const [ticket_content, log] = await Promise.all ([createData('ticket/create.php', create_data), logActivity('Created Ticket ' + ticket_num, 'Create a Ticket')]);
     
         if (ticket_content.message == 'Ticket Created' && log) {
-            toastr.success('Ticket Created Successfully.');
-            setTimeout(function(){
-                window.location.replace('../views/tickets.php');
-             }, 2000);
+            sessionStorage.setItem('save_message', "Ticket Created Successfully.");
+            window.location.replace('../views/tickets.php');
         }
         else {
             toastr.error(ticket_content.message);
@@ -496,24 +498,6 @@ async function setCreateTicketPage () {
         for (var i = 2; i < user_levels.length; i++) {
             var opt = `<option value='${user_levels[i].user_id}'>${user_levels[i].user_role}</option>`;
             $("#admin_role").append(opt);
-        }
-    }
-}
-
-async function generateTicketNum() {
-    const content = fetchData('ticket/read.php');
-
-    let unique = false;
-    while(unique == false) {
-        let checker = 0;
-        let rand_num = "TN" + Math.round(Math.random() * 999999);
-        for(let i = 0; i < content.length; i++) {
-            if(rand_num == content[i].ticket_num) {
-                checker++;
-            }
-        }
-        if (checker == 0) {
-            return rand_num;
         }
     }
 }

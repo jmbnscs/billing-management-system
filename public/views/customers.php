@@ -62,28 +62,28 @@
                 <div class="row mb-3">
                   <label for="gstech_id" class="col-sm-2 col-form-label">GSTech ID</label>
                   <div class="col-sm-10">
-                      <input type="text" class="form-control" id="gstech_id" placeholder="" disabled>
+                      <input type="text" class="form-control" id="gstech_id" disabled>
                   </div>
                 </div>
 
                 <div class="row mb-3">
                   <label for="first_name" class="col-sm-2 col-form-label">First Name</label>
                       <div class="col-sm-10">
-                          <input type="text" class="form-control" id="first_name" placeholder="Ex. Juan" disabled>
+                          <input type="text" class="form-control" id="first_name" disabled>
                       </div>
                   </div>
                   
                   <div class="row mb-3">
                       <label for="middle_name" class="col-sm-2 col-form-label">Middle Name</label>
                       <div class="col-sm-10">
-                          <input type="text" class="form-control" id="middle_name" placeholder="Ex. Santos" disabled>
+                          <input type="text" class="form-control" id="middle_name" disabled>
                       </div>
                   </div>
           
                   <div class="row mb-3">    
                       <label for="last_name" class="col-sm-2 col-form-label">Last Name</label>
                       <div class="col-sm-10">
-                          <input type="text" class="form-control" id="last_name" placeholder="Ex. Dela Cruz" disabled>
+                          <input type="text" class="form-control" id="last_name" disabled>
                       </div>
                   </div>
           
@@ -140,21 +140,21 @@
                   <div class="row mb-3">
                       <label for="billing_address" class="col-sm-2 col-form-label">Address</label>
                       <div class="col-sm-10">
-                          <textarea class="form-control" id="billing_address" placeholder="Ex. 123 Kapasigan St. Pasig City" required></textarea>
+                          <textarea class="form-control" id="billing_address" required></textarea>
                       </div>
                   </div>
           
                   <div class="row mb-3">
                       <label for="mobile_number" class="col-sm-2 col-form-label">Mobile Number</label>
                       <div class="col-sm-10">
-                          <input type="text" class="form-control" id="mobile_number" placeholder="Ex. 09XXXXXXXXX" pattern="[0]{1}[9]{1}[0-9]{9}" required>
+                          <input type="text" class="form-control" id="mobile_number" pattern="[0]{1}[9]{1}[0-9]{9}" required>
                       </div>
                   </div>
           
                   <div class="row mb-3">
                       <label for="email" class="col-sm-2 col-form-label">Email</label>
                       <div class="col-sm-10">
-                          <input type="email" class="form-control" placeholder="Ex. name@example.com" id="email" required>
+                          <input type="email" class="form-control" id="email" required>
                       </div>
                   </div>
 
