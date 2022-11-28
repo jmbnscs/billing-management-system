@@ -205,6 +205,12 @@ h6 {
   visibility: hidden !important;
 }
 
+/* Modal Header */
+.modal-header {
+  background-color: #0819A8;
+  color: #f6f6fe;
+}
+
 /* Light Backgrounds */
 .bg-primary-light {
   background-color: #cfe2ff;

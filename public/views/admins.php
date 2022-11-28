@@ -41,7 +41,7 @@
 <!-- View Admin Modal -->
 <form id="save-admin">
   <div class="modal fade" id="view-admins" tabindex="-1">
-      <div class="modal-dialog modal-dialog-scrollable modal-lg">
+      <div class="modal-dialog modal-dialog-scrollable modal-xl">
         <div class="modal-content">
 
           <!-- Modal Header -->
@@ -51,98 +51,109 @@
           </div>
 
           <!-- Modal Body -->
-          <div class="modal-body">
-            <div class="row mb-3">
-                <label for="admin_id" class="col-sm-3 col-form-label">Admin ID</label>
-                <div class="col-sm-9">
-                    <input type="text" class="form-control" id="admin_id" readonly>
+          <div class="modal-body row g-3">
+            <!-- Left -->
+            <div class="col-sm-6 ">
+              <div class="col-md-9 pt-2">
+                <div class="form-floating">
+                  <input type="text" class="form-control" id="admin_id" placeholder="Admin ID" readonly>
+                  <label for="admin_id">Admin ID</label>
                 </div>
+              </div>
+
+              <div class="col-md-9 pt-2">
+                <div class="form-floating">
+                  <input type="text" class="form-control" id="admin_username" placeholder="Username" readonly>
+                  <label for="admin_username">Username</label>
+                </div>
+              </div>
+
+              <div class="col-md-9 pt-2">
+                <div class="form-floating">
+                  <input type="text" class="form-control" id="admin_password" placeholder="Default Password" readonly>
+                  <label for="admin_password">Default Password</label>
+                </div>
+              </div>
+
+              <div class="col-md-9 pt-2">
+                <div class="form-floating">
+                  <input type="text" class="form-control" id="first_name" placeholder="First Name" readonly>
+                  <label for="first_name">First Name</label>
+                </div>
+              </div>
+
+              <div class="col-md-9 pt-2">
+                <div class="form-floating">
+                  <input type="text" class="form-control" id="middle_name" placeholder="Middle Name" value="N/A" readonly>
+                  <label for="middle_name">Middle Name</label>
+                </div>
+              </div>
+
+              <div class="col-md-9 pt-2">
+                <div class="form-floating">
+                  <input type="text" class="form-control" id="last_name" placeholder="Last Name" readonly>
+                  <label for="last_name">Last Name</label>
+                </div>
+              </div>
+
+              <div class="col-md-9 pt-2">
+                <div class="form-floating">
+                  <input type="date" class="form-control" id="admin_bday" placeholder="Birthday" readonly>
+                  <label for="admin_bday">Birthday</label>
+                </div>
+              </div>
+
             </div>
 
-            <div class="row mb-3">
-                <label for="admin_username" class="col-sm-3 col-form-label">Username</label>
-                <div class="col-sm-9">
-                    <input type="text" class="form-control" id="admin_username" disabled>
-                </div>
-            </div>
+            <!-- Right -->
+            <div class="col-sm-6">
 
-            <div class="row mb-3">
-                <label for="admin_password" class="col-sm-3 col-form-label" id="pwd_label">Default Password</label>
-                <div class="col-sm-9">
-                    <input type="text" class="form-control" id="admin_password" disabled>
+              <div class="col-md-9 pt-2">
+                <div class="form-floating">
+                  <input type="date" class="form-control" id="employment_date" placeholder="Employment Date" readonly>
+                  <label for="employment_date">Employment Date</label>
                 </div>
-            </div>
+              </div>
 
-            <div class="row mb-3">
-                <label for="first_name" class="col-sm-3 col-form-label">First Name</label>
-                <div class="col-sm-9">
-                    <input type="text" class="form-control" id="first_name" placeholder="N/A" disabled>
-                </div>
-            </div>
-            
-            <div class="row mb-3">
-                <label for="middle_name" class="col-sm-3 col-form-label">Middle Name</label>
-                <div class="col-sm-9">
-                    <input type="text" class="form-control" id="middle_name" placeholder="N/A" disabled>
-                </div>
-            </div>
-    
-            <div class="row mb-3">    
-                <label for="last_name" class="col-sm-3 col-form-label">Last Name</label>
-                <div class="col-sm-9">
-                    <input type="text" class="form-control" id="last_name" placeholder="N/A" disabled>
-                </div>
-            </div>
-    
-            <div class="row mb-3">
-                <label for="admin_bday" class="col-sm-3 col-form-label">Birthday</label>
-                <div class="col-sm-9">
-                    <input type="date" class="form-control" id="admin_bday" disabled>
-                </div>
-            </div>
-    
-            <div class="row mb-3">
-                <label for="employment_date" class="col-sm-3 col-form-label">Employment Date</label>
-                <div class="col-sm-9">
-                    <input type="date" class="form-control" id="employment_date" disabled>
-                </div>
-            </div>
-    
-            <div class="row mb-3">
-                <label for="mobile_number" class="col-sm-3 col-form-label">Mobile Number</label>
-                <div class="col-sm-9">
-                    <input type="text" class="form-control" id="mobile_number" placeholder="Ex. 09XXXXXXXXX" pattern="[0]{1}[9]{1}[0-9]{9}" required>
-                </div>
-            </div>
-    
-            <div class="row mb-3">
-                <label for="admin_email" class="col-sm-3 col-form-label">Email</label>
-                <div class="col-sm-9">
-                    <input type="email" class="form-control" placeholder="Ex. name@example.com" id="admin_email" required>
-                </div>
-            </div>
+              <div class="col-md-10 pt-4">
+                <h5 style="border-bottom: 1px solid grey;">Edit Admin Information</h5>
+              </div>
 
-            <div class="row mb-3">
-                <label for="address" class="col-sm-3 col-form-label">Address</label>
-                    <div class="col-sm-9">
-                        <textarea class="form-control" id="address" rows="2" placeholder="Ex. Anonas Street Sta. Mesa, Manila" required></textarea>
-                    </div>
-            </div>
-
-            <div class="row mb-3">
-                <label for="role" class="col-sm-3 col-form-label">Admin Level</label>
-                <div class="col-sm-9">
-                    <select id="role" class="form-select" required>
-                    </select>
+              <div class="col-md-9 pt-2">
+                <div class="form-floating">
+                  <input type="text" class="form-control" id="mobile_number" placeholder="Mobile Number" pattern="[0]{1}[9]{1}[0-9]{9}" required>
+                  <label for="mobile_number">Mobile Number</label>
                 </div>
-            </div>
+              </div>
 
-            <div class="row mb-3">
-                <label for="admin_status" class="col-sm-3 col-form-label">Admin Status</label>
-                <div class="col-sm-9">
-                    <select id="admin_status" class="form-select" required>
-                    </select>
+              <div class="col-md-9 pt-2">
+                <div class="form-floating">
+                  <input type="email" class="form-control" id="admin_email" placeholder="Email" required>
+                  <label for="admin_email">Email</label>
                 </div>
+              </div>
+
+              <div class="col-md-9 pt-2">
+                <div class="form-floating">
+                  <textarea class="form-control" id="address" rows="2" placeholder="Address" required></textarea>
+                  <label for="address">Address</label>
+                </div>
+              </div>
+
+              <div class="col-md-9 pt-2">
+                <div class="form-floating">
+                  <select id="role" class="form-select" required></select>
+                  <label for="role">Admin Level</label>
+                </div>
+              </div>
+
+              <div class="col-md-9 pt-2">
+                <div class="form-floating">
+                  <select id="admin_status" class="form-select" required></select>
+                  <label for="admin_status">Admin Status</label>
+                </div>
+              </div>
+
             </div>
 
           </div>
@@ -173,8 +184,29 @@
           </div>
 
           <!-- Modal Body -->
-          <div class="modal-body">
-                  <div class="row mb-3">
+          <div class="modal-body row g-3">
+                  <div class="col-md-12">
+                    <div class="form-floating">
+                      <input type="text" class="form-control" id="admin_id_rst" placeholder="Admin ID" readonly>
+                      <label for="admin_id_rst">Admin ID</label>
+                    </div>
+                  </div>
+
+                  <div class="col-md-12">
+                    <div class="form-floating">
+                      <input type="text" class="form-control" id="admin_username_rst" placeholder="Username" readonly>
+                      <label for="admin_username_rst">Username</label>
+                    </div>
+                  </div>
+
+                  <div class="col-md-12">
+                    <div class="form-floating">
+                      <input type="text" class="form-control" id="admin_password_rst" placeholder="Default Password" readonly>
+                      <label for="admin_password_rst">Default Password</label>
+                    </div>
+                  </div>
+
+                  <!-- <div class="row mb-3">
                       <label for="admin_id" class="col-sm-4 col-form-label">Admin ID</label>
                       <div class="col-sm-8">
                           <input type="text" class="form-control" id="admin_id_rst" readonly>
@@ -193,7 +225,7 @@
                       <div class="col-sm-8">
                           <input type="text" class="form-control" id="admin_password_rst" disabled>
                       </div>
-                  </div>
+                  </div> -->
           </div>
 
           <!-- Modal Footer -->

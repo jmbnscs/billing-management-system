@@ -66,7 +66,7 @@ async function setViewModal () {
         $('#admin_password').val(defaults.def_password);
         
         $('#first_name').val(admin.first_name);
-        $('#middle_name').val(admin.middle_name);
+        (admin.middle_name == null || admin.middle_name === '') ? $('#middle_name').val('N/A') : $('#middle_name').val(admin.middle_name);
         $('#last_name').val(admin.last_name);
         $('#admin_bday').val(admin.birthdate);
         $('#employment_date').val(admin.employment_date);
@@ -78,7 +78,7 @@ async function setViewModal () {
         toggleInputData('disabled', true);
         setDefaultDropdown();
 
-        modalTitle.textContent = admin_id + ' - ' + admin.first_name + ' ' + admin.last_name + ' [' + admin_role + ']';
+        modalTitle.textContent = admin.first_name + ' ' + admin.last_name + ' [' + admin_role + ']';
 
         function setDefaultDropdown () {
             $("#role").empty();
