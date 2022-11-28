@@ -51,42 +51,42 @@
 
             <!-- Modal Body -->
             <div class="modal-body row g-3">
-                <div class="col-md-10">
+                <div class="col-md-12">
                   <div class="form-floating">
                     <input type="text" class="form-control" id="plan_id" placeholder="Plan ID" readonly>
                     <label for="plan_id">Plan ID</label>
                   </div>
                 </div>
 
-                <div class="col-md-10">
+                <div class="col-md-12">
                   <div class="form-floating">
                     <input type="text" class="form-control" id="plan_name" placeholder="Plan Name" required>
                     <label for="plan_name">Plan Name</label>
                   </div>
                 </div>
 
-                <div class="col-md-10">
+                <div class="col-md-12">
                   <div class="form-floating">
                     <input type="text" class="form-control" id="bandwidth" placeholder="Bandwidth" required>
                     <label for="bandwidth">Bandwidth</label>
                   </div>
                 </div>
 
-                <div class="col-md-10">
+                <div class="col-md-12">
                   <div class="form-floating">
                     <input type="text" class="form-control" id="price" placeholder="Price" required>
                     <label for="price">Price</label>
                   </div>
                 </div>
 
-                <div class="col-md-10">
+                <div class="col-md-12">
                   <div class="form-floating">
                     <select id="plan_status_id" class="form-select" required></select>
                     <label for="plan_status_id">Status</label>
                   </div>
                 </div>
 
-                <div class="col-md-10">
+                <div class="col-md-12">
                   <div class="form-floating">
                     <select class="form-control selectpicker" id="inclusion" multiple aria-label="size 5 select example" data-actions-box="true"></select>
                     <label for="inclusion">Inclusion(s)</label>

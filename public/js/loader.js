@@ -230,7 +230,7 @@ async function generateInvoice() {
         });
     
         const content = await createResponse.json();
-        const log = await logAutomation('Created Invoice for Account # ' + account_id + ' - Invoice # ' + content.invoice_id, 'Automated System');
+        const log = await logAutomation('Invoice Generated for Account # ' + account_id + ' - Invoice # ' + content.invoice_id, 'Automated System');
     
         if (content.message == 'Invoice Created' && log) {
             sendEmail(content.invoice_id);

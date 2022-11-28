@@ -170,7 +170,7 @@ async function setInvoicePage () {
     
                         let log = await logActivity('Updated payment for ' + account_id + ' with Invoice # ' + invoice_id, 'Unpaid Invoices');
     
-                        if (update_content.message == 'Invoice Updated' && payment_content.message == 'Payment Record Created' && tag_content.message == 'Payment Tagged' && rating_content.message == 'Rating Updated' && log) {
+                        if (update_content.message == 'Invoice Updated' && payment_content.success && tag_content.message == 'Payment Tagged' && rating_content.message == 'Rating Updated' && log) {
                             sessionStorage.setItem('save_message', "Payment Updated Successfully.");
                             window.location.reload();
                         }
@@ -249,7 +249,6 @@ async function setPaymentRecordsPage() {
             var modalTitle = updateModal.querySelector('.modal-title');
             modalTitle.textContent = data.payment_reference_id;
             
-            $('#payment_id').val(data.payment_id);
             $('#amount_paid').val(data.amount_paid);
             $('#payment_reference_id').val(data.payment_reference_id);
             $('#payment_date').val(data.payment_date);
@@ -273,9 +272,14 @@ async function setPaymentRecordsPage() {
                 toggleInputData('disabled', false);
             };
 
-            update_fn.onsubmit = (e) => {
+            update_fn.onsubmit = async (e) => {
                 e.preventDefault();
-                processUpdate();
+                if (await isAccountIDExist($('#account_id').val())) {
+                    processUpdate();
+                }
+                else {
+                    toastr.error('Account ID does not exist.');
+                }
             };
 
             async function processUpdate() {
@@ -283,7 +287,6 @@ async function setPaymentRecordsPage() {
                 const payment_reference_id = $('#payment_reference_id').val();
                 const amount_paid = $('#amount_paid').val();
                 const payment_date = $('#payment_date').val();
-                const payment_id = $('#payment_id').val();
 
                 const latest_invoice = await fetchData('invoice/read_latest.php?account_id=' + account_id);
 
@@ -317,6 +320,17 @@ async function setPaymentRecordsPage() {
                     toastr.error("Payment was not updated.");
                 }
             }
+
+            async function isAccountIDExist(account_id) {
+                const content = await fetchData('account/read.php');
+
+                for (var i = 0; i < content.length; i++) {
+                    if (content[i].account_id == account_id) {
+                        return true;
+                    }
+                }
+                return false;
+            }
         });
     }
     
@@ -331,21 +345,12 @@ async function setPaymentRecordsPage() {
             var modalTitle = deleteModal.querySelector('.modal-title');
             modalTitle.textContent = 'Delete ' + data.payment_reference_id + '?';
             
-            $('#payment_id_d').val(data.payment_id);
             $('#payment_reference_id_d').val(data.payment_reference_id);
             $('#payment_date_d').val(data.payment_date);
             $('#amount_paid_d').val(data.amount_paid);
             $('#tagged_d').val('Untagged');
 
-            toggleInputData('disabled', true);
             setTagElement('tagged_d', 2);
-
-            function toggleInputData (setAttr, bool) {
-                $('#payment_id_d').attr(setAttr, bool);
-                $('#payment_reference_id_d').attr(setAttr, bool);
-                $('#payment_date_d').attr(setAttr, bool);
-                $('#amount_paid_d').attr(setAttr, bool);
-            }
 
             delete_fn.onsubmit = (e) => {
                 e.preventDefault();
@@ -360,7 +365,7 @@ async function setPaymentRecordsPage() {
 
                 const log = await logActivity('Deleted Payment Record #' + payment_id + ' [' + data.payment_reference_id + ']', 'Untagged Payments');
                 
-                if (response.message == 'Payment Record Deleted' && log) {
+                if (response.success && log) {
                     sessionStorage.setItem('save_message', "Payment Record Deleted Successfully.");
                     window.location.reload();
                 }
@@ -442,7 +447,7 @@ async function setProrateRecordsPage() {
             $('#prorate_charge').val(data.amount);
             $('#status').val('Uncharged');
 
-            setTagElement('status', 1);
+            setTagElement('status', 2);
             toggleInputData('disabled', true);
 
             function toggleInputData (setAttr, bool) {
@@ -474,7 +479,7 @@ async function setProrateRecordsPage() {
                 const update_content = await updateData('prorate/update.php', update_data);
                 const log = await logActivity('Updated Prorate Record # ' + prorate_id, 'Uncharged Prorates')
             
-                if (update_content.message == 'Prorate Updated' && log) {
+                if (update_content.success && log) {
                     sessionStorage.setItem('save_message', "Prorate Record Updated Successfully.");
                     window.location.reload();
                 }
@@ -517,7 +522,7 @@ async function setProrateRecordsPage() {
                 const delete_content = await deleteData('prorate/delete.php', delete_data);
                 const log = await logActivity('Deleted Prorate Record # ' + prorate_id, 'Uncharged Prorates');
             
-                if (delete_content.message == 'Prorate Deleted' && log) {
+                if (delete_content.success && log) {
                     sessionStorage.setItem('save_message', "Prorate Record Deleted Successfully.");
                     window.location.reload();
                 }
@@ -559,7 +564,7 @@ async function setAddPaymentPage () {
             const payment_content = await createData('payment/create.php', payment_data);
             const log = await logActivity('Added new payment record with Reference ID # ' + payment_ref, 'Add Payment Record');
         
-            if (payment_content.message == 'Payment Record Created' && log) {
+            if (payment_content.success && log) {
                 toastr.success('Payment Record Created Successfully.');
                 setTimeout(function(){
                     window.location.replace('../views/invoice_payments.php');

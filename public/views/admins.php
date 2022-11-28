@@ -205,27 +205,6 @@
                       <label for="admin_password_rst">Default Password</label>
                     </div>
                   </div>
-
-                  <!-- <div class="row mb-3">
-                      <label for="admin_id" class="col-sm-4 col-form-label">Admin ID</label>
-                      <div class="col-sm-8">
-                          <input type="text" class="form-control" id="admin_id_rst" readonly>
-                      </div>
-                  </div>
-
-                  <div class="row mb-3">
-                      <label for="admin_username" class="col-sm-4 col-form-label">Username</label>
-                      <div class="col-sm-8">
-                          <input type="text" class="form-control" id="admin_username_rst" disabled>
-                      </div>
-                  </div>
-
-                  <div class="row mb-3">
-                      <label for="admin_password" class="col-sm-4 col-form-label" id="pwd_label">Default Password</label>
-                      <div class="col-sm-8">
-                          <input type="text" class="form-control" id="admin_password_rst" disabled>
-                      </div>
-                  </div> -->
           </div>
 
           <!-- Modal Footer -->
