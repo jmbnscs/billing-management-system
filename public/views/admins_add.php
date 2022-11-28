@@ -8,7 +8,7 @@
   <h1>Add New Admin</h1>
   <nav>
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="dashboard.html">Home</a></li>
+      <li class="breadcrumb-item"><a href="dashboard.php">Home</a></li>
       <li class="breadcrumb-item active">Admins</li>
     </ol>
   </nav>
@@ -32,7 +32,7 @@
                     <div class="row mb-3">
                         <label for="first_name" class="col-sm-2 col-form-label">First Name</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="first_name" placeholder="Ex. Juan" required>
+                            <input type="text" class="form-control" id="first_name" placeholder="Ex. Juan" size="50" minlength="2" required>
                         </div>
                     </div>
                     
@@ -46,7 +46,7 @@
                     <div class="row mb-3">    
                         <label for="last_name" class="col-sm-2 col-form-label">Last Name</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="last_name" placeholder="Ex. Dela Cruz" required>
+                            <input type="text" class="form-control" id="last_name" placeholder="Ex. Dela Cruz" size="50" minlength="2" required>
                         </div>
                     </div>
             
@@ -67,7 +67,7 @@
                     <div class="row mb-3">
                         <label for="admin_bday" class="col-sm-2 col-form-label">Birthday</label>
                         <div class="col-sm-10">
-                            <input type="date" class="form-control" id="admin_bday" placeholder="Ex. 03/02/2001" required>
+                            <input type="date" class="form-control admin_bday" id="admin_bday" autocomplete="off" required>
                         </div>
                     </div>
 
@@ -97,10 +97,8 @@
                     <div class ="text-center">
                         <button type="submit" class="btn btn-success">Create Account</button>
                     </div>
-
+                    
                 </form>
-
-
         </div>
       </div>
 
@@ -121,6 +119,10 @@
   <script src="../assets/vendor/simple-datatables/simple-datatables.js"></script>
   <script src="../assets/vendor/tinymce/tinymce.min.js"></script>
   <script src="../assets/vendor/php-email-form/validate.js"></script>
+
+  <!-- Datepicker -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 
   <!-- Template Main JS File -->
   <script src="../assets/js/main.js"></script>

@@ -340,13 +340,14 @@ async function updateUnpaidInvoice() {
             // console.log('Overdue: ' + unpaid_content[i].invoice_status_id);
         }
 
-        if (day_difference == -6) {
+        // console.log(day_difference);
+        if (day_difference == -5) {
             if (!await checkEmailLog(unpaid_content[i].invoice_id, 1)) {
                 sendNotice(unpaid_content[i].invoice_id, 1);
                 createEmailLog(unpaid_content[i].account_id, unpaid_content[i].invoice_id, 1, 'Payment Reminder for Account # ' + unpaid_content[i].account_id + ' - 5 days before due');
             }
         }
-        else if (day_difference == -1) {
+        else if (day_difference == 0) {
             if (!await checkEmailLog(unpaid_content[i].invoice_id, 2)) {
                 sendNotice(unpaid_content[i].invoice_id, 2);
                 createEmailLog(unpaid_content[i].account_id, unpaid_content[i].invoice_id, 2, 'Payment Reminder for Account # ' + unpaid_content[i].account_id + ' - Due Today');

@@ -214,6 +214,42 @@ function setButtons() {
     delete_fn = document.getElementById('delete-data');
 }
 
+function isLegalAge(bday) {
+	var today = new Date();
+    var year_today = today.getFullYear();
+    var month_today = today.getMonth() + 1;
+    var day_today = today.getDate();
+
+    var bdate = new Date(bday);
+    var year_bdate = bdate.getFullYear();
+    var month_bdate = bdate.getMonth() + 1;
+    var day_bdate = bdate.getDate();
+
+    var by = Number.parseFloat(year_bdate),
+		bm = Number.parseFloat(month_bdate),
+		bd = Number.parseFloat(day_bdate),
+		ty = Number.parseFloat(year_today),
+		tm = Number.parseFloat(month_today),
+		td = Number.parseFloat(day_today);
+
+    if (td < bd) {
+        tm = tm - 1;
+    } 
+
+    if (tm < bm) {
+        ty = ty - 1;
+    } 
+
+    var age = ty - by;
+    
+    if (age >= 18) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
 // Display Default Data
 async function setDefaults () {
     const admin_data = await getAdminData(admin_id);

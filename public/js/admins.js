@@ -59,10 +59,12 @@ async function setViewModal () {
         var modalTitle = viewModal.querySelector('.modal-title');
         var admin_role;
       
-        const [admin, user_levels, admin_statuses] = await Promise.all ([fetchData('admin/read_single.php?admin_id=' + admin_id), fetchData('user_level/read.php'), fetchData('statuses/read.php?status_table=admin_status')])
+        const [admin, user_levels, admin_statuses, defaults] = await Promise.all ([fetchData('admin/read_single.php?admin_id=' + admin_id), fetchData('user_level/read.php'), fetchData('statuses/read.php?status_table=admin_status'), fetchData('logs/read_admin_default.php?admin_id=' + admin_id)])
 
         $('#admin_id').val(admin.admin_id);
         $('#admin_username').val(admin.admin_username);
+        $('#admin_password').val(defaults.def_password);
+        
         $('#first_name').val(admin.first_name);
         $('#middle_name').val(admin.middle_name);
         $('#last_name').val(admin.last_name);
@@ -80,13 +82,13 @@ async function setViewModal () {
 
         function setDefaultDropdown () {
             $("#role").empty();
-            for (var i = 0; i < user_levels.length; i++) {
-                if (user_levels[i].user_id == admin.user_level_id) {
-                    admin_role = user_levels[i].user_role;
-                    var opt = `<option value='${user_levels[i].user_id}'>${user_levels[i].user_role}</option>`;
-                    $("#role").append(opt);
+                for (var i = 0; i < user_levels.length; i++) {
+                    if (user_levels[i].user_id == admin.user_level_id) {
+                        admin_role = user_levels[i].user_role;
+                        var opt = `<option value='${user_levels[i].user_id}'>${user_levels[i].user_role}</option>`;
+                        $("#role").append(opt);
+                    }
                 }
-            }
 
             $("#admin_status").empty();
             for (var i = 0; i < admin_statuses.length; i++) {
@@ -98,16 +100,21 @@ async function setViewModal () {
         }
 
         async function setDropdownData () {
-            $("#role").empty();
-            $("#role").append(`<option selected disabled value="">Choose Admin Level</option>`);
-            for (var i = 1; i < user_levels.length; i++) {
-                if (user_levels[i].user_id == admin.user_level_id) {
-                    var opt = `<option selected value='${user_levels[i].user_id}' style='color: blue'>${user_levels[i].user_role}</option>`;
+            if (admin.admin_id != '11674') {
+                $("#role").empty();
+                $("#role").append(`<option selected disabled value="">Choose Admin Level</option>`);
+                for (var i = 1; i < user_levels.length; i++) {
+                    if (user_levels[i].user_id == admin.user_level_id) {
+                        var opt = `<option selected value='${user_levels[i].user_id}' style='color: blue'>${user_levels[i].user_role}</option>`;
+                    }
+                    else {
+                        var opt = `<option value='${user_levels[i].user_id}'>${user_levels[i].user_role}</option>`;
+                    }
+                    $("#role").append(opt);
                 }
-                else {
-                    var opt = `<option value='${user_levels[i].user_id}'>${user_levels[i].user_role}</option>`;
-                }
-                $("#role").append(opt);
+            }
+            else {
+                $("#role").attr('disabled', true);
             }
 
             $("#admin_status").empty();
@@ -186,8 +193,51 @@ async function setViewModal () {
             e.preventDefault();
             updateAdminData();
         };
-    });
 
+        const reset_pwd_btn = document.getElementById('reset-btn');
+        reset_pwd_btn.onclick = (e) => {
+            e.preventDefault();
+            $('#view-admins').modal('hide');
+            setResetPWModal(admin_id);
+        };
+    });
+}
+
+async function setResetPWModal (admin_id) {
+    var resetModal = document.getElementById('reset-pw-modal');
+    var modalTitle = resetModal.querySelector('.modal-title');
+    modalTitle.textContent = 'Reset Password for Admin ' + admin_id + '?';
+
+    const content = await fetchData('logs/read_admin_default.php?admin_id=' + admin_id);
+    $('#admin_id_rst').val(content.admin_id);
+    $('#admin_username_rst').val(content.def_username);
+    $('#admin_password_rst').val(content.def_password);
+
+    const reset_pwd = document.getElementById('reset-password');
+    reset_pwd.onsubmit = (e) => {
+        e.preventDefault();
+        resetPassword();
+    };
+
+    async function resetPassword() {
+        let update_data = JSON.stringify({
+            'admin_id' : content.admin_id,
+            'admin_password' : content.def_password
+        });
+
+        const [update_content, log] = await Promise.all ([updateData('admin/reset_password.php', update_data), logActivity('Password Reset for Admin ' + content.def_username + ' - ' + admin_id, 'View Admins')]);
+
+        if (update_content.success && log) {
+            toastr.success('Password has been reset successfully.');
+            setTimeout (() => {
+                window.location.reload();
+            }, 2000);
+        }
+        else {
+            toastr.error('Some error has occurred, please try again later.');
+            // toastr.error(update_content.error);
+        }
+    }
 }
 
 // -------------------------------------------------------------------- Add Admin
@@ -197,9 +247,25 @@ async function setAddAdminPage () {
     
     setAddDropdown();
 
+    var maxBirthdayDate = new Date();
+    maxBirthdayDate.setFullYear( maxBirthdayDate.getFullYear() - 18 );
+    maxBirthdayDate.setMonth(11,31)
+    $( "#admin_bday" ).datepicker({
+        dateFormat: 'yy-mm-dd',
+        changeMonth: true,
+        changeYear: true,
+        maxDate: maxBirthdayDate,
+    yearRange: '1950:'+maxBirthdayDate.getFullYear(),
+    });
+
     add_admin.onsubmit = (e) => {
         e.preventDefault();
-        addAdmin();
+        if (isLegalAge($('#admin_bday').val())) {
+            addAdmin();
+        }
+        else {
+            toastr.warning('The birthday provided is not of legal age.');
+        }
     };
 
     async function addAdmin() {
@@ -219,17 +285,32 @@ async function setAddAdminPage () {
         let content = await createData('admin/create.php', data);
         let log = await logActivity('Created new admin account with Admin ID # ' + $('#admin_id').val(), 'Add New Admin');
         
-        if (content.message = 'Admin Created' && log) {
+        if (content.success && log) {
+            let create_content = await fetchData('admin/read_single.php?admin_id=' + $('#admin_id').val());
+            let log_data = JSON.stringify({
+                'admin_id' : $('#admin_id').val(),
+                'def_username' : create_content.admin_username,
+                'def_password' : create_content.admin_password
+            });
+            let log_default = await createData('logs/log_admin_default.php', log_data);
+            
             toastr.success('Admin Created Successfully.');
+                setTimeout(function(){
+                    window.location.replace('../views/admins.php');
+                 }, 2000);
+            
+        }
+        else {
+            toastr.error('Some error has occurred, please try again later.');
             setTimeout(function(){
-                window.location.replace('../views/admins.php');
+                window.location.reload();
              }, 2000);
         }
     }
 
     async function setAddDropdown() {
         const user_levels = await fetchData('user_level/read.php');
-        for (var i = 1; i < user_levels.length; i++) {
+        for (var i = 2; i < user_levels.length; i++) {
             var opt = `<option value='${user_levels[i].user_id}'>${user_levels[i].user_role}</option>`;
             $("#role").append(opt);
         }
@@ -242,7 +323,7 @@ async function generateAdminID() {
 
     while (unique == false) {
         let checker = 0;
-        let rand_num = Math.round(Math.random() * 99999);
+        let rand_num = Math.floor(10000 + Math.random() * 90000);
 
         for (let i = 0; i < content.length; i++) {
             if (rand_num == content[i].admin_id) {

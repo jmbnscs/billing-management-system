@@ -38,9 +38,8 @@
     </div>
   </div> <!-- End Admins Table -->
 
-<!-- Admin Modal -->
+<!-- View Admin Modal -->
 <form id="save-admin">
-  <!-- Modal Dialog Scrollable -->
   <div class="modal fade" id="view-admins" tabindex="-1">
       <div class="modal-dialog modal-dialog-scrollable modal-lg">
         <div class="modal-content">
@@ -63,35 +62,42 @@
             <div class="row mb-3">
                 <label for="admin_username" class="col-sm-3 col-form-label">Username</label>
                 <div class="col-sm-9">
-                    <input type="text" class="form-control" id="admin_username" placeholder="admin_username" disabled>
+                    <input type="text" class="form-control" id="admin_username" disabled>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label for="admin_password" class="col-sm-3 col-form-label" id="pwd_label">Default Password</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="admin_password" disabled>
                 </div>
             </div>
 
             <div class="row mb-3">
                 <label for="first_name" class="col-sm-3 col-form-label">First Name</label>
                 <div class="col-sm-9">
-                    <input type="text" class="form-control" id="first_name" placeholder="Ex. Juan" disabled>
+                    <input type="text" class="form-control" id="first_name" placeholder="N/A" disabled>
                 </div>
             </div>
             
             <div class="row mb-3">
                 <label for="middle_name" class="col-sm-3 col-form-label">Middle Name</label>
                 <div class="col-sm-9">
-                    <input type="text" class="form-control" id="middle_name" placeholder="Ex. Santos" disabled>
+                    <input type="text" class="form-control" id="middle_name" placeholder="N/A" disabled>
                 </div>
             </div>
     
             <div class="row mb-3">    
                 <label for="last_name" class="col-sm-3 col-form-label">Last Name</label>
                 <div class="col-sm-9">
-                    <input type="text" class="form-control" id="last_name" placeholder="Ex. Dela Cruz" disabled>
+                    <input type="text" class="form-control" id="last_name" placeholder="N/A" disabled>
                 </div>
             </div>
     
             <div class="row mb-3">
                 <label for="admin_bday" class="col-sm-3 col-form-label">Birthday</label>
                 <div class="col-sm-9">
-                    <input type="date" class="form-control" id="admin_bday" placeholder="Ex. 03/02/2001" disabled>
+                    <input type="date" class="form-control" id="admin_bday" disabled>
                 </div>
             </div>
     
@@ -119,7 +125,7 @@
             <div class="row mb-3">
                 <label for="address" class="col-sm-3 col-form-label">Address</label>
                     <div class="col-sm-9">
-                        <textarea class="form-control" id="address" rows="2" placeholder="Ex. Anonas Street Sta. Mesa Manila" required></textarea>
+                        <textarea class="form-control" id="address" rows="2" placeholder="Ex. Anonas Street Sta. Mesa, Manila" required></textarea>
                     </div>
             </div>
 
@@ -145,13 +151,60 @@
           <!-- Modal Footer -->
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#reset-pw-modal" id="reset-btn">Reset Password</button>
             <button type="button" class="btn btn-primary" id="edit-admin">Edit</button>
             <button type="submit" class="btn btn-success" id="save-admin-btn" disabled>Save Changes</button>
           </div>
         </div>
       </div>
   </div>
-</form> <!-- End Admins Modal -->
+</form> <!-- End View Admins Modal -->
+
+<!-- Reset Password Modal -->
+<form id="reset-password">
+  <div class="modal fade" id="reset-pw-modal" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h5 class="modal-title"></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+
+          <!-- Modal Body -->
+          <div class="modal-body">
+                  <div class="row mb-3">
+                      <label for="admin_id" class="col-sm-4 col-form-label">Admin ID</label>
+                      <div class="col-sm-8">
+                          <input type="text" class="form-control" id="admin_id_rst" readonly>
+                      </div>
+                  </div>
+
+                  <div class="row mb-3">
+                      <label for="admin_username" class="col-sm-4 col-form-label">Username</label>
+                      <div class="col-sm-8">
+                          <input type="text" class="form-control" id="admin_username_rst" disabled>
+                      </div>
+                  </div>
+
+                  <div class="row mb-3">
+                      <label for="admin_password" class="col-sm-4 col-form-label" id="pwd_label">Default Password</label>
+                      <div class="col-sm-8">
+                          <input type="text" class="form-control" id="admin_password_rst" disabled>
+                      </div>
+                  </div>
+          </div>
+
+          <!-- Modal Footer -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-danger">Reset</button>
+          </div>
+        </div>
+      </div>
+  </div>
+</form>
 
 </main><!-- End #main -->
 
