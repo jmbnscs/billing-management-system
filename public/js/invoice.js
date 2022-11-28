@@ -320,17 +320,7 @@ async function setPaymentRecordsPage() {
                     toastr.error("Payment was not updated.");
                 }
             }
-
-            async function isAccountIDExist(account_id) {
-                const content = await fetchData('account/read.php');
-
-                for (var i = 0; i < content.length; i++) {
-                    if (content[i].account_id == account_id) {
-                        return true;
-                    }
-                }
-                return false;
-            }
+            
         });
     }
     

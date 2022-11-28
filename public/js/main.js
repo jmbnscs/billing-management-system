@@ -160,6 +160,17 @@ async function getStatusName(status_table, status_id) {
     return content.status_name;
 }
 
+async function isAccountIDExist(account_id) {
+    const content = await fetchData('account/read.php');
+
+    for (var i = 0; i < content.length; i++) {
+        if (content[i].account_id == account_id) {
+            return true;
+        }
+    }
+    return false;
+}
+
 // Functions to format data display
 function setTagElement(id, status) {
     document.getElementById(id).classList.add('text-white');

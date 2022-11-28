@@ -46,23 +46,16 @@
                 </div>
 
                 <div class="row mb-3">
-                    <label for="date_filed" class="col-sm-2 col-form-label">Date Filed</label>
+                    <label for="date_filed" class="col-sm-2 col-form-label" required>Date Filed</label>
                     <div class="col-sm-10">
                         <input type="date" class="form-control" id="date_filed">
                     </div>
                 </div>
-        
-                <!-- <div class="row mb-3">
-                    <label for="duration" class="col-sm-2 col-form-label">Duration</label>
-                    <div class="col-sm-10">
-                        <input type="datetime" class="form-control" id="duration" placeholder="HH:MM:SS">
-                    </div>
-                </div> -->
 
                 <div class="row mb-3">
                     <label for="account_id" class="col-sm-2 col-form-label">Account ID</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="account_id">
+                        <input type="text" class="form-control" id="account_id" required>
                     </div>
                 </div>
 
