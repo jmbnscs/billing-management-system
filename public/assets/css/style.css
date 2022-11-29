@@ -1063,6 +1063,15 @@ h6 {
   color: rgba(1, 41, 112, 0.6);
 }
 
+.date_filed::-webkit-calendar-picker-indicator{
+  display: none;
+}
+
+.date_filed::-webkit-input-placeholder{ 
+  visibility: hidden !important;
+}
+
+
 /*--------------------------------------------------------------
 # Add Plan Page 
 --------------------------------------------------------------*/

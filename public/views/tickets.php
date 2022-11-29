@@ -26,7 +26,7 @@
               <th scope="col">Date Filed</th>
               <th scope="col">Ticket Status</th>
               <th scope="col">Account ID</th>
-              <th scope="col">Inspect</th>
+              <th scope="col">Claim / View</th>
             </tr>
           </thead>
           <tbody id="ticket-data">

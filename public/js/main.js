@@ -164,6 +164,7 @@ async function getStatusName(status_table, status_id) {
 function setTagElement(id, status) {
     document.getElementById(id).classList.add('text-white');
     document.getElementById(id).classList.remove('bg-danger');
+    document.getElementById(id).classList.remove('bg-warning');
     document.getElementById(id).classList.remove('bg-success');
 
     if (status == 1) {
@@ -337,9 +338,8 @@ async function generateID(fetch_page, added_string, size) {
     while (true) {
         let checker = 0;
         let rand_num = added_string + Math.round(Math.random() * Number((9).toString().repeat(size)));
-        console.log(rand_num)
         for(let i = 0; i < content.length; i++) {
-            if(rand_num == content[i].ticket_num) {
+            if((rand_num == content[i].ticket_num) || (rand_num == content[i].account_id) || (rand_num == content[i].admin_id)) {
                 checker++;
             }
         }

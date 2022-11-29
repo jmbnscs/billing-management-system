@@ -117,7 +117,7 @@ async function setInvoicePage () {
             $('#payment_date').val(data.payment_date);
 
             $('#invoice_status_id').val(await getStatusName('invoice_status', data.invoice_status_id));
-            setTagElement('invoice_status_id', data.invoice_status_id);
+            (data.invoice_status_id == 1) ? setTagElement('invoice_status_id', 1) : setTagElement('invoice_status_id', 2);
 
             function toggleInputData (setAttr, bool) {
                 $('#payment_reference_id').attr(setAttr, bool);

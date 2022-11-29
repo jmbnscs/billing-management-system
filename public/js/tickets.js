@@ -21,6 +21,12 @@ $(document).ready(function () {
             setPendingTicketsTable();
             pendingModal();
         }
+        else if (DIR_CUR == DIR_MAIN + 'views/tickets_invalid.php') {
+            displaySuccessMessage();
+
+            setInvalidTicketsTable();
+            invalidatedTicketsModal();
+        }
         else {
             displaySuccessMessage();
 
@@ -77,7 +83,7 @@ async function activeModal () {
         $('#admin_role').val(admin_role.user_role);
         $('#ticket_status_id').val(ticket_status);
 
-        setTagElement('ticket_status_id', 3);
+        setTagElement('ticket_status_id', 2);
 
         const claim_ticket_btn = document.getElementById('claim-ticket-btn');
         claim_ticket_btn.onclick = (e) => {
@@ -153,7 +159,7 @@ async function invalidModal (ticket_num, page) {
     
         if (claim_content.message == 'Ticket Claimed' && log) {
             sessionStorage.setItem('save_message', "Ticket Invalidated Successfully.");
-            window.location.reload();
+            window.location.replace('../views/tickets_invalid.php');;
         }
         else {
             toastr.error("Ticket was not invalidated. " + claim_content.message);
@@ -216,7 +222,7 @@ async function pendingModal () {
         $('#admin_id').val(admin_un);
         $('#ticket_status_id').val(ticket_status);
 
-        setTagElement('ticket_status_id', 2);
+        setTagElement('ticket_status_id', 3);
 
         const pending_resolve_ticket_btn = document.getElementById('pend-resolve-ticket-btn');
         pending_resolve_ticket_btn.onclick = (e) => {
@@ -450,12 +456,119 @@ async function resolvedModal () {
     });
 }
 
+// -------------------------------------------------------------------- Invalid Ticket Page
+async function setInvalidTicketsTable () {
+    const ticket_data = await fetchData('views/ticket_invalid.php');
+    var t = $('#ticket-invalid-table').DataTable();
+
+    for (var i = 0; i < ticket_data.length; i++) {
+        if(ticket_data[i].admin_id == admin_id || admin_id == '11674') {
+            t.row.add($(`
+            <tr>
+                <th scope="row"><a href="#">${ticket_data[i].ticket_num}</a></th>
+                <td>${ticket_data[i].concern}</td>
+                <td>${ticket_data[i].date_filed}</td>
+                <td><span class="badge bg-danger">${ticket_data[i].ticket_status}</span></td>
+                <td>${ticket_data[i].account_id}</td>
+                <td>${ticket_data[i].user_level}</td>
+                <td>${ticket_data[i].admin_username}</td>
+                <td>
+                    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#invalidatedModal" data-bs-whatever="${ticket_data[i].ticket_num}" id="setName"><i class="bi bi-folder-fill"></i></button>
+                </td>
+            </tr>
+            `)).draw(false);
+        }
+    }
+}
+
+async function invalidatedTicketsModal () {
+    var pendModal = document.getElementById('invalidatedModal')
+    pendModal.addEventListener('show.bs.modal', async function (event) {
+
+        var button = event.relatedTarget;
+        const ticket_num = button.getAttribute('data-bs-whatever');
+        const ticket = await fetchData('ticket/read_single.php?ticket_num=' + ticket_num);
+
+        var modalTitle = pendModal.querySelector('.modal-title');
+        modalTitle.textContent = ticket_num;
+
+        const [concern, ticket_status] = await Promise.all ([fetchData('concerns/read_single.php?concern_id=' + ticket.concern_id), getStatusName('ticket_status', ticket.ticket_status_id)]);
+
+        $('#account_id').val(ticket.account_id);
+        $('#concern_id').val(concern.concern_category);
+        $('#concern_details').val(ticket.concern_details);
+        $('#date_filed').val(ticket.date_filed);
+        $('#admin_id').val(admin_un);
+        $('#ticket_status_id').val(ticket_status);
+
+        setTagElement('ticket_status_id', 2);
+
+        const reactivate_ticket = document.getElementById('reactivate-ticket-btn');
+        const delete_ticket = document.getElementById('delete-ticket-btn');
+
+        reactivate_ticket.onclick = (e) => {
+            e.preventDefault();
+            reActivateTicketData();
+        };
+
+        delete_ticket.onclick = (e) => {
+            e.preventDefault();
+            deleteTicketData();
+        };
+        
+        async function reActivateTicketData() {
+            const reactivate_data = JSON.stringify({
+                'ticket_num' : ticket_num,
+                'ticket_status_id' : 1,
+                'admin_id' : admin_id
+            });
+
+            const [reactivate_content, log] = await Promise.all ([updateData('ticket/claim.php', reactivate_data), logActivity('Re-Activated Ticket ' + ticket_num, 'Invalid Tickets')]);
+        
+            if (reactivate_content.message == 'Ticket Claimed' && log) {
+                sessionStorage.setItem('save_message', "Ticket Re-Activated Successfully.");
+                window.location.replace('../views/tickets.php');
+            }
+            else {
+                toastr.error("Ticket was not re-activated. " + reactivate_content.message);
+            }
+        }
+
+        async function deleteTicketData() {
+            const delete_data = JSON.stringify({
+                'ticket_num' : ticket_num,
+            });
+
+            const [delete_content, log] = await Promise.all ([updateData('ticket/delete.php', delete_data), logActivity('Ticket Deleted ' + ticket_num, 'Invalid Tickets')]);
+        
+            if (delete_content.message == 'Ticket Deleted' && log) {
+                sessionStorage.setItem('save_message', "Ticket Deleted Successfully.");
+                window.location.reload();
+            }
+            else {
+                toastr.error("Ticket was not deleted. " + delete_content.message);
+            }
+        }
+    });
+}
+
 // -------------------------------------------------------------------- Add Ticket Page
 async function setCreateTicketPage () {
     const create_ticket = document.getElementById('create-ticket');
     $('#ticket_num').val(await generateID('ticket/read.php', "TN", 6));
+    getExistingAccounts = await fetchData('account/read.php');
 
     setAddDropdown();
+    disableFutureDates();
+
+    function disableFutureDates() {
+        $("#date_filed").datepicker({
+            dateFormat: 'yy-mm-dd',
+            changeMonth: true,
+            changeYear: true,
+            maxDate: new Date
+        });
+    }
 
     create_ticket.onsubmit = (e) => {
         e.preventDefault();
@@ -463,28 +576,41 @@ async function setCreateTicketPage () {
     };
 
     async function createTicket() {
+        var continue_request = false;
         const ticket_num = $('#ticket_num').val();
         const concern_id = $('#concern_id').val();
+        const account_id = $('#account_id').val();
         const user_level = (concern_id == 1 || concern_id == 2) ? 3 : 5;
 
-        const create_data = JSON.stringify({
-            'concern_id' : concern_id,
-            'concern_details' : $('#concern_details').val(),
-            'date_filed' : $('#date_filed').val(),
-            'ticket_status_id' : 1,
-            'account_id' : $('#account_id').val(),
-            'ticket_num' : ticket_num,
-            'user_level' : user_level
-        });
+        for(var i = 0; i < getExistingAccounts.length; i++) {
+            if(getExistingAccounts[i].account_id == account_id) {
+                continue_request = true;
+            }
+        }
 
-        const [ticket_content, log] = await Promise.all ([createData('ticket/create.php', create_data), logActivity('Created Ticket ' + ticket_num, 'Create a Ticket')]);
+        if(continue_request) {
+            const create_data = JSON.stringify({
+                'concern_id' : concern_id,
+                'concern_details' : $('#concern_details').val(),
+                'date_filed' : $('#date_filed').val(),
+                'ticket_status_id' : 1,
+                'account_id' : account_id,
+                'ticket_num' : ticket_num,
+                'user_level' : user_level
+            });
     
-        if (ticket_content.message == 'Ticket Created' && log) {
-            sessionStorage.setItem('save_message', "Ticket Created Successfully.");
-            window.location.replace('../views/tickets.php');
+            const [ticket_content, log] = await Promise.all ([createData('ticket/create.php', create_data), logActivity('Created Ticket ' + ticket_num, 'Create a Ticket')]);
+        
+            if (ticket_content.message == 'Ticket Created' && log) {
+                sessionStorage.setItem('save_message', "Ticket Created Successfully.");
+                window.location.replace('../views/tickets.php');
+            }
+            else {
+                toastr.error(ticket_content.message);
+            }
         }
         else {
-            toastr.error(ticket_content.message);
+            toastr.error("Account ID does not exist!");
         }
     }
     

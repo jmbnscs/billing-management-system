@@ -48,7 +48,7 @@
                 <div class="row mb-3">
                     <label for="date_filed" class="col-sm-2 col-form-label">Date Filed</label>
                     <div class="col-sm-10">
-                        <input type="date" class="form-control" id="date_filed">
+                        <input type="date" class="form-control date_filed" id="date_filed" autocomplete="off" required>
                     </div>
                 </div>
         
@@ -93,6 +93,10 @@
   <script src="../assets/vendor/simple-datatables/simple-datatables.js"></script>
   <script src="../assets/vendor/tinymce/tinymce.min.js"></script>
   <script src="../assets/vendor/php-email-form/validate.js"></script>
+
+  <!-- Datepicker -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 
   <!-- Template Main JS File -->
   <script src="../assets/js/main.js"></script>
