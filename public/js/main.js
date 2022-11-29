@@ -320,6 +320,12 @@ $(() => {
     }
 })
 
+$('#account-settings').on('click', (e) => {
+    e.preventDefault();
+    sessionStorage.setItem('edit', true);
+    window.location.replace('../views/profile.php');
+})
+
 // Logout Session
 function logout() {
     sessionStorage.clear();
@@ -334,6 +340,10 @@ function logout() {
             console.error(xhr)
         }
     });
+
+    function preventBack() { window.history.forward(); }
+    setTimeout(preventBack(), 0);
+    window.onunload = function () { null };
 }
 
 // Toastr Configs

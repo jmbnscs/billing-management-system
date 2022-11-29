@@ -8,7 +8,7 @@
     <h1>Add New Plan</h1>
     <nav>
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="dashboard.html">Home</a></li>
+        <li class="breadcrumb-item"><a href="dashboard.php">Home</a></li>
         <li class="breadcrumb-item active">Plans</li>
       </ol>
     </nav>

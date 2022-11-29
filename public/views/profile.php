@@ -8,7 +8,7 @@
       <h1>Profile</h1>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="dashboard.html">Home</a></li>
+          <li class="breadcrumb-item"><a href="dashboard.php">Home</a></li>
           <li class="breadcrumb-item active">Profile</li>
         </ol>
       </nav>
@@ -123,21 +123,21 @@
                     <div class="row mb-3">
                       <label for="email" class="col-md-4 col-lg-3 col-form-label">Email</label>
                       <div class="col-md-8 col-lg-9">
-                        <input name="email" type="email" class="form-control" id="edit-email" value="" >
+                        <input name="email" type="email" class="form-control" id="edit-email" value="" required>
                       </div>
                     </div>
 
                     <div class="row mb-3">
                       <label for="edit-number" class="col-md-4 col-lg-3 col-form-label">Mobile Number</label>
                       <div class="col-md-8 col-lg-9">
-                        <input name="edit-number" type="text" class="form-control" id="edit-number" value="">
+                        <input name="edit-number" type="text" class="form-control" id="edit-number" value="" placeholder="Ex. 09XXXXXXXXX" pattern="[0]{1}[9]{1}[0-9]{9}" required>
                       </div>
                     </div>
 
                     <div class="row mb-3">
                       <label for="Address" class="col-md-4 col-lg-3 col-form-label">Address</label>
                       <div class="col-md-8 col-lg-9">
-                        <input name="address" type="text" class="form-control" id="edit-address" value="">
+                        <input name="address" type="text" class="form-control" id="edit-address" value="" required>
                       </div>
                     </div>
 
@@ -162,14 +162,14 @@
                     <div class="row mb-3">
                       <label for="new-password" class="col-md-4 col-lg-3 col-form-label">New Password</label>
                       <div class="col-md-8 col-lg-9">
-                        <input name="new-password" type="password" class="form-control" id="new-password" autocomplete="off" required>
+                        <input name="new-password" type="password" class="form-control" id="new-password" autocomplete="off" minlength="8" required>
                       </div>
                     </div>
 
                     <div class="row mb-3">
                       <label for="re-new-password" class="col-md-4 col-lg-3 col-form-label">Re-enter New Password</label>
                       <div class="col-md-8 col-lg-9">
-                        <input name="re-new-password" type="password" class="form-control" id="re-new-password" autocomplete="off" required>
+                        <input name="re-new-password" type="password" class="form-control" id="re-new-password" autocomplete="off" minlength="8" required>
                       </div>
                     </div>
 

@@ -218,8 +218,8 @@ async function setViewModal (table) {
                 category.concern_category, 
                 data.concern_details, 
                 formatDateString(data.date_filed),
-                (data.resolution_details == null) ? 'N/A' : data.resolution_details, 
-                (data.date_resolved == null) ? 'N/A' : formatDateString(data.date_resolved), 
+                (data.resolution_details == null || data.resolution_details == '') ? 'N/A' : data.resolution_details, 
+                (data.date_resolved == null || data.date_resolved == '0000-00-00') ? 'N/A' : formatDateString(data.date_resolved), 
                 (data.admin_id == null) ? 'N/A' : admin.first_name + ' ' + admin.last_name, 
                 status
             ];
