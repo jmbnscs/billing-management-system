@@ -143,13 +143,6 @@ function setConnectionPage() {
             $('#connection_id_d').val(connection_id);
             $('#connection_name_md_d').val(connection.connection_name);
 
-            toggleInputData('disabled', true);
-
-            function toggleInputData (setAttr, bool) {
-                $('#connection_id_d').attr(setAttr, bool);
-                $('#connection_name_md_d').attr(setAttr, bool);
-            }
-
             delete_fn.onsubmit = (e) => {
                 e.preventDefault();
                 processDelete();
@@ -240,9 +233,9 @@ function setConcernsPage() {
             var modalTitle = updateModal.querySelector('.modal-title');
             modalTitle.textContent = concern_data.concern_category;
 
-            $('#concern_id').val(concern_id);
+            (concern_data.customer_access == 0) ? $('#customer_access_md').attr('checked', 0) : $('#customer_access_md').attr('checked', 1);
+            $('#concern_id').val($('#customer_access_md').val());
             $('#concern_category_md').val(concern_data.concern_category);
-            (concern_data.customer_access == 0) ? $('#customer_access_md').attr('checked', false) : $('#customer_access_md').attr('checked', true);
 
             toggleInputData('disabled', true);
 
@@ -288,6 +281,10 @@ function setConcernsPage() {
                 else {
                     toastr.error("Concern Category was not updated.");
                 }
+            }
+
+            function toggleSwitch(bool) {
+                $('#customer_access_md').attr('checked', bool);
             }
         });
     }

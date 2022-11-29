@@ -29,7 +29,7 @@
                 </li>
 
                 <li class="nav-item">
-                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#add-connection-tab" id="edit-connection">Add Connection</button>
+                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#add-connection-tab" id="edit-connection">Add New Connection</button>
                 </li>
 
               </ul>
@@ -93,7 +93,7 @@
 <form id="update-data">
   <!-- Modal Dialog Scrollable -->
   <div class="modal fade" id="editModal" tabindex="-1">
-      <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg">
+      <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-m">
         <div class="modal-content">
 
           <!-- Modal Header -->
@@ -103,20 +103,20 @@
           </div>
 
           <!-- Modal Body -->
-          <div class="modal-body">
-            <div class="row mb-3">
-                <label for="connection_id" class="col-sm-2 col-form-label">Connection ID</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" id="connection_id" readonly>
+          <div class="modal-body row g-3">
+                <div class="col-md-12">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="connection_id" placeholder="Connection ID" readonly>
+                    <label for="connection_id">Connection ID</label>
+                  </div>
                 </div>
-            </div>
 
-            <div class="row mb-3">
-              <label for="connection_name_md" class="col-md-4 col-lg-3 col-form-label">Connection Name</label>
-              <div class="col-md-8 col-lg-9">
-                <input type="text" class="form-control" id="connection_name_md" required>
-              </div>
-            </div>
+                <div class="col-md-12">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="connection_name_md" placeholder="Connection Name" required>
+                    <label for="connection_name_md">Connection Name</label>
+                  </div>
+                </div>
 
           </div>
           <!-- End Modal Body -->
@@ -141,20 +141,21 @@
           <h5 class="modal-title"></h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body">
-          <div class="row mb-3">
-                <label for="connection_id_d" class="col-md-4 col-lg-5 col-form-label">Connection ID</label>
-                <div class="col-md-8 col-lg-9">
-                    <input type="text" class="form-control" id="connection_id_d" readonly>
+        <div class="modal-body row g-3">
+          
+                <div class="col-md-12">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="connection_id_d" placeholder="Connection ID" readonly>
+                    <label for="connection_id_d">Connection ID</label>
+                  </div>
                 </div>
-            </div>
 
-            <div class="row mb-3">
-              <label for="connection_name_md_d" class="col-md-4 col-lg-5 col-form-label">Connection Name</label>
-              <div class="col-md-8 col-lg-9">
-                <input type="text" class="form-control" id="connection_name_md_d" readonly>
-              </div>
-            </div>
+                <div class="col-md-12">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="connection_name_md_d" placeholder="Connection Name" readonly>
+                    <label for="connection_name_md_d">Connection Name</label>
+                  </div>
+                </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
