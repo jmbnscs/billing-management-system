@@ -233,12 +233,14 @@ async function setDefaults () {
     if (level_id == 3) {
         $('#misc-page').addClass('hide');
         $('#admin-add').addClass('hide');
+        $('#ticket-invalid').addClass('hide');
     }
     else if (level_id == 4) {
         $('#ticket-page').addClass('hide');
     }
     else if (level_id == 5) {
         $('#invoice-payment-add').addClass('hide');
+        $('#ticket-invalid').addClass('hide');
     }
     else if (level_id == 6) {
         $('#invoice-payment-add').addClass('hide');
