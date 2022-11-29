@@ -5,6 +5,7 @@ const DIR_APP = 'http://localhost/billing-management-system/app/includes/';
 const DIR_CUR = window.location.pathname;
 
 // Constant Variables
+// let admin_id, admin_status_id, hashed, logged_in, admin_un, user_id;
 const admin_id = localStorage.getItem('admin_id');
 const admin_status_id = sessionStorage.getItem('admin_status_id');
 const hashed = localStorage.getItem('hashed');
@@ -13,7 +14,8 @@ const admin_un = localStorage.getItem('admin_username');
 const user_id = localStorage.getItem('user_id');
 
 $(document).ready( () => {
-    if (logged_in !== undefined || logged_in !== null && logged_in === 'successful') {
+    console.log(admin_id);
+    if(checkDefaults()) {
         if (admin_status_id == 3) {
             let msg = "Please contact the system administrator.";
             let title = "Your account has been locked!"
@@ -29,10 +31,21 @@ $(document).ready( () => {
         setDefaults();
         setToastr();
     }
-    else if (admin_id == undefined || admin_id == null) {
+    else {
         window.location.replace('../views/login.php');
     }
 });
+
+function checkDefaults() {
+    console.log(admin_id === undefined || admin_id == 'null' || admin_id === null || admin_id == 'undefined');
+    if (admin_id === undefined || admin_id == 'null' || admin_id === null || admin_id == 'undefined') {
+        console.log(admin_id);
+        window.location.replace('../views/login.php');
+    }
+    else {
+        return true;
+    }
+}
 
 // Check if still using Default Password
 function isDefault () {

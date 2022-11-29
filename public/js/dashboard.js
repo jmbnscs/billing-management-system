@@ -1,19 +1,25 @@
 $(document).ready(function () {
-    isDefault();
+    if (checkDefaults()) {
+        isDefault();
 
-    if (sessionStorage.getItem('error_message') == "You don't have access to this page.") {
-        setToastrArgs(sessionStorage.getItem('error_message'), "Error");
-        sessionStorage.setItem('error_message', null);
+        if (sessionStorage.getItem('error_message') == "You don't have access to this page.") {
+            setToastrArgs(sessionStorage.getItem('error_message'), "Error");
+            sessionStorage.setItem('error_message', null);
+        }
+    
+        setCards();
+        setEventListener();
+        setRevenueReports();
+        setPlanPreview();
+        setCustomerPreview();
+        setCollection();
+        setTicketOverview();
+        setRecentActivity();
     }
-
-    setCards();
-    setEventListener();
-    setRevenueReports();
-    setPlanPreview();
-    setCustomerPreview();
-    setCollection();
-    setTicketOverview();
-    setRecentActivity();
+    else {
+        window.location.replace('../views/login.php');
+    }
+    
 });
 
 const currentMonth = new Date().getMonth() + 1;
