@@ -8,7 +8,7 @@
     <h1>Advanced Options</h1>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="dashboard.html">Home</a></li>
+          <li class="breadcrumb-item"><a href="dashboard.php">Home</a></li>
           <li class="breadcrumb-item active">Concerns</li>
         </ol>
       </nav>
@@ -98,7 +98,7 @@
 <form id="update-data">
   <!-- Modal Dialog Scrollable -->
   <div class="modal fade" id="editModal" tabindex="-1">
-      <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg">
+      <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-m">
         <div class="modal-content">
 
           <!-- Modal Header -->
@@ -108,25 +108,28 @@
           </div>
 
           <!-- Modal Body -->
-          <div class="modal-body">
-            <div class="row mb-3">
-                <label for="concern_id" class="col-sm-2 col-form-label">Concern ID</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" id="concern_id" readonly>
-                </div>
-            </div>
+          <div class="modal-body row g-3">
 
-            <div class="row mb-3">  
-              <label for="concern_category_md" class="col-md-4 col-lg-3 col-form-label">Concern Category Name</label>
-              <div class="col-md-8 col-lg-9">
-                <input type="text" class="form-control" id="concern_category_md" required>
-                <br>
-                <div class="form-check form-switch">
-                  <input class="form-check-input" type="checkbox" id="customer_access_md" value="1">
-                  <label class="form-check-label" for="customer_access_md_d">Customer Access</label>
+                <div class="col-md-12">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="concern_id" placeholder="Concern ID" readonly>
+                    <label for="concern_id">Concern ID</label>
+                  </div>
                 </div>
-              </div>
-            </div>
+
+                <div class="col-md-12">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="concern_category_md" placeholder="Concern Category Name" readonly>
+                    <label for="concern_category_md">Concern Category Name</label>
+                  </div>
+                </div>
+
+                <div class="col-md-12">
+                  <div class="form-check form-switch">
+                    <input type="checkbox" class="form-check-input" id="customer_access_md" value="1">
+                    <label for="customer_access_md">Customer Access</label>
+                  </div>
+                </div>
 
           </div>
           <!-- End Modal Body -->
@@ -151,26 +154,31 @@
           <h5 class="modal-title"></h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body">
-          <div class="row mb-3">
-                <label for="concern_id" class="col-md-4 col-lg-5 col-form-label">Concern ID</label>
-                <div class="col-md-8 col-lg-9">
-                    <input type="text" class="form-control" id="concern_id_d" readonly>
-                </div>
-            </div>
+        
+        <div class="modal-body row g-3">
 
-            <div class="row mb-3">
-              <label for="concern_category_md_d" class="col-md-4 col-lg-8 col-form-label">Concern Category Name</label>
-              <div class="col-md-8 col-lg-9">
-                <input type="text" class="form-control" id="concern_category_md_d" readonly>
-                <br>
-                <div class="form-check form-switch">
-                  <input class="form-check-input" type="checkbox" id="customer_access_md_d" value="1" disabled>
-                  <label class="form-check-label" for="customer_access_md_d">Customer Access</label>
+                <div class="col-md-12">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="concern_id_d" placeholder="Concern ID" readonly>
+                    <label for="concern_id_d">Concern ID</label>
+                  </div>
                 </div>
-              </div>
-            </div>
+
+                <div class="col-md-12">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="concern_category_md_d" placeholder="Concern Category Name" readonly>
+                    <label for="concern_category_md_d">Concern Category Name</label>
+                  </div>
+                </div>
+
+                <div class="col-md-12">
+                  <div class="form-check form-switch">
+                    <input type="checkbox" class="form-check-input" id="customer_access_md_d" value="1" disabled>
+                    <label for="customer_access_md_d">Customer Access</label>
+                  </div>
+                </div>
         </div>
+
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
           <button type="submit" class="btn btn-danger">Delete</button>

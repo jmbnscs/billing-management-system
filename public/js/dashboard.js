@@ -1,19 +1,25 @@
 $(document).ready(function () {
-    isDefault();
+    if (checkDefaults()) {
+        isDefault();
 
-    if (sessionStorage.getItem('error_message') == "You don't have access to this page.") {
-        setToastrArgs(sessionStorage.getItem('error_message'), "Error");
-        sessionStorage.setItem('error_message', null);
+        if (sessionStorage.getItem('error_message') == "You don't have access to this page.") {
+            setToastrArgs(sessionStorage.getItem('error_message'), "Error");
+            sessionStorage.setItem('error_message', null);
+        }
+    
+        setCards();
+        setEventListener();
+        setRevenueReports();
+        setPlanPreview();
+        setCustomerPreview();
+        setCollection();
+        setTicketOverview();
+        setRecentActivity();
     }
-
-    setCards();
-    setEventListener();
-    setRevenueReports();
-    setPlanPreview();
-    setCustomerPreview();
-    setCollection();
-    setTicketOverview();
-    setRecentActivity();
+    else {
+        window.location.replace('../views/login.php');
+    }
+    
 });
 
 const currentMonth = new Date().getMonth() + 1;
@@ -44,7 +50,7 @@ async function setRecentActivity() {
     const content = await fetchData('logs/read_admin_log.php?admin_id=' + admin_id);
     
     if (content.length > 0) {
-        for (var i = content.length; i > 0; i--) {
+        for (var i = 0; i < content.length; i++) {
             const activity_panel = document.getElementById('activity-panel');
     
             // Main Div
@@ -65,7 +71,7 @@ async function setRecentActivity() {
             const activity_content = document.createElement('div');
             activity_content.classList.add('activity-content');
     
-            const seconds = (new Date() - new Date(content[i - 1].date_accessed)) / 1000;
+            const seconds = (new Date() - new Date(content[i].date_accessed)) / 1000;
         
             var d = Math.floor(seconds / (3600*24));
             var h = Math.floor(seconds % (3600*24) / 3600);
@@ -74,19 +80,19 @@ async function setRecentActivity() {
     
             if (d >= 1) {
                 activity_label.textContent = d + ' day/s';
-                activity_content.textContent = content[i - 1].activity;
+                activity_content.textContent = content[i].activity;
             }
             else if (h >= 1) {
                 activity_label.textContent = h + ' hr/s';
-                activity_content.textContent = content[i - 1].activity;
+                activity_content.textContent = content[i].activity;
             }
             else if (m >= 1) {
                 activity_label.textContent = m + ' min/s';
-                activity_content.textContent = content[i - 1].activity;
+                activity_content.textContent = content[i].activity;
             }
             else {
                 activity_label.textContent = s + ' sec/s';
-                activity_content.textContent = content[i - 1].activity;
+                activity_content.textContent = content[i].activity;
             }
     
             activity_div.append(activity_label);

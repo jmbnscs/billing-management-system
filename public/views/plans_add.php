@@ -8,7 +8,7 @@
     <h1>Add New Plan</h1>
     <nav>
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="dashboard.html">Home</a></li>
+        <li class="breadcrumb-item"><a href="dashboard.php">Home</a></li>
         <li class="breadcrumb-item active">Plans</li>
       </ol>
     </nav>
@@ -32,14 +32,14 @@
                   <div class="row mb-3">
                       <label for="bandwidth" class="col-sm-2 col-form-label">Bandwidth</label>
                       <div class="col-sm-10">
-                          <input type="text" class="form-control" id="bandwidth" required>
+                          <input type="number" class="form-control" id="bandwidth" min="5" required>
                       </div>
                   </div>
 
                   <div class="row mb-3">
                       <label for="price" class="col-sm-2 col-form-label">Price</label>
                       <div class="col-sm-10">
-                          <input type="text" class="form-control" id="price" required>
+                          <input type="number" class="form-control" id="price" min="1" required>
                       </div>
                   </div>
 

@@ -8,7 +8,7 @@
     <h1>Advanced Options</h1>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="dashboard.html">Home</a></li>
+          <li class="breadcrumb-item"><a href="dashboard.php">Home</a></li>
           <li class="breadcrumb-item active">Area</li>
         </ol>
       </nav>
@@ -94,7 +94,7 @@
 <form id="update-data">
   <!-- Modal Dialog Scrollable -->
   <div class="modal fade" id="editModal" tabindex="-1">
-      <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg">
+      <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-m">
         <div class="modal-content">
 
           <!-- Modal Header -->
@@ -104,20 +104,20 @@
           </div>
 
           <!-- Modal Body -->
-          <div class="modal-body">
-            <div class="row mb-3">
-                <label for="area_id" class="col-sm-2 col-form-label">Area ID</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" id="area_id" readonly>
+          <div class="modal-body row g-3">
+                <div class="col-md-12">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="area_id" placeholder="Area ID" readonly>
+                    <label for="area_id">Area ID</label>
+                  </div>
                 </div>
-            </div>
 
-            <div class="row mb-3">
-              <label for="area_name_md" class="col-sm-2 col-form-label">Area Name</label>
-              <div class="col-sm-10">
-                <input name="area_name_md" type="text" class="form-control" id="area_name_md" value="" required>
-              </div>
-            </div>
+                <div class="col-md-12">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="area_name_md" placeholder="Area Name" required>
+                    <label for="area_name_md">Area Name</label>
+                  </div>
+                </div>
 
           </div>
           <!-- End Modal Body -->
@@ -142,20 +142,20 @@
           <h5 class="modal-title"></h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body">
-          <div class="row mb-3">
-                <label for="area_id_d" class="col-md-4 col-lg-3 col-form-label">Area ID</label>
-                <div class="col-md-8 col-lg-9">
-                    <input type="text" class="form-control" id="area_id_d" readonly>
+        <div class="modal-body row g-3">
+                <div class="col-md-12">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="area_id_d" placeholder="Area ID" readonly>
+                    <label for="area_id_d">Area ID</label>
+                  </div>
                 </div>
-            </div>
 
-            <div class="row mb-3">
-              <label for="area_name_md_d" class="col-md-4 col-lg-3 col-form-label">Area Name</label>
-              <div class="col-md-8 col-lg-9">
-                <input name="area_name_md_d" type="text" class="form-control" id="area_name_md_d" value="" readonly>
-              </div>
-            </div>
+                <div class="col-md-12">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="area_name_md_d" placeholder="Area Name" readonly>
+                    <label for="area_name_md_d">Area Name</label>
+                  </div>
+                </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>

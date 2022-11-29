@@ -25,9 +25,9 @@
               <th scope="col">Concern</th>
               <th scope="col">Date Filed</th>
               <th scope="col">Date Resolved</th>
-              <th scope="col">Ticket Status</th>
               <th scope="col">Account ID</th>
               <th scope="col">Resolved By</th>
+              <th scope="col">Ticket Status</th>
               <th scope="col">View</th>
             </tr>
           </thead>
@@ -43,7 +43,7 @@
 <!-- Resolved Modal -->
 <form id="view-ticket">
   <div class="modal fade" id="resolvedModal" tabindex="-1">
-      <div class="modal-dialog modal-dialog-scrollable modal-lg">
+      <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-m">
         <div class="modal-content">
 
           <!-- Modal Header -->
@@ -53,68 +53,67 @@
           </div>
 
           <!-- Modal Body -->
-          <div class="modal-body">
+          <div class="modal-body row g-3">
 
-                  <div class="row mb-3">
-                      <label for="account_id" class="col-sm-2 col-form-label">Account ID</label>
-                      <div class="col-sm-10">
-                          <input type="text" class="form-control" id="account_id" readonly>
-                      </div>
+                  <div class="col-md-12">
+                    <div class="form-floating">
+                      <input type="text" class="form-control" id="account_id" placeholder="Account ID" readonly>
+                      <label for="account_id">Account ID</label>
+                    </div>
+                  </div>
+            
+                  <div class="col-md-12">
+                    <div class="form-floating">
+                      <input type="text" class="form-control" id="concern_id" placeholder="Concern" readonly>
+                      <label for="concern_id">Concern</label>
+                    </div>
                   </div>
 
-                  <div class="row mb-3">
-                      <label for="concern_id" class="col-sm-2 col-form-label">Concern</label>
-                      <div class="col-sm-10">
-                          <input type="text" class="form-control" id="concern_id" readonly>
-                      </div>
+                  <div class="col-md-12">
+                    <div class="form-floating">
+                      <input type="text" class="form-control" id="concern_details" placeholder="Concern Details" readonly>
+                      <label for="concern_details">Concern Details</label>
+                    </div>
                   </div>
 
-                  <div class="row mb-3">    
-                      <label for="concern_details" class="col-sm-2 col-form-label">Concern Details</label>
-                      <div class="col-sm-10">
-                          <textarea class="form-control" id="concern_details" readonly></textarea>
-                      </div>
+                  <div class="col-md-12">
+                    <div class="form-floating">
+                      <input type="date" class="form-control" id="date_filed" placeholder="Date Filed" readonly>
+                      <label for="date_filed">Date Filed</label>
+                    </div>
                   </div>
 
-                  <div class="row mb-3">
-                      <label for="date_filed" class="col-sm-2 col-form-label">Date Filed</label>
-                      <div class="col-sm-10">
-                          <input type="date" class="form-control" id="date_filed" readonly>
-                      </div>
+                  <div class="col-md-12">
+                    <div class="form-floating">
+                      <input type="date" class="form-control" id="date_resolved" placeholder="Date Resolved" readonly>
+                      <label for="date_resolved">Date Resolved</label>
+                    </div>
                   </div>
 
-                  <div class="row mb-3">
-                      <label for="date_resolved" class="col-sm-2 col-form-label">Date Resolved</label>
-                      <div class="col-sm-10">
-                          <input type="date" class="form-control" id="date_resolved" readonly>
-                      </div>
+                  <div class="col-md-12">
+                    <div class="form-floating">
+                      <textarea class="form-control" id="resolution_details" readonly></textarea>
+                      <label for="resolution_details">Resolution Details</label>
+                    </div>
                   </div>
 
-                  <div class="row mb-3">
-                      <label for="resolution_details" class="col-sm-2 col-form-label">Resolution Details</label>
-                      <div class="col-sm-10">
-                          <textarea class="form-control" id="resolution_details" readonly></textarea>
-                      </div>
+                  <div class="col-md-12">
+                    <div class="form-floating">
+                      <input type="text" class="form-control" id="admin_username" placeholder="Resolved by" readonly>
+                      <label for="admin_username">Resolved by</label>
+                    </div>
                   </div>
 
-                  <div class="row mb-3">
-                      <label for="admin_username" class="col-sm-2 col-form-label">Resolved by</label>
-                      <div class="col-sm-10">
-                          <input type="text" class="form-control" id="admin_username" readonly>
-                      </div>
+                  <div class="col-md-12">
+                    <div class="form-floating">
+                      <input type="text" class="form-control" id="admin_role" placeholder="Admin Role" readonly>
+                      <label for="admin_role">Admin Role</label>
+                    </div>
                   </div>
 
-                  <div class="row mb-3">
-                      <label for="admin_role" class="col-sm-2 col-form-label">Admin Role</label>
-                      <div class="col-sm-10">
-                          <input type="text" class="form-control" id="admin_role" readonly>
-                      </div>
-                  </div>
-
-                  <div class="row mb-3">
-                    <label for="ticket_status_id" class="col-sm-2 col-form-label">Ticket Status</label>
+                  <div class="col-md-12">
                     <div class="col-sm-5">
-                        <input type="text" class="form-control text-center " id="ticket_status_id" value="" disabled>
+                      <input type="text" class="form-control text-center " id="ticket_status_id" value="" disabled>
                     </div>
                   </div>
           </div>

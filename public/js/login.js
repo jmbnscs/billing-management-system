@@ -210,3 +210,7 @@ function setToastr(title, message, type) {
         toastr.warning(message, title);
       }
 }
+
+function preventBack() { window.history.forward(); }
+    setTimeout(preventBack(), 0);
+    window.onunload = function () { null };

@@ -39,7 +39,7 @@
 <form id="update-data">
   <!-- Modal Dialog Scrollable -->
   <div class="modal fade" id="editModal" tabindex="-1">
-      <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg">
+      <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-m">
         <div class="modal-content">
 
           <!-- Modal Header -->
@@ -49,48 +49,41 @@
           </div>
 
           <!-- Modal Body -->
-          <div class="modal-body">
-            <div class="row mb-3">
-                <label for="payment_id" class="col-sm-2 col-form-label">Payment ID</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" id="payment_id" readonly>
+          <div class="modal-body row g-3">
+            
+                <div class="col-md-12">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="payment_reference_id" placeholder="Reference ID" required>
+                    <label for="payment_reference_id">Reference ID</label>
+                  </div>
                 </div>
-            </div>
 
-            <div class="row mb-3">
-              <label for="payment_reference_id" class="col-sm-2 col-form-label">Reference ID</label>
-              <div class="col-sm-10">
-                <input type="text" class="form-control" id="payment_reference_id" value="" required>
-              </div>
-            </div>
+                <div class="col-md-12">
+                  <div class="form-floating">
+                    <input type="number" class="form-control" id="amount_paid" placeholder="Amount Paid" required>
+                    <label for="amount_paid">Amount Paid</label>
+                  </div>
+                </div>
 
-            <div class="row mb-3">
-              <label for="amount_paid" class="col-sm-2 col-form-label">Amount Paid</label>
-              <div class="col-sm-10">
-                <input type="number" class="form-control" id="amount_paid" value="" required>
-              </div>
-            </div>
+                <div class="col-md-12">
+                  <div class="form-floating">
+                    <input type="date" class="form-control" id="payment_date" placeholder="Payment Date" required>
+                    <label for="payment_date">Payment Date</label>
+                  </div>
+                </div>
 
-            <div class="row mb-3">
-              <label for="payment_date" class="col-sm-2 col-form-label">Payment Date</label>
-              <div class="col-sm-10">
-                <input type="date" class="form-control" id="payment_date" value="" required>
-              </div>
-            </div>
+                <div class="col-md-12">
+                  <div class="form-floating">
+                    <input type="number" class="form-control" id="account_id" placeholder="Account ID" required>
+                    <label for="account_id">Account ID</label>
+                  </div>
+                </div>
 
-            <div class="row mb-3">
-              <label for="account_id" class="col-sm-2 col-form-label">Account ID</label>
-              <div class="col-sm-10">
-                <input type="number" class="form-control" id="account_id" value="" required>
-              </div>
-            </div>
-
-            <div class="row mb-3">
-              <label for="tagged" class="col-sm-2 col-form-label">Status</label>
-              <div class="col-sm-3">
-                <input type="text" class="form-control text-center " id="tagged" value="" disabled>
-              </div>
-            </div>
+                <div class="col-md-12">
+                  <div class="col-sm-5">
+                    <input type="text" class="form-control text-center " id="tagged" value="" disabled>
+                  </div>
+                </div>
 
           </div>
           <!-- End Modal Body -->
@@ -115,43 +108,40 @@
           <h5 class="modal-title"></h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body">
-        <div class="row mb-3">
-                <label for="payment_id_d" class="col-sm-3 col-form-label">Payment ID</label>
-                <div class="col-sm-8">
-                    <input type="text" class="form-control" id="payment_id_d" readonly>
-                </div>
-            </div>
 
-            <div class="row mb-3">
-              <label for="amount_paid_d" class="col-sm-3 col-form-label">Amount Paid</label>
-              <div class="col-sm-8">
-                <input type="text" class="form-control" id="amount_paid_d" value="" required>
+        <!-- Modal Body -->
+        <div class="modal-body row g-3">
+            
+            <div class="col-md-12">
+              <div class="form-floating">
+                <input type="text" class="form-control" id="payment_reference_id_d" placeholder="Reference ID" readonly>
+                <label for="payment_reference_id_d">Reference ID</label>
               </div>
             </div>
 
-            <div class="row mb-3">
-              <label for="payment_reference_id_d" class="col-sm-3 col-form-label">Reference ID</label>
-              <div class="col-sm-8">
-                <input type="text" class="form-control" id="payment_reference_id_d" value="" required>
+            <div class="col-md-12">
+              <div class="form-floating">
+                <input type="number" class="form-control" id="amount_paid_d" placeholder="Amount Paid" readonly>
+                <label for="amount_paid_d">Amount Paid</label>
               </div>
             </div>
 
-            <div class="row mb-3">
-              <label for="payment_date_d" class="col-sm-3 col-form-label">Payment Date</label>
-              <div class="col-sm-8">
-                <input type="date" class="form-control" id="payment_date_d" value="" required>
+            <div class="col-md-12">
+              <div class="form-floating">
+                <input type="date" class="form-control" id="payment_date_d" placeholder="Payment Date" readonly>
+                <label for="payment_date_d">Payment Date</label>
               </div>
             </div>
 
-            <div class="row mb-3">
-              <label for="tagged_d" class="col-sm-3 col-form-label">Status</label>
-              <div class="col-sm-3">
+            <div class="col-md-12">
+              <div class="col-sm-5">
                 <input type="text" class="form-control text-center " id="tagged_d" value="" disabled>
               </div>
             </div>
 
         </div>
+        <!-- End Modal Body -->
+      
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="cncl-btn">Cancel</button>
           <button type="submit" class="btn btn-danger" id="dlt-btn">Delete</button>

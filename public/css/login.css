@@ -2,13 +2,7 @@
 body {
     font-family: "Montserrat", sans-serif;
 
-    /* @Kyla: You forgot to include this sa files mehe */
     background: url(../images/background4.png);
-
-    /* Using this for the meantime */
-    /* background: rgba(0, 0, 0, 0.85); */
-
-
     background-repeat: no-repeat;
     background-size: cover;
   }
@@ -172,7 +166,7 @@ body {
     padding: 10px 0;
     width: 100%;
     border-bottom: 1px solid #eee;
-    color: red;
+    color: #fff;
     font-size: 15px;
     font-family: "Montserrat", sans-serif;
     z-index: 1;

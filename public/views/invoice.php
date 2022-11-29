@@ -39,10 +39,9 @@
   </div><!-- End Invoice Table -->
 
 <!-- View Invoice Modal -->
-<form id="update-data">
   <!-- Modal Dialog Scrollable -->
   <div class="modal fade" id="editModal" tabindex="-1">
-      <div class="modal-dialog modal-fullscreen modal-dialog-centered modal-lg">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
 
           <!-- Modal Header -->
@@ -53,75 +52,99 @@
 
           <!-- Modal Body -->
           <div class="modal-body row g-3">
-             <div class="container px-4">
-              <div class="row mb-3">
-                <!-- Left -->
-                <div class="col-sm-8">
+                <div class="col-sm-12">
 
-                  <div class="card mt-2">
-                    <div class="card-header">Invoice Details</div>
-                    <div class="card-body">
                       <div class="row pt-2">
-                        <div class="col-md-8">
-                          <label for="invoice_id" class="form-label">Invoice ID</label>
-                          <input type="text" class="form-control" id="invoice_id" readonly>
-                        </div>
-                        <div class="col-md-4">
-                          <label for="account_id" class="form-label">Account ID</label>
-                          <input type="text" class="form-control" id="account_id" readonly>
-                        </div>
+                          <div class="col-md-8 pt-2">
+                            <div class="form-floating">
+                              <input type="text" class="form-control" id="invoice_id" placeholder="Invoice ID" readonly>
+                              <label for="invoice_id">Invoice ID</label>
+                            </div>
+                          </div>
+
+                          <div class="col-md-4 pt-2">
+                            <div class="form-floating">
+                              <input type="text" class="form-control" id="account_id" placeholder="Account ID" readonly>
+                              <label for="account_id">Account ID</label>
+                            </div>
+                          </div>
                       </div>
 
                       <div class="row pt-4"> 
-                        <div class="col-md-4">
-                          <label for="billing_period_start" class="form-label">Billing Period Start</label>
-                          <input type="date" class="form-control" id="billing_period_start" readonly>
-                        </div>
-                        <div class="col-md-4">
-                          <label for="billing_period_end" class="form-label">Billing Period End</label>
-                          <input type="date" class="form-control" id="billing_period_end" readonly>
-                        </div>
-                        <div class="col-md-4">
-                          <label for="disconnection_date" class="form-label">Disconnection Date</label>
-                          <input type="date" class="form-control" id="disconnection_date" readonly>
-                        </div>
+                          <div class="col-md-4">
+                            <div class="form-floating">
+                              <input type="date" class="form-control" id="billing_period_start" placeholder="Billing Period Start" readonly>
+                              <label for="billing_period_start">Billing Period Start</label>
+                            </div>
+                          </div>
+
+                          <div class="col-md-4">
+                            <div class="form-floating">
+                              <input type="date" class="form-control" id="billing_period_end" placeholder="Billing Period End" readonly>
+                              <label for="billing_period_end">Billing Period End</label>
+                            </div>
+                          </div>
+
+                          <div class="col-md-4">
+                            <div class="form-floating">
+                              <input type="date" class="form-control" id="disconnection_date" placeholder="Disconnection Date" readonly>
+                              <label for="disconnection_date">Disconnection Date</label>
+                            </div>
+                          </div>
                       </div>
 
                       <div class="row pt-4"> 
-                        <div class="col-md-6">
-                          <label for="previous_bill" class="form-label">Previous Bill</label>
-                          <input type="text" class="form-control" id="previous_bill" readonly>
-                        </div>
-                        <div class="col-md-6">
-                          <label for="previous_payment" class="form-label">Previous Payment</label>
-                          <input type="text" class="form-control" id="previous_payment" readonly>
-                        </div>
+                          <div class="col-md-3">
+                            <div class="form-floating">
+                              <input type="text" class="form-control" id="previous_bill" placeholder="Previous Bill" readonly>
+                              <label for="previous_bill">Previous Bill</label>
+                            </div>
+                          </div>
+
+                          <div class="col-md-3">
+                            <div class="form-floating">
+                              <input type="text" class="form-control" id="previous_payment" placeholder="Previous Payment" readonly>
+                              <label for="previous_payment">Previous Payment</label>
+                            </div>
+                          </div>
+
+                          <div class="col-md-3">
+                            <div class="form-floating">
+                              <input type="text" class="form-control" id="balance" placeholder="Balance" readonly>
+                              <label for="balance">Balance</label>
+                            </div>
+                          </div>
+
+                          <div class="col-md-3">
+                            <div class="form-floating">
+                              <input type="text" class="form-control" id="secured_cash" placeholder="Secured Cash" readonly>
+                              <label for="secured_cash">Secured Cash</label>
+                            </div>
+                          </div>
                       </div>
 
                       <div class="row pt-4"> 
-                        <div class="col-md-6">
-                          <label for="balance" class="form-label">Balance</label>
-                          <input type="text" class="form-control" id="balance" readonly>
-                        </div>
-                        <div class="col-md-6">
-                          <label for="secured_cash" class="form-label">Secured Cash</label>
-                          <input type="text" class="form-control" id="secured_cash" readonly>
-                        </div>
-                      </div>
 
-                      <div class="row pt-4"> 
-                        <div class="col-md-4">
-                          <label for="subscription_amount" class="form-label">Subscription Amount</label>
-                          <input type="text" class="form-control" id="subscription_amount" readonly>
-                        </div>
-                        <div class="col-md-4">
-                          <label for="prorated_charge" class="form-label">Prorated Charge</label>
-                          <input type="text" class="form-control" id="prorated_charge" readonly>
-                        </div>
-                        <div class="col-md-4">
-                          <label for="installation_charge" class="form-label">Installation Charge</label>
-                          <input type="text" class="form-control" id="installation_charge" readonly>
-                        </div>
+                          <div class="col-md-4">
+                            <div class="form-floating">
+                              <input type="text" class="form-control" id="subscription_amount" placeholder="Subscription Amount" readonly>
+                              <label for="subscription_amount">Subscription Amount</label>
+                            </div>
+                          </div>
+
+                          <div class="col-md-4">
+                            <div class="form-floating">
+                              <input type="text" class="form-control" id="prorated_charge" placeholder="Prorated Charge" readonly>
+                              <label for="prorated_charge">Prorated Charge</label>
+                            </div>
+                          </div>
+
+                          <div class="col-md-4">
+                            <div class="form-floating">
+                              <input type="text" class="form-control" id="installation_charge" placeholder="Installation Charge" readonly>
+                              <label for="installation_charge">Installation Charge</label>
+                            </div>
+                          </div>
                       </div>
 
                       <div class="row pt-4">
@@ -134,13 +157,68 @@
                           <input type="text" class="form-control text-center " id="invoice_status_id" readonly>
                         </div>
                       </div> 
+
+                </div> 
+          </div>
+          <!-- End Modal Body -->
+
+          <!-- Modal Footer -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-payment-md" id="edit-btn">Add Payment</button>
+          </div>
+        </div>
+      </div>
+  </div> <!-- End View Invoice Modal -->
+
+<!-- Add Payment Modal -->
+<form id="update-data">
+  <div class="modal fade" id="add-payment-md" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h5 class="modal-title">Add Payment Record?</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+
+          <!-- Modal Body -->
+          <div class="modal-body row g-3">
+                  <div class="col-md-12">
+                    <div class="form-floating">
+                      <input type="text" class="form-control" id="payment_reference_id" placeholder="Payment Reference ID" required>
+                      <label for="payment_reference_id">Payment Reference ID</label>
                     </div>
                   </div>
 
-                </div> <!-- End Left -->
+                  <div class="col-md-12">
+                    <div class="form-floating">
+                      <input type="number" min="1" class="form-control" id="amount_paid" placeholder="Amount Paid" required>
+                      <label for="amount_paid">Amount Paid</label>
+                    </div>
+                  </div>
 
-                <!-- Right -->
-                <div class="col-sm-4">
+                  <div class="col-md-12">
+                    <div class="form-floating">
+                      <input type="date" class="form-control" id="payment_date" placeholder="Payment Date" required>
+                      <label for="payment_date">Payment Date</label>
+                    </div>
+                  </div>
+          </div>
+
+          <!-- Modal Footer -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-success">Add</button>
+          </div>
+        </div>
+      </div>
+  </div>
+</form>
+
+<!-- Right -->
+<!-- <div class="col-sm-4">
                   <div class="row pt-4">
                     <h5 class="text-center">Payment Details</h5>
                     <div class="col-md-12 pt-4">
@@ -171,22 +249,7 @@
                     </div>
 
                   </div>
-                </div>
-              </div>
-             </div>
-          </div>
-          <!-- End Modal Body -->
-
-          <!-- Modal Footer -->
-          <!-- <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" id="edit-btn">Edit</button>
-            <button type="submit" class="btn btn-success" id="save-btn" disabled>Save Changes</button>
-          </div> -->
-        </div>
-      </div>
-  </div>
-</form> <!-- End View Invoice Modal -->
+                </div> -->
 
 </main><!-- End #main -->
 

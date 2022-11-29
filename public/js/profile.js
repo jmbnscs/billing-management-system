@@ -4,6 +4,10 @@ $(document).ready( () => {
     if (hashed == 0) {
         document.getElementById('password-change').click();
     }
+    else if (sessionStorage.getItem('edit') == 'true') {
+        sessionStorage.setItem('edit', false);
+        document.getElementById('edit-profile').click();
+    }
     else {
         document.getElementById('overview-profile').click();
     }
@@ -23,9 +27,9 @@ async function setProfilePage() {
     $('#first_name').text(data.first_name);
     $('#middle_name').text(data.middle_name);
     $('#last_name').text(data.last_name);
-    $('#birthdate').text(data.birthdate);
+    $('#birthdate').text(formatDateString(data.birthdate));
     $('#address').text(data.address);
-    $('#employment_date').text(data.employment_date);
+    $('#employment_date').text(formatDateString(data.employment_date));
 
     // Edit Profile
     $('#fullName').val(data.first_name + ' ' + data.last_name);
@@ -87,20 +91,25 @@ async function setProfilePage() {
     
         if (verify.message == 'success') {
             if (newPassword == renewPassword) {
-                const update_data = JSON.stringify({
-                    'admin_id' : admin_id,
-                    'admin_password' : newPassword
-                });
-
-                const [content, log] = await Promise.all ([updateData('admin/update_password.php', update_data), logActivity('Changed Password', 'Profile')]);
-                
-                if (content.message == 'Password Updated' && log) {
-                    localStorage.setItem('hashed', 1);
-                    toastr.success(content.message);
-
-                    setTimeout(function(){
-                        logout();
-                     }, 2000);
+                if (newPassword == currentPassword) {
+                    toastr.warning('New Password should not be the same as current password.');
+                }
+                else {
+                    const update_data = JSON.stringify({
+                        'admin_id' : admin_id,
+                        'admin_password' : newPassword
+                    });
+    
+                    const [content, log] = await Promise.all ([updateData('admin/update_password.php', update_data), logActivity('Changed Password', 'Profile')]);
+                    
+                    if (content.message == 'Password Updated' && log) {
+                        localStorage.setItem('hashed', 1);
+                        toastr.success(content.message);
+    
+                        setTimeout(function(){
+                            logout();
+                         }, 2000);
+                    }
                 }
             }
             else {

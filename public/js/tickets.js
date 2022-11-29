@@ -49,11 +49,11 @@ async function setActiveTicketsTable () {
         if(ticket_data[i].user_level == user_id || user_id == 2) {
             t.row.add($(`
             <tr>
-                <th scope="row"><a href="#">${ticket_data[i].ticket_num}</a></th>
+                <th scope="row" style="color: #012970;">${ticket_data[i].ticket_num}</th>
                 <td>${ticket_data[i].concern}</td>
                 <td>${ticket_data[i].date_filed}</td>
-                <td><span class="badge bg-danger">${ticket_data[i].ticket_status}</span></td>
                 <td>${ticket_data[i].account_id}</td>
+                <td><span class="badge bg-danger">${ticket_data[i].ticket_status}</span></td>
                 <td>
                     <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#activeModal" data-bs-whatever="${ticket_data[i].ticket_num}" id="setName"><i class="bi bi-folder-fill"></i></button>
                 </td>
@@ -179,10 +179,10 @@ async function setPendingTicketsTable () {
                 <th scope="row"><a href="#">${ticket_data[i].ticket_num}</a></th>
                 <td>${ticket_data[i].concern}</td>
                 <td>${ticket_data[i].date_filed}</td>
-                <td><span class="badge bg-warning">${ticket_data[i].ticket_status}</span></td>
                 <td>${ticket_data[i].account_id}</td>
                 <td>${ticket_data[i].user_level}</td>
                 <td>${ticket_data[i].admin_username}</td>
+                <td><span class="badge bg-warning">${ticket_data[i].ticket_status}</span></td>
                 <td>
                     <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#pendingModal" data-bs-whatever="${ticket_data[i].ticket_num}" id="setName"><i class="bi bi-folder-fill"></i></button>
                 </td>
@@ -416,9 +416,9 @@ async function setResolvedTicketsTable () {
                     <td>${ticket_data[i].concern}</td>
                     <td>${ticket_data[i].date_filed}</td>
                     <td>${ticket_data[i].date_resolved}</td>
-                    <td><span class="badge ${tag}">${ticket_data[i].ticket_status}</span></td>
                     <td>${ticket_data[i].account_id}</td>
                     <td>${ticket_data[i].admin_username}</td>
+                    <td><span class="badge ${tag}">${ticket_data[i].ticket_status}</span></td>
                     <td>
                         <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#resolvedModal" data-bs-whatever="${ticket_data[i].ticket_num}" id="setName"><i class="ri ri-eye-fill"></i></button>
                     </td>
@@ -559,6 +559,7 @@ async function setCreateTicketPage () {
     getExistingAccounts = await fetchData('account/read.php');
 
     setAddDropdown();
+    $('#date_filed').val(getDateToday())
     disableFutureDates();
 
     function disableFutureDates() {
@@ -570,9 +571,14 @@ async function setCreateTicketPage () {
         });
     }
 
-    create_ticket.onsubmit = (e) => {
+    create_ticket.onsubmit = async (e) => {
         e.preventDefault();
-        createTicket();
+        if (await isAccountIDExist($('#account_id').val())) {
+            createTicket();
+        }
+        else {
+            toastr.error('Account ID does not exist.');
+        }
     };
 
     async function createTicket() {

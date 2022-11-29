@@ -5,6 +5,7 @@ const DIR_APP = 'http://localhost/billing-management-system/app/includes/';
 const DIR_CUR = window.location.pathname;
 
 // Constant Variables
+// let admin_id, admin_status_id, hashed, logged_in, admin_un, user_id;
 const admin_id = localStorage.getItem('admin_id');
 const admin_status_id = sessionStorage.getItem('admin_status_id');
 const hashed = localStorage.getItem('hashed');
@@ -13,7 +14,8 @@ const admin_un = localStorage.getItem('admin_username');
 const user_id = localStorage.getItem('user_id');
 
 $(document).ready( () => {
-    if (logged_in !== undefined || logged_in !== null && logged_in === 'successful') {
+    console.log(admin_id);
+    if(checkDefaults()) {
         if (admin_status_id == 3) {
             let msg = "Please contact the system administrator.";
             let title = "Your account has been locked!"
@@ -29,10 +31,21 @@ $(document).ready( () => {
         setDefaults();
         setToastr();
     }
-    else if (admin_id == undefined || admin_id == null) {
+    else {
         window.location.replace('../views/login.php');
     }
 });
+
+function checkDefaults() {
+    console.log(admin_id === undefined || admin_id == 'null' || admin_id === null || admin_id == 'undefined');
+    if (admin_id === undefined || admin_id == 'null' || admin_id === null || admin_id == 'undefined') {
+        console.log(admin_id);
+        window.location.replace('../views/login.php');
+    }
+    else {
+        return true;
+    }
+}
 
 // Check if still using Default Password
 function isDefault () {
@@ -160,6 +173,17 @@ async function getStatusName(status_table, status_id) {
     return content.status_name;
 }
 
+async function isAccountIDExist(account_id) {
+    const content = await fetchData('account/read.php');
+
+    for (var i = 0; i < content.length; i++) {
+        if (content[i].account_id == account_id) {
+            return true;
+        }
+    }
+    return false;
+}
+
 // Functions to format data display
 function setTagElement(id, status) {
     document.getElementById(id).classList.add('text-white');
@@ -215,6 +239,42 @@ function setButtons() {
     delete_fn = document.getElementById('delete-data');
 }
 
+function isLegalAge(bday) {
+	var today = new Date();
+    var year_today = today.getFullYear();
+    var month_today = today.getMonth() + 1;
+    var day_today = today.getDate();
+
+    var bdate = new Date(bday);
+    var year_bdate = bdate.getFullYear();
+    var month_bdate = bdate.getMonth() + 1;
+    var day_bdate = bdate.getDate();
+
+    var by = Number.parseFloat(year_bdate),
+		bm = Number.parseFloat(month_bdate),
+		bd = Number.parseFloat(day_bdate),
+		ty = Number.parseFloat(year_today),
+		tm = Number.parseFloat(month_today),
+		td = Number.parseFloat(day_today);
+
+    if (td < bd) {
+        tm = tm - 1;
+    } 
+
+    if (tm < bm) {
+        ty = ty - 1;
+    } 
+
+    var age = ty - by;
+    
+    if (age >= 18) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
 // Display Default Data
 async function setDefaults () {
     const admin_data = await getAdminData(admin_id);
@@ -255,7 +315,9 @@ async function setDefaults () {
         $('#plan-add').addClass('hide');
         $('#misc-page').addClass('hide');
     }
+}
 
+$(() => {
     // Navbar Active Config
     const path = location.pathname.split('/')[4];
     const id = 'nav-' + path.split('.')[0];
@@ -272,7 +334,13 @@ async function setDefaults () {
         $('#drop-options').removeClass('collapsed');
         $('#options-nav').addClass('show');
     }
-}
+})
+
+$('#account-settings').on('click', (e) => {
+    e.preventDefault();
+    sessionStorage.setItem('edit', true);
+    window.location.replace('../views/profile.php');
+})
 
 // Logout Session
 function logout() {
@@ -288,6 +356,10 @@ function logout() {
             console.error(xhr)
         }
     });
+
+    function preventBack() { window.history.forward(); }
+    setTimeout(preventBack(), 0);
+    window.onunload = function () { null };
 }
 
 // Toastr Configs

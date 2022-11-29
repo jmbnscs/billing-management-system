@@ -31,7 +31,7 @@ async function setPlansTable () {
         (plan_data[i].status == 'ACTIVE') ? tag = 'bg-success' : tag = 'bg-danger';
         t.row.add($(`
             <tr>
-                <th scope="row"><a href="#">${plan_data[i].plan_name}</a></th>
+                <th scope="row" style="color: #012970;">${plan_data[i].plan_name}</th>
                 <td>${plan_data[i].bandwidth} mbps</td>
                 <td>&#8369; ${plan_data[i].price}</a></td>
                 <td>${plan_data[i].inclusions}</td>
