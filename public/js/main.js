@@ -14,7 +14,7 @@ const admin_un = localStorage.getItem('admin_username');
 const user_id = localStorage.getItem('user_id');
 
 $(document).ready( () => {
-    console.log(admin_id);
+    // console.log(admin_id);
     if(checkDefaults()) {
         if (admin_status_id == 3) {
             let msg = "Please contact the system administrator.";
@@ -37,7 +37,7 @@ $(document).ready( () => {
 });
 
 function checkDefaults() {
-    console.log(admin_id === undefined || admin_id == 'null' || admin_id === null || admin_id == 'undefined');
+    // console.log(admin_id === undefined || admin_id == 'null' || admin_id === null || admin_id == 'undefined');
     if (admin_id === undefined || admin_id == 'null' || admin_id === null || admin_id == 'undefined') {
         console.log(admin_id);
         window.location.replace('../views/login.php');

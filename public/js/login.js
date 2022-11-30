@@ -129,7 +129,7 @@ async function login () {
             disableLoginButton();
             localStorage.setItem('attempts', 3);
         }
-        else if (content.login_attempts === 5) {
+        else if (content.login_attempts === 6) {
             let message = "3 attempts remaining before lockout.";
             setToastr("Warning", message, "error");
         }

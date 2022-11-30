@@ -18,6 +18,7 @@ $(document).ready( () => {
         if (user_id != 2) {
             $('#save-admin-btn').addClass('hide');
             $('#edit-admin').addClass('hide');
+            $('#reset-btn').addClass('hide');
         }
     }
 });
@@ -209,6 +210,7 @@ async function setResetPWModal (admin_id) {
     modalTitle.textContent = 'Reset Password for Admin ' + admin_id + '?';
 
     const content = await fetchData('logs/read_admin_default.php?admin_id=' + admin_id);
+    const admin_content = await fetchData('admin/read_single.php?admin_id=' + admin_id);
     $('#admin_id_rst').val(content.admin_id);
     $('#admin_username_rst').val(content.def_username);
     $('#admin_password_rst').val(content.def_password);
@@ -222,7 +224,8 @@ async function setResetPWModal (admin_id) {
     async function resetPassword() {
         let update_data = JSON.stringify({
             'admin_id' : content.admin_id,
-            'admin_password' : content.def_password
+            'admin_password' : content.def_password,
+            'admin_username' : admin_content.admin_username
         });
 
         const [update_content, log] = await Promise.all ([updateData('admin/reset_password.php', update_data), logActivity('Password Reset for Admin ' + content.def_username + ' - ' + admin_id, 'View Admins')]);
