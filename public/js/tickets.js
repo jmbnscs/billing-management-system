@@ -555,7 +555,7 @@ async function invalidatedTicketsModal () {
 // -------------------------------------------------------------------- Add Ticket Page
 async function setCreateTicketPage () {
     const create_ticket = document.getElementById('create-ticket');
-    $('#ticket_num').val(await generateID('ticket/read.php', "TN", 6));
+    $('#ticket_num').val(await generateID('check/ticket_num.php?ticket_num=', "TN", 6));
     getExistingAccounts = await fetchData('account/read.php');
 
     setAddDropdown();

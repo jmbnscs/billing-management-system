@@ -275,20 +275,10 @@ async function setCustomerPage () {
 // -------------------------------------------------------------------- Add Customer
 async function setAddCustomerPage () {
     const add_customer = document.getElementById('add-customer');
-    $('#account_id').val(await generateID('account/read.php', "", 8));
+    $('#account_id').val(await generateID('check/account_id.php?account_id=', "", 8));
 
     setAddDropdown();
-
-    var maxBirthdayDate = new Date();
-    maxBirthdayDate.setFullYear( maxBirthdayDate.getFullYear() - 18 );
-    maxBirthdayDate.setMonth(11,31)
-    $( "#birthdate" ).datepicker({
-        dateFormat: 'yy-mm-dd',
-        changeMonth: true,
-        changeYear: true,
-        maxDate: maxBirthdayDate,
-    yearRange: '1950:'+maxBirthdayDate.getFullYear(),
-    });
+    setAllowedDate('#birthdate');
 
     add_customer.onsubmit = (e) => {
         e.preventDefault();
@@ -308,7 +298,7 @@ async function setAddCustomerPage () {
             'start_date' : $('#start_date').val(),
             'plan_id' : $('#plan_id').val(),
             'connection_id' : $('#connection_id').val(),
-            'account_status_id' : $('#account_status_id').val(),
+            // 'account_status_id' : $('#account_status_id').val(),
             'area_id' : $('#area_id').val()
         });
 
@@ -399,10 +389,10 @@ async function setAddCustomerPage () {
             $("#connection_id").append(opt);
         }
     
-        for (var i = 0; i < account_status.length; i++) {
-            var opt = `<option value='${account_status[i].status_id}'>${account_status[i].status_name}</option>`;
-            $("#account_status_id").append(opt);
-        }
+        // for (var i = 0; i < account_status.length; i++) {
+        //     var opt = `<option value='${account_status[i].status_id}'>${account_status[i].status_name}</option>`;
+        //     $("#account_status_id").append(opt);
+        // }
     
         for (var i = 0; i < area.length; i++) {
             var opt = `<option value='${area[i].area_id}'>${area[i].area_name}</option>`;

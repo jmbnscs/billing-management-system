@@ -102,14 +102,14 @@
                         </div>
                     </div>
 
-                    <div class="row mb-3">
+                    <!-- <div class="row mb-3">
                         <label for="account_status_id" class="col-sm-2 col-form-label">Account Status</label>
                         <div class="col-sm-10">
                             <select id="account_status_id" class="form-select" required>
                                 <option selected disabled value="">Choose Account Status</option>
                             </select>
                         </div>
-                    </div>
+                    </div> -->
 
                     <div class="row mb-3">
                         <label for="area_id" class="col-sm-2 col-form-label">Area</label>

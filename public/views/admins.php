@@ -18,6 +18,18 @@
     <div class="card recent-sales overflow-auto">
       <br>
       <div class="card-body">
+        <div>
+          <select id="status-filter" class="form-control" style="display: inline; width: 200px; margin-left: 25px;">
+            <option value="">Show All: Status</option>
+          </select>
+        </div>
+
+        <div>
+          <select id="role-filter" class="form-control" style="display: inline; width: 200px; margin-left: 25px;">
+            <option value="">Show All: Role</option>
+          </select>
+        </div>
+
         <table class="table table-borderless" id="admins-table">
           <thead>
             <tr>
@@ -231,6 +243,9 @@
 
   <!-- Template Main JS File -->
   <script src="../assets/js/main.js"></script>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+  <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
 
   <!-- Backend JS File -->
   <script src="../js/main.js"></script>

@@ -5,7 +5,6 @@ const DIR_APP = 'http://localhost/billing-management-system/app/includes/';
 const DIR_CUR = window.location.pathname;
 
 // Constant Variables
-// let admin_id, admin_status_id, hashed, logged_in, admin_un, user_id;
 const admin_id = localStorage.getItem('admin_id');
 const admin_status_id = sessionStorage.getItem('admin_status_id');
 const hashed = localStorage.getItem('hashed');
@@ -14,7 +13,6 @@ const admin_un = localStorage.getItem('admin_username');
 const user_id = localStorage.getItem('user_id');
 
 $(document).ready( () => {
-    // console.log(admin_id);
     if(checkDefaults()) {
         if (admin_status_id == 3) {
             let msg = "Please contact the system administrator.";
@@ -37,9 +35,7 @@ $(document).ready( () => {
 });
 
 function checkDefaults() {
-    // console.log(admin_id === undefined || admin_id == 'null' || admin_id === null || admin_id == 'undefined');
     if (admin_id === undefined || admin_id == 'null' || admin_id === null || admin_id == 'undefined') {
-        console.log(admin_id);
         window.location.replace('../views/login.php');
     }
     else {
@@ -185,6 +181,18 @@ async function isAccountIDExist(account_id) {
 }
 
 // Functions to format data display
+async function generateID(fetch_page, added_string, size) {
+    while (true) {
+        let rand_num = added_string + Math.round(Math.random() * Number((9).toString().repeat(size)));
+        let content = await fetchData(fetch_page + rand_num);
+        if (!content.exist) {
+            if (rand_num.length == (size + added_string.length)) {
+                return rand_num;
+            }
+        }
+    }
+}
+
 function setTagElement(id, status) {
     document.getElementById(id).classList.add('text-white');
     document.getElementById(id).classList.remove('bg-danger');
@@ -273,6 +281,41 @@ function isLegalAge(bday) {
     else {
         return false;
     }
+}
+
+function setAllowedDate(id) {
+    var maxBirthdayDate = new Date();
+    maxBirthdayDate.setFullYear( maxBirthdayDate.getFullYear() - 18 );
+
+    $(id).datepicker({
+        dateFormat: 'yy-mm-dd',
+        changeMonth: true,
+        changeYear: true,
+        maxDate: maxBirthdayDate,
+        yearRange: '1950:'+ maxBirthdayDate.getFullYear(),
+    });
+}
+
+function setDateRange(id, date) {
+    var minDate = new Date(date);
+    var maxDate = new Date();
+
+    $(id).datepicker({
+        dateFormat: 'yy-mm-dd',
+        changeMonth: true,
+        changeYear: true,
+        minDate: minDate,
+        maxDate: maxDate,
+        yearRange: minDate.getFullYear() + ':' + maxDate.getFullYear()
+    });
+}
+
+function isWithinRange(date, input_date) {
+    var minDate = new Date(date);
+    var maxDate = new Date();
+    var inputDate = new Date(input_date);
+
+    return minDate < inputDate && inputDate < maxDate;
 }
 
 // Display Default Data
@@ -404,21 +447,4 @@ function setToastrArgs(msg, title) {
       };
       
     toastr.error(msg, title);
-}
-
-async function generateID(fetch_page, added_string, size) {
-    const content = fetchData(fetch_page);
-
-    while (true) {
-        let checker = 0;
-        let rand_num = added_string + Math.round(Math.random() * Number((9).toString().repeat(size)));
-        for(let i = 0; i < content.length; i++) {
-            if((rand_num == content[i].ticket_num) || (rand_num == content[i].account_id) || (rand_num == content[i].admin_id)) {
-                checker++;
-            }
-        }
-        if ((checker == 0) && (rand_num.length == (size + added_string.length))) {
-            return rand_num;
-        }
-    }
 }

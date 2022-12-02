@@ -81,7 +81,7 @@
                     <div class="row mb-3">
                         <label for="employment_date" class="col-sm-2 col-form-label">Employment Date</label>
                         <div class="col-sm-10">
-                            <input type="date" class="form-control" id="employment_date" required>
+                            <input type="date" class="form-control custom-bday" id="employment_date" required>
                         </div>
                     </div>
 

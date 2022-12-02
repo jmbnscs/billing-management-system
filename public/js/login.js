@@ -69,6 +69,7 @@ $(document).ready(function () {
 
 // -------------------------------- Backend JS --------------------------------
 const DIR_API = 'http://localhost/gstech_api/api/';
+const DIR_APP = 'http://localhost/billing-management-system/app/includes/';
 
 async function login () {
     const admin_username = $('#admin_username').val();
@@ -110,20 +111,19 @@ async function login () {
     if (content.message == 'success') {
         localStorage.setItem('admin_id', content.admin_id);
         localStorage.setItem('login', 'successful');
+        logLogin(content.admin_id, admin_username);
         window.location.replace('../views/dashboard.php');
     }
     else if (content.message == 'change password') {
         localStorage.setItem('hashed', 0);
         localStorage.setItem('admin_id', content.admin_id);
         localStorage.setItem('login', 'successful');
-        window.location.replace('../views/dashboard.php');
+        window.location.replace('../views/profile.php');
     }
     else if (content.message == 'Invalid Password'){
-        // console.log(localStorage.getItem('attempts'));
         attempt = localStorage.getItem('attempts');
-        console.log(attempt);
         localStorage.setItem('attempts', attempt - 1);
-        if ((content.login_attempts === 5) && (localStorage.getItem('attempts') <= 0)) {
+        if ((content.login_attempts === 6) && (localStorage.getItem('attempts') <= 0)) {
             let message = "3 attempts remaining before lockout.";
             setToastr("Warning", message, "error");
             disableLoginButton();
@@ -165,6 +165,41 @@ $(function () {
         login();
     });
 });
+
+async function logLogin(admin_id, admin_un) {
+    let url = DIR_APP + 'log_activity.php';
+    let content;
+    try {
+        let res = await fetch(url);
+        content = await res.json();
+    } catch (error) {
+        console.log(error);
+    }
+
+    const data = {
+        'admin_id' : admin_id,
+        'username' : admin_un,
+        'page_accessed' : 'Login',
+        'activity' : 'Successful Login',
+        'ip_address' : content.ip_address,
+        'user_agent' : content.user_agent
+    };
+
+    fetch(DIR_API + 'logs/log_activity.php', {
+        method: 'POST', 
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+        })
+    .then((response) => response.json())
+    .then((data) => {
+        console.log('Success:', data);
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+}
 
 function disableLoginButton() {
     $('#submit').prop('disabled', true);
