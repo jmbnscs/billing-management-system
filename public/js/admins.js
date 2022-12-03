@@ -47,6 +47,7 @@ async function setViewAdminPage () {
     
     async function setAdminTable () {
     
+        // ito
         var t = $('#admins-table').DataTable( {
             "searching": true
         });
@@ -62,6 +63,8 @@ async function setViewAdminPage () {
             var opt = `<option value='${user_roles[i].user_role}'>${user_roles[i].user_role}</option>`;
             $("#role-filter").append(opt);
         }
+
+        // hanggang dito
     
         for (var i = 0; i < admins.length; i++) {
             var tag;
@@ -79,6 +82,7 @@ async function setViewAdminPage () {
             `)).draw(false);
         }
     
+        // dito ulit
         $("#admins-table_filter.dataTables_filter").append($("#role-filter"));
         $("#admins-table_filter.dataTables_filter").append($("#status-filter"));
 
@@ -127,6 +131,8 @@ async function setViewAdminPage () {
 
         t.draw();
         t.columns.adjust().draw();
+
+        // hanggang dito
     }
     
     async function setViewModal () {

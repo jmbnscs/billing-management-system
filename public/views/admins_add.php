@@ -67,7 +67,7 @@
                     <div class="row mb-3">
                         <label for="admin_bday" class="col-sm-2 col-form-label">Birthday</label>
                         <div class="col-sm-10">
-                            <input type="date" class="form-control custom-bday" id="admin_bday" autocomplete="off" required>
+                            <input type="date" class="form-control custom-date" id="admin_bday" autocomplete="off" required>
                         </div>
                     </div>
 
@@ -81,7 +81,7 @@
                     <div class="row mb-3">
                         <label for="employment_date" class="col-sm-2 col-form-label">Employment Date</label>
                         <div class="col-sm-10">
-                            <input type="date" class="form-control custom-bday" id="employment_date" required>
+                            <input type="date" class="form-control custom-date" id="employment_date" required>
                         </div>
                     </div>
 

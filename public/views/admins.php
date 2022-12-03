@@ -18,6 +18,7 @@
     <div class="card recent-sales overflow-auto">
       <br>
       <div class="card-body">
+        <!-- Filter Dropdown -->
         <div>
           <select id="status-filter" class="form-control" style="display: inline; width: 200px; margin-left: 25px;">
             <option value="">Show All: Status</option>
@@ -28,7 +29,7 @@
           <select id="role-filter" class="form-control" style="display: inline; width: 200px; margin-left: 25px;">
             <option value="">Show All: Role</option>
           </select>
-        </div>
+        </div><!-- End Filter Dropdown -->
 
         <table class="table table-borderless" id="admins-table">
           <thead>

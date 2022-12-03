@@ -283,6 +283,7 @@ function isLegalAge(bday) {
     }
 }
 
+// Birthday
 function setAllowedDate(id) {
     var maxBirthdayDate = new Date();
     maxBirthdayDate.setFullYear( maxBirthdayDate.getFullYear() - 18 );
@@ -296,6 +297,7 @@ function setAllowedDate(id) {
     });
 }
 
+// Range Date
 function setDateRange(id, date) {
     var minDate = new Date(date);
     var maxDate = new Date();
