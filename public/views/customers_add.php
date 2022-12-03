@@ -17,8 +17,23 @@
 <section class="section customers-add">
   <div class="row">
     <div class="col-mb-8">
+        <div class="col-md-12 head">
+            <div class="float-right">
+                <a href="javascript:void(0);" class="btn btn-success" onclick="formToggle('importFrm');"><i class="plus"></i> Import</a>
+            </div>
+        </div>
+        <!-- CSV file upload form -->
+        <div class="col-md-12" id="importFrm" style="display: none;">
+            <form method="post" enctype="multipart/form-data" id="upload-form">
+                <input type="file" name="file" />
+                <input type="submit" class="btn btn-primary" name="importSubmit" value="IMPORT">
+            </form>
+        </div>
         <div class="card">
+                
             <div class="card-body pt-4">
+                
+
                 <form id="add-customer">
 
                     <div class="row mb-3">

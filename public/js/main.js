@@ -318,6 +318,15 @@ function isWithinRange(date, input_date) {
     return minDate < inputDate && inputDate < maxDate;
 }
 
+function formToggle(ID){
+    var element = document.getElementById(ID);
+    if(element.style.display === "none"){
+        element.style.display = "block";
+    }else{
+        element.style.display = "none";
+    }
+}
+
 // Display Default Data
 async function setDefaults () {
     const admin_data = await getAdminData(admin_id);
@@ -332,31 +341,12 @@ async function setDefaults () {
     $('#display_role').text(user.user_role);
     $('#display_dd_name').text(admin_data.admin_username);
 
-    // Set User Levels
-    if (level_id == 3) {
-        $('#misc-page').addClass('hide');
-        $('#admin-add').addClass('hide');
-        $('#ticket-invalid').addClass('hide');
-    }
-    else if (level_id == 4) {
-        $('#ticket-page').addClass('hide');
-    }
-    else if (level_id == 5) {
-        $('#invoice-payment-add').addClass('hide');
-        $('#ticket-invalid').addClass('hide');
-    }
-    else if (level_id == 6) {
-        $('#invoice-payment-add').addClass('hide');
-        $('#invoice-payment').addClass('hide');
-        $('#invoice-prorate').addClass('hide');
-        $('#ticket-page').addClass('hide');
-    }
+    const restrict_content = await fetchData('restriction/get_user_restriction.php?user_id=' + level_id);
 
-    if (level_id == 4 || level_id == 5 || level_id == 6) {
-        $('#admin-add').addClass('hide');
-        $('#customer-add').addClass('hide');
-        $('#plan-add').addClass('hide');
-        $('#misc-page').addClass('hide');
+    if (restrict_content.length > 0) {
+        for (var i = 0; i < restrict_content.length; i++) {
+            $('#' + restrict_content[i].nav_id).addClass('hide');
+        }
     }
 }
 

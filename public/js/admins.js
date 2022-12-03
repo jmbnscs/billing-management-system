@@ -1,9 +1,8 @@
-$(document).ready( () => {
+$(document).ready( async () => {
     isDefault();
 
     if (DIR_CUR == DIR_MAIN + 'views/admins_add.php') {
-        if(user_id == 4 || user_id == 5 || user_id == 6) {
-            setErrorMessage();
+        if(await checkRestriction()) {
             window.location.replace("../views/dashboard.php");
         }
         else {
@@ -14,13 +13,32 @@ $(document).ready( () => {
         displaySuccessMessage();
         setViewAdminPage();
 
-        if (user_id != 2) {
-            $('#save-admin-btn').addClass('hide');
-            $('#edit-admin').addClass('hide');
-            $('#reset-btn').addClass('hide');
+        const restrict_btn = await updateData('pages/get_btn_restriction.php', JSON.stringify({'user_id': user_id, 'nav_id' : 'admin-view'}));
+
+        if (restrict_btn.length > 0) {
+            for (var i = 0; i < restrict_btn.length; i++) {
+                $('#' + restrict_btn[i].page_button).addClass('hide');
+            }
         }
     }
 });
+
+async function checkRestriction () {
+    const content = await fetchData('restriction/get_user_restriction.php?user_id=' + user_id);
+
+    if (content.length > 0) {
+        for (var i = 0; i < content.length; i++) {
+            if (content[i].nav_id == 'admin-add') {
+                setErrorMessage();
+                return true;
+            }
+        }
+        return false;
+    }
+    else {
+        return false;
+    }
+}
 
 // -------------------------------------------------------------------- View Admin
 async function setViewAdminPage () {
@@ -113,8 +131,8 @@ async function setViewAdminPage () {
     
     async function setViewModal () {
         $("#view-admins").on("hidden.bs.modal", function () {
-            $('#save-admin-btn').attr('disabled', true);
-            $('#edit-admin').attr('disabled', false);
+            $('#save-btn').attr('disabled', true);
+            $('#edit-btn').attr('disabled', false);
         });
     
         var viewModal = document.getElementById('view-admins')
@@ -258,11 +276,11 @@ async function setViewAdminPage () {
                 }
             }
     
-            const edit_admin = document.getElementById('edit-admin');
+            const edit_admin = document.getElementById('edit-btn');
             edit_admin.onclick = (e) => {
                 e.preventDefault();
-                $('#save-admin-btn').attr('disabled', false);
-                $('#edit-admin').attr('disabled', true);
+                $('#save-btn').attr('disabled', false);
+                $('#edit-btn').attr('disabled', true);
                 toggleInputData('disabled', false);
                 setDropdownData();
             };

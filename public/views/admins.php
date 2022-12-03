@@ -175,8 +175,8 @@
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#reset-pw-modal" id="reset-btn">Reset Password</button>
-            <button type="button" class="btn btn-primary" id="edit-admin">Edit</button>
-            <button type="submit" class="btn btn-success" id="save-admin-btn" disabled>Save Changes</button>
+            <button type="button" class="btn btn-primary" id="edit-btn">Edit</button>
+            <button type="submit" class="btn btn-success" id="save-btn" disabled>Save Changes</button>
           </div>
         </div>
       </div>
