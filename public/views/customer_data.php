@@ -147,7 +147,7 @@
 
                       <!-- Filter Dropdown -->
                       <div>
-                        <select id="status-filter" class="form-control" style="display: inline; width: 200px; margin-left: 25px;">
+                        <select id="status-filter" class="form-control" style="display: inline; width: 150px; margin-left: 20px;">
                           <option value="">Show All: Status</option>
                         </select>
                       </div>
@@ -206,6 +206,15 @@
                 <div class="col-sm-11 m-auto">
                   <h5 class="card-title">Prorates History</h5>
                   <div class="card overflow-auto customer-tbl">
+
+                      <!-- Filter Dropdown -->
+                      <div>
+                        <select id="prorate-status-filter" class="form-control" style="display: inline; width: 150px; margin-left: 20px;">
+                          <option value="">Show All: Status</option>
+                        </select>
+                      </div>
+                      <!-- End Filter Dropdown -->
+
                       <table class="table table-borderless" id="customer-prorate-tbl">
                         <thead>
                           <tr>
@@ -233,6 +242,21 @@
                 <div class="col-sm-11 m-auto">
                   <h5 class="card-title">Tickets History</h5>
                   <div class="card overflow-auto customer-tbl">
+
+                      <!-- Filter Dropdown -->
+                      <div>
+                        <select id="ticket-status-filter" class="form-control" style="display: inline; width: 150px; margin-left: 20px;">
+                          <option value="">Show All: Status</option>
+                        </select>
+                      </div>
+
+                      <div>
+                        <select id="concern-filter" class="form-control" style="display: inline; width: 150px; margin-left: 20px;">
+                          <option value="">Show All: Concern</option>
+                        </select>
+                      </div>
+                      <!-- End Filter Dropdown -->
+
                       <table class="table table-borderless" id="customer-ticket-tbl">
                         <thead>
                           <tr>

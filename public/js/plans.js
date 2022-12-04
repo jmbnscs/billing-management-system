@@ -24,8 +24,19 @@ $(document).ready(function () {
 
 // -------------------------------------------------------------------- View Plan Page
 async function setPlansTable () {
+    const inclusion = await fetchData('inclusion/read.php');
     let plan_data = await fetchData('views/plan.php');
-    var t = $('#plan-table').DataTable(), tag;
+    var tag;
+
+    var t = $('#plan-table').DataTable( {
+        "searching": true
+    });
+    
+    for (var i = 0; i < inclusion.length; i++) {
+        var opt = `<option value='${inclusion[i].inclusion_name}'>${inclusion[i].inclusion_name}</option>`;
+        $("#inclusions-filter").append(opt);
+        //$("#inclusions-filter").selectpicker("refresh");
+    }
 
     for (var i = 0; i < plan_data.length; i++) {
         (plan_data[i].status == 'ACTIVE') ? tag = 'bg-success' : tag = 'bg-danger';
@@ -40,6 +51,33 @@ async function setPlansTable () {
             </tr>
         `)).draw(false);
     }
+
+    $("#plan-table_filter.dataTables_filter").append($("#inclusions-filter"));
+
+    var inclusionsIndex = 0;
+    $("#plan-table th").each(function (i) {
+        if ($($(this)).html() == "Inclusion") {
+            inclusionsIndex = i; return false;
+        }
+    });
+
+    $.fn.dataTable.ext.search.push(
+        function (settings, data, dataIndex) {
+            var selectedItem = $('#inclusions-filter').val()
+            var category = data[inclusionsIndex];
+            if (selectedItem === "" || category.includes(selectedItem)) {
+            return true;
+            }
+            return false;
+        }
+    );
+
+    $("#inclusions-filter").change(function (e) {
+        t.draw();
+    });
+
+    t.draw();
+    t.columns.adjust().draw();
 }
 
 async function setViewModal () {

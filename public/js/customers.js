@@ -46,17 +46,34 @@ $(document).ready(function () {
 
 // -------------------------------------------------------------------- View Customers
 async function setCustomerPage () {
-    const customer_data = await fetchData('views/customer.php');
+    const [plans, areas, customer_statuses, customer_data] = await Promise.all ([fetchData('plan/read.php'), fetchData('area/read.php'), fetchData('statuses/read.php?status_table=account_status'), fetchData('views/customer.php')]);
 
     setCustomerTable();
     setViewModal();
 
     function setCustomerTable () {
+        
         var t = $('#customer-table').DataTable({
             pageLength : 5,
-            lengthMenu: [5, 10, 20]
+            lengthMenu: [5, 10, 20],
+            "searching": true
         }), tag;
-    
+
+        for (var i = 0; i < plans.length; i++) {
+            var opt = `<option value='${plans[i].plan_name}'>${plans[i].plan_name}</option>`;
+            $("#plan-filter").append(opt);
+        }
+
+        for (var i = 0; i < areas.length; i++) {
+            var opt = `<option value='${areas[i].area_name}'>${areas[i].area_name}</option>`;
+            $("#area-filter").append(opt);
+        }
+
+        for (var i = 0; i < customer_statuses.length; i++) {
+            var opt = `<option value='${customer_statuses[i].status_name}'>${customer_statuses[i].status_name}</option>`;
+            $("#customer-status-filter").append(opt);
+        }
+
         for (var i = 0; i < customer_data.length; i++) {
             (customer_data[i].status == 'ACTIVE') ? tag = 'bg-success' : tag = 'bg-danger';
     
@@ -65,14 +82,84 @@ async function setCustomerPage () {
                     <th scope="row" style="color: #012970;">${customer_data[i].account_id}</th>
                     <td>${customer_data[i].customer_name}</td>
                     <td>${customer_data[i].plan}</td>
-                    <td>&#8369; ${customer_data[i].balance}</td>
+                    <td>${customer_data[i].area}</td>
                     <td><span class="badge ${tag}">${customer_data[i].status}</span></td>
+                    <td>&#8369; ${customer_data[i].balance}</td>
                     <td><a href="../views/customer_data.php?acct=${customer_data[i].account_id}" target="_blank"><button type="button" class="btn btn-outline-primary""><i class="ri ri-eye-fill"></i></button><a></td>
                 </tr>
             `)).draw(false);
-
-            
         }
+
+        $("#customer-table_filter.dataTables_filter").append($("#plan-filter"));
+        $("#customer-table_filter.dataTables_filter").append($("#area-filter"));
+        $("#customer-table_filter.dataTables_filter").append($("#customer-status-filter"));
+
+        var planIndex = 0, areaIndex = 0, statusIndex = 0;
+        $("#customer-table th").each(function (i) {
+            if ($($(this)).html() == "Plan") {
+                planIndex = i; return false;
+            }
+        });
+
+        $("#customer-table th").each(function (i) {
+            if ($($(this)).html() == "Area") {
+                areaIndex = i; return false;
+            }
+        });
+
+        $("#customer-table th").each(function (i) {
+            if ($($(this)).html() == "Status") {
+                statusIndex = i; return false;
+            }
+        });
+
+        $.fn.dataTable.ext.search.push(
+        function (settings, data, dataIndex) {
+            var selectedItem = $('#plan-filter').val()
+            var category = data[planIndex];
+            if (selectedItem === "" || category.includes(selectedItem)) {
+            return true;
+            }
+            return false;
+        }
+        );
+        
+        $.fn.dataTable.ext.search.push(
+            function (settings, data, dataIndex) {
+              var selectedItem = $('#area-filter').val()
+              var category = data[areaIndex];
+              if (selectedItem === "" || category.includes(selectedItem)) {
+                return true;
+              }
+              return false;
+            }
+        );
+
+        $.fn.dataTable.ext.search.push(
+            function (settings, data, dataIndex) {
+              var selectedItem = $('#customer-status-filter').val()
+              var category = data[statusIndex];
+              if (selectedItem === "" || category.includes(selectedItem)) {
+                return true;
+              }
+              return false;
+            }
+        );
+
+        $("#plan-filter").change(function (e) {
+            t.draw();
+        });
+
+        $("#area-filter").change(function (e) {
+            t.draw();
+        });
+
+        $("#customer-status-filter").change(function (e) {
+            t.draw();
+        });
+
+        t.draw();
+        t.columns.adjust().draw();
     }
 }
 

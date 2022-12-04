@@ -18,6 +18,14 @@
     <div class="card recent-sales overflow-auto">
       <br>
       <div class="card-body">
+        <!-- Filter Dropdown -->
+        <div>
+          <select id="inclusions-filter" class="form-control" style="display: inline; width: 200px; margin-left: 25px;">
+            <option value="">Select All: Inclusion</option>
+            <option value="None">None</option>
+          </select>
+        </div>
+        <!-- End Filter Dropdown -->
         <table class="table table-borderless" id="plan-table">
           <thead>
             <tr>

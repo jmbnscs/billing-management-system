@@ -286,11 +286,18 @@ async function setPaymentHistory() {
 }
 
 async function setProrateHistory() {
-    let content = await fetchData('prorate/read_acct.php?account_id=' + account_id);
+    const [content, prorate_statuses] = await Promise.all ([fetchData('prorate/read_acct.php?account_id=' + account_id), fetchData('statuses/read.php?status_table=prorate_status')]);
+
     var t = $('#customer-prorate-tbl').DataTable({
         pageLength : 5,
-        lengthMenu: [5, 10]
+        lengthMenu: [5, 10],
+        "searching": true
     }), tag;
+
+    for (var i = 0; i < prorate_statuses.length; i++) {
+        var opt = `<option value='${prorate_statuses[i].status_name}'>${prorate_statuses[i].status_name}</option>`;
+        $("#prorate-status-filter").append(opt);
+    }
 
     for (var i = 0; i < content.length; i++) {
         let status = await getStatusName('prorate_status', content[i].prorate_status_id);
@@ -308,15 +315,55 @@ async function setProrateHistory() {
         `)).draw(false);
     }
 
+    // dito ulit
+    $("#customer-prorate-tbl_filter.dataTables_filter").append($("#prorate-status-filter"));
+
+    var statusIndex = 0;
+    $("#customer-prorate-tbl th").each(function (i) {
+        if ($($(this)).html() == "Status") {
+            statusIndex = i; return false;
+        }
+    });
+
+    $.fn.dataTable.ext.search.push(
+        function (settings, data, dataIndex) {
+        var selectedItem = $('#prorate-status-filter').val()
+        var category = data[statusIndex];
+        if (selectedItem === "" || category.includes(selectedItem)) {
+            return true;
+        }
+        return false;
+        }
+    );
+
+    $("#prorate-status-filter").change(function (e) {
+        t.draw();
+    });
+
+    t.draw();
+    t.columns.adjust().draw();
+
     setViewModal('view-prorate')
 }
 
 async function setTicketHistory() {
-    let content = await fetchData('ticket/read_single_account.php?account_id=' + account_id);
+    const [content, ticket_statuses, concerns] = await Promise.all ([fetchData('ticket/read_single_account.php?account_id=' + account_id), fetchData('statuses/read.php?status_table=ticket_status'), fetchData('concerns/read.php')]);
+
     var t = $('#customer-ticket-tbl').DataTable({
         pageLength : 5,
-        lengthMenu: [5, 10]
+        lengthMenu: [5, 10],
+        "searching": true
     }), tag;
+
+    for (var i = 0; i < ticket_statuses.length; i++) {
+        var opt = `<option value='${ticket_statuses[i].status_name}'>${ticket_statuses[i].status_name}</option>`;
+        $("#ticket-status-filter").append(opt);
+    }
+
+    for (var i = 0; i < concerns.length; i++) {
+        var opt = `<option value='${concerns[i].concern_category}'>${concerns[i].concern_category}</option>`;
+        $("#concern-filter").append(opt);
+    }
 
     for (var i = 0; i < content.length; i++) {
         const [concern, status] = await Promise.all ([fetchData('concerns/read_single.php?concern_id=' + content[i].concern_id), getStatusName('ticket_status', content[i].ticket_status_id)]);
@@ -349,6 +396,55 @@ async function setTicketHistory() {
                 </tr>
         `)).draw(false);
     }
+
+    $("#customer-ticket-tbl_filter.dataTables_filter").append($("#concern-filter"));
+    $("#customer-ticket-tbl_filter.dataTables_filter").append($("#ticket-status-filter"));
+
+    var statusIndex = 0, concernIndex = 0;
+    $("#customer-ticket-tbl th").each(function (i) {
+        if ($($(this)).html() == "Status") {
+            statusIndex = i; return false;
+        }
+    });
+
+    $("#customer-ticket-tbl th").each(function (i) {
+        if ($($(this)).html() == "Concern") {
+            concernIndex = i; return false;
+        }
+    });
+
+    $.fn.dataTable.ext.search.push(
+        function (settings, data, dataIndex) {
+        var selectedItem = $('#ticket-status-filter').val()
+        var category = data[statusIndex];
+        if (selectedItem === "" || category.includes(selectedItem)) {
+            return true;
+        }
+        return false;
+        }
+    );
+
+    $.fn.dataTable.ext.search.push(
+    function (settings, data, dataIndex) {
+        var selectedItem = $('#concern-filter').val()
+        var category = data[concernIndex];
+        if (selectedItem === "" || category.includes(selectedItem)) {
+        return true;
+        }
+        return false;
+    }
+    );
+
+    $("#ticket-status-filter").change(function (e) {
+        t.draw();
+    });
+
+    $("#concern-filter").change(function (e) {
+        t.draw();
+    });
+
+    t.draw();
+    t.columns.adjust().draw();
 
     setViewModal('view-ticket')
 }
