@@ -84,11 +84,6 @@ async function setAddCustomerPage () {
         localStorage.setItem('account_id', await generateID('check/account_id.php?account_id=', "", 8));
     }
     $('#account_id').val(localStorage.getItem('account_id'));
-    var req_elem = document.querySelectorAll('.required-tooltip');
-    console.log(req_elem.length);
-    console.log(req_elem[0]);
-    $(req_elem).attr('title', 'This is a required field.');
-    console.log(document.querySelectorAll('.required-tooltip'));
 
     setAddDropdown();
 
@@ -100,19 +95,70 @@ async function setAddCustomerPage () {
 
     add_customer.onsubmit = (e) => {
         e.preventDefault();
-        if (isLegalAge($('#birthdate').val())) {
-            if (isWithinRange('2021-09-23', $('#start_date').val())) {
-                localStorage.removeItem('account_id');
-                addCustomer();
+        checkValidity();
+        
+    };
+    var req_elem = document.getElementById('add-customer').querySelectorAll("[required]");
+
+    function checkValidity() {
+        resetElements();
+        var counter = 0;
+        var mobile_number = new RegExp("^([0]{1}[9]{1}[0-9]{9})$");
+        var email = /^\S+@\S+\.\S+$/;
+        
+        for (var i = 0; i < req_elem.length; i++) {
+            if (req_elem[i].value == '') {
+                req_elem[i].classList.add('invalid-input');
+                req_elem[i].nextElementSibling.classList.add('d-block');
+                counter++;
             }
             else {
-                toastr.warning('Start date is not within range.');
+                if (req_elem[i].id == 'mobile_number') {
+                    if (!mobile_number.test(req_elem[i].value)) {
+                        req_elem[i].classList.add('invalid-input');
+                        req_elem[i].nextElementSibling.classList.add('d-block');
+                        counter++;
+                    }
+                }
+                else if (req_elem[i].id == 'email') {
+                    if (!email.test(req_elem[i].value)) {
+                        req_elem[i].classList.add('invalid-input');
+                        req_elem[i].nextElementSibling.classList.add('d-block');
+                        counter++;
+                    }
+                }
+                else if (req_elem[i].id == 'birthdate') {
+                    if (!isLegalAge(req_elem[i].value)) {
+                        req_elem[i].classList.add('invalid-input');
+                        req_elem[i].nextElementSibling.classList.add('d-block');
+                        counter++;
+                    }
+                }
+                else if (req_elem[i].id == 'start_date') {
+                    if (!isWithinRange('2021-09-23', req_elem[i].value)) {
+                        req_elem[i].classList.add('invalid-input');
+                        req_elem[i].nextElementSibling.classList.add('d-block');
+                        counter++;
+                    }
+                }
             }
+        } 
+
+        if (counter > 0) {
+            toastr.warning('Please enter eme');
         }
         else {
-            toastr.warning('The birthday provided is not of legal age.');
+            localStorage.removeItem('account_id');
+            addCustomer();
         }
-    };
+    }
+
+    function resetElements() {
+        for (var i = 0; i < req_elem.length; i++) {
+            $('#' + req_elem[i].id).removeClass('invalid-input');
+            $(($('#' + req_elem[i].id).next()).removeClass('d-block'));
+        }
+    }
 
     // const import_customer = document.getElementById('upload-form');
     // import_customer.onsubmit = (e) => {
@@ -220,7 +266,7 @@ async function setAddCustomerPage () {
     }
 
     async function setAddDropdown() {
-        const [area, plan, connection, account_status, install_type] = await Promise.all ([fetchData('area/read.php'), fetchData('plan/read.php'), fetchData('connection/read.php'), fetchData('statuses/read.php?status_table=account_status'), fetchData('installation_type/read.php')]);
+        const [area, plan, connection, install_type] = await Promise.all ([fetchData('area/read.php'), fetchData('plan/read_active.php'), fetchData('connection/read.php'), fetchData('installation_type/read.php')]);
 
         for (var i = 0; i < plan.length; i++) {
             var opt = `<option value='${plan[i].plan_id}'>${plan[i].plan_name + " - " + plan[i].bandwidth + "mbps"}</option>`;
