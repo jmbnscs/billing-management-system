@@ -358,7 +358,7 @@ async function setAddAdminPage () {
     add_admin.onsubmit = (e) => {
         e.preventDefault();
         if (isLegalAge($('#admin_bday').val())) {
-            if (isWithinRange($('2021-09-23' ,'#employment_date').val())) {
+            if (isWithinRange('2021-09-23', $('#employment_date').val())) {
                 addAdmin();
             }
             else {

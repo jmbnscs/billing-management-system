@@ -79,40 +79,60 @@ async function setCustomerPage () {
 // -------------------------------------------------------------------- Add Customer
 async function setAddCustomerPage () {
     const add_customer = document.getElementById('add-customer');
-    $('#account_id').val(await generateID('check/account_id.php?account_id=', "", 8));
+
+    if (localStorage.getItem('account_id') == null) {
+        localStorage.setItem('account_id', await generateID('check/account_id.php?account_id=', "", 8));
+    }
+    $('#account_id').val(localStorage.getItem('account_id'));
+    var req_elem = document.querySelectorAll('.required-tooltip');
+    console.log(req_elem.length);
+    console.log(req_elem[0]);
+    $(req_elem).attr('title', 'This is a required field.');
+    console.log(document.querySelectorAll('.required-tooltip'));
 
     setAddDropdown();
+
+    var today = new Date();
+    $('#start_date').val(getDateToday());
+    today.setDate(today.getDate() - 7);
     setAllowedDate('#birthdate');
+    setDateRange('#start_date', today);
 
     add_customer.onsubmit = (e) => {
         e.preventDefault();
         if (isLegalAge($('#birthdate').val())) {
-            addCustomer();
+            if (isWithinRange('2021-09-23', $('#start_date').val())) {
+                localStorage.removeItem('account_id');
+                addCustomer();
+            }
+            else {
+                toastr.warning('Start date is not within range.');
+            }
         }
         else {
             toastr.warning('The birthday provided is not of legal age.');
         }
     };
 
-    const import_customer = document.getElementById('upload-form');
-    import_customer.onsubmit = (e) => {
-        $('#upload-form').attr('action', '../../app/includes/customer_upload.php');
-        window.location.reload();
-        if (DIR_CUR == DIR_MAIN + 'views/customers_add.php?status=succ') {
-            toastr.success('Customer Records Imported Successfully.');
-            setTimeout(function(){
-                window.location.replace('../views/customers.php');
-                }, 2000);
-        }
-        else if (DIR_CUR == DIR_MAIN + 'views/customers_add.php?status=err') {
-            toastr.warning('Some error has occurred, please check file and try again.');
-            window.location.replace('../views/customers_add.php');
-        }
-        else if (DIR_CUR == DIR_MAIN + 'views/customers_add.php?status=invalid_file') {
-            toastr.error('Please upload a valid csv file.');
-            window.location.replace('../views/customers_add.php');
-        }
-    };
+    // const import_customer = document.getElementById('upload-form');
+    // import_customer.onsubmit = (e) => {
+    //     $('#upload-form').attr('action', '../../app/includes/customer_upload.php');
+    //     window.location.reload();
+    //     if (DIR_CUR == DIR_MAIN + 'views/customers_add.php?status=succ') {
+    //         toastr.success('Customer Records Imported Successfully.');
+    //         setTimeout(function(){
+    //             window.location.replace('../views/customers.php');
+    //             }, 2000);
+    //     }
+    //     else if (DIR_CUR == DIR_MAIN + 'views/customers_add.php?status=err') {
+    //         toastr.warning('Some error has occurred, please check file and try again.');
+    //         window.location.replace('../views/customers_add.php');
+    //     }
+    //     else if (DIR_CUR == DIR_MAIN + 'views/customers_add.php?status=invalid_file') {
+    //         toastr.error('Please upload a valid csv file.');
+    //         window.location.replace('../views/customers_add.php');
+    //     }
+    // };
 
     async function addCustomer() {
         const account_id = $('#account_id').val();
@@ -122,7 +142,6 @@ async function setAddCustomerPage () {
             'start_date' : $('#start_date').val(),
             'plan_id' : $('#plan_id').val(),
             'connection_id' : $('#connection_id').val(),
-            // 'account_status_id' : $('#account_status_id').val(),
             'area_id' : $('#area_id').val()
         });
 
@@ -212,11 +231,6 @@ async function setAddCustomerPage () {
             var opt = `<option value='${connection[i].connection_id}'>${connection[i].connection_name}</option>`;
             $("#connection_id").append(opt);
         }
-    
-        // for (var i = 0; i < account_status.length; i++) {
-        //     var opt = `<option value='${account_status[i].status_id}'>${account_status[i].status_name}</option>`;
-        //     $("#account_status_id").append(opt);
-        // }
     
         for (var i = 0; i < area.length; i++) {
             var opt = `<option value='${area[i].area_id}'>${area[i].area_name}</option>`;
