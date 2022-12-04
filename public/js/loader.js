@@ -4,7 +4,7 @@ const today_date = new Date();
 // const today_date = new Date('2022-11-30');
 
 if (localStorage.getItem('admin_id') == '11674') {
-    autoload();
+    // autoload();
 }
 
 async function autoload() {

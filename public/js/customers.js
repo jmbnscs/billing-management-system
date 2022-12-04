@@ -33,6 +33,17 @@ $(document).ready(function () {
             setAddCustomerPage();
         }
     }
+    else if (DIR_CUR == DIR_MAIN + 'views/customers_import.php') {
+        
+        // if(user_id == 4|| user_id == 5 || user_id == 6) {
+        //     setErrorMessage();
+        //     window.location.replace("../views/dashboard.php");
+        // }
+        // else {
+        //     setAddCustomerPage();
+        // }
+        setImportCustomerPage();
+    }
     else {
         displaySuccessMessage();
         setCustomerPage();
@@ -49,7 +60,7 @@ async function setCustomerPage () {
     const [plans, areas, customer_statuses, customer_data] = await Promise.all ([fetchData('plan/read.php'), fetchData('area/read.php'), fetchData('statuses/read.php?status_table=account_status'), fetchData('views/customer.php')]);
 
     setCustomerTable();
-    setViewModal();
+    // setViewModal();
 
     function setCustomerTable () {
         
@@ -247,26 +258,6 @@ async function setAddCustomerPage () {
         }
     }
 
-    // const import_customer = document.getElementById('upload-form');
-    // import_customer.onsubmit = (e) => {
-    //     $('#upload-form').attr('action', '../../app/includes/customer_upload.php');
-    //     window.location.reload();
-    //     if (DIR_CUR == DIR_MAIN + 'views/customers_add.php?status=succ') {
-    //         toastr.success('Customer Records Imported Successfully.');
-    //         setTimeout(function(){
-    //             window.location.replace('../views/customers.php');
-    //             }, 2000);
-    //     }
-    //     else if (DIR_CUR == DIR_MAIN + 'views/customers_add.php?status=err') {
-    //         toastr.warning('Some error has occurred, please check file and try again.');
-    //         window.location.replace('../views/customers_add.php');
-    //     }
-    //     else if (DIR_CUR == DIR_MAIN + 'views/customers_add.php?status=invalid_file') {
-    //         toastr.error('Please upload a valid csv file.');
-    //         window.location.replace('../views/customers_add.php');
-    //     }
-    // };
-
     async function addCustomer() {
         const account_id = $('#account_id').val();
 
@@ -377,3 +368,10 @@ async function setAddCustomerPage () {
     }
 }
 
+// -------------------------------------------------------------------- Import Customer
+async function setImportCustomerPage () {
+    const import_customer = document.getElementById('upload-customer');
+    import_customer.onsubmit = (e) => {
+        $('#upload-customer').attr('action', '../../app/includes/customer_upload.php');
+    };
+}

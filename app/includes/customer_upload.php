@@ -45,7 +45,7 @@ if(isset($_POST['importSubmit'])){
                     continue;
                 }
                 else {
-                    $qstring = '?status=err';
+                    $qstring = '?status=' . $response['error'];
                     break;
                 }
             }
