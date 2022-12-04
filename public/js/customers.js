@@ -211,10 +211,36 @@ async function setAddCustomerPage () {
                 counter++;
             }
             else {
-                if (req_elem[i].id == 'mobile_number') {
+                if (req_elem[i].id == 'first_name') {
+                    if (!isNaN(req_elem[i].value) && req_elem[i].value) {
+                        req_elem[i].classList.add('invalid-input');
+                        req_elem[i].nextElementSibling.classList.add('d-block');
+                        $(($('#' + req_elem[i].id).next()).text("First name must not be a number."));
+                        counter++;
+                    }
+                }
+                else if (req_elem[i].id == 'last_name') {
+                    if (!isNaN(req_elem[i].value && req_elem[i].value)) {
+                        req_elem[i].classList.add('invalid-input');
+                        req_elem[i].nextElementSibling.classList.add('d-block');
+                        $(($('#' + req_elem[i].id).next()).text("Last name must not be a number."));
+                        counter++;
+                    }
+                }
+                else if (req_elem[i].id == 'billing_address') {
+                    if (!isNaN(req_elem[i].value) && req_elem[i].value) {
+                        req_elem[i].classList.add('invalid-input');
+                        req_elem[i].nextElementSibling.classList.add('d-block');
+                        $(($('#' + req_elem[i].id).next()).text('Please enter a valid address.'));
+                        counter++;
+                    }
+                }
+                else if (req_elem[i].id == 'mobile_number') {
                     if (!mobile_number.test(req_elem[i].value)) {
                         req_elem[i].classList.add('invalid-input');
                         req_elem[i].nextElementSibling.classList.add('d-block');
+                        err_msg = (isNaN(req_elem[i].value) || (req_elem[i].value.length !== 11)) ? 'Please enter an 11-digit mobile number.' : 'The mobile number must start with `09`';
+                        $(($('#' + req_elem[i].id).next()).text(err_msg));
                         counter++;
                     }
                 }
@@ -222,6 +248,8 @@ async function setAddCustomerPage () {
                     if (!email.test(req_elem[i].value)) {
                         req_elem[i].classList.add('invalid-input');
                         req_elem[i].nextElementSibling.classList.add('d-block');
+                        err_msg = (!req_elem[i].value.includes('@')) ? 'The email must contain `@`.' :'Please enter a valid email address.';
+                        $(($('#' + req_elem[i].id).next()).text(err_msg));
                         counter++;
                     }
                 }
@@ -229,13 +257,16 @@ async function setAddCustomerPage () {
                     if (!isLegalAge(req_elem[i].value)) {
                         req_elem[i].classList.add('invalid-input');
                         req_elem[i].nextElementSibling.classList.add('d-block');
+                        $(($('#' + req_elem[i].id).next()).text('Customer is not of legal age.'));
                         counter++;
                     }
                 }
                 else if (req_elem[i].id == 'start_date') {
                     if (!isWithinRange('2021-09-23', req_elem[i].value)) {
+                        console.log(req_elem[i].value)
                         req_elem[i].classList.add('invalid-input');
                         req_elem[i].nextElementSibling.classList.add('d-block');
+                        $(($('#' + req_elem[i].id).next()).text("Start date is not within the company's calendar."));
                         counter++;
                     }
                 }
@@ -243,7 +274,7 @@ async function setAddCustomerPage () {
         } 
 
         if (counter > 0) {
-            toastr.warning('Please enter eme');
+            toastr.warning('Please provide the appropriate details on each field.');
         }
         else {
             localStorage.removeItem('account_id');

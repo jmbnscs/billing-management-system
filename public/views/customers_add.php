@@ -33,7 +33,8 @@
                         <div class="col-sm-10">
                             <input type="text" class="form-control" id="first_name" placeholder="Ex. Juan" required>
                             <div class="invalid-feedback" id="fn-error">
-                                Alfredo
+                                <!-- Please fill out this field. -->
+                                Please enter the customer's first name.
                             </div>
                         </div>
                     </div>
@@ -50,7 +51,8 @@
                         <div class="col-sm-10">
                             <input type="text" class="form-control" id="last_name" placeholder="Ex. Dela Cruz" required>
                             <div class="invalid-feedback">
-                                Alfredo
+                                <!-- Please enter the customer's <strong>last name</strong>. -->
+                                Please enter the customer's last name.
                             </div>
                         </div>
                     </div>
@@ -60,7 +62,7 @@
                         <div class="col-sm-10">
                             <textarea class="form-control" id="billing_address" placeholder="Ex. 123 Kapasigan St. Pasig City" required></textarea>
                             <div class="invalid-feedback">
-                                Alfredo
+                                Please enter the customer's address.
                             </div>
                         </div>
                     </div>
@@ -70,7 +72,7 @@
                         <div class="col-sm-10">
                             <input type="text" class="form-control" id="mobile_number" placeholder="Ex. 09XXXXXXXXX" pattern="[0]{1}[9]{1}[0-9]{9}" required>
                             <div class="invalid-feedback">
-                                Alfredo
+                                Please enter the customer's mobile number.
                             </div>
                         </div>
                     </div>
@@ -80,7 +82,7 @@
                         <div class="col-sm-10">
                             <input type="email" class="form-control" placeholder="Ex. name@example.com" id="email" required>
                             <div class="invalid-feedback">
-                                Alfredo
+                                Please enter the customer's email.
                             </div>
                         </div>
                     </div>
@@ -90,7 +92,7 @@
                         <div class="col-sm-10">
                             <input type="date" class="form-control custom-date" id="birthdate" required>
                             <div class="invalid-feedback" id="bday-error">
-                                Alfredo
+                                Please enter the customer's birthdate.
                             </div>
                         </div>
                     </div>
@@ -100,7 +102,7 @@
                         <div class="col-sm-10">
                             <input type="date" class="form-control custom-date" id="start_date" required>
                             <div class="invalid-feedback" id="start-dt-error">
-                                Alfredo
+                                Please enter the customer's start date.
                             </div>
                         </div>
                     </div>
@@ -112,7 +114,7 @@
                                 <option selected disabled value="">Choose Subscription Plan</option>
                             </select>
                             <div class="invalid-feedback">
-                                Alfredo
+                                Please choose a subscription plan.
                             </div>
                         </div>
                     </div>
@@ -124,7 +126,7 @@
                                 <option selected disabled value="">Choose Connection Type</option>
                             </select>
                             <div class="invalid-feedback">
-                                Alfredo
+                                Please choose a connection type.
                             </div>
                         </div>
                     </div>
@@ -136,7 +138,7 @@
                                 <option selected disabled value="">Choose Area</option>
                             </select>
                             <div class="invalid-feedback">
-                                Alfredo
+                                Please choose an area.
                             </div>
                         </div>
                     </div>
@@ -148,7 +150,7 @@
                                 <option selected disabled value="">Choose Installation Type</option>
                             </select>
                             <div class="invalid-feedback">
-                                Alfredo
+                                Please choose an installation type.
                             </div>
                         </div>
                     </div>
