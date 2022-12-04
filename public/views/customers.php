@@ -18,14 +18,34 @@
     <div class="card recent-sales overflow-auto">
       <br>
       <div class="card-body">
+        <!-- Filter Dropdown -->
+        <div>
+          <select id="customer-status-filter" class="form-control" style="display: inline; width: 150px; margin-left: 20px;">
+            <option value="">Show All: Status</option>
+          </select>
+        </div>
+
+        <div>
+          <select id="area-filter" class="form-control" style="display: inline; width: 150px; margin-left: 20px;">
+            <option value="">Show All: Area</option>
+          </select>
+        </div>
+
+        <div>
+          <select id="plan-filter" class="form-control" style="display: inline; width: 150px; margin-left: 20px;">
+            <option value="">Show All: Plan</option>
+          </select>
+        </div>
+        <!-- End Filter Dropdown -->
         <table class="table table-borderless" id="customer-table">
           <thead>
             <tr>
               <th scope="col">ID</th>
               <th scope="col">Customer</th>
               <th scope="col">Plan</th>
-              <th scope="col">Balance</th>
+              <th scope="col">Area</th>
               <th scope="col">Status</th>
+              <th scope="col">Balance</th>
               <th scope="col">View</th>
             </tr>
           </thead>
