@@ -354,7 +354,7 @@ async function pendSubscriptionModal(ticket_num) {
 
         const [account_content, ticket_content, log] = await Promise.all ([updateData('account/update.php', account_data), updateData('ticket/update.php', ticket_data), logActivity('Resolved Ticket ' + ticket_num, 'Pending Tickets')]);
     
-        if (account_content.message == 'success' && ticket_content.message == 'Ticket Updated' && log) {
+        if (account_content.success && ticket_content.message == 'Ticket Updated' && log) {
             sessionStorage.setItem('save_message', "Ticket Resolved Successfully.");
             window.location.replace('../views/tickets_resolved.php');
         }

@@ -320,14 +320,14 @@ function isWithinRange(date, input_date) {
     return minDate < inputDate && inputDate < maxDate;
 }
 
-function formToggle(ID){
-    var element = document.getElementById(ID);
-    if(element.style.display === "none"){
-        element.style.display = "block";
-    }else{
-        element.style.display = "none";
-    }
-}
+// function formToggle(ID){
+//     var element = document.getElementById(ID);
+//     if(element.style.display === "none"){
+//         element.style.display = "block";
+//     }else{
+//         element.style.display = "none";
+//     }
+// }
 
 // Display Default Data
 async function setDefaults () {

@@ -1061,6 +1061,55 @@ h6 {
   white-space: nowrap;
   color: #666;
 }
+/*--------------------------------------------------------------
+# Customer Data Page 
+--------------------------------------------------------------*/
+.profile-details p {
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.profile-details p small {
+  font-weight: lighter;
+}
+
+.profile-information p {
+  font-size: 12px;
+  font-weight: lighter;
+}
+
+.profile-information p small {
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.nav-tabs-customer {
+  border-bottom: 2px solid #ebeef4;
+}
+
+.nav-tabs-customer .nav-link {
+  margin-bottom: -2px;
+  border: none;
+  color: rgba(1, 41, 112, 0.6);
+  background-color: inherit;
+}
+
+.nav-tabs-customer .nav-link:hover,
+.nav-tabs-customer .nav-link:focus {
+  color: #012970;
+}
+
+.nav-tabs-customer .nav-link.active {
+  /* background-color: #fff; */
+  color: #012970;
+  border-bottom: 2px solid #012970;
+}
+
+.card .customer-tbl {
+  background-color: inherit;
+  box-shadow: none;
+  border: none;
+}
 
 /*--------------------------------------------------------------
 # Customer Add Page 

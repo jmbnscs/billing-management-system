@@ -13,6 +13,7 @@ let customer_name;
 let account_id = (window.location.href).split("=")[1];
 
 async function setDefaultSetting() {
+    displaySuccessMessage();
     const customer_data = await fetchData('views/customer_data.php?account_id=' + account_id);
     customer_name = customer_data.first_name + " " + customer_data.last_name;
     $('#customer-name').text(customer_name);
@@ -57,11 +58,164 @@ async function setCustomerData(customer_data) {
     $('#rating_base').text(customer_data.rating_base);
     $('#delinquent_ratings').text(customer_data.delinquent_ratings);
     $('#rating_status').text(customer_data.rating_status);
+
+    if (customer_data.rating_status == 'DELINQUENT') {
+        document.getElementById('rating-img').src = '../images/delinquent.png';
+        $('#rating-tag').addClass('hide');
+    }
+
+    const account_id = customer_data.account_id;
+
+    var viewModal = document.getElementById('edit-customer');
+    viewModal.addEventListener('show.bs.modal', async function (event) {
+
+        const [customer, account, installation] = await Promise.all ([fetchData('customer/read_single.php?account_id=' + account_id), fetchData('account/read_single.php?account_id=' + account_id), fetchData('installation/read_single.php?account_id=' + account_id)]);
+
+        $('#billing_address_edt').val(customer.billing_address);
+        $('#mobile_number_edt').val(customer.mobile_number);
+        $('#email_edt').val(customer.email);
+
+        const [area, plan, connection, account_status, install_type] = await Promise.all ([fetchData('area/read.php'), fetchData('plan/read.php'), fetchData('connection/read.php'), fetchData('statuses/read.php?status_table=account_status'), fetchData('installation_type/read.php')]);
+
+        $("#area_id_edt").empty();
+        $("#area_id_edt").append(`<option selected disabled value="">Choose Area</option>`);
+        for (var i = 0; i < area.length; i++) {
+            if (area[i].area_id == account.area_id) {
+                var opt = `<option selected value='${area[i].area_id}' style='color: blue'>${area[i].area_name}</option>`;
+            }
+            else {
+                var opt = `<option value='${area[i].area_id}'>${area[i].area_name}</option>`;
+            }
+            $("#area_id_edt").append(opt);
+        }
+
+        $("#plan_id_edt").empty();
+        $("#plan_id_edt").append(`<option selected disabled>Choose Subscription Plan</option>`);
+        for (var i = 0; i < plan.length; i++) {
+            if (plan[i].plan_id == account.plan_id) {
+                var opt = `<option selected value='${plan[i].plan_id}' style='color: blue'>${plan[i].plan_name + " - " + plan[i].bandwidth + "mbps"}</option>`;
+            }
+            else {
+                var opt = `<option value='${plan[i].plan_id}'>${plan[i].plan_name + " - " + plan[i].bandwidth + "mbps"}</option>`;
+            }
+            $("#plan_id_edt").append(opt);
+        }
+
+        $("#connection_id_edt").empty();
+        $("#connection_id_edt").append(`<option selected disabled value="">Choose Connection Type</option>`);
+        for (var i = 0; i < connection.length; i++) {
+            if (connection[i].connection_id == account.connection_id) {
+                var opt = `<option selected value='${connection[i].connection_id}' style='color: blue'>${connection[i].connection_name}</option>`;
+            }
+            else {
+                var opt = `<option value='${connection[i].connection_id}'>${connection[i].connection_name}</option>`;
+            }
+            $("#connection_id_edt").append(opt);
+        }
+
+        $("#account_status_id_edt").empty();
+        $("#account_status_id_edt").append(`<option selected disabled value="">Choose Account Status</option>`);
+        for (var i = 0; i < account_status.length; i++) {
+            if (account_status[i].status_id == account.account_status_id) {
+                var opt = `<option selected value='${account_status[i].status_id}' style='color: blue'>${account_status[i].status_name}</option>`;
+            }
+            else {
+                var opt = `<option value='${account_status[i].status_id}'>${account_status[i].status_name}</option>`;
+            }
+            $("#account_status_id_edt").append(opt);
+        }
+
+        $("#install_type_id_edt").empty();
+        $("#install_type_id_edt").append(`<option selected disabled value="">Choose Installation Type</option>`);
+        for (var i = 0; i < install_type.length; i++) {
+            if (install_type[i].install_type_id == installation.install_type_id) {
+                var opt = `<option selected value='${install_type[i].install_type_id}' color: blue'>${install_type[i].install_type_name}</option>`;
+            }
+            else {
+                var opt = `<option value='${install_type[i].install_type_id}'>${install_type[i].install_type_name}</option>`;
+            }
+            $("#install_type_id_edt").append(opt);
+        }
+
+        const save_customer = document.getElementById('save-customer');
+        save_customer.onsubmit = (e) => {
+            e.preventDefault();
+            updateCustomerData();
+        };
+
+        async function updateCustomerData() {
+            let update_data = JSON.stringify({
+                'account_id' : account_id,
+                'billing_address' : $('#billing_address_edt').val(),
+                'mobile_number' : $('#mobile_number_edt').val(),
+                'email' : $('#email_edt').val()
+            });
+
+            let account_data = JSON.stringify({
+                'account_id' : account_id,
+                'plan_id' : $('#plan_id_edt').val(),
+                'connection_id' : $('#connection_id_edt').val(),
+                'account_status_id' : $('#account_status_id_edt').val(),
+                'area_id' : $('#area_id_edt').val()
+            });
+        
+            let activity, log = true, details = account_id + ' - ' + customer_data.first_name + ' ' + customer_data.last_name;
+            if (customer.mobile_number != $('#mobile_number_edt').val()) {
+                activity = 'Updated customer mobile number [' + details + '].';
+                log = await logActivity(activity, 'Customer List');
+            }
+            if (customer.email != $('#email_edt').val()) {
+                activity = 'Updated customer email [' + details + '].';
+                log = await logActivity(activity, 'Customer List');
+            }
+            if (customer.billing_address != $('#billing_address_edt').val()) {
+                activity = 'Updated customer billing address [' + details + '].';
+                log = await logActivity(activity, 'Customer List');
+            }
+            if (account.plan_id != $('#plan_id_edt').val()) {
+                activity = 'Updated account subscription plan [' + details + '].';
+                log = await logActivity(activity, 'Customer List');
+            }
+            if (account.connection_id != $('#connection_id_edt').val()) {
+                activity = 'Updated account connection type [' + details + '].';
+                log = await logActivity(activity, 'Customer List');
+            }
+            if (account.account_status_id != $('#account_status_id_edt').val()) {
+                activity = 'Updated account status [' + details + '].';
+                log = await logActivity(activity, 'Customer List');
+            }
+            if (account.area_id != $('#area_id_edt').val()) {
+                activity = 'Updated account area [' + details + '].';
+                log = await logActivity(activity, 'Customer List');
+            }
+            
+            const [customer_content, account_content] = await Promise.all ([updateData('customer/update.php', update_data), updateData('account/update.php', account_data)]);
+        
+            if (customer_content.success && account_content.success && log) {
+                sessionStorage.setItem('save_message', "Customer Updated Successfully.");
+                window.location.reload();
+            }
+            else {
+                toastr.error("Customer was not updated.");
+            }
+        }
+        
+    });
 }
 
 async function setInvoiceHistory() {
     let content = await fetchData('invoice/read_single_account.php?account_id=' + account_id);
-    var t = $('#customer-invoice-tbl').DataTable(), tag;
+    const inv_status = await fetchData('statuses/read.php?status_table=invoice_status');
+    var t = $('#customer-invoice-tbl').DataTable({
+        pageLength : 5,
+        lengthMenu: [5, 10],
+        "searching": true
+    }), tag;
+
+    for (var i = 0; i < inv_status.length; i++) {
+        var opt = `<option value='${inv_status[i].status_name}'>${inv_status[i].status_name}</option>`;
+        $("#status-filter").append(opt);
+    }
 
     for (var i = 0; i < content.length; i++) {
         let status = await getStatusName('invoice_status', content[i].invoice_status_id);
@@ -69,20 +223,49 @@ async function setInvoiceHistory() {
         
         t.row.add($(`
             <tr>
-                <th scope="row" style="color: #012970;"><strong>${content[i].invoice_id}</strong></th>
-                <td>${formatDateString(content[i].disconnection_date)}</td>
-                <td>&#8369; ${content[i].total_bill}</td>
+                <th scope="row" style="color: #012970;">${content[i].invoice_id}</th>
+                <td>${content[i].disconnection_date}</td>
                 <td>&#8369; ${content[i].running_balance}</td>
                 <td><span class="badge ${tag}">${status}</span></td>
                 <td><button type="submit" class="btn btn-outline-primary" value="${content[i].invoice_id}" name="invoice_id_btn"><i class="ri ri-eye-fill"></i></button></td>
             </tr>
         `)).draw(false);
     }
+
+    $("#customer-invoice-tbl_filter.dataTables_filter").append($("#status-filter"));
+    var statusIndex = 0;
+        $("#customer-invoice-tbl th").each(function (i) {
+            if ($($(this)).html() == "Status") {
+                statusIndex = i; return false;
+            }
+        });
+
+    $.fn.dataTable.ext.search.push(
+        function (settings, data, dataIndex) {
+            var selectedItem = $('#status-filter').val()
+            var category = data[statusIndex];
+            if (selectedItem === "" || category.includes(selectedItem)) {
+            return true;
+            }
+            return false;
+        }
+    );
+
+    $("#status-filter").change(function (e) {
+        t.draw();
+    });
+
+    t.draw();
+    // t.columns.adjust().draw();
+
 }
 
 async function setPaymentHistory() {
     let content = await fetchData('payment/read_single_account.php?account_id=' + account_id);
-    var t = $('#customer-payment-tbl').DataTable(), tag, payment_status;
+    var t = $('#customer-payment-tbl').DataTable({
+        pageLength : 5,
+        lengthMenu: [5, 10]
+    }), tag, payment_status;
 
     for (var i = 0; i < content.length; i++) {
         (content[i].tagged == 1) ? payment_status = 'Tagged' : payment_status = 'Untagged';
@@ -92,8 +275,7 @@ async function setPaymentHistory() {
             <tr>
                 <th scope="row" style="color: #012970;"><strong>${content[i].payment_reference_id}</strong></th>
                 <td>&#8369; ${content[i].amount_paid}</td>
-                <td>${formatDateString(content[i].payment_date)}</td>
-                <td>${content[i].invoice_id}</td>
+                <td>${content[i].payment_date}</td>
                 <td><span class="badge ${tag}">${payment_status}</span></td>
                 <td><button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#view-payment" data-bs-whatever="${content[i].payment_id}"><i class="ri ri-eye-fill"></i></button></td>
             </tr>
@@ -105,7 +287,10 @@ async function setPaymentHistory() {
 
 async function setProrateHistory() {
     let content = await fetchData('prorate/read_acct.php?account_id=' + account_id);
-    var t = $('#customer-prorate-tbl').DataTable(), tag;
+    var t = $('#customer-prorate-tbl').DataTable({
+        pageLength : 5,
+        lengthMenu: [5, 10]
+    }), tag;
 
     for (var i = 0; i < content.length; i++) {
         let status = await getStatusName('prorate_status', content[i].prorate_status_id);
@@ -128,19 +313,37 @@ async function setProrateHistory() {
 
 async function setTicketHistory() {
     let content = await fetchData('ticket/read_single_account.php?account_id=' + account_id);
-    var t = $('#customer-ticket-tbl').DataTable(), tag;
+    var t = $('#customer-ticket-tbl').DataTable({
+        pageLength : 5,
+        lengthMenu: [5, 10]
+    }), tag;
 
     for (var i = 0; i < content.length; i++) {
         const [concern, status] = await Promise.all ([fetchData('concerns/read_single.php?concern_id=' + content[i].concern_id), getStatusName('ticket_status', content[i].ticket_status_id)]);
-        (status == "RESOLVED") ? tag = 'bg-success' : tag = 'bg-danger';
+        var admin_username;
+        if (content[i].admin_id == null) {
+            admin_username = 'N/A';
+        }
+        else {
+            const admin_content = await fetchData('admin/read_single.php?admin_id=' + content[i].admin_id);
+            admin_username = admin_content.admin_username;
+        }
+
+        if (status == 'RESOLVED') {
+            tag = 'bg-success';
+        }
+        else if (status == 'PENDING') {
+            tag = 'bg-warning';
+        }
+        else {
+            tag = 'bg-danger';
+        }
         
         t.row.add($(`
             <tr>
                 <th scope="row" style="color: #012970;"><strong>${content[i].ticket_num}</strong></th>
                 <td>${concern.concern_category}</td>
-                <td>${formatDateString(content[i].date_filed)}</td>
-                <td>${(content.date_resolved == null) ? 'N/A' : formatDateString(content.date_resolved)}</td>
-                <td>${content[i].ticket_num}</td>
+                <td>${admin_username}</td>
                 <td><span class="badge ${tag}">${status}</span></td>
                 <td><button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#view-ticket" data-bs-whatever="${content[i].ticket_num}"><i class="ri ri-eye-fill"></i></button></td>
                 </tr>
