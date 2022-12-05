@@ -20,13 +20,13 @@
       <div class="card-body">
         <!-- Filter Dropdown -->
         <div>
-          <select id="status-filter" class="form-control" style="display: inline; width: 200px; margin-left: 25px;">
+          <select id="status-filter" class="form-select table-filter" style="display: inline; width: 200px; margin-left: 25px;">
             <option value="">Show All: Status</option>
           </select>
         </div>
 
         <div>
-          <select id="role-filter" class="form-control" style="display: inline; width: 200px; margin-left: 25px;">
+          <select id="role-filter" class="form-select table-filter" style="display: inline; width: 200px; margin-left: 25px;">
             <option value="">Show All: Role</option>
           </select>
         </div>

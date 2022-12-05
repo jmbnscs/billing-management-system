@@ -315,7 +315,6 @@ async function setProrateHistory() {
         `)).draw(false);
     }
 
-    // dito ulit
     $("#customer-prorate-tbl_filter.dataTables_filter").append($("#prorate-status-filter"));
 
     var statusIndex = 0;
@@ -341,7 +340,6 @@ async function setProrateHistory() {
     });
 
     t.draw();
-    t.columns.adjust().draw();
 
     setViewModal('view-prorate')
 }
@@ -444,7 +442,6 @@ async function setTicketHistory() {
     });
 
     t.draw();
-    t.columns.adjust().draw();
 
     setViewModal('view-ticket')
 }

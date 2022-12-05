@@ -147,7 +147,7 @@
 
                       <!-- Filter Dropdown -->
                       <div>
-                        <select id="status-filter" class="form-control" style="display: inline; width: 150px; margin-left: 20px;">
+                        <select id="status-filter" class="form-select table-filter" style="display: inline; width: 150px; margin-left: 20px;">
                           <option value="">Show All: Status</option>
                         </select>
                       </div>
@@ -209,7 +209,7 @@
 
                       <!-- Filter Dropdown -->
                       <div>
-                        <select id="prorate-status-filter" class="form-control" style="display: inline; width: 150px; margin-left: 20px;">
+                        <select id="prorate-status-filter" class="form-select table-filter" style="display: inline; width: 150px; margin-left: 20px;">
                           <option value="">Show All: Status</option>
                         </select>
                       </div>
@@ -245,13 +245,13 @@
 
                       <!-- Filter Dropdown -->
                       <div>
-                        <select id="ticket-status-filter" class="form-control" style="display: inline; width: 150px; margin-left: 20px;">
+                        <select id="ticket-status-filter" class="form-select table-filter" style="display: inline; width: 150px; margin-left: 20px;">
                           <option value="">Show All: Status</option>
                         </select>
                       </div>
 
                       <div>
-                        <select id="concern-filter" class="form-control" style="display: inline; width: 150px; margin-left: 20px;">
+                        <select id="concern-filter" class="form-select table-filter" style="display: inline; width: 150px; margin-left: 20px;">
                           <option value="">Show All: Concern</option>
                         </select>
                       </div>
