@@ -1121,7 +1121,16 @@ h6 {
 
 .invalid-input {
   border-color: red;
+  background: url("https://th.bing.com/th/id/OIP.qGKQka8nRO4VilC4blOtigHaHa?pid=ImgDet&rs=1") no-repeat 95% 50%;
+  background-size: 20px;
 }
+
+input:required:valid {
+  border-color: green;
+  background: url("https://cdn.pixabay.com/photo/2017/03/28/01/46/check-mark-2180770_960_720.png") no-repeat 95% 50% ;
+  background-size: 20px;
+}
+
 
 .table-filter {
   border-color: #012970;
