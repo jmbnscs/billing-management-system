@@ -12,15 +12,16 @@ $(document).ready(function () {
         }, 2000);
     }
     else if (status == 'err') {
-        toastr.warning('Some error has occurred, please check file and try again.');
-        setTimeout(function(){
-            window.location.replace('../views/customers_add.php');
-        }, 2000);
+        toastr.warning('Some error has occurred, please download file to update.');
+        $('#error-dl').removeClass('hide');
+        // setTimeout(function(){
+        //     window.location.replace('../views/customers_add.php');
+        // }, 2000);
     }
     else if (status == 'invalid_file') {
         toastr.error('Please upload a valid csv file.');
         setTimeout(function(){
-            window.location.replace('../views/customers_add.php');
+            window.location.replace('../views/customers_import.php');
         }, 2000);
     }
     else if (DIR_CUR == DIR_MAIN + 'views/customers_add.php') {
@@ -404,5 +405,17 @@ async function setImportCustomerPage () {
     const import_customer = document.getElementById('upload-customer');
     import_customer.onsubmit = (e) => {
         $('#upload-customer').attr('action', '../../app/includes/customer_upload.php');
+        // $.ajax({
+        //     url: '../../app/includes/customer_upload.php',
+        //     cache: false,
+        //     success: function(response) {
+        //         var res = $.parseJSON(response);
+        //     },
+        //     error: function (xhr, status, error, response) {
+        //         console.error(xhr);
+        //         var res = $.parseJSON(response);
+
+        //     }
+        // });
     };
 }
