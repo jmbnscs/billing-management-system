@@ -20,19 +20,19 @@
       <div class="card-body">
         <!-- Filter Dropdown -->
         <div>
-          <select id="customer-status-filter" class="form-control" style="display: inline; width: 150px; margin-left: 20px;">
+          <select id="customer-status-filter" class="form-select table-filter" style="display: inline; width: 160px; margin-left: 20px;">
             <option value="">Show All: Status</option>
           </select>
         </div>
 
         <div>
-          <select id="area-filter" class="form-control" style="display: inline; width: 150px; margin-left: 20px;">
+          <select id="area-filter" class="form-select table-filter" style="display: inline; width: 160px; margin-left: 20px;">
             <option value="">Show All: Area</option>
           </select>
         </div>
 
         <div>
-          <select id="plan-filter" class="form-control" style="display: inline; width: 150px; margin-left: 20px;">
+          <select id="plan-filter" class="form-select table-filter" style="display: inline; width: 160px; margin-left: 20px;">
             <option value="">Show All: Plan</option>
           </select>
         </div>

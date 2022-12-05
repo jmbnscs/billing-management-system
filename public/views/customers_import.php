@@ -44,21 +44,14 @@
 
         </div>
 
-        <div class="card">
+        <div class="card hide" id="error-dl">
             <div class="card-header">
-                <h5>Import Invoice Record</h5>
+                <h5>Download Error Record</h5>
             </div>
 
             <div class="card-body">
                 <div class="col-md-8 mt-3">
-                    <form method="post" enctype="multipart/form-data" id="upload-invoice" class="form-inline">
-                        <div class="form-group">
-                            <input type="file" name="file" class="form-control form-control-m" required>
-                        </div>
-                        <div class="form-group col-md-3 mt-4">
-                            <input type="submit" class="btn btn-success form-control " name="importSubmit" value="Import Invoice Record">
-                        </div>
-                    </form>
+                    <a href="../../app/temp/uploaderror.csv" download><button class="btn btn-danger">Download</button></a>
                 </div>
             </div>
 

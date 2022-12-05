@@ -18,48 +18,56 @@
     <div class="row">
       <div class="col-mb-8">
 
-        <div class="card">
+        <div class="card p-3">
           <div class="card-body pt-4">
               
-          <form id="add-plan">
-                  <div class="row mb-3">
-                      <label for="plan_name" class="col-sm-2 col-form-label">Plan Name</label>
-                      <div class="col-sm-10">
-                          <input type="text" class="form-control" id="plan_name" required>
-                      </div>
-                  </div>
-
-                  <div class="row mb-3">
-                      <label for="bandwidth" class="col-sm-2 col-form-label">Bandwidth</label>
-                      <div class="col-sm-10">
-                          <input type="number" class="form-control" id="bandwidth" min="5" required>
-                      </div>
-                  </div>
-
-                  <div class="row mb-3">
-                      <label for="price" class="col-sm-2 col-form-label">Price</label>
-                      <div class="col-sm-10">
-                          <input type="number" class="form-control" id="price" min="1" required>
-                      </div>
-                  </div>
-
-                  <div class="row mb-3">
-                      <label for="inclusion" class="col-sm-2 col-form-label">Inclusion(s)</label>
-                      <div class="col-sm-10">
-                      
-                          <select class="form-control selectpicker" id="inclusion" multiple aria-label="size 5 select example" data-actions-box="true">
-                            <option value="" disabled>Choose Inclusions</option>
-                          </select>
-                        
-                      </div>
-                  </div>
-
-                <div class ="text-center">
-                  <button type="submit" class="btn btn-primary">Submit Plan</button>
+          <form id="add-plan" class="row g-3" novalidate>
+            <div class="row mb-3 position-relative">
+                <label for="plan_name" class="col-sm-2 col-form-label required">Plan Name</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="plan_name" required>
+                    <div class="invalid-feedback">
+                        Please enter a valid plan name.
+                    </div>
                 </div>
+            </div>
 
+            <div class="row mb-3 position-relative">
+                <label for="bandwidth" class="col-sm-2 col-form-label required">Bandwidth</label>
+                <div class="col-sm-10">
+                    <input type="number" class="form-control" id="bandwidth" min="5" required>
+                    <div class="invalid-feedback">
+                        Please enter bandwidth.
+                    </div>
+                </div>
+            </div>
 
-              </form>
+            <div class="row mb-3 position-relative">
+                <label for="price" class="col-sm-2 col-form-label required">Price</label>
+                <div class="col-sm-10">
+                    <input type="number" class="form-control" id="price" min="1" required>
+                    <div class="invalid-feedback">
+                        Please enter plan price.
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3 position-relative">
+                <label for="inclusion" class="col-sm-2 col-form-label">Inclusion(s)</label>
+                <div class="col-sm-10">
+                
+                    <select class="form-control selectpicker" id="inclusion" multiple aria-label="size 5 select example" data-actions-box="true">
+                      <option value="" disabled>Choose Inclusions</option>
+                    </select>
+                  
+                </div>
+            </div>
+
+            <div class ="text-center">
+              <button type="submit" class="btn btn-success">Submit Plan</button>
+            </div>
+
+          </form>
 
           </div>
         </div>
