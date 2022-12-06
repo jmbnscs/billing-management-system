@@ -63,7 +63,7 @@ async function setInvoicePage () {
     });
 
     async function setInvoiceTable() {
-        const [content, invoice_status] = await Promise.all ([fetchData('views/invoice_unpaid.php'), fetchData('statuses/read.php?status_table=invoice_status')]);
+        const [content, invoice_status, customers] = await Promise.all ([fetchData('views/invoice_unpaid.php'), fetchData('statuses/read.php?status_table=invoice_status'), fetchData('views/customer.php')]);
     
         var t = $('#invoice-table').DataTable({
             "searching": true
@@ -72,6 +72,11 @@ async function setInvoicePage () {
         for (var i = 1; i < invoice_status.length; i++) {
             var opt = `<option value='${invoice_status[i].status_name}'>${invoice_status[i].status_name}</option>`;
             $("#invoice-status-filter").append(opt);
+        }
+
+        for (var i = 0; i < customers.length; i++) {
+            var opt = `<option value='${customers[i].customer_name}'>${customers[i].customer_name}</option>`;
+            $("#invoice-customer-filter").append(opt);
         }
 
         for (var i = 0; i < content.length; i++) {
@@ -90,11 +95,18 @@ async function setInvoicePage () {
         }
 
         $("#invoice-table_filter.dataTables_filter").append($("#invoice-status-filter"));
+        $("#invoice-table_filter.dataTables_filter").append($("#invoice-customer-filter"));
 
-        var statusIndex = 0;
+        var statusIndex = 0, customerIndex = 0;
         $("#invoice-table th").each(function (i) {
             if ($($(this)).html() == "Status") {
                 statusIndex = i; return false;
+            }
+        });
+
+        $("#invoice-table th").each(function (i) {
+            if ($($(this)).html() == "Customer") {
+                customerIndex = i; return false;
             }
         });
 
@@ -109,14 +121,27 @@ async function setInvoicePage () {
             }
         );
 
+        $.fn.dataTable.ext.search.push(
+            function (settings, data, dataIndex) {
+              var selectedItem = $('#invoice-customer-filter').val()
+              var category = data[customerIndex];
+              if (selectedItem === "" || category.includes(selectedItem)) {
+                return true;
+              }
+              return false;
+            }
+        );
+
         $("#invoice-status-filter").change(function (e) {
+            t.draw();
+        });
+
+        $("#invoice-customer-filter").change(function (e) {
             t.draw();
         });
 
         t.draw();
         t.columns.adjust().draw();
-
-        // hanggang dito
     }
 
     // Set View Invoice Modal
@@ -420,8 +445,16 @@ async function setProrateRecordsPage() {
     });
 
     async function setProrateRecordsTable() {
-        let content = await fetchData('views/prorate.php');
-        var t = $('#prorate-table').DataTable();
+        const [content, customers] = await Promise.all ([fetchData('views/prorate.php'), fetchData('views/customer.php')]);
+
+        var t = $('#prorate-table').DataTable({
+            "searching": true
+        });
+
+        for (var i = 0; i < customers.length; i++) {
+            var opt = `<option value='${customers[i].customer_name}'>${customers[i].customer_name}</option>`;
+            $("#prorate-customer-filter").append(opt);
+        }
 
         if (user_id == 5) {
             for (var i = 0; i < content.length; i++) {
@@ -456,6 +489,34 @@ async function setProrateRecordsPage() {
                 `)).draw(false);
             }
         }
+
+        $("#prorate-table_filter.dataTables_filter").append($("#prorate-customer-filter"));
+
+        var customerIndex = 0;
+
+        $("#prorate-table th").each(function (i) {
+            if ($($(this)).html() == "Customer") {
+                customerIndex = i; return false;
+            }
+        });
+
+        $.fn.dataTable.ext.search.push(
+            function (settings, data, dataIndex) {
+              var selectedItem = $('#prorate-customer-filter').val()
+              var category = data[customerIndex];
+              if (selectedItem === "" || category.includes(selectedItem)) {
+                return true;
+              }
+              return false;
+            }
+        );
+
+        $("#prorate-customer-filter").change(function (e) {
+            t.draw();
+        });
+
+        t.draw();
+        t.columns.adjust().draw();
     }
     
     async function setUpdateModal () {

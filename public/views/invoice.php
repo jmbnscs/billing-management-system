@@ -25,6 +25,12 @@
             <option value="">Show All: Status</option>
           </select>
         </div>
+
+        <div>
+          <select id="invoice-customer-filter" class="form-select table-filter" style="display: inline; width: 200px; margin-left: 25px;">
+            <option value="">Show All: Customer</option>
+          </select>
+        </div>
         <!-- End Filter Dropdown -->
 
         <table class="table table-borderless" id="invoice-table">
