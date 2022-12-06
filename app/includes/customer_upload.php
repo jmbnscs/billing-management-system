@@ -57,13 +57,15 @@ if(isset($_POST['importSubmit'])){
                     curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
                     
                     $resp = curl_exec($ch);
+                    curl_close($ch);
                     $response = json_decode($resp, true);
+
                     if ($response['success'] === true) {
                         // $qstring = '?status=succ';
                         continue;
                     }
                     else {
-                        array_push($data_error, $line);
+                        array_push($data_error, $data);
                     }
                 }
             }
@@ -124,7 +126,7 @@ function formatMobileNumber ($mobile_number) {
 }
 
 function formatEmail ($email) {
-	if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+	if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
         return $email;
     }
     else {
