@@ -451,6 +451,9 @@ async function setAddPlanPage () {
                         $(($('#' + req_elem[i].id).next()).text("Plan name must not be just numbers."));
                         counter++;
                     }
+                    else {
+                        showValid();
+                    }
                 }
                 else if (req_elem[i].id == 'bandwidth') {
                     if (req_elem[i].value < 5) {
@@ -458,6 +461,9 @@ async function setAddPlanPage () {
                         req_elem[i].nextElementSibling.classList.add('d-block');
                         $(($('#' + req_elem[i].id).next()).text("Bandwidth must at least be 5 mbps."));
                         counter++;
+                    }
+                    else {
+                        showValid();
                     }
                 }
                 else if (req_elem[i].id == 'price') {
@@ -467,6 +473,16 @@ async function setAddPlanPage () {
                         $(($('#' + req_elem[i].id).next()).text('Plan price should at least be \u20B1 1.00'));
                         counter++;
                     }
+                    else {
+                        showValid();
+                    }
+                }
+                else {
+                    showValid();
+                }
+
+                function showValid() {
+                    req_elem[i].classList.add('valid-input');
                 }
             }
         } 
@@ -481,6 +497,7 @@ async function setAddPlanPage () {
 
     function resetElements() {
         for (var i = 0; i < req_elem.length; i++) {
+            $('#' + req_elem[i].id).removeClass('valid-input');
             $('#' + req_elem[i].id).removeClass('invalid-input');
             $(($('#' + req_elem[i].id).next()).removeClass('d-block'));
         }

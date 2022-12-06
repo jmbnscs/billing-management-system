@@ -18,28 +18,31 @@
     <div class="row">
       <div class="col-mb-8">
 
-        <div class="card">
+        <div class="card pt-3">
           <div class="card-body pt-4">
               
-          <form id="create-new">
-                  <div class="row mb-3">
-                      <label for="payment_ref" class="col-sm-2 col-form-label">Reference ID</label>
+          <form id="create-new" class="row g-3" novalidate>
+                  <div class="row mb-3 position-relative">
+                      <label for="payment_ref" class="col-sm-2 col-form-label required">Reference ID</label>
                       <div class="col-sm-10">
                           <input type="text" class="form-control" id="payment_ref" required>
+                            <div class="invalid-feedback">Please enter valid reference ID.</div>
                       </div>
                   </div>
 
-                  <div class="row mb-3">
-                      <label for="amount_paid" class="col-sm-2 col-form-label">Amount Paid</label>
+                  <div class="row mb-3 position-relative">
+                      <label for="amount_paid" class="col-sm-2 col-form-label required">Amount Paid</label>
                       <div class="col-sm-10">
                           <input type="number" class="form-control" id="amount_paid" required>
+                          <div class="invalid-feedback">Please enter amount paid.</div>
                       </div>
                   </div>
 
-                  <div class="row mb-3">
-                    <label for="payment_date" class="col-sm-2 col-form-label">Payment Date</label>
+                  <div class="row mb-3 position-relative">
+                    <label for="payment_date" class="col-sm-2 col-form-label required">Payment Date</label>
                     <div class="col-sm-10">
-                        <input type="date" class="form-control" id="payment_date" required>
+                        <input type="date" class="form-control custom-date" id="payment_date" required>
+                        <div class="invalid-feedback">Please choose payment date.</div>
                     </div>
                 </div>
 
@@ -73,6 +76,10 @@
 
   <!-- Template Main JS File -->
   <script src="../assets/js/main.js"></script>
+
+  <!-- Datepicker -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 
   <!-- Backend JS File -->
   <script src="../js/main.js"></script>

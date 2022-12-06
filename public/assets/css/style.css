@@ -1121,6 +1121,14 @@ h6 {
 
 .invalid-input {
   border-color: red;
+  background: url("https://th.bing.com/th/id/OIP.qGKQka8nRO4VilC4blOtigHaHa?pid=ImgDet&rs=1") no-repeat 95% 50%;
+  background-size: 20px;
+}
+
+.valid-input {
+  border-color: green;
+  background: url("https://cdn.pixabay.com/photo/2017/03/28/01/46/check-mark-2180770_960_720.png") no-repeat 95% 50% ;
+  background-size: 20px;
 }
 
 .table-filter {
@@ -1130,7 +1138,11 @@ h6 {
 /*--------------------------------------------------------------
 # Customer Add Page 
 --------------------------------------------------------------*/
-.customers-add label {
+.customers-add label,
+.plans-add label,
+.payments-add label,
+.ticket-create label,
+.admin-add label {
   font-weight: 600;
   color: #012970;
 }
@@ -1138,11 +1150,6 @@ h6 {
 /*--------------------------------------------------------------
 # Create Ticket Page 
 --------------------------------------------------------------*/
-.ticket-create label {
-  font-weight: 600;
-  color: rgba(1, 41, 112, 0.6);
-}
-
 .date_filed::-webkit-calendar-picker-indicator{
   display: none;
 }
@@ -1155,18 +1162,12 @@ h6 {
 /*--------------------------------------------------------------
 # Add Plan Page 
 --------------------------------------------------------------*/
-.plans-add label {
-  font-weight: 600;
-  color: #012970;
-}
+
 
 /*--------------------------------------------------------------
 # Add Admin Page 
 --------------------------------------------------------------*/
-.admin-add label {
-  font-weight: 600;
-  color: #012970;
-}
+
 
 /*--------------------------------------------------------------
 # Profile Page
