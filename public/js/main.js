@@ -317,7 +317,7 @@ function isWithinRange(date, input_date) {
     var maxDate = new Date(new Date().setHours(23,59,59,999));
     var inputDate = new Date(input_date);
 
-    console.log(maxDate.getMonth() - minDate.getMonth());
+    // console.log(maxDate.getMonth() - minDate.getMonth());
 
     return minDate < inputDate && inputDate < maxDate;
 }

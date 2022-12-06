@@ -18,7 +18,7 @@
     <div class="row">
       <div class="col-mb-8">
 
-        <div class="card p-3">
+        <div class="card pt-3">
           <div class="card-body pt-4">
               
           <form id="add-plan" class="row g-3" novalidate>

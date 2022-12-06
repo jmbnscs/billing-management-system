@@ -347,7 +347,10 @@ async function setViewAdminPage () {
 
 // -------------------------------------------------------------------- Add Admin
 async function setAddAdminPage () {
-    $('#admin_id').val(await generateID('check/admin_id.php?admin_id=', "", 5));
+    if (localStorage.getItem('admin_id') == null) {
+        localStorage.setItem('admin_id', await generateID('check/admin_id.php?admin_id=', "", 5));
+    }
+    $('#admin_id').val(localStorage.getItem('admin_id'));
     
     setAddDropdown();
     setAllowedDate('#admin_bday');
@@ -357,18 +360,142 @@ async function setAddAdminPage () {
     const add_admin = document.getElementById('add-admin');
     add_admin.onsubmit = (e) => {
         e.preventDefault();
-        if (isLegalAge($('#admin_bday').val())) {
-            if (isWithinRange('2021-09-23', $('#employment_date').val())) {
-                addAdmin();
+        checkValidity();
+    };
+
+    var req_elem = document.getElementById('add-admin').querySelectorAll("[required]");
+
+    function checkValidity() {
+        resetElements();
+        var counter = 0;
+        var mobile_number = new RegExp("^([0]{1}[9]{1}[0-9]{9})$");
+        var email = /^\S+@\S+\.\S+$/;
+
+        if ($('#middle_name').val() == '') {
+            $('#middle_name').addClass('valid-input');
+        }
+        else if (!isNaN($('#middle_name').val()) && $('#middle_name').val()) {
+            $('#middle_name').removeClass('valid-input');
+            $('#middle_name').addClass('invalid-input');
+            $($('#middle_name').next()).addClass('d-block');
+        }
+        
+        for (var i = 0; i < req_elem.length; i++) {
+            if (req_elem[i].value == '') {
+                req_elem[i].classList.add('invalid-input');
+                req_elem[i].nextElementSibling.classList.add('d-block');
+                counter++;
             }
             else {
-                toastr.warning('Employment date is not within range.');
+                if (req_elem[i].id == 'first_name') {
+                    if (!isNaN(req_elem[i].value) && req_elem[i].value) {
+                        req_elem[i].classList.add('invalid-input');
+                        req_elem[i].nextElementSibling.classList.add('d-block');
+                        $(($('#' + req_elem[i].id).next()).text("First name must not be a number."));
+                        counter++;
+                    }
+                    else {
+                        showValid();
+                    }
+                }
+                else if (req_elem[i].id == 'last_name') {
+                    if (!isNaN(req_elem[i].value && req_elem[i].value)) {
+                        req_elem[i].classList.add('invalid-input');
+                        req_elem[i].nextElementSibling.classList.add('d-block');
+                        $(($('#' + req_elem[i].id).next()).text("Last name must not be a number."));
+                        counter++;
+                    }
+                    else {
+                        showValid();
+                    }
+                }
+                else if (req_elem[i].id == 'address') {
+                    if (!isNaN(req_elem[i].value) && req_elem[i].value) {
+                        req_elem[i].classList.add('invalid-input');
+                        req_elem[i].nextElementSibling.classList.add('d-block');
+                        $(($('#' + req_elem[i].id).next()).text('Please enter a valid address.'));
+                        counter++;
+                    }
+                    else {
+                        showValid();
+                    }
+                }
+                else if (req_elem[i].id == 'mobile_number') {
+                    if (!mobile_number.test(req_elem[i].value)) {
+                        req_elem[i].classList.add('invalid-input');
+                        req_elem[i].nextElementSibling.classList.add('d-block');
+                        err_msg = (isNaN(req_elem[i].value) || (req_elem[i].value.length !== 11)) ? 'Please enter an 11-digit mobile number.' : 'The mobile number must start with `09`';
+                        $(($('#' + req_elem[i].id).next()).text(err_msg));
+                        counter++;
+                    }
+                    else {
+                        showValid();
+                    }
+                }
+                else if (req_elem[i].id == 'admin_email') {
+                    if (!email.test(req_elem[i].value)) {
+                        req_elem[i].classList.add('invalid-input');
+                        req_elem[i].nextElementSibling.classList.add('d-block');
+                        err_msg = (!req_elem[i].value.includes('@')) ? 'The email must contain `@`.' :'Please enter a valid email address.';
+                        $(($('#' + req_elem[i].id).next()).text(err_msg));
+                        counter++;
+                    }
+                    else {
+                        showValid();
+                    }
+                }
+                else if (req_elem[i].id == 'admin_bday') {
+                    if (!isLegalAge(req_elem[i].value)) {
+                        req_elem[i].classList.add('invalid-input');
+                        req_elem[i].nextElementSibling.classList.add('d-block');
+                        $(($('#' + req_elem[i].id).next()).text('Admin is not of legal age.'));
+                        counter++;
+                    }
+                    else {
+                        showValid();
+                    }
+                }
+                else if (req_elem[i].id == 'employment_date') {
+                    if (!isWithinRange('2021-09-23', req_elem[i].value)) {
+                        req_elem[i].classList.add('invalid-input');
+                        req_elem[i].nextElementSibling.classList.add('d-block');
+                        $(($('#' + req_elem[i].id).next()).text("Employment date is not within the company's calendar."));
+                        counter++;
+                    }
+                    else {
+                        showValid();
+                    }
+                }
+                else {
+                    showValid();
+                }
+
+                function showValid() {
+                    req_elem[i].classList.add('valid-input');
+                }
             }
+        } 
+
+        if (counter > 0) {
+            toastr.warning('Please provide the appropriate details on each field.');
         }
         else {
-            toastr.warning('The birthday provided is not of legal age.');
+            localStorage.removeItem('admin_id');
+            addAdmin();
         }
-    };
+    }
+
+    function resetElements() {
+        for (var i = 0; i < req_elem.length; i++) {
+            $('#' + req_elem[i].id).removeClass('valid-input');
+            $('#' + req_elem[i].id).removeClass('invalid-input');
+            $(($('#' + req_elem[i].id).next()).removeClass('d-block'));
+        }
+
+        $('#middle_name').removeClass('valid-input');
+        $('#middle_name').removeClass('invalid-input');
+        $($('#middle_name').next()).removeClass('d-block');
+    }
 
     async function addAdmin() {
         let data = JSON.stringify({

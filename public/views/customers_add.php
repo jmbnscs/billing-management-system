@@ -17,7 +17,7 @@
 <section class="section customers-add">
   <div class="row">
     <div class="col-mb-8">
-        <div class="card p-3">
+        <div class="card pt-3">
             <div class="card-body pt-4">
                 <form id="add-customer" class="row g-3" novalidate>
 
@@ -32,10 +32,7 @@
                         <label for="first_name" class="col-sm-2 col-form-label required">First Name</label>
                         <div class="col-sm-10">
                             <input type="text" class="form-control" id="first_name" placeholder="Ex. Juan" required>
-                            <div class="invalid-feedback" id="fn-error">
-                                <!-- Please fill out this field. -->
-                                Please enter the customer's first name.
-                            </div>
+                            <div class="invalid-feedback">Please enter the customer's first name.</div>
                         </div>
                     </div>
                         
@@ -43,6 +40,7 @@
                         <label for="middle_name" class="col-sm-2 col-form-label">Middle Name</label>
                         <div class="col-sm-10">
                             <input type="text" class="form-control" id="middle_name" placeholder="Ex. Santos">
+                            <div class="invalid-feedback">Middle name must not be a number.</div>
                         </div>
                     </div>
 
@@ -50,10 +48,7 @@
                         <label for="last_name" class="col-sm-2 col-form-label required">Last Name</label>
                         <div class="col-sm-10">
                             <input type="text" class="form-control" id="last_name" placeholder="Ex. Dela Cruz" required>
-                            <div class="invalid-feedback">
-                                <!-- Please enter the customer's <strong>last name</strong>. -->
-                                Please enter the customer's last name.
-                            </div>
+                            <div class="invalid-feedback">Please enter the customer's last name.</div>
                         </div>
                     </div>
 
@@ -61,9 +56,7 @@
                         <label for="billing_address" class="col-sm-2 col-form-label required">Address</label>
                         <div class="col-sm-10">
                             <textarea class="form-control" id="billing_address" placeholder="Ex. 123 Kapasigan St. Pasig City" required></textarea>
-                            <div class="invalid-feedback">
-                                Please enter the customer's address.
-                            </div>
+                            <div class="invalid-feedback">Please enter the customer's address.</div>
                         </div>
                     </div>
 
@@ -71,9 +64,7 @@
                         <label for="mobile_number" class="col-sm-2 col-form-label required">Mobile Number</label>
                         <div class="col-sm-10">
                             <input type="text" class="form-control" id="mobile_number" placeholder="Ex. 09XXXXXXXXX" pattern="[0]{1}[9]{1}[0-9]{9}" required>
-                            <div class="invalid-feedback">
-                                Please enter the customer's mobile number.
-                            </div>
+                            <div class="invalid-feedback">Please enter the customer's mobile number.</div>
                         </div>
                     </div>
 
@@ -81,9 +72,7 @@
                         <label for="email" class="col-sm-2 col-form-label required">Email</label>
                         <div class="col-sm-10">
                             <input type="email" class="form-control" placeholder="Ex. name@example.com" id="email" required>
-                            <div class="invalid-feedback">
-                                Please enter the customer's email.
-                            </div>
+                            <div class="invalid-feedback">Please enter the customer's email.</div>
                         </div>
                     </div>
 
@@ -91,9 +80,7 @@
                         <label for="birthdate" class="col-sm-2 col-form-label required">Birthdate</label>
                         <div class="col-sm-10">
                             <input type="date" class="form-control custom-date" id="birthdate" required>
-                            <div class="invalid-feedback" id="bday-error">
-                                Please enter the customer's birthdate.
-                            </div>
+                            <div class="invalid-feedback">Please enter the customer's birthdate.</div>
                         </div>
                     </div>
 
@@ -101,9 +88,7 @@
                         <label for="start_date" class="col-sm-2 col-form-label required">Start Date</label>
                         <div class="col-sm-10">
                             <input type="date" class="form-control custom-date" id="start_date" required>
-                            <div class="invalid-feedback" id="start-dt-error">
-                                Please enter the customer's start date.
-                            </div>
+                            <div class="invalid-feedback">Please enter the customer's start date.</div>
                         </div>
                     </div>
 
@@ -113,9 +98,7 @@
                             <select id="plan_id" class="form-select" required>
                                 <option selected disabled value="">Choose Subscription Plan</option>
                             </select>
-                            <div class="invalid-feedback">
-                                Please choose a subscription plan.
-                            </div>
+                            <div class="invalid-feedback">Please choose a subscription plan.</div>
                         </div>
                     </div>
 
@@ -125,9 +108,7 @@
                             <select id="connection_id" class="form-select" required>
                                 <option selected disabled value="">Choose Connection Type</option>
                             </select>
-                            <div class="invalid-feedback">
-                                Please choose a connection type.
-                            </div>
+                            <div class="invalid-feedback">Please choose a connection type.</div>
                         </div>
                     </div>
 
@@ -137,9 +118,7 @@
                             <select id="area_id" class="form-select" required>
                                 <option selected disabled value="">Choose Area</option>
                             </select>
-                            <div class="invalid-feedback">
-                                Please choose an area.
-                            </div>
+                            <div class="invalid-feedback">Please choose an area.</div>
                         </div>
                     </div>
 
@@ -149,9 +128,7 @@
                             <select id="install_type_id" class="form-select" required>
                                 <option selected disabled value="">Choose Installation Type</option>
                             </select>
-                            <div class="invalid-feedback">
-                                Please choose an installation type.
-                            </div>
+                            <div class="invalid-feedback">Please choose an installation type.</div>
                         </div>
                     </div>
 

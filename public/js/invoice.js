@@ -528,10 +528,88 @@ async function setProrateRecordsPage() {
 async function setAddPaymentPage () {
     setButtons();
 
+    var today = new Date();
+    $('#payment_date').val(getDateToday());
+    today.setDate(today.getDate() - 30);
+    setDateRange('#payment_date', today);
+
     create_fn.onsubmit = (e) => {
         e.preventDefault();
-        addPayment();
+        checkValidity();
     };
+
+    var req_elem = document.getElementById('create-new').querySelectorAll("[required]");
+
+    async function checkValidity () {
+        resetElements();
+        var counter = 0;
+
+        for (var i = 0; i < req_elem.length; i++) {
+            if (req_elem[i].value == '') {
+                req_elem[i].classList.add('invalid-input');
+                req_elem[i].nextElementSibling.classList.add('d-block');
+                counter++;
+            }
+            else {
+                if (req_elem[i].id == 'payment_ref') {
+                    const pay_ref = await fetchData('check/payment_ref.php?payment_reference_id=' + req_elem[i].value);
+                    if (pay_ref.exist) {
+                        req_elem[i].classList.add('invalid-input');
+                        req_elem[i].nextElementSibling.classList.add('d-block');
+                        $(($('#' + req_elem[i].id).next()).text("Payment Reference ID already exist."));
+                        counter++;
+                    }
+                    else {
+                        showValid();
+                    }
+                }
+                else if (req_elem[i].id == 'amount_paid') {
+                    if (req_elem[i].value < 1) {
+                        req_elem[i].classList.add('invalid-input');
+                        req_elem[i].nextElementSibling.classList.add('d-block');
+                        $(($('#' + req_elem[i].id).next()).text("Amount paid should at least be \u20B1 1.00"));
+                        counter++;
+                    }
+                    else {
+                        showValid();
+                    }
+                }
+                else if (req_elem[i].id == 'payment_date') {
+                    if (!isWithinRange(today, req_elem[i].value)) {
+                        req_elem[i].classList.add('invalid-input');
+                        req_elem[i].nextElementSibling.classList.add('d-block');
+                        $(($('#' + req_elem[i].id).next()).text('Payment date is not within range.'));
+                        counter++;
+                    }
+                    else {
+                        showValid();
+                    }
+                }
+                else {
+                    showValid();
+                }
+
+                function showValid() {
+                    req_elem[i].classList.add('valid-input');
+                }
+            }
+        } 
+
+        if (counter > 0) {
+            toastr.warning('Please provide the appropriate details on each field.');
+        }
+        else {
+            addPayment();
+        }
+    }
+
+    function resetElements() {
+        for (var i = 0; i < req_elem.length; i++) {
+            $('#' + req_elem[i].id).removeClass('valid-input');
+            $('#' + req_elem[i].id).removeClass('invalid-input');
+            $(($('#' + req_elem[i].id).next()).removeClass('d-block'));
+        }
+    }
 
     async function addPayment () {
         const payment_ref = $('#payment_ref').val();

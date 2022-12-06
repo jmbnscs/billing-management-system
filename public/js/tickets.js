@@ -558,28 +558,93 @@ async function setCreateTicketPage () {
     $('#ticket_num').val(await generateID('check/ticket_num.php?ticket_num=', "TN", 6));
     getExistingAccounts = await fetchData('account/read.php');
 
-    setAddDropdown();
-    $('#date_filed').val(getDateToday())
-    disableFutureDates();
+    // localStorage.removeItem('ticket_num');
 
-    function disableFutureDates() {
-        $("#date_filed").datepicker({
-            dateFormat: 'yy-mm-dd',
-            changeMonth: true,
-            changeYear: true,
-            maxDate: new Date
-        });
+    if (localStorage.getItem('ticket_num') == null) {
+        localStorage.setItem('ticket_num', await generateID('check/ticket_num.php?ticket_num=', "TN", 6));
     }
+    $('#ticket_num').val(localStorage.getItem('ticket_num'));
+
+    setAddDropdown();
+    $('#date_filed').val(getDateToday());
+    var today = new Date();
+    $('#date_filed').val(getDateToday());
+    today.setDate(today.getDate() - 30);
+    setDateRange('#date_filed', today);
 
     create_ticket.onsubmit = async (e) => {
         e.preventDefault();
-        if (await isAccountIDExist($('#account_id').val())) {
-            createTicket();
+        checkValidity();
+
+        // if (await isAccountIDExist($('#account_id').val())) {
+        //     createTicket();
+        // }
+        // else {
+        //     toastr.error('Account ID does not exist.');
+        // }
+    };
+
+    var req_elem = document.getElementById('create-ticket').querySelectorAll("[required]");
+
+    async function checkValidity () {
+        resetElements();
+        var counter = 0;
+
+        for (var i = 0; i < req_elem.length; i++) {
+            if (req_elem[i].value == '') {
+                req_elem[i].classList.add('invalid-input');
+                req_elem[i].nextElementSibling.classList.add('d-block');
+                counter++;
+            }
+            else {
+                if (req_elem[i].id == 'account_id') {
+                    const acct_id = await fetchData('check/account_id.php?account_id=' + req_elem[i].value);
+                    if (!acct_id.exist) {
+                        req_elem[i].classList.add('invalid-input');
+                        req_elem[i].nextElementSibling.classList.add('d-block');
+                        $(($('#' + req_elem[i].id).next()).text("Account ID does not exist."));
+                        counter++;
+                    }
+                    else {
+                        showValid();
+                    }
+                }
+                else if (req_elem[i].id == 'date_filed') {
+                    if (!isWithinRange(today, req_elem[i].value)) {
+                        req_elem[i].classList.add('invalid-input');
+                        req_elem[i].nextElementSibling.classList.add('d-block');
+                        $(($('#' + req_elem[i].id).next()).text('Please choose a valid date.'));
+                        counter++;
+                    }
+                    else {
+                        showValid();
+                    }
+                }
+                else {
+                    showValid();
+                }
+
+                function showValid() {
+                    req_elem[i].classList.add('valid-input');
+                }
+            }
+        } 
+
+        if (counter > 0) {
+            toastr.warning('Please provide the appropriate details on each field.');
         }
         else {
-            toastr.error('Account ID does not exist.');
+            createTicket();
         }
-    };
+    }
+
+    function resetElements() {
+        for (var i = 0; i < req_elem.length; i++) {
+            $('#' + req_elem[i].id).removeClass('valid-input');
+            $('#' + req_elem[i].id).removeClass('invalid-input');
+            $(($('#' + req_elem[i].id).next()).removeClass('d-block'));
+        }
+    }
 
     async function createTicket() {
         var continue_request = false;
@@ -621,7 +686,7 @@ async function setCreateTicketPage () {
     }
     
     async function setAddDropdown() {
-        const [concern, user_levels] = await Promise.all ([fetchData('concerns/read.php'), fetchData('user_level/read.php')]);
+        const [concern, user_levels, customer] = await Promise.all ([fetchData('concerns/read.php'), fetchData('user_level/read.php'), fetchData('customer/read.php')]);
         for (var i = 0; i < concern.length; i++) {
             var opt = `<option value='${concern[i].concern_id}'>${concern[i].concern_category}</option>`;
             $("#concern_id").append(opt);
@@ -630,6 +695,11 @@ async function setCreateTicketPage () {
         for (var i = 2; i < user_levels.length; i++) {
             var opt = `<option value='${user_levels[i].user_id}'>${user_levels[i].user_role}</option>`;
             $("#admin_role").append(opt);
+        }
+
+        for (var i = 0; i < customer.length; i++) {
+            var opt = `<option value='${customer[i].account_id}'>${customer[i].first_name} ${customer[i].last_name}</option>`;
+            $("#accounts-list").append(opt);
         }
     }
 }

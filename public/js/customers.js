@@ -3,7 +3,7 @@ $(document).ready(function () {
     
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
-    const status = urlParams.get('status')
+    const status = urlParams.get('status');
 
     if (status == 'succ') {
         toastr.success('Customer Records Imported Successfully.');
@@ -197,6 +197,7 @@ async function setAddCustomerPage () {
         checkValidity();
         
     };
+    
     var req_elem = document.getElementById('add-customer').querySelectorAll("[required]");
 
     function checkValidity() {
@@ -204,6 +205,15 @@ async function setAddCustomerPage () {
         var counter = 0;
         var mobile_number = new RegExp("^([0]{1}[9]{1}[0-9]{9})$");
         var email = /^\S+@\S+\.\S+$/;
+
+        if ($('#middle_name').val() == '') {
+            $('#middle_name').addClass('valid-input');
+        }
+        else if (!isNaN($('#middle_name').val()) && $('#middle_name').val()) {
+            $('#middle_name').removeClass('valid-input');
+            $('#middle_name').addClass('invalid-input');
+            $($('#middle_name').next()).addClass('d-block');
+        }
         
         for (var i = 0; i < req_elem.length; i++) {
             if (req_elem[i].value == '') {
@@ -219,6 +229,9 @@ async function setAddCustomerPage () {
                         $(($('#' + req_elem[i].id).next()).text("First name must not be a number."));
                         counter++;
                     }
+                    else {
+                        showValid();
+                    }
                 }
                 else if (req_elem[i].id == 'last_name') {
                     if (!isNaN(req_elem[i].value && req_elem[i].value)) {
@@ -227,6 +240,9 @@ async function setAddCustomerPage () {
                         $(($('#' + req_elem[i].id).next()).text("Last name must not be a number."));
                         counter++;
                     }
+                    else {
+                        showValid();
+                    }
                 }
                 else if (req_elem[i].id == 'billing_address') {
                     if (!isNaN(req_elem[i].value) && req_elem[i].value) {
@@ -234,6 +250,9 @@ async function setAddCustomerPage () {
                         req_elem[i].nextElementSibling.classList.add('d-block');
                         $(($('#' + req_elem[i].id).next()).text('Please enter a valid address.'));
                         counter++;
+                    }
+                    else {
+                        showValid();
                     }
                 }
                 else if (req_elem[i].id == 'mobile_number') {
@@ -244,6 +263,9 @@ async function setAddCustomerPage () {
                         $(($('#' + req_elem[i].id).next()).text(err_msg));
                         counter++;
                     }
+                    else {
+                        showValid();
+                    }
                 }
                 else if (req_elem[i].id == 'email') {
                     if (!email.test(req_elem[i].value)) {
@@ -253,6 +275,9 @@ async function setAddCustomerPage () {
                         $(($('#' + req_elem[i].id).next()).text(err_msg));
                         counter++;
                     }
+                    else {
+                        showValid();
+                    }
                 }
                 else if (req_elem[i].id == 'birthdate') {
                     if (!isLegalAge(req_elem[i].value)) {
@@ -261,15 +286,27 @@ async function setAddCustomerPage () {
                         $(($('#' + req_elem[i].id).next()).text('Customer is not of legal age.'));
                         counter++;
                     }
+                    else {
+                        showValid();
+                    }
                 }
                 else if (req_elem[i].id == 'start_date') {
                     if (!isWithinRange('2021-09-23', req_elem[i].value)) {
-                        console.log(req_elem[i].value)
                         req_elem[i].classList.add('invalid-input');
                         req_elem[i].nextElementSibling.classList.add('d-block');
                         $(($('#' + req_elem[i].id).next()).text("Start date is not within the company's calendar."));
                         counter++;
                     }
+                    else {
+                        showValid();
+                    }
+                }
+                else {
+                    showValid();
+                }
+
+                function showValid() {
+                    req_elem[i].classList.add('valid-input');
                 }
             }
         } 
@@ -285,9 +322,14 @@ async function setAddCustomerPage () {
 
     function resetElements() {
         for (var i = 0; i < req_elem.length; i++) {
+            $('#' + req_elem[i].id).removeClass('valid-input');
             $('#' + req_elem[i].id).removeClass('invalid-input');
             $(($('#' + req_elem[i].id).next()).removeClass('d-block'));
         }
+
+        $('#middle_name').removeClass('valid-input');
+        $('#middle_name').removeClass('invalid-input');
+        $($('#middle_name').next()).removeClass('d-block');
     }
 
     async function addCustomer() {
@@ -402,6 +444,8 @@ async function setAddCustomerPage () {
 
 // -------------------------------------------------------------------- Import Customer
 async function setImportCustomerPage () {
+    $('#error-dl').addClass('hide');
+
     const import_customer = document.getElementById('upload-customer');
     import_customer.onsubmit = (e) => {
         $('#upload-customer').attr('action', '../../app/includes/customer_upload.php');
