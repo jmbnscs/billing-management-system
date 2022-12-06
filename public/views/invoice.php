@@ -18,6 +18,15 @@
     <div class="card recent-sales overflow-auto">
       <br>
       <div class="card-body">
+
+        <!-- Filter Dropdown -->
+        <div>
+          <select id="invoice-status-filter" class="form-select table-filter" style="display: inline; width: 200px; margin-left: 25px;">
+            <option value="">Show All: Status</option>
+          </select>
+        </div>
+        <!-- End Filter Dropdown -->
+
         <table class="table table-borderless" id="invoice-table">
           <thead>
             <tr>

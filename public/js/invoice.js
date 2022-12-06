@@ -63,9 +63,17 @@ async function setInvoicePage () {
     });
 
     async function setInvoiceTable() {
-        let content = await fetchData('views/invoice_unpaid.php');
-        var t = $('#invoice-table').DataTable(), tag;
+        const [content, invoice_status] = await Promise.all ([fetchData('views/invoice_unpaid.php'), fetchData('statuses/read.php?status_table=invoice_status')]);
     
+        var t = $('#invoice-table').DataTable({
+            "searching": true
+        }), tag;
+
+        for (var i = 1; i < invoice_status.length; i++) {
+            var opt = `<option value='${invoice_status[i].status_name}'>${invoice_status[i].status_name}</option>`;
+            $("#invoice-status-filter").append(opt);
+        }
+
         for (var i = 0; i < content.length; i++) {
             (content[i].status == 'PAID') ? tag = 'bg-success' : tag = 'bg-danger';
             
@@ -80,6 +88,35 @@ async function setInvoicePage () {
                 </tr>
             `)).draw(false);
         }
+
+        $("#invoice-table_filter.dataTables_filter").append($("#invoice-status-filter"));
+
+        var statusIndex = 0;
+        $("#invoice-table th").each(function (i) {
+            if ($($(this)).html() == "Status") {
+                statusIndex = i; return false;
+            }
+        });
+
+        $.fn.dataTable.ext.search.push(
+            function (settings, data, dataIndex) {
+              var selectedItem = $('#invoice-status-filter').val()
+              var category = data[statusIndex];
+              if (selectedItem === "" || category.includes(selectedItem)) {
+                return true;
+              }
+              return false;
+            }
+        );
+
+        $("#invoice-status-filter").change(function (e) {
+            t.draw();
+        });
+
+        t.draw();
+        t.columns.adjust().draw();
+
+        // hanggang dito
     }
 
     // Set View Invoice Modal
