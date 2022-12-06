@@ -20,10 +20,14 @@ if(isset($_POST['importSubmit'])){
             
             while(($line = fgetcsv($csvFile)) !== FALSE){
 
+                $account_id = isAccountIDExist($line[0]);
                 $mobile_number = formatMobileNumber($line[9]);
                 $email = formatEmail($line[10]);
 
-                if ($mobile_number == 'error') {
+                if ($account_id == 'error') {
+                    array_push($data_error, $line);
+                }
+                else if ($mobile_number == 'error') {
                     array_push($data_error, $line);
                 }
                 else if ($email == 'error') {
@@ -85,7 +89,7 @@ if(isset($_POST['importSubmit'])){
                 $qstring = '?status=err';
                 // echo json_encode(
                 //     array (
-                //         'success' => false,
+                //         'success' => false
                 //     )
                 // );
             }
@@ -131,6 +135,30 @@ function formatEmail ($email) {
     }
     else {
         return 'error';
+    }
+}
+
+function isAccountIDExist ($account_id) {
+    $ch = require 'curl.init.php';
+    $url = DIR_API . "account/read_single.php?account_id=" . $account_id;
+
+    $data = json_encode(
+        array (
+            'account_id' => $account_id
+        )
+    );
+
+    curl_setopt($ch, CURLOPT_URL, $url);
+    
+    $resp = curl_exec($ch);
+    curl_close($ch);
+    $response = json_decode($resp, true);
+
+    if ($response['message'] === 'success') {
+        return 'error';
+    }
+    else {
+        return $account_id;
     }
 }
 
