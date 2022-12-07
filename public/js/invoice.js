@@ -1,54 +1,64 @@
-$(document).ready(function () {
+$(document).ready( function () {
     isDefault();
+    // console.log();
+    // checkRestriction().then( (res) => {
+    //     console.log(res);
+    // })
 
     if (DIR_CUR == DIR_MAIN + 'views/invoice_payments_add.php') {
-        if (user_id == 5 || user_id == 6) {
-            setErrorMessage();
-            window.location.replace("../views/dashboard.php");
-        }
-        else {
-            setAddPaymentPage();
-        }
+        setAddPaymentPage();
+        checkRestriction('payments', 'invoice-payment-add');
+        // if (user_id == 5 || user_id == 6) {
+        //     setErrorMessage();
+        //     window.location.replace("../views/dashboard.php");
+        // }
+        // else {
+        //     setAddPaymentPage();
+        // }
     }
     else if (DIR_CUR == DIR_MAIN + 'views/invoice_payments.php') {
-        if (user_id == 6) {
-            setErrorMessage();
-            window.location.replace("../views/dashboard.php");
-        }
-        else {
-            setPaymentRecordsPage();
+        setPaymentRecordsPage();
+        checkRestriction('payments', 'invoice-payment');
+        // if (user_id == 6) {
+        //     setErrorMessage();
+        //     window.location.replace("../views/dashboard.php");
+        // }
+        // else {
+        //     setPaymentRecordsPage();
 
-            if (user_id == 5) {
-                $('#edit-btn').addClass('hide');
-                $('#save-btn').addClass('hide');
-                $('#dlt-btn').addClass('hide');
-            }
-        }
+        //     if (user_id == 5) {
+        //         $('#edit-btn').addClass('hide');
+        //         $('#save-btn').addClass('hide');
+        //         $('#dlt-btn').addClass('hide');
+        //     }
+        // }
     }
     else if (DIR_CUR == DIR_MAIN + 'views/invoice_prorate.php') {
-        if (user_id == 6) {
-            setErrorMessage();
-            window.location.replace("../views/dashboard.php");
-        }
-        else {
-            setProrateRecordsPage();
+        setProrateRecordsPage();
+        checkRestriction('prorate', 'invoice-prorate');
 
-            if (user_id == 5) {
-                $('#edit-btn').addClass('hide');
-                $('#save-btn').addClass('hide');
-                $('#dlt-btn').addClass('hide');
-            }
-        }
+
+        // if (user_id == 6) {
+        //     setErrorMessage();
+        //     window.location.replace("../views/dashboard.php");
+        // }
+        // else {
+        //     setProrateRecordsPage();
+
+        //     if (user_id == 5) {
+        //         $('#edit-btn').addClass('hide');
+        //         $('#save-btn').addClass('hide');
+        //         $('#dlt-btn').addClass('hide');
+        //     }
+        // }
     }
     else {
         setInvoicePage();
-
-        if (user_id == 5 || user_id == 6) {
-            $('#edit-btn').addClass('hide');
-            $('#save-btn').addClass('hide');
-        }
+        checkRestriction('invoice', 'invoice-page');
     }
 });
+
+
 
 // -------------------------------------------------------------------- View Invoices JS
 async function setInvoicePage () {
@@ -292,12 +302,16 @@ async function setPaymentRecordsPage() {
                         <td><span class="badge bg-danger">Untagged</span></td>
                         <td>
                             <button type="button" class="btn btn-outline-info m-1" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="${content[i].payment_id}" ><i class="bi bi-eye"></i></button>
-                            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-whatever="${content[i].payment_id}" id="dlt-act"><i class="ri ri-delete-bin-5-fill"></i></button>
+                            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-whatever="${content[i].payment_id}" id="dlt-act-btn"><i class="ri ri-delete-bin-5-fill"></i></button>
                         </td>
                     </tr>
                 `)).draw(false);
             }
         }
+
+        // if(user_id == 2) {
+        //     $('#dlt-btn').addClass('hide');
+        // }
     }
     
     async function setUpdateModal () {
@@ -483,7 +497,7 @@ async function setProrateRecordsPage() {
                         <td><span class="badge bg-danger">Uncharged</span></td>
                         <td>
                             <button type="button" class="btn btn-outline-info m-1" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="${content[i].prorate_id}" ><i class="bi bi-eye"></i></button>
-                            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-whatever="${content[i].prorate_id}" ><i class="ri ri-delete-bin-5-fill"></i></button>
+                            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-whatever="${content[i].prorate_id}" id="dlt-act-btn"><i class="ri ri-delete-bin-5-fill"></i></button>
                         </td>
                     </tr>
                 `)).draw(false);

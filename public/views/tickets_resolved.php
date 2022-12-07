@@ -53,8 +53,8 @@
           </div>
 
           <!-- Modal Body -->
-          <div class="modal-body row g-3">
-
+          <div class="modal-body">
+              <div class="row g-3">
                   <div class="col-md-12">
                     <div class="form-floating">
                       <input type="text" class="form-control" id="account_id" placeholder="Account ID" readonly>
@@ -116,6 +116,9 @@
                       <input type="text" class="form-control text-center " id="ticket_status_id" value="" disabled>
                     </div>
                   </div>
+              </div>
+
+                  
           </div>
 
           <!-- Modal Footer -->

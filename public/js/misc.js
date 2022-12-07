@@ -357,27 +357,117 @@ function setConcernsPage() {
 // End of Concerns Page
 
 // -------------------------------------------------------------------- User Level Page
-function setUserLevelPage() {
-    displaySuccessMessage();
+async function setUserLevelPage() {
     setButtons();
-    setTable('user_level', '#userlevel-table');
-    setUpdateModal();
-    setDeleteModal();
+    const user_levels = await fetchData('user_level/read.php');
+
+    const container = document.getElementById('user-role-body');
+
+    for (var i = 1; i < user_levels.length; i++) {
+        const descriptions = await fetchData('pages/get_descriptions.php?user_id=' + user_levels[i].user_id);
+        const card = document.createElement('div');
+        card.classList = 'card-body';
+
+        const content = `
+        <div class="col-sm-4 user-cards">
+            <div class="card mt-3">
+            <div class="card-body">
+                <h5>${user_levels[i].user_role}</h5>
+                <h6>Total users with this role: 1</h6>
+                <ul>
+                    <li><i class="bi bi-check2-circle"></i> ${descriptions[0]}</li>
+                    <li><i class="bi bi-check2-circle"></i> ${descriptions[1]}</li>
+                    <li><i class="bi bi-check2-circle"></i> ${descriptions[2]}</li>
+                    <li><i class="bi bi-check2-circle"></i> ${descriptions[3]}</li>
+                    <li><i class="bi bi-check2-circle"></i> ${descriptions[4]}</li>
+                    <li><i class="bi bi-check2-circle"></i> <em>and ${descriptions.length - 5} more.. </em></li>
+                </ul>
+
+                <button class="btn btn-outline-success">View Role</button>
+                <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="${user_levels[i].user_id}">Edit Role</button>
+            </div>
+            </div>
+        </div>
+        `;
+
+        container.innerHTML += content;
+    }
 
     $("#editModal").on("hidden.bs.modal", function () {
-        $('#save-btn').attr('disabled', true);
-        $('#edit-btn').attr('disabled', false);
+        // $('#save-btn').attr('disabled', true);
+        // $('#edit-btn').attr('disabled', false);
+        // Reset checkbox here?
     });
 
-    create_fn.onsubmit = (e) => {
-        e.preventDefault();
-        processCreate();
-    };
+    var updateModal = document.getElementById('editModal');
+    updateModal.addEventListener('show.bs.modal', async function (event) {
+
+        var button = event.relatedTarget;
+        var data_id = button.getAttribute('data-bs-whatever');
+        let userlevel_data = await fetchData('user_level/read_single.php?user_id=' + data_id);
+
+        var modalTitle = updateModal.querySelector('.modal-title');
+        modalTitle.textContent = userlevel_data.user_role;
+
+        $('#user_id').val(data_id);
+        $('#user_role').val(userlevel_data.user_role);
+
+        $('#select_all').change( (e) => {
+            toggle($('#select_all').is(':checked'));
+        });
+
+        function toggle(bool) {
+            checkboxes = document.getElementsByName('check');
+            for(var i = 0; i < checkboxes.length; i++) {
+                (bool) ? $('#' + checkboxes[i].id).prop('checked', true) : $('#' + checkboxes[i].id).prop('checked', false);
+            }
+        }
+
+        update_fn.onsubmit = (e) => {
+            e.preventDefault();
+            // processUpdate();
+        };
+
+        async function processUpdate() {
+            const update_data = JSON.stringify({
+                'user_id' : data_id,
+                'user_role' : $('#user_role').val()
+            });
+
+            const [content, log] = await Promise.all ([updateData('user_level/update.php', update_data), logActivity('Updated User Level # ' + data_id, 'User Level - Overview')]);
+        
+            if (content.message == 'User Level Updated' && log) {
+                sessionStorage.setItem('save_message', "User Role Updated Successfully.");
+                window.location.reload();
+            }
+            else {
+                toastr.error("User Role was not updated.");
+            }
+        }
+    });
+
+    // setUpdateModal();
+    
+}
+// function setUserLevelPage() {
+//     displaySuccessMessage();
+//     setButtons();
+//     setTable('user_level', '#userlevel-table');
+//     setUpdateModal();
+//     setDeleteModal();
+
+    // $("#editModal").on("hidden.bs.modal", function () {
+    // });
+
+//     create_fn.onsubmit = (e) => {
+//         e.preventDefault();
+//         processCreate();
+//     };
     
     async function setUpdateModal () {
-        var updateModal = document.getElementById('editModal')
+        var updateModal = document.getElementById('editModal');
         updateModal.addEventListener('show.bs.modal', async function (event) {
-    
+
             var button = event.relatedTarget;
             var data_id = button.getAttribute('data-bs-whatever');
             let userlevel_data = await fetchData('user_level/read_single.php?user_id=' + data_id);
@@ -386,31 +476,28 @@ function setUserLevelPage() {
             modalTitle.textContent = userlevel_data.user_role;
 
             $('#user_id').val(data_id);
-            $('#user_role_md').val(userlevel_data.user_role);
+            $('#user_role').val(userlevel_data.user_role);
 
-            toggleInputData('disabled', true);
+            $('#select_all').change( (e) => {
+                toggle($('#select_all').is(':checked'));
+            });
 
-            function toggleInputData (setAttr, bool) {
-                $('#user_id').attr(setAttr, bool);
-                $('#user_role_md').attr(setAttr, bool);
+            function toggle(bool) {
+                checkboxes = document.getElementsByName('check');
+                for(var i = 0; i < checkboxes.length; i++) {
+                    (bool) ? $('#' + checkboxes[i].id).prop('checked', true) : $('#' + checkboxes[i].id).prop('checked', false);
+                }
             }
-
-            edit_fn.onclick = (e) => {
-                e.preventDefault();
-                $('#save-btn').attr('disabled', false);
-                $('#edit-btn').attr('disabled', true);
-                toggleInputData('disabled', false);
-            };
 
             update_fn.onsubmit = (e) => {
                 e.preventDefault();
-                processUpdate();
+                // processUpdate();
             };
 
             async function processUpdate() {
                 const update_data = JSON.stringify({
                     'user_id' : data_id,
-                    'user_role' : $('#user_role_md').val()
+                    'user_role' : $('#user_role').val()
                 });
 
                 const [content, log] = await Promise.all ([updateData('user_level/update.php', update_data), logActivity('Updated User Level # ' + data_id, 'User Level - Overview')]);
@@ -426,61 +513,61 @@ function setUserLevelPage() {
         });
     }
     
-    async function setDeleteModal () {
-        var deleteModal = document.getElementById('deleteModal')
-        deleteModal.addEventListener('show.bs.modal', async function (event) {
+//     async function setDeleteModal () {
+//         var deleteModal = document.getElementById('deleteModal')
+//         deleteModal.addEventListener('show.bs.modal', async function (event) {
     
-            var button = event.relatedTarget;
-            var data_id = button.getAttribute('data-bs-whatever');
-            let userlevel_data = await fetchData('user_level/read_single.php?user_id=' + data_id);
+//             var button = event.relatedTarget;
+//             var data_id = button.getAttribute('data-bs-whatever');
+//             let userlevel_data = await fetchData('user_level/read_single.php?user_id=' + data_id);
 
-            var modalTitle = deleteModal.querySelector('.modal-title');
-            modalTitle.textContent = "Delete " + userlevel_data.user_role + "?";
+//             var modalTitle = deleteModal.querySelector('.modal-title');
+//             modalTitle.textContent = "Delete " + userlevel_data.user_role + "?";
 
-            $('#user_id_d').val(data_id);
-            $('#user_role_md_d').val(userlevel_data.user_role);
+//             $('#user_id_d').val(data_id);
+//             $('#user_role_md_d').val(userlevel_data.user_role);
     
-            delete_fn.onsubmit = (e) => {
-                e.preventDefault();
-                processDelete();
-            };
+//             delete_fn.onsubmit = (e) => {
+//                 e.preventDefault();
+//                 processDelete();
+//             };
 
-            async function processDelete() {
-                const delete_data = JSON.stringify({
-                    'user_id' : data_id
-                });
+//             async function processDelete() {
+//                 const delete_data = JSON.stringify({
+//                     'user_id' : data_id
+//                 });
 
-                const [content, log] = await Promise.all ([deleteData('user_level/delete.php', delete_data), logActivity('Deleted User Level # ' + data_id, 'User Level - Overview')]);
+//                 const [content, log] = await Promise.all ([deleteData('user_level/delete.php', delete_data), logActivity('Deleted User Level # ' + data_id, 'User Level - Overview')]);
                 
-                if (content.message == 'User Level Deleted' && log) {
-                    sessionStorage.setItem('save_message', "User Role Deleted Successfully.");
-                    window.location.reload();
-                }
-                else {
-                    toastr.error("User Role was not deleted.");
-                }
-            }
-        });
-    }
+//                 if (content.message == 'User Level Deleted' && log) {
+//                     sessionStorage.setItem('save_message', "User Role Deleted Successfully.");
+//                     window.location.reload();
+//                 }
+//                 else {
+//                     toastr.error("User Role was not deleted.");
+//                 }
+//             }
+//         });
+//     }
     
-    async function processCreate() {
-        const create_data = JSON.stringify({
-            'user_role' : $('#user_role').val()
-        });
+//     async function processCreate() {
+//         const create_data = JSON.stringify({
+//             'user_role' : $('#user_role').val()
+//         });
 
-        const [content, log] = await Promise.all ([createData('user_level/create.php', create_data), logActivity('Created new User Role - ' + $('#user_role').val(), 'User Level - Add User Level')]) 
+//         const [content, log] = await Promise.all ([createData('user_level/create.php', create_data), logActivity('Created new User Role - ' + $('#user_role').val(), 'User Level - Add User Level')]) 
         
-        if (content.message = 'User Level Created' && log) {
-            toastr.success('User Role Created Successfully.');
-            setTimeout(function(){
-                window.location.replace('../views/user_level.php');
-             }, 2000);
-        }
-        else {
-            toastr.error("User Role was not created.");
-        }
-    }
-}
+//         if (content.message = 'User Level Created' && log) {
+//             toastr.success('User Role Created Successfully.');
+//             setTimeout(function(){
+//                 window.location.replace('../views/user_level.php');
+//              }, 2000);
+//         }
+//         else {
+//             toastr.error("User Role was not created.");
+//         }
+//     }
+// }
 // End of User Level Page
 
 // -------------------------------------------------------------------- Area Page

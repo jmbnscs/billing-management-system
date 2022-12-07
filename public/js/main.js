@@ -345,13 +345,41 @@ async function setDefaults () {
     $('#display_role').text(user.user_role);
     $('#display_dd_name').text(admin_data.admin_username);
 
-    const restrict_content = await fetchData('restriction/get_user_restriction.php?user_id=' + level_id);
+    const restrict_content = await fetchData('restriction/get_pages_restriction.php?user_id=' + level_id);
+    const keys = Object.keys(restrict_content);
 
-    if (restrict_content.length > 0) {
-        for (var i = 0; i < restrict_content.length; i++) {
-            $('#' + restrict_content[i].nav_id).addClass('hide');
+    keys.forEach((key, index) => {
+        // console.log(`${key}: ${restrict_content[key]}`);
+        if (restrict_content[key] == 0) {
+            $('#' + key).addClass('hide');
         }
-    }
+    });
+}
+
+async function checkRestriction (page, dir) {
+    const restriction = await fetchData('restriction/get_buttons_restriction.php?user_id=' + user_id);
+    const keys = Object.keys(restriction);
+
+    keys.forEach((key, index) => {
+        if (key.split("-")[0] == page) {
+            if (restriction[key] == 0) {
+                $('#' + key.split("-")[1] + '-btn').addClass('hide');
+            }
+        }
+    });
+
+    const restrict_content = await fetchData('restriction/get_pages_restriction.php?user_id=' + user_id);
+    const page_keys = Object.page_keys(restrict_content);
+
+    page_keys.forEach((key, index) => {
+        if (key == dir) {
+            if (restrict_content[key] == 0) {
+                setErrorMessage();
+                window.location.replace("../views/dashboard.php");
+            }
+        }
+        
+    });
 }
 
 $(() => {

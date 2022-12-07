@@ -206,9 +206,17 @@ h6 {
 }
 
 /* Modal Header */
-.modal-header {
-  background-color: #0819A8;
-  color: #f6f6fe;
+.modal-header,
+.modal-footer {
+  background-color: #f6f6fe;
+  color: #0819A8;
+  font-weight: bolder;
+}
+
+.modal-body .title {
+  color: #0819A8;
+  font-weight: 6000;
+  width: 250px;
 }
 
 /* Light Backgrounds */
@@ -1168,6 +1176,41 @@ h6 {
 # Add Admin Page 
 --------------------------------------------------------------*/
 
+/*--------------------------------------------------------------
+# Misc Page 
+--------------------------------------------------------------*/
+.user-cards .card-body{
+  padding-top: 30px;
+  /* background-color: #0819A8; */
+}
+
+.user-cards .card-body h5{
+  color: #0819A8;
+  font-weight: 600;
+}
+
+.user-cards .card-body h6{
+  color: #3e4f6f;
+  font-weight: lighter;
+  font-size: smaller;
+}
+
+.user-cards .card-body ul {
+  list-style: none;
+  padding: 0;
+  padding-left: .3em;
+}
+
+.user-cards .card-body li {
+  font-size: smaller;
+  font-weight: lighter;
+}
+
+.user-cards .card-body button {
+  font-size: smaller;
+  margin-right: 10px;
+  /* font-weight: bolder; */
+}
 
 /*--------------------------------------------------------------
 # Profile Page
