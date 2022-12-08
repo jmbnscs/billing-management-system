@@ -25,16 +25,20 @@ $(document).ready(function () {
         }, 2000);
     }
     else if (DIR_CUR == DIR_MAIN + 'views/customers_add.php') {
+        restrictPages('customer-add');
+        setAddCustomerPage();
         
-        if(user_id == 4|| user_id == 5 || user_id == 6) {
-            setErrorMessage();
-            window.location.replace("../views/dashboard.php");
-        }
-        else {
-            setAddCustomerPage();
-        }
+        // if(user_id == 4|| user_id == 5 || user_id == 6) {
+        //     setErrorMessage();
+        //     window.location.replace("../views/dashboard.php");
+        // }
+        // else {
+        // }
     }
     else if (DIR_CUR == DIR_MAIN + 'views/customers_import.php') {
+        restrictPages('customer-import');
+        setImportCustomerPage();
+        $('#error-dl').addClass('hide');
         
         // if(user_id == 4|| user_id == 5 || user_id == 6) {
         //     setErrorMessage();
@@ -43,16 +47,11 @@ $(document).ready(function () {
         // else {
         //     setAddCustomerPage();
         // }
-        setImportCustomerPage();
     }
     else {
+        restrictPages('customer-page');
         displaySuccessMessage();
         setCustomerPage();
-
-        if (user_id != 2 && user_id != 3) {
-            $('#save-customer-btn').addClass('hide');
-            $('#edit-customer').addClass('hide');
-        }
     }
 });
 

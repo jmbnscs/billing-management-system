@@ -1,13 +1,10 @@
 $(document).ready( function () {
     isDefault();
-    // console.log();
-    // checkRestriction().then( (res) => {
-    //     console.log(res);
-    // })
 
     if (DIR_CUR == DIR_MAIN + 'views/invoice_payments_add.php') {
+        restrictPages('invoice-payment-add');
         setAddPaymentPage();
-        checkRestriction('payments', 'invoice-payment-add');
+        // checkRestriction('payments', );
         // if (user_id == 5 || user_id == 6) {
         //     setErrorMessage();
         //     window.location.replace("../views/dashboard.php");
@@ -17,8 +14,10 @@ $(document).ready( function () {
         // }
     }
     else if (DIR_CUR == DIR_MAIN + 'views/invoice_payments.php') {
+        restrictPages('invoice-payment');
         setPaymentRecordsPage();
-        checkRestriction('payments', 'invoice-payment');
+        restrictFunctions('payments');
+        // checkRestriction('payments', 'invoice-payment');
         // if (user_id == 6) {
         //     setErrorMessage();
         //     window.location.replace("../views/dashboard.php");
@@ -34,8 +33,10 @@ $(document).ready( function () {
         // }
     }
     else if (DIR_CUR == DIR_MAIN + 'views/invoice_prorate.php') {
+        restrictPages('invoice-prorate');
         setProrateRecordsPage();
-        checkRestriction('prorate', 'invoice-prorate');
+        restrictFunctions('prorate');
+        // checkRestriction('prorate', 'invoice-prorate');
 
 
         // if (user_id == 6) {
@@ -54,7 +55,9 @@ $(document).ready( function () {
     }
     else {
         setInvoicePage();
-        checkRestriction('invoice', 'invoice-page');
+        restrictPages('invoice-page');
+        restrictFunctions('invoice');
+        // checkRestriction('invoice', 'invoice-page');
     }
 });
 

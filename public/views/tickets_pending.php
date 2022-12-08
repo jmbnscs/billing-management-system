@@ -100,8 +100,8 @@
           <!-- Modal Footer -->
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#subscriptionModal" id="pend-resolve-ticket-btn" >Resolve</button>
-            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#invalidModal" id="invalid-ticket-btn" >Invalid</button>
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#subscriptionModal" id="resolve-btn" >Resolve</button>
+            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#invalidModal" id="invalid-btn" >Invalid</button>
           </div>
         </div>
       </div>

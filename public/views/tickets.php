@@ -97,8 +97,8 @@
           <!-- Modal Footer -->
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#claimModal" id="claim-ticket-btn" >Claim</button>
-            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#invalidModal" id="invalid-ticket-btn" >Invalid</button>
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#claimModal" id="claim-btn" >Claim</button>
+            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#invalidModal" id="invalid-btn" >Invalid</button>
           </div>
         </div>
       </div>

@@ -356,7 +356,7 @@ async function setDefaults () {
     });
 }
 
-async function checkRestriction (page, dir) {
+async function restrictFunctions (page) {
     const restriction = await fetchData('restriction/get_buttons_restriction.php?user_id=' + user_id);
     const keys = Object.keys(restriction);
 
@@ -367,19 +367,24 @@ async function checkRestriction (page, dir) {
             }
         }
     });
+}
 
-    const restrict_content = await fetchData('restriction/get_pages_restriction.php?user_id=' + user_id);
-    const page_keys = Object.page_keys(restrict_content);
+function restrictPages (dir) {
+    // const restrict_content = await fetchData('restriction/get_pages_restriction.php?user_id=' + user_id);
+    fetch(DIR_API + 'restriction/get_pages_restriction.php?user_id=' + user_id)
+        .then((response) => response.json())
+        .then((data) => {
+            const keys = Object.keys(data);
 
-    page_keys.forEach((key, index) => {
-        if (key == dir) {
-            if (restrict_content[key] == 0) {
-                setErrorMessage();
-                window.location.replace("../views/dashboard.php");
-            }
-        }
-        
-    });
+            keys.forEach((key, index) => {
+                if (key == dir) {
+                    if (data[key] == 0) {
+                        setErrorMessage();
+                        window.location.replace("../views/dashboard.php");
+                    }
+                }
+            });
+        });
 }
 
 $(() => {

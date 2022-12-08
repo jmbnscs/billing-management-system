@@ -1,25 +1,16 @@
 $(document).ready( async () => {
     isDefault();
+    restrictPages('admin-page');
+
 
     if (DIR_CUR == DIR_MAIN + 'views/admins_add.php') {
-        if(await checkRestriction()) {
-            window.location.replace("../views/dashboard.php");
-        }
-        else {
-            setAddAdminPage();
-        }
+        restrictPages('admin-add');
+        setAddAdminPage();
     }
     else {
+        restrictPages('admin-view');
         displaySuccessMessage();
         setViewAdminPage();
-
-        const restrict_btn = await updateData('pages/get_btn_restriction.php', JSON.stringify({'user_id': user_id, 'nav_id' : 'admin-view'}));
-
-        if (restrict_btn.length > 0) {
-            for (var i = 0; i < restrict_btn.length; i++) {
-                $('#' + restrict_btn[i].page_button).addClass('hide');
-            }
-        }
     }
 });
 
@@ -47,9 +38,9 @@ async function setViewAdminPage () {
     
     async function setAdminTable () {
     
-        // ito
         var t = $('#admins-table').DataTable( {
-            "searching": true
+            "searching": true,
+            "autoWidth": false
         });
 
         const [admin_statuses, user_roles, admins] = await Promise.all ([fetchData('statuses/read.php?status_table=admin_status'), fetchData('user_level/read.php'), fetchData('views/admin.php')]);
@@ -64,8 +55,6 @@ async function setViewAdminPage () {
             $("#role-filter").append(opt);
         }
 
-        // hanggang dito
-    
         for (var i = 0; i < admins.length; i++) {
             var tag;
             (admins[i].status == 'Active') ? tag = 'bg-success' : tag = 'bg-danger';
@@ -130,9 +119,6 @@ async function setViewAdminPage () {
         });
 
         t.draw();
-        t.columns.adjust().draw();
-
-        // hanggang dito
     }
     
     async function setViewModal () {
@@ -347,10 +333,10 @@ async function setViewAdminPage () {
 
 // -------------------------------------------------------------------- Add Admin
 async function setAddAdminPage () {
-    if (localStorage.getItem('admin_id') == null) {
-        localStorage.setItem('admin_id', await generateID('check/admin_id.php?admin_id=', "", 5));
+    if (sessionStorage.getItem('new_admin_id') == null) {
+        sessionStorage.setItem('new_admin_id', await generateID('check/admin_id.php?admin_id=', "", 5));
     }
-    $('#admin_id').val(localStorage.getItem('admin_id'));
+    $('#admin_id').val(sessionStorage.getItem('new_admin_id'));
     
     setAddDropdown();
     setAllowedDate('#admin_bday');
@@ -480,7 +466,7 @@ async function setAddAdminPage () {
             toastr.warning('Please provide the appropriate details on each field.');
         }
         else {
-            localStorage.removeItem('admin_id');
+            sessionStorage.removeItem('new_admin_id');
             addAdmin();
         }
     }
@@ -515,6 +501,7 @@ async function setAddAdminPage () {
         
         if (content.success && log) {
             let create_content = await fetchData('admin/read_single.php?admin_id=' + $('#admin_id').val());
+
             let log_data = JSON.stringify({
                 'admin_id' : $('#admin_id').val(),
                 'def_username' : create_content.admin_username,

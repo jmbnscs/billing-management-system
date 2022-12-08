@@ -100,8 +100,8 @@
           <!-- Modal Footer -->
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-success" id="reactivate-ticket-btn">Re-Activate</button>
-            <button type="button" class="btn btn-danger" id="delete-ticket-btn">Delete</button>
+            <button type="button" class="btn btn-success" id="reactivate-btn">Re-Activate</button>
+            <button type="button" class="btn btn-danger" id="delete-btn">Delete</button>
           </div>
         </div>
       </div>

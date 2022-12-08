@@ -2,22 +2,25 @@ $(document).ready(function () {
     isDefault();
 
     if (DIR_CUR == DIR_MAIN + 'views/plans_add.php') {
-        if(user_id == 4 || user_id == 5 || user_id == 6) {
-            setErrorMessage();
-            window.location.replace("../views/dashboard.php");
-        }
-        else {
-            setAddPlanPage();
-        }
+        restrictPages('plan-add');
+        setAddPlanPage();
+        // if(user_id == 4 || user_id == 5 || user_id == 6) {
+        //     setErrorMessage();
+        //     window.location.replace("../views/dashboard.php");
+        // }
+        // else {
+        //     setAddPlanPage();
+        // }
     }
     else {
+        restrictPages('plan-page');
         displaySuccessMessage();
         setPlansPage();
-
-        if (user_id != 2 && user_id != 3) {
-            $('#edit-plan').addClass('hide');
-            $('#save-plan-btn').addClass('hide');
-        }
+        restrictFunctions('plans')
+        // if (user_id != 2 && user_id != 3) {
+        //     $('#edit-plan').addClass('hide');
+        //     $('#save-plan-btn').addClass('hide');
+        // }
     }
 });
 

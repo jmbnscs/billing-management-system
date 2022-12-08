@@ -1,44 +1,47 @@
 $(document).ready(function () {
     isDefault();
+    restrictPages('ticket-page');
+    
+    if (DIR_CUR == DIR_MAIN + 'views/tickets_create.php') {
+        restrictPages('ticket-create');
+        setCreateTicketPage();
+    }
+    else if (DIR_CUR == DIR_MAIN + 'views/tickets_resolved.php') {
+        restrictPages('ticket-resolved');
+        displaySuccessMessage();
 
-    if(user_id == 4 || user_id == 6) {
-        setErrorMessage();
-        window.location.replace("../views/dashboard.php");
+        setResolvedTicketsTable();
+        resolvedModal();
+    }
+    else if (DIR_CUR == DIR_MAIN + 'views/tickets_pending.php') {
+        restrictPages('ticket-pending');
+        displaySuccessMessage();
+
+        setPendingTicketsTable();
+        pendingModal();
+        restrictFunctions('pending');
+    }
+    else if (DIR_CUR == DIR_MAIN + 'views/tickets_invalid.php') {
+        restrictPages('ticket-invalid');
+        displaySuccessMessage();
+
+        setInvalidTicketsTable();
+        invalidatedTicketsModal();
+        restrictFunctions('invalid');
     }
     else {
-        if (DIR_CUR == DIR_MAIN + 'views/tickets_create.php') {
-            setCreateTicketPage();
-        }
-        else if (DIR_CUR == DIR_MAIN + 'views/tickets_resolved.php') {
-            displaySuccessMessage();
+        restrictPages('ticket-active');
+        displaySuccessMessage();
 
-            setResolvedTicketsTable();
-            resolvedModal();
-        }
-        else if (DIR_CUR == DIR_MAIN + 'views/tickets_pending.php') {
-            displaySuccessMessage();
-
-            setPendingTicketsTable();
-            pendingModal();
-        }
-        else if (DIR_CUR == DIR_MAIN + 'views/tickets_invalid.php') {
-            displaySuccessMessage();
-
-            setInvalidTicketsTable();
-            invalidatedTicketsModal();
-        }
-        else {
-            displaySuccessMessage();
-
-            setActiveTicketsTable();
-            activeModal();
-        }
+        setActiveTicketsTable();
+        activeModal();
+        restrictFunctions('active');
     }
 });
 
 // Global Variables
 const invalid_ticket = document.getElementById('invalid-ticket-modal');
-const invalid_ticket_btn = document.getElementById('invalid-ticket-btn');
+const invalid_ticket_btn = document.getElementById('invalid-btn');
 
 // -------------------------------------------------------------------- Active Ticket Page
 async function setActiveTicketsTable () {
@@ -85,7 +88,7 @@ async function activeModal () {
 
         setTagElement('ticket_status_id', 2);
 
-        const claim_ticket_btn = document.getElementById('claim-ticket-btn');
+        const claim_ticket_btn = document.getElementById('claim-btn');
         claim_ticket_btn.onclick = (e) => {
             e.preventDefault();
             $('#activeModal').modal('hide');
@@ -204,13 +207,13 @@ async function pendingModal () {
         modalTitle.textContent = ticket_num;
 
         if(ticket.concern_id == 1) {
-            $('#pend-resolve-ticket-btn').attr('data-bs-target', '#networkModal');
+            $('#resolve-btn').attr('data-bs-target', '#networkModal');
         }
         else if (ticket.concern_id == 2) {
-            $('#pend-resolve-ticket-btn').attr('data-bs-target', '#subscriptionModal');
+            $('#resolve-btn').attr('data-bs-target', '#subscriptionModal');
         }
         else {
-            $('#pend-resolve-ticket-btn').attr('data-bs-target', '#disconnectModal');
+            $('#resolve-btn').attr('data-bs-target', '#disconnectModal');
         }
 
         const [concern, ticket_status] = await Promise.all ([fetchData('concerns/read_single.php?concern_id=' + ticket.concern_id), getStatusName('ticket_status', ticket.ticket_status_id)]);
@@ -224,7 +227,7 @@ async function pendingModal () {
 
         setTagElement('ticket_status_id', 3);
 
-        const pending_resolve_ticket_btn = document.getElementById('pend-resolve-ticket-btn');
+        const pending_resolve_ticket_btn = document.getElementById('resolve-btn');
         pending_resolve_ticket_btn.onclick = (e) => {
             e.preventDefault();
             $('#pendingModal').modal('hide');
@@ -503,8 +506,8 @@ async function invalidatedTicketsModal () {
 
         setTagElement('ticket_status_id', 2);
 
-        const reactivate_ticket = document.getElementById('reactivate-ticket-btn');
-        const delete_ticket = document.getElementById('delete-ticket-btn');
+        const reactivate_ticket = document.getElementById('reactivate-btn');
+        const delete_ticket = document.getElementById('delete-btn');
 
         reactivate_ticket.onclick = (e) => {
             e.preventDefault();

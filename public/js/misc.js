@@ -1,11 +1,9 @@
 $(document).ready(function () {
     isDefault();
+    restrictPages('misc-page');
 
-    if(user_id == 3 || user_id == 4 || user_id == 5 || user_id == 6) {
-        setErrorMessage();
-        window.location.replace("../views/dashboard.php");
-    }
-    else if (DIR_CUR == DIR_MAIN + 'views/connection.php') {
+    if (DIR_CUR == DIR_MAIN + 'views/connection.php') {
+        restrictPages('')
         setConnectionPage();
     }
     else if (DIR_CUR == DIR_MAIN + 'views/concerns.php') {
