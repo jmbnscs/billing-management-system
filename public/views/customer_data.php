@@ -5,7 +5,7 @@
 <main id="main" class="main">
   <!-- Page Title -->
   <div class="pagetitle">
-    <h1>View Customer Details</h1>
+    <h1>Customer Details</h1>
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="dashboard.php">Home</a></li>

@@ -1275,6 +1275,31 @@ h6 {
 }
 
 /*--------------------------------------------------------------
+# Admin Data Page
+--------------------------------------------------------------*/
+.admin-icon {
+  border-radius: 50%;
+  width: 150px;
+  height: 150px; 
+  background: #E4F6FA;
+  border: 2px #012970 groove;
+
+  line-height: 150px;
+  font-size: 60px;
+  color: #012970;
+  text-align: center;
+}
+
+table.dataTable td.dt-control {
+  text-align: center;
+  cursor: pointer;
+}
+
+table.dataTable td.dt-control:before {
+  background-color: #012970;
+}
+
+/*--------------------------------------------------------------
 # F.A.Q Page
 --------------------------------------------------------------*/
 .faq .basic h6 {
