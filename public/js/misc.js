@@ -363,6 +363,7 @@ async function setUserLevelPage() {
 
     for (var i = 1; i < user_levels.length; i++) {
         const descriptions = await fetchData('pages/get_descriptions.php?user_id=' + user_levels[i].user_id);
+        const countUsers = await fetchData('views/admin_user_level.php?user_role=' + user_levels[i].user_role);
         const card = document.createElement('div');
         card.classList = 'card-body';
 
@@ -371,7 +372,7 @@ async function setUserLevelPage() {
             <div class="card mt-3">
             <div class="card-body">
                 <h5>${user_levels[i].user_role}</h5>
-                <h6>Total users with this role: 1</h6>
+                <h6>Total users with this role: ${Object.keys(countUsers).length}</h6>
                 <ul>
                     <li><i class="bi bi-check2-circle"></i> ${descriptions[0]}</li>
                     <li><i class="bi bi-check2-circle"></i> ${descriptions[1]}</li>
@@ -381,7 +382,7 @@ async function setUserLevelPage() {
                     <li><i class="bi bi-check2-circle"></i> <em>and ${descriptions.length - 5} more.. </em></li>
                 </ul>
 
-                <button class="btn btn-outline-success">View Role</button>
+                <a href="../views/user_level_data.php?user_role=${user_levels[i].user_role}" target="_blank" style="text-decorations:none; color:inherit;"><button class="btn btn-outline-success">View Role</button></a>
                 <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="${user_levels[i].user_id}">Edit Role</button>
             </div>
             </div>
