@@ -2,17 +2,24 @@
     use PHPMailer\PHPMailer\PHPMailer;
     use PHPMailer\PHPMailer\Exception;
 
-    require '../phpmailer/src/Exception.php';
-    require '../phpmailer/src/PHPMailer.php';
-    require '../phpmailer/src/SMTP.php';
+    require '../helpers/phpmailer/src/Exception.php';
+    require '../helpers/phpmailer/src/PHPMailer.php';
+    require '../helpers/phpmailer/src/SMTP.php';
 
     if (isset($_POST['invoice_id'])) {
+        $ch = require 'curl.init.php';
+        $url = DIR_API . "logs/get_mail_auth.php?id=1";
+        curl_setopt($ch, CURLOPT_URL, $url);
+        $resp = curl_exec($ch);
+        $mail_data = json_decode($resp, true);
+        curl_close($ch);
+
         $mail = new PHPMailer(true);
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
-        $mail->Username = 'bill.gstech@gmail.com';
-        $mail->Password = 'kqrakwidvjjmstck';
+        $mail->Username = $mail_data['email'];
+        $mail->Password = $mail_data['password'];
         $mail->SMTPSecure = 'ssl';
         $mail->Port = 465;
 
@@ -35,7 +42,7 @@
         $date = new DateTime($data['billing_period_end']);
         $bill_date = $date->sub(new DateInterval('P10D'));
 
-        $mail->setFrom('bill.gstech@gmail.com');
+        $mail->setFrom($mail_data['email']);
 
         $mail->addAddress($customer['email']);
 

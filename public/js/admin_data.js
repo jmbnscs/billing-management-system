@@ -5,8 +5,7 @@ $(document).ready(function () {
 });
 
 let admin_name;
-// let admindata_id = (window.location.href).split("=")[1];
-let admindata_id = '41516';
+let admindata_id = (window.location.href).split("=")[1];
 
 async function setDefaultSetting() {
     displaySuccessMessage();
@@ -19,10 +18,7 @@ async function setDefaultSetting() {
 
     setAdminData(admin_data);
     setActivities();
-    // setInvoiceHistory();
-    // setPaymentHistory();
-    // setProrateHistory();
-    // setTicketHistory();
+    setTicketHistory();
 }
 
 async function setAdminData(admin_data) {
@@ -116,16 +112,6 @@ async function setActivities() {
         lengthMenu: [10, 20, 50],
         "searching": true,
         "autoWidth": false,
-        // "buttons" : ['pdf'],
-        // buttons: [
-        //     'pdf', 'copy'
-        //     // {
-        //     //     text: 'My button',
-        //     //     action: function ( e, dt, node, config ) {
-        //     //         alert( 'Button activated' );
-        //     //     }
-        //     // }
-        // ]
     });
 
     const content = await fetchData('logs/read_admin_all_logs.php?admin_id=' + admindata_id);
@@ -139,6 +125,37 @@ async function setActivities() {
                 <td>${content[i].page_accessed}</td>
                 <td>${content[i].activity}</td>
                 <td>${content[i].date_accessed}</td>
+            </tr>
+            `)).draw(false);
+        }
+        else {
+            counter--;
+        }
+                
+        counter++;
+    }
+}
+
+async function setTicketHistory() {
+    var t = $('#tickets-table').DataTable( {
+        pageLength: 10,
+        lengthMenu: [10, 20, 50],
+        "searching": true,
+        "autoWidth": false,
+    });
+
+    const content = await fetchData('ticket/read_single_admin.php?admin_id=' + admindata_id);
+    let counter = 1;
+
+    for (var i = 0; i < content.length; i++) {
+        if (content[i].page_accessed != 'Login') {
+            let [concern, status] = await Promise.all ([fetchData('concerns/read_single.php?concern_id=' + content[i].concern_id), getStatusName('ticket_status', content[i].ticket_status_id)]);
+            t.row.add($(`
+            <tr>
+                <th scope="row" style="color: #012970;"><strong>${counter}</strong></th>
+                <td>${content[i].ticket_num}</td>
+                <td>${concern.concern_category}</td>
+                <td>${status}</td>
             </tr>
             `)).draw(false);
         }

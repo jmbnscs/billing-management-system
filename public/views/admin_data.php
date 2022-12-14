@@ -61,19 +61,7 @@
             </li>
 
             <li class="nav-item flex-fill">
-              <button class="nav-link w-100" data-bs-toggle="tab" data-bs-target="#customer-invoice" id="customer-invoice-tab">Invoice</button>
-            </li>
-
-            <li class="nav-item flex-fill">
-              <button class="nav-link w-100" data-bs-toggle="tab" data-bs-target="#customer-payment" id="customer-payment-tab">Payment</button>
-            </li>
-
-            <li class="nav-item flex-fill">
-              <button class="nav-link w-100" data-bs-toggle="tab" data-bs-target="#customer-prorate" id="customer-prorate-tab">Prorate</button>
-            </li>
-
-            <li class="nav-item flex-fill">
-              <button class="nav-link w-100" data-bs-toggle="tab" data-bs-target="#customer-ticket" id="customer-ticket-tab">Ticket</button>
+              <button class="nav-link w-100" data-bs-toggle="tab" data-bs-target="#admin-ticket" id="admin-ticket-tab">Ticket</button>
             </li>
 
           </ul><!-- End Bordered Tabs -->
@@ -81,6 +69,7 @@
         <br>
         <!-- Tab Contents -->
 
+        <!-- Admin Logs -->
         <div class="tab-content">
             <div class="tab-pane fade show active admin-overview" id="admin-overview">
                 <div class="card">
@@ -106,13 +95,37 @@
                     </div>
                 </div>
           </div>
-          <!-- End Account Overview -->
+        </div> 
 
-          
+        <!-- Admin Tickets -->
+        <div class="tab-content">
+            <div class="tab-pane fade show admin-ticket" id="admin-ticket">
+                <div class="card">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="p-2">
+                                <h5 class="card-title p-2">Ticket History</h5>
 
-        </div> <!-- End Tab Contents -->
+                                <table class="table" id="tickets-table">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Ticket #</th>
+                                            <th scope="col">Concern</th>
+                                            <th scope="col">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
 
-        
+                    </div>
+                </div>
+          </div>
+        </div>
+
+        <!-- End Tab Contents -->
 
       </div>
     </div>

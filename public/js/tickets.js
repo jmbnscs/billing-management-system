@@ -558,15 +558,15 @@ async function invalidatedTicketsModal () {
 // -------------------------------------------------------------------- Add Ticket Page
 async function setCreateTicketPage () {
     const create_ticket = document.getElementById('create-ticket');
-    $('#ticket_num').val(await generateID('check/ticket_num.php?ticket_num=', "TN", 6));
+    // $('#ticket_num').val(await generateID('check/ticket_num.php?ticket_num=', "TN", 6));
     getExistingAccounts = await fetchData('account/read.php');
 
     // localStorage.removeItem('ticket_num');
 
-    if (localStorage.getItem('ticket_num') == null) {
-        localStorage.setItem('ticket_num', await generateID('check/ticket_num.php?ticket_num=', "TN", 6));
+    if (sessionStorage.getItem('ticket_num') == null) {
+        sessionStorage.setItem('ticket_num', await generateID('check/ticket_num.php?ticket_num=', "TN", 6));
     }
-    $('#ticket_num').val(localStorage.getItem('ticket_num'));
+    $('#ticket_num').val(sessionStorage.getItem('ticket_num'));
 
     setAddDropdown();
     $('#date_filed').val(getDateToday());
@@ -676,6 +676,7 @@ async function setCreateTicketPage () {
             const [ticket_content, log] = await Promise.all ([createData('ticket/create.php', create_data), logActivity('Created Ticket ' + ticket_num, 'Create a Ticket')]);
         
             if (ticket_content.message == 'Ticket Created' && log) {
+                sessionStorage.removeItem('ticket_num');
                 sessionStorage.setItem('save_message', "Ticket Created Successfully.");
                 window.location.replace('../views/tickets.php');
             }

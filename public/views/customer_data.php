@@ -516,7 +516,7 @@
           <div class="row mb-3">
             <label for="concern_details" class="col-sm-4 col-form-label">Concern Details</label>
             <div class="col-sm-8">
-              <input type="text" class="form-control" id="concern_details" value="" readonly>
+              <textarea row="3" class="form-control" id="concern_details" value="" readonly></textarea>
             </div>
           </div>
 

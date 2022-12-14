@@ -71,7 +71,7 @@ async function setCustomerData(customer_data) {
         $('#mobile_number_edt').val(customer.mobile_number);
         $('#email_edt').val(customer.email);
 
-        const [area, plan, connection, account_status, install_type] = await Promise.all ([fetchData('area/read.php'), fetchData('plan/read.php'), fetchData('connection/read.php'), fetchData('statuses/read.php?status_table=account_status'), fetchData('installation_type/read.php')]);
+        const [area, plan, connection, account_status, install_type] = await Promise.all ([fetchData('area/read.php'), fetchData('plan/read_active.php'), fetchData('connection/read.php'), fetchData('statuses/read.php?status_table=account_status'), fetchData('installation_type/read.php')]);
 
         $("#area_id_edt").empty();
         $("#area_id_edt").append(`<option selected disabled value="">Choose Area</option>`);
@@ -494,7 +494,7 @@ async function setViewModal (table) {
             let status = await getStatusName('ticket_status', data.ticket_status_id);
             let category = await fetchData('concerns/read_single.php?concern_id=' + data.concern_id);
             let admin = await getAdminData(data.admin_id);
-            (data.ticket_status_id == 3) ? setTagElement('ticket_status', 1) : setTagElement('ticket_status', 2);
+            (data.ticket_status_id == 3) ? setTagElement('ticket_status', 1) : (data.ticket_status_id == 2) ? setTagElement('ticket_status', 3) : setTagElement('ticket_status', 2);
             id = [
                 '#ticket_num', 
                 '#concern_category', 

@@ -1,11 +1,5 @@
 <?php
 require_once('../helpers/tcpdf/tcpdf.php');
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
-require '../phpmailer/src/Exception.php';
-require '../phpmailer/src/PHPMailer.php';
-require '../phpmailer/src/SMTP.php';
 
     class PDF extends TCPDF {
         public function Header () {
@@ -163,7 +157,7 @@ require '../phpmailer/src/SMTP.php';
     // set document information
     $pdf->setCreator(PDF_CREATOR);
     $pdf->setAuthor('GSTechBMS');
-    $pdf->setSubject('TCPDF Tutorial');
+    $pdf->setSubject('GSTech Billing Statement');
     
     $pdf->setHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE.' 001', PDF_HEADER_STRING, array(0,64,255), array(0,64,128));
     $pdf->setFooterData(array(0,64,0), array(0,64,128));
@@ -186,6 +180,3 @@ require '../phpmailer/src/SMTP.php';
     // ---------------------------------------------------------
     
     $invoice = $pdf->Output('test.pdf', 'I');
-
-
-
