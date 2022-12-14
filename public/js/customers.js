@@ -67,7 +67,8 @@ async function setCustomerPage () {
         var t = $('#customer-table').DataTable({
             pageLength : 5,
             lengthMenu: [5, 10, 20],
-            "searching": true
+            "searching": true,
+            "autoWidth": false,
         }), tag;
 
         for (var i = 0; i < plans.length; i++) {
@@ -170,7 +171,7 @@ async function setCustomerPage () {
         });
 
         t.draw();
-        t.columns.adjust().draw();
+        // t.columns.adjust().draw();
     }
 }
 

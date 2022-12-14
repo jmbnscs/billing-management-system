@@ -1300,6 +1300,43 @@ table.dataTable td.dt-control:before {
 }
 
 /*--------------------------------------------------------------
+# Invoice Data Page
+--------------------------------------------------------------*/
+.invoice-details h5 {
+  color: #0819A8;
+  font-weight: 500;
+}
+
+.invoice-details h6 {
+  font-weight: lighter;
+  border-bottom: #012970 2px solid;
+}
+
+.invoice-information p {
+  font-size: 12px;
+  font-weight: lighter;
+}
+
+.invoice-information p small {
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.invoice-information h6 {
+  /* font-weight: lighter; */
+  color: #0819A8;
+  font-weight: 500;
+  border: none;
+}
+
+.invoice-information h6 small {
+  /* font-weight: lighter; */
+  font-size: 20px;
+  font-weight: bold;
+  border: none;
+}
+
+/*--------------------------------------------------------------
 # F.A.Q Page
 --------------------------------------------------------------*/
 .faq .basic h6 {

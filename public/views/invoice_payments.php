@@ -74,8 +74,10 @@
 
                 <div class="col-md-12">
                   <div class="form-floating">
-                    <input type="number" class="form-control" id="account_id" placeholder="Account ID" required>
+                    <input list="accounts-list" type="number" class="form-control" id="account_id" placeholder="Account ID" required>
                     <label for="account_id">Account ID</label>
+
+                    <datalist id="accounts-list"></datalist>
                   </div>
                 </div>
 

@@ -102,7 +102,7 @@ async function setInvoicePage () {
                     <td>${content[i].disconnection_date}</td>
                     <td>&#8369; ${content[i].running_balance}</td>
                     <td><span class="badge ${tag}">${content[i].status}</span></td>
-                    <td><button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="${content[i].invoice_id}"><i class="ri ri-eye-fill"></i></button></td>
+                    <td><a href="../views/invoice_data.php?acct=${content[i].invoice_id}" target="_blank"><button type="button" class="btn btn-outline-primary"><i class="ri ri-eye-fill"></i></button></a></td>
                 </tr>
             `)).draw(false);
         }
@@ -324,6 +324,7 @@ async function setPaymentRecordsPage() {
             var button = event.relatedTarget;
             var payment_id = button.getAttribute('data-bs-whatever');
             let data = await fetchData('payment/read_single.php?payment_id=' + payment_id);
+            const customer = await fetchData('customer/read.php');
 
             var modalTitle = updateModal.querySelector('.modal-title');
             modalTitle.textContent = data.payment_reference_id;
@@ -333,6 +334,11 @@ async function setPaymentRecordsPage() {
             $('#payment_date').val(data.payment_date);
             $('#account_id').val(data.account_id);
             $('#tagged').val('Untagged');
+
+            for (var i = 0; i < customer.length; i++) {
+                var opt = `<option value='${customer[i].account_id}'>${customer[i].first_name} ${customer[i].last_name}</option>`;
+                $("#accounts-list").append(opt);
+            }
 
             toggleInputData('disabled', true);
             setTagElement('tagged', 2);
