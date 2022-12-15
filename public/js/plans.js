@@ -4,23 +4,12 @@ $(document).ready(function () {
     if (DIR_CUR == DIR_MAIN + 'views/plans_add.php') {
         restrictPages('plan-add');
         setAddPlanPage();
-        // if(user_id == 4 || user_id == 5 || user_id == 6) {
-        //     setErrorMessage();
-        //     window.location.replace("../views/dashboard.php");
-        // }
-        // else {
-        //     setAddPlanPage();
-        // }
     }
     else {
         restrictPages('plan-page');
         displaySuccessMessage();
         setPlansPage();
-        restrictFunctions('plans')
-        // if (user_id != 2 && user_id != 3) {
-        //     $('#edit-plan').addClass('hide');
-        //     $('#save-plan-btn').addClass('hide');
-        // }
+        restrictFunctions('plans');
     }
 });
 
@@ -31,7 +20,10 @@ async function setPlansPage () {
     var tag;
 
     var t = $('#plan-table').DataTable( {
-        "searching": true
+        pageLength: 5,
+        lengthMenu: [5, 10, 20],
+        "searching": true,
+        "autoWidth": false
     });
     
     for (var i = 0; i < inclusion.length; i++) {

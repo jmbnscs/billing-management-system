@@ -46,7 +46,12 @@ const invalid_ticket_btn = document.getElementById('invalid-btn');
 // -------------------------------------------------------------------- Active Ticket Page
 async function setActiveTicketsTable () {
     const ticket_data = await fetchData('views/ticket.php');
-    var t = $('#ticket-table').DataTable();
+    var t = $('#ticket-table').DataTable({
+        pageLength: 5,
+        lengthMenu: [5, 10, 20],
+        "searching": true,
+        "autoWidth": false
+    });
 
     for (var i = 0; i < ticket_data.length; i++) {
         if(ticket_data[i].user_level == user_id || user_id == 2) {
@@ -173,7 +178,12 @@ async function invalidModal (ticket_num, page) {
 // -------------------------------------------------------------------- Pending Ticket Page
 async function setPendingTicketsTable () {
     const ticket_data = await fetchData('views/ticket_pending.php');
-    var t = $('#ticket-pending-table').DataTable();
+    var t = $('#ticket-pending-table').DataTable({
+        pageLength: 5,
+        lengthMenu: [5, 10, 20],
+        "searching": true,
+        "autoWidth": false
+    });
 
     for (var i = 0; i < ticket_data.length; i++) {
         if(ticket_data[i].admin_id == admin_id || admin_id == '11674') {
@@ -276,9 +286,11 @@ async function pendNetworkModal(ticket_num) {
         var yyyy = today.getFullYear();
         today = yyyy + '-' + mm + '-' + dd;
 
+        const duration_net = $('#duration_hours').val() + ':' + $('#duration_minutes').val() + ':' + $('#duration_seconds').val();
+
         const prorate_data = JSON.stringify({
             'account_id' : $('#account_id_net').val(),
-            'duration' : $('#duration_net').val(),
+            'duration' : duration_net,
             'ticket_num' : ticket_num
         });
 
@@ -408,7 +420,12 @@ async function pendDisconnectModal(ticket_num) {
 // -------------------------------------------------------------------- Resolved Ticket Page
 async function setResolvedTicketsTable () {
     const ticket_data = await fetchData('views/ticket_resolved.php');
-    var t = $('#ticket-resolved-table').DataTable();
+    var t = $('#ticket-resolved-table').DataTable({
+        pageLength: 5,
+        lengthMenu: [5, 10, 20],
+        "searching": true,
+        "autoWidth": false
+    });
 
     for (var i = 0; i < ticket_data.length; i++) {
         var tag = 'bg-success';                   // Manager ID
@@ -462,7 +479,12 @@ async function resolvedModal () {
 // -------------------------------------------------------------------- Invalid Ticket Page
 async function setInvalidTicketsTable () {
     const ticket_data = await fetchData('views/ticket_invalid.php');
-    var t = $('#ticket-invalid-table').DataTable();
+    var t = $('#ticket-invalid-table').DataTable({
+        pageLength: 5,
+        lengthMenu: [5, 10, 20],
+        "searching": true,
+        "autoWidth": false
+    });
 
     for (var i = 0; i < ticket_data.length; i++) {
         if(ticket_data[i].admin_id == admin_id || admin_id == '11674') {

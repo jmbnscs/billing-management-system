@@ -137,16 +137,26 @@
                     </div>
                   </div>
 
-                  <div class="col-md-12">
-                    <div class="form-floating">
-                      <input type="datetime" class="form-control" id="duration_net" placeholder="HH:MM:SS" required>
-                      <label for="duration_net">Duration</label>
+
+                  <div class="col-md-12 row pt-3">
+                    <label>Duration</label>
+                    <div class="form-floating col-sm-4">
+                      <input type="number" class="form-control" id="duration_hours" placeholder="HH" value="" required>
+                      <label for="duration_hours">Hours</label>
+                    </div>
+                    <div class="form-floating col-sm-4">
+                      <input type="number" class="form-control" id="duration_minutes" placeholder="MM" value="" min="0" max="59" required>
+                      <label for="duration_minutes">Minutes</label>
+                    </div>
+                    <div class="form-floating col-sm-4">
+                      <input type="number" class="form-control" id="duration_seconds" placeholder="SS" value="" min="0" max="59" required>
+                      <label for="duration_seconds">Seconds</label>
                     </div>
                   </div>
 
                   <div class="col-md-12">
                     <div class="form-floating">
-                      <textarea class="form-control" id="resolution_details_net" required></textarea>
+                      <textarea class="form-control" id="resolution_details_net" value="" placeholder="Resolution Details" required></textarea>
                       <label for="resolution_details_net">Resolution Details</label>
                     </div>
                   </div>

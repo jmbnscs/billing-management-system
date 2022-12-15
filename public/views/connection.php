@@ -14,80 +14,67 @@
       </nav>
     </div><!-- End Page Title -->
 
-    <section class="section connection">
-      <div class="row">
-        <div class="col-xl-12">
+  <section class="section connection">
+    <div class="row">
+      <div class="col-xl-12">
+        <div class="card">
+          <div class="card-body pt-3">
+            
+            <!-- Bordered Tabs -->
+            <ul class="nav nav-tabs nav-tabs-bordered">
+              <li class="nav-item">
+                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#connection-overview" id="overview-connection">Overview</button>
+              </li>
+              <li class="nav-item">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#add-connection-tab" id="edit-connection">Add New Connection</button>
+              </li>
+            </ul>
+            
+            <div class="tab-content pt-2">
+              <!-- Connection Details Table-->
+              <div class="tab-pane fade show active connection-overview " id="connection-overview">
+                <h5 class="card-title">Connection Details</h5>
 
-          <div class="card">
-            <div class="card-body pt-3">
-              
-              <!-- Bordered Tabs -->
-              <ul class="nav nav-tabs nav-tabs-bordered">
+                <div class="col-12">
+                    <table class="table table-borderless" id="connections-table">
+                      <thead>
+                        <tr>
+                          <th scope="col">#</th>
+                          <th scope="col">Connection Type</th>
+                          <th scope="col">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody></tbody>
+                    </table>
+                </div>
+              </div>
+              <!-- End Connection Details Table -->
 
-                <li class="nav-item">
-                  <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#connection-overview" id="overview-connection">Overview</button>
-                </li>
-
-                <li class="nav-item">
-                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#add-connection-tab" id="edit-connection">Add New Connection</button>
-                </li>
-
-              </ul>
-              
-              <div class="tab-content pt-2">
-
-                <!-- Connection Details Table-->
-                <div class="tab-pane fade show active connection-overview " id="connection-overview">
-                  <h5 class="card-title">Connection Details</h5>
-
-                  <div class="col-12">
-                    <div class="card connection-details overflow-auto">
-                    <br>
-                    <div class="card-body">
-                      <table class="table table-borderless" id="connections-table">
-                        <thead>
-                          <tr>
-                            <th scope="col">Connection ID</th>
-                            <th scope="col">Connection Type</th>
-                            <th scope="col">Actions</th>
-                          </tr>
-                        </thead>
-
-                        <tbody id="connections-data">
-                        </tbody>
-                      
-                      </table>
+              <!-- Add New Connection Form -->
+              <div class="tab-pane fade add-connection-tab pt-3 " id="add-connection-tab">
+                <form id="create-new">
+                  <div class="row mb-3">
+                    <label for="connection_name" class="col-md-4 col-lg-3 col-form-label">Connection Name</label>
+                    <div class="col-md-8 col-lg-9">
+                      <input name="connection_name" type="text" class="form-control" id="connection_name" value="" required>
                     </div>
                   </div>
-                </div><!-- Connection Details Table -->
 
-                </div>
+                  <div class="text-center">
+                    <button type="submit" class="btn btn-primary">Add Connection</button>
+                  </div>
+                </form>
 
-                <!-- Add New Connection Form -->
-                <div class="tab-pane fade add-connection-tab pt-3 " id="add-connection-tab">
-                  <form id="create-new">
-                    <div class="row mb-3">
-                      <label for="connection_name" class="col-md-4 col-lg-3 col-form-label">Connection Name</label>
-                      <div class="col-md-8 col-lg-9">
-                        <input name="connection_name" type="text" class="form-control" id="connection_name" value="" required>
-                      </div>
-                    </div>
-
-                    <div class="text-center">
-                      <button type="submit" class="btn btn-primary">Add Connection</button>
-                    </div>
-                  </form>
-
-                </div><!-- end Add New Connection Form -->
-
-              </div><!-- End Bordered Tabs -->
-
+              </div>
+              <!-- End Add New Connection Form -->
             </div>
           </div>
+          <!-- End Bordered Tabs -->
 
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
 <!-- Connection Modal -->
 <form id="update-data">
@@ -124,8 +111,7 @@
           <!-- Modal Footer -->
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" id="edit-btn">Edit</button>
-            <button type="submit" class="btn btn-success" id="save-btn" disabled>Save Changes</button>
+            <button type="submit" class="btn btn-success" id="save-btn">Save Changes</button>
           </div>
         </div>
       </div>

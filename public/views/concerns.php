@@ -5,11 +5,11 @@
   <main id="main" class="main">
 
     <div class="pagetitle">
-    <h1>Advanced Options</h1>
+    <h1>Concerns</h1>
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="dashboard.php">Home</a></li>
-          <li class="breadcrumb-item active">Concerns</li>
+          <li class="breadcrumb-item active">Advanced Options</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
@@ -17,7 +17,7 @@
     <section class="section connection">
       <div class="row">
         <div class="col-xl-12">
-          <div class="card">
+          <div class="card overflow-auto">
             <!-- Bordered Tabs -->
             <div class="card-body pt-3">
               
@@ -40,13 +40,10 @@
                   <h5 class="card-title">Concern Details</h5>
 
                   <div class="col-12">
-                    <div class="card concern-details overflow-auto">
-                    <br>
-                    <div class="card-body">
                         <table class="table table-borderless" id="concern-table">
                           <thead>
                             <tr>
-                              <th scope="col">Concern ID</th>
+                              <th scope="col">#</th>
                               <th scope="col">Concern Category</th>
                               <th scope="col">Actions</th>
                             </tr>
@@ -54,9 +51,6 @@
                           <tbody id="concern-data">
                         </tbody>
                       </table>
-                    </div>
-
-                    </div>
                   </div>
 
                 </div><!-- Concern Details Table -->
@@ -69,11 +63,11 @@
                       <label for="concern_category" class="col-md-4 col-lg-3 col-form-label">Concern Category Name</label>
                       <div class="col-md-8 col-lg-5">
                         <input name="concern_category" type="text" class="form-control" id="concern_category" value="" required>
-                        <br>
-                        <div class="form-check form-switch">
+                        <!-- <br> -->
+                        <!-- <div class="form-check form-switch">
                           <input class="form-check-input" type="checkbox" id="customer_access" value="1">
                           <label class="form-check-label" for="customer_access">Customer Access</label>
-                        </div>
+                        </div> -->
                       </div>
                       
                     </div>
@@ -119,17 +113,17 @@
 
                 <div class="col-md-12">
                   <div class="form-floating">
-                    <input type="text" class="form-control" id="concern_category_md" placeholder="Concern Category Name" readonly>
+                    <input type="text" class="form-control" id="concern_category_md" placeholder="Concern Category Name" required>
                     <label for="concern_category_md">Concern Category Name</label>
                   </div>
                 </div>
 
-                <div class="col-md-12">
+                <!-- <div class="col-md-12">
                   <div class="form-check form-switch">
                     <input type="checkbox" class="form-check-input" id="customer_access_md" value="1">
                     <label for="customer_access_md">Customer Access</label>
                   </div>
-                </div>
+                </div> -->
 
           </div>
           <!-- End Modal Body -->
@@ -137,8 +131,7 @@
           <!-- Modal Footer -->
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" id="edit-btn">Edit</button>
-            <button type="submit" class="btn btn-success" id="save-btn" disabled>Save Changes</button>
+            <button type="submit" class="btn btn-success" id="save-btn">Save Changes</button>
           </div>
         </div>
       </div>
@@ -171,12 +164,12 @@
                   </div>
                 </div>
 
-                <div class="col-md-12">
+                <!-- <div class="col-md-12">
                   <div class="form-check form-switch">
                     <input type="checkbox" class="form-check-input" id="customer_access_md_d" value="1" disabled>
                     <label for="customer_access_md_d">Customer Access</label>
                   </div>
-                </div>
+                </div> -->
         </div>
 
         <div class="modal-footer">
