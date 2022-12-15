@@ -35,7 +35,7 @@
                         <div class="form-group">
                             <input type="file" name="file" class="form-control form-control-m" required>
                         </div>
-                        <div class="form-group col-md-3 mt-4">
+                        <div class="form-group col-md-4 mt-4">
                             <input type="submit" class="btn btn-success form-control " name="importSubmit" value="Import Customer Data">
                         </div>
                     </form>
@@ -54,9 +54,48 @@
                     <a href="../../app/temp/uploaderror.csv" download><button class="btn btn-danger">Download</button></a>
                 </div>
             </div>
-
         </div>
+
+        <!-- 
+        <div class="card">
+            <div class="card-header">
+                <h5>Export Customer Data</h5>
+            </div>
+
+            <div class="card-body">
+                <div class="col-md-8 mt-3">
+                    <a href="../../app/includes/customer_export.php" download><button class="btn btn-primary">Download</button></a>
+                </div>
+            </div>
+        </div> -->
         
+        <div class="card">
+            <div class="card-header">
+                <h5>Export All Customer Data</h5>
+            </div>
+
+            <div class="card-body">
+                <div class="col-md-8 mt-3">
+                    <form method="post" id="export-customer" class="form-inline">
+                        <div class="form-group col-md-4 mt-4">
+                            <input type="submit" class="btn btn-info form-control " name="exportSubmit" value="Export Customer Data">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h5>Download Template</h5>
+            </div>
+
+            <div class="card-body">
+                <div class="col-md-8 mt-3">
+                    <a href="../../app/temp/template.csv" download><button class="btn btn-primary">Download</button></a>
+                </div>
+            </div>
+        </div>
 
     </div>
   </div>

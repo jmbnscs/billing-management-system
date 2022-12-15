@@ -48,6 +48,10 @@
                   <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change-password" id="password-change">Change Password</button>
                 </li>
 
+                <li class="nav-item">
+                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-activity-logs" id="activity-logs">Activity Logs</button>
+                </li>
+
               </ul>
               <div class="tab-content pt-2">
 
@@ -181,14 +185,111 @@
 
                 </div>
 
-              </div><!-- End Bordered Tabs -->
+                <!-- Activity Logs -->
+                <div class="tab-content">
+                  <div class="tab-pane fade" id="profile-activity-logs">
+                    <div class="row-activity-tbl">
+                      <div class="col-sm-11 m-auto">
+                        <h5 class="card-title">Activity Logs</h5>
+                          <div class="card overflow-auto activity-logs-tbl">
+                          <table class="table-profile table-borderless" id="activity-logs-tbl">
+                            <thead>
+                              <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Page</th>
+                                <th scope="col">Date</th>
+                                <th scope="col">Time</th>
+                                <th scope="col">View</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div><!-- End Activity Logs -->
 
+              </div>
             </div>
           </div>
-
         </div>
       </div>
     </section>
+
+    <!-- Activity Logs Modal -->
+    <div class="modal fade" id="view-activity-modal" tabindex="-1">
+      <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-m">
+        <div class="modal-content">
+
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h5 class="modal-title"></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+
+          <!-- Modal Body -->
+          <div class="modal-body">
+          <!--   <div class="row mb-3">
+              <label for="activity_id" class="col-sm-4 col-form-label">ID</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" id="activity_id" value="" readonly>
+              </div>
+            </div> -->
+
+            <div class="row mb-3">
+              <label for="activity_page" class="col-sm-4 col-form-label">Page</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" id="activity_page" value="" readonly>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <label for="activity_made" class="col-sm-4 col-form-label">Activity</label>
+              <div class="col-sm-8">
+                <textarea type="text" class="form-control" id="activity_made" rows="2" value="" readonly></textarea>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <label for="activity_date" class="col-sm-4 col-form-label">Date</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" id="activity_date" value="" readonly>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <label for="activity_time" class="col-sm-4 col-form-label">Time</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" id="activity_time" value="" readonly>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <label for="activity_address" class="col-sm-4 col-form-label">IP Address</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" id="activity_address" value="" readonly>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <label for="activity_user_agent" class="col-sm-4 col-form-label">User Agent</label>
+              <div class="col-sm-8">
+                <textarea type="text" class="form-control" id="activity_user_agent" rows="4" value="" readonly></textarea>
+              </div>
+            </div>
+
+          </div>
+          <!-- End Modal Body -->
+
+          <!-- Modal Footer -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
   </main><!-- End #main -->
 

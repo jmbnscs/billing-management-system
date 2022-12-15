@@ -1113,7 +1113,7 @@ h6 {
   border-bottom: 2px solid #012970;
 }
 
-.card .customer-tbl {
+.card .customer-tbl .activity-logs-tbl{
   background-color: inherit;
   box-shadow: none;
   border: none;
@@ -1244,7 +1244,7 @@ h6 {
 }
 
 .profile .profile-overview .row,
-.customer-data .customer-overview .row .user-level-data{
+.customer-data .customer-overview .row .user-level-data .row-activity-tbl{
   margin-bottom: 20px;
   font-size: 15px;
 }

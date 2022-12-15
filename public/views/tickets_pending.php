@@ -216,10 +216,10 @@
   </div>
 </form>
 
-<!-- Resolve Disconnection Modal -->
-<form id="disconnect-ticket-modal">
+<!-- Resolve Default Modal -->
+<form id="default-ticket-modal">
   <!-- Modal Dialog Scrollable -->
-  <div class="modal fade" id="disconnectModal" tabindex="-1">
+  <div class="modal fade" id="defaultModal" tabindex="-1">
       <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-m">
         <div class="modal-content">
 
@@ -258,7 +258,7 @@
           <!-- Modal Footer -->
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-success" id="resolve-disconnect-btn">Resolve</button>
+            <button type="submit" class="btn btn-success" id="resolve-default-btn">Resolve</button>
           </div>
         </div>
       </div>
