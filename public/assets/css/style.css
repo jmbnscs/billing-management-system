@@ -1072,12 +1072,12 @@ h6 {
 /*--------------------------------------------------------------
 # Customer Data Page 
 --------------------------------------------------------------*/
-.profile-details p {
+.profile-details p .user-level-details{
   font-size: 15px;
   font-weight: bold;
 }
 
-.profile-details p small {
+.profile-details p small .user-level-details{
   font-weight: lighter;
 }
 
@@ -1113,7 +1113,7 @@ h6 {
   border-bottom: 2px solid #012970;
 }
 
-.card .customer-tbl {
+.card .customer-tbl .activity-logs-tbl{
   background-color: inherit;
   box-shadow: none;
   border: none;
@@ -1244,22 +1244,23 @@ h6 {
 }
 
 .profile .profile-overview .row,
-.customer-data .customer-overview .row {
+.customer-data .customer-overview .row .user-level-data .row-activity-tbl{
   margin-bottom: 20px;
   font-size: 15px;
 }
 
 .profile .profile-overview .card-title,
-.customer-data .customer-overview .card-title {
+.customer-data .customer-overview .card-title .user-level-data{
   color: #012970;
 }
 
 .profile .profile-overview .label,
-.customer-data .customer-overview .label {
+.customer-data .customer-overview .label .user-level-data{
   font-weight: 600;
   color: rgba(1, 41, 112, 0.6);
 }
 
+/* here */
 .profile .profile-edit label {
   font-weight: 600;
   color: rgba(1, 41, 112, 0.6);

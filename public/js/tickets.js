@@ -223,7 +223,8 @@ async function pendingModal () {
             $('#resolve-btn').attr('data-bs-target', '#subscriptionModal');
         }
         else {
-            $('#resolve-btn').attr('data-bs-target', '#disconnectModal');
+            //$('#resolve-btn').attr('data-bs-target', '#disconnectModal');
+            $('#resolve-btn').attr('data-bs-target', '#defaultModal');
         }
 
         const [concern, ticket_status] = await Promise.all ([fetchData('concerns/read_single.php?concern_id=' + ticket.concern_id), getStatusName('ticket_status', ticket.ticket_status_id)]);
@@ -249,7 +250,8 @@ async function pendingModal () {
                 pendSubscriptionModal(ticket_num);
             }
             else {
-                pendDisconnectModal(ticket_num);
+                //pendDisconnectModal(ticket_num);
+                pendDefaultModal(ticket_num);
             }
         };
 
@@ -379,24 +381,27 @@ async function pendSubscriptionModal(ticket_num) {
     }
 }
 
-async function pendDisconnectModal(ticket_num) {
-    var disconModal = document.getElementById('disconnectModal');
+async function pendDefaultModal(ticket_num) {
+    var disconModal = document.getElementById('defaultModal');
     var modalTitle = disconModal.querySelector('.modal-title');
-    modalTitle.textContent = ticket_num + ' -  Disconnection Ticket';
+    // modalTitle.textContent = ticket_num + ' -  Disconnection Ticket';
     
     const ticket = await fetchData('ticket/read_single.php?ticket_num=' + ticket_num);
     const [customer, plan, account] = await Promise.all ([fetchData('customer/read_single.php?account_id=' + ticket.account_id), fetchData('plan/read.php'), fetchData('account/read_single.php?account_id=' + ticket.account_id)]);
 
+    // Should be changed when new concern_category will be added
+    concern_category = (ticket.concern_id == 3) ? 'Disconnection' : 'General Concern'
+    modalTitle.textContent = ticket_num + ' - ' + concern_category; 
     $('#account_id_disc').val(ticket.account_id);
     $('#customer_name_disc').val(customer.first_name + ' ' + customer.last_name);
 
-    const resolve_disconnect = document.getElementById('disconnect-ticket-modal');
-    resolve_disconnect.onsubmit = (e) => {
+    const resolve_default = document.getElementById('default-ticket-modal');
+    resolve_default.onsubmit = (e) => {
         e.preventDefault();
-        disconnectTicketData();
+        defaultTicketData();
     };
 
-    async function disconnectTicketData() {
+    async function defaultTicketData() {
         const update_data = JSON.stringify({
             'ticket_num' : ticket_num,
             'resolution_details' : $('#resolution_details_disc').val(),
@@ -416,6 +421,44 @@ async function pendDisconnectModal(ticket_num) {
         }
     }
 }
+
+// async function pendDisconnectModal(ticket_num) {
+//     var disconModal = document.getElementById('disconnectModal');
+//     var modalTitle = disconModal.querySelector('.modal-title');
+//     modalTitle.textContent = ticket_num + ' -  Disconnection Ticket';
+    
+//     const ticket = await fetchData('ticket/read_single.php?ticket_num=' + ticket_num);
+//     const [customer, plan, account] = await Promise.all ([fetchData('customer/read_single.php?account_id=' + ticket.account_id), fetchData('plan/read.php'), fetchData('account/read_single.php?account_id=' + ticket.account_id)]);
+
+//     $('#account_id_disc').val(ticket.account_id);
+//     $('#customer_name_disc').val(customer.first_name + ' ' + customer.last_name);
+
+//     const resolve_disconnect = document.getElementById('disconnect-ticket-modal');
+//     resolve_disconnect.onsubmit = (e) => {
+//         e.preventDefault();
+//         disconnectTicketData();
+//     };
+
+//     async function disconnectTicketData() {
+//         const update_data = JSON.stringify({
+//             'ticket_num' : ticket_num,
+//             'resolution_details' : $('#resolution_details_disc').val(),
+//             'date_resolved' : getDateToday(),
+//             'ticket_status_id' : 3,
+//             'admin_id' : admin_id
+//         });
+
+//         const [ticket_content, log] = await Promise.all ([updateData('ticket/update.php', update_data), logActivity('Resolved Ticket ' + ticket_num, 'Pending Tickets')]);
+    
+//         if (ticket_content.message == 'Ticket Updated' && log) {
+//             sessionStorage.setItem('save_message', "Ticket Resolved Successfully.");
+//             window.location.replace('../views/tickets_resolved.php');
+//         }
+//         else {
+//             toastr.error("Ticket was not resolved. " + ticket_content.message);
+//         }
+//     }
+// }
 
 // -------------------------------------------------------------------- Resolved Ticket Page
 async function setResolvedTicketsTable () {

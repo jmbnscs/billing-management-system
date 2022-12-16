@@ -279,7 +279,7 @@
         </div> -->
 
         <div class="card-body">
-          <h5 class="card-title">Recent Activity <span>| Today</span></h5>
+          <h5 class="card-title"><a href="../views/profile.php?tab=activityLogs">Recent Activity</a><span>| Today</span></h5>
 
           <div class="activity" id="activity-panel">
 

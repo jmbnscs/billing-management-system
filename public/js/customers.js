@@ -38,6 +38,7 @@ $(document).ready(function () {
     else if (DIR_CUR == DIR_MAIN + 'views/customers_import.php') {
         restrictPages('customer-import');
         setImportCustomerPage();
+        setExportCustomerPage();
         $('#error-dl').addClass('hide');
         
         // if(user_id == 4|| user_id == 5 || user_id == 6) {
@@ -459,6 +460,28 @@ async function setImportCustomerPage () {
         //         console.error(xhr);
         //         var res = $.parseJSON(response);
 
+        //     }
+        // });
+    };
+}
+
+// -------------------------------------------------------------------- Export Customer
+async function setExportCustomerPage () {
+    const export_customer = document.getElementById('export-customer');
+    export_customer.onsubmit = (e) => {
+        $('#export-customer').attr('action', '../../app/includes/customer_export.php');
+        toastr.info("Preparing CSV File...");
+        // $.ajax({
+        //     url: '../../app/includes/customer_export.php',
+        //     cache: false,
+        //     success: function(response) {
+        //         var res = $.parseJSON(response);
+        //         console.log(res)
+        //     },
+        //     error: function (xhr, status, error, response) {
+        //         console.error(xhr);
+        //         var res = $.parseJSON(response);
+        //         console.log(res)
         //     }
         // });
     };
