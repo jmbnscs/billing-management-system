@@ -17,7 +17,6 @@
             <div class="row">
                 <!-- Brand Box -->
                 <div class="col-sm-6 brand">
-                    <!-- <img src="../images/gst-logo.ico" alt="GSTech Logo" class="logo"> -->
                     <div>
                         <img src="../images/gstech-logo-vector.png" class="heading">
                     </div>
@@ -35,7 +34,7 @@
 
                             <div class="form-group">
                                 <label class="label" id="un">Username</label>
-                                <input type="text" name="admin_username" id="admin_username" required>
+                                <input type="text" name="admin_username" id="admin_username" autocomplete="on" required>
                             </div>
                                 
                             <div class="form-group">
@@ -70,6 +69,7 @@
 
                     <!-- Welcome Page -->
                     <div class="welcome form-piece">
+
                         <form class="signup-form" action="#" method="post">
                             <div class="login-message">
                                 <h1>Welcome back!</h1>
