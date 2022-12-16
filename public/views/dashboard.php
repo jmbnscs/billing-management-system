@@ -46,7 +46,7 @@
                 </div>
                 <div class="ps-3" id="unpaid-invoice-data">
                   <h6 id="total_unpaid"></h6>
-                  <span class="text-success small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">increase</span>
+                  <!-- <span class="text-success small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">increase</span> -->
                   <!-- <a href="../views/invoice.php" class="stretched-link"></a> -->
                 </div>
               </div>
@@ -81,7 +81,7 @@
                 <div class="ps-3">
                   <!-- Apply Backend Here -->
                   <h6 id="total_uncharged"></h6>
-                  <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span>
+                  <!-- <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span> -->
 
                 </div>
               </div>
@@ -104,7 +104,7 @@
                 <div class="ps-3">
                   <!-- Apply Backend Here -->
                   <h6 id="active_tkt_cnt"></h6>
-                  <span class="text-success small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">increase</span>
+                  <!-- <span class="text-success small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">increase</span> -->
 
                 </div>
               </div>
@@ -127,7 +127,7 @@
                 <div class="ps-3">
                   <!-- Apply Backend Here -->
                   <h6 id="claimed_tkt_cnt"></h6>
-                  <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span>
+                  <!-- <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span> -->
 
                 </div>
               </div>
@@ -216,48 +216,6 @@
           
           <canvas id="ticket_overview" style="max-height: 300px;"></canvas>
           <br>
-              <!-- Radial Bar Chart -->
-              <!-- <div id="radialBarChart"></div>
-
-              <script>
-                document.addEventListener("DOMContentLoaded", () => {
-                  new ApexCharts(document.querySelector("#radialBarChart"), {
-                    series: [44, 55, 83],
-                    chart: {
-                      height: 400,
-                      type: 'radialBar',
-                      toolbar: {
-                        show: true
-                      }
-                    },
-                    plotOptions: {
-                      radialBar: {
-                        dataLabels: {
-                          name: {
-                            fontSize: '16px',
-                          },
-                          value: {
-                            fontSize: '22px',
-                          },
-                          total: {
-                            show: true,
-                            label: 'Total',
-                            formatter: function(w) {
-                              // By default this function returns the average of all series. The below is just an example to show the use of custom formatter function
-                              return 249 
-                            }
-                          }
-                        }
-                      }
-                    },
-                    labels: [ 'Network Interruption', 
-                              'Subscription Changes', 
-                              'Coffee Ticket'],
-                  }).render();
-                });
-              </script> -->
-              <!-- End Radial Bar Chart -->
-
         </div>
       </div><!-- EndTicket Overview -->
 
@@ -279,46 +237,9 @@
         </div> -->
 
         <div class="card-body">
-          <h5 class="card-title"><a href="../views/profile.php?tab=activityLogs">Recent Activity</a><span>| Today</span></h5>
+          <h5 class="card-title"><a href="../views/profile.php?tab=activityLogs">Recent Activity</a><span> | Today</span></h5>
 
           <div class="activity" id="activity-panel">
-
-            <!-- <div class="activity-item d-flex">
-              <div class="activite-label" id="activity-6-time"></div>
-              <i class='bi bi-circle-fill activity-badge text-success align-self-start'></i>
-              <div class="activity-content" id="activity-6-content"></div>
-            </div>
-
-            <div class="activity-item d-flex">
-              <div class="activite-label" id="activity-5-time"></div>
-              <i class='bi bi-circle-fill activity-badge text-danger align-self-start'></i>
-              <div class="activity-content" id="activity-5-content"></div>
-            </div>
-
-            <div class="activity-item d-flex">
-              <div class="activite-label" id="activity-4-time"></div>
-              <i class='bi bi-circle-fill activity-badge text-primary align-self-start'></i>
-              <div class="activity-content" id="activity-4-content"></div>
-            </div>
-
-            <div class="activity-item d-flex">
-              <div class="activite-label" id="activity-3-time"></div>
-              <i class='bi bi-circle-fill activity-badge text-info align-self-start'></i>
-              <div class="activity-content" id="activity-3-content"></div>
-            </div>
-
-            <div class="activity-item d-flex">
-              <div class="activite-label" id="activity-2-time"></div>
-              <i class='bi bi-circle-fill activity-badge text-warning align-self-start'></i>
-              <div class="activity-content" id="activity-2-content"></div>
-            </div>
-
-            <div class="activity-item d-flex">
-              <div class="activite-label" id="activity-1-time"></div>
-              <i class='bi bi-circle-fill activity-badge text-muted align-self-start'></i>
-              <div class="activity-content" id="activity-1-content"></div>
-            </div> -->
-
           </div>
 
         </div>
