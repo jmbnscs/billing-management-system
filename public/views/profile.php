@@ -19,12 +19,15 @@
         <div class="col-xl-4">
 
           <div class="card">
-            <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+            <div class="mx-auto mt-4 d-block admin-icon" id="admin-icon"></div>
+            <div class="card-body p-3">
+              <div>
+                <h4 class="text-center fw-bold" id="profile-name"></h4>
+                <h6 class="text-center fw-light fst-italic"><span id="profile-role"></span></h6>
+              </div>
 
-              <!-- <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle"> -->
-              <h2 id="profile-name"></h2>
-              <h3 id="profile-role"></h3>
             </div>
+
           </div>
 
         </div>
@@ -188,10 +191,10 @@
                 <!-- Activity Logs -->
                 <div class="tab-content">
                   <div class="tab-pane fade" id="profile-activity-logs">
-                    <div class="row-activity-tbl">
+                    <div class="row activity-tbl">
                       <div class="col-sm-11 m-auto">
                         <h5 class="card-title">Activity Logs</h5>
-                          <div class="card overflow-auto activity-logs-tbl">
+                          <div class="container overflow-auto activity-logs-tbl">
                           <table class="table-profile table-borderless" id="activity-logs-tbl">
                             <thead>
                               <tr>

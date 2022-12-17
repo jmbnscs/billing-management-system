@@ -343,7 +343,7 @@ async function setProrateRecordsPage() {
                         <td data-label="Customer Name">${content[i].customer_name}</td>
                         <td data-label="Duration">${content[i].duration}</td>
                         <td data-label="Amount">&#8369; ${content[i].amount}</td>
-                        <td data-label="Status"><span class="badge bg-danger">Uncharged</span></td>
+                        <td data-label="Status"><span class="badge bg-danger">Untagged</span></td>
                         <td data-label="View">
                             <button type="button" class="btn btn-outline-info m-1" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="${content[i].prorate_id}" ><i class="bi bi-eye"></i></button>
                         </td>
@@ -359,7 +359,7 @@ async function setProrateRecordsPage() {
                         <td data-label="Customer Name">${content[i].customer_name}</td>
                         <td data-label="Duration">${content[i].duration}</td>
                         <td data-label="Amount">&#8369; ${content[i].amount}</td>
-                        <td data-label="Status"><span class="badge bg-danger">Uncharged</span></td>
+                        <td data-label="Status"><span class="badge bg-danger">Untagged</span></td>
                         <td data-label="Actions">
                             <button type="button" class="btn btn-outline-info m-1" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="${content[i].prorate_id}" ><i class="bi bi-eye"></i></button>
                             <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-whatever="${content[i].prorate_id}" id="dlt-act-btn"><i class="ri ri-delete-bin-5-fill"></i></button>

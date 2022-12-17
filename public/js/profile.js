@@ -20,6 +20,7 @@ $(document).ready( () => {
 async function setProfilePage() {
     const data = await getAdminData(admin_id);
     const user = await getUserLevel(data.user_level_id);
+    $('#admin-icon').text((data.first_name).charAt(0) + (data.last_name).charAt(0));
     $('#profile-name').text(data.first_name + ' ' + data.last_name);
     $('#profile-role').text(user.user_role);
 

@@ -434,8 +434,9 @@ h6 {
 
 .header .search-bar {
   min-width: 300px;
-  padding-left: 600px;
-  
+  /* padding-left: 600px; */
+  position: relative;
+  float: right;
 }
 
 @media (max-width: 1199px) {

@@ -14,8 +14,8 @@
       </nav>
   </div><!-- End Page Title -->
 
-  <!-- Customer Data Tabs -->
-  <section class="section customer-data">
+  <!-- Admin Data Tabs -->
+  <section class="section admin-data">
     <div class="row">
       <div class="col-xl-4">
           <div class="card">
