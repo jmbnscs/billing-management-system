@@ -48,11 +48,11 @@
     </div>
     <!-- Admins Table -->
     <div class="col-xl-8">
-      <div class="card">
-        <div class="row">
-          <div class="col-sm-11 m-auto">
+      <div class="card recent-sales overflow-auto p-3">
+        <!-- <div class="row"> -->
+          <!-- <div class="col-sm-11 m-auto"> -->
             <h5 class="card-title">Admins</h5>
-            <div class="card overflow-auto customer-tbl"> <!-- here -->
+            <div class="container customer-tbl"> <!-- here -->
               <!-- Filter Dropdown -->
               <div>
                 <select id="admin-status-filter" class="form-select table-filter" style="display: inline; width: 160px; margin-left: 18px;">
@@ -71,12 +71,11 @@
                     <th scope="col">View</th>
                   </tr>
                 </thead>
-                <tbody id="admin-data">
-                </tbody>
+                <tbody></tbody>
               </table>
             </div>
-          </div>
-        </div>
+          <!-- </div> -->
+        <!-- </div> -->
       </div>
     </div> 
     <!-- End Admins Table -->

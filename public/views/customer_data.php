@@ -78,9 +78,10 @@
             </li>
 
           </ul><!-- End Bordered Tabs -->
+          <br>
 
         <!-- Tab Contents -->
-        <div class="card">
+        <div class="card pb-2">
           <!-- Account Overview -->
           <div class="tab-content">
             <div class="tab-pane fade show active customer-overview" id="customer-overview">
@@ -120,6 +121,7 @@
 
                     <div class="row profile-information align-items-start ms-1 p-0">
                       <div class="col"><p>Payment Rating <br><small id="avg_rating"></small></p></div>
+                      <div class="col"></div>
                     </div>
 
                     <div class="row profile-information align-items-start ms-1 p-0">
@@ -138,12 +140,12 @@
 
           <!-- Customer Invoice History  -->
           <form action="../../app/includes/view_invoice.php" method="post" target="_blank">
-            <div class="tab-content ">
+            <div class="tab-content">
               <div class="tab-pane fade customer-invoice" id="customer-invoice">
                 <div class="row">
                   <div class="col-sm-11 m-auto">
-                    <h5 class="card-title">Invoice History</h5>
-                    <div class="card overflow-auto customer-tbl">
+                    <h5 class="card-title p-3">Invoice History</h5>
+                    <div class="container overflow-auto customer-tbl">
 
                       <!-- Filter Dropdown -->
                       <div>
@@ -178,8 +180,8 @@
             <div class="tab-pane fade customer-payment" id="customer-payment">
               <div class="row">
                 <div class="col-sm-11 m-auto">
-                  <h5 class="card-title">Payment History</h5>
-                  <div class="card overflow-auto customer-tbl">
+                  <h5 class="card-title p-3">Payment History</h5>
+                  <div class="container overflow-auto customer-tbl">
                       <table class="table table-borderless" id="customer-payment-tbl">
                         <thead>
                           <tr>
@@ -204,8 +206,8 @@
             <div class="tab-pane fade customer-prorate" id="customer-prorate">
               <div class="row">
                 <div class="col-sm-11 m-auto">
-                  <h5 class="card-title">Prorates History</h5>
-                  <div class="card overflow-auto customer-tbl">
+                  <h5 class="card-title p-3">Prorates History</h5>
+                  <div class="container overflow-auto customer-tbl">
 
                       <!-- Filter Dropdown -->
                       <div>
@@ -220,7 +222,7 @@
                           <tr>
                             <th scope="col">Prorate ID</th>
                             <th scope="col">Duration</th>
-                            <th scope="col">Prorate Charge</th>
+                            <th scope="col">Prorate Discount</th>
                             <th scope="col">Ticket #</th>
                             <th scope="col">Status</th>
                             <th scope="col">View</th>
@@ -240,8 +242,8 @@
             <div class="tab-pane fade customer-ticket" id="customer-ticket">
               <div class="row">
                 <div class="col-sm-11 m-auto">
-                  <h5 class="card-title">Tickets History</h5>
-                  <div class="card overflow-auto customer-tbl">
+                  <h5 class="card-title p-3">Tickets History</h5>
+                  <div class="container overflow-auto customer-tbl">
 
                       <!-- Filter Dropdown -->
                       <div>
@@ -567,6 +569,8 @@
 </div>
 
 </main>
+
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
   <!-- Vendor JS Files -->
   <script src="../assets/vendor/apexcharts/apexcharts.min.js"></script>

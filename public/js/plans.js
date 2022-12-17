@@ -42,11 +42,11 @@ async function setPlansPage () {
         t.row.add($(`
             <tr>
                 <th scope="row" style="color: #012970;">${plan_data[i].plan_name}</th>
-                <td>${plan_data[i].bandwidth} mbps</td>
-                <td>&#8369; ${plan_data[i].price}</a></td>
-                <td>${plan_data[i].inclusions}</td>
-                <td><span class="badge ${tag}">${plan_data[i].status}</span></td>
-                <td><button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#view-plans" data-bs-whatever="${plan_data[i].plan_id}" id="edit-modal-btn"><i class="ri ri-eye-fill"></i></button></td>
+                <td data-label="Bandwidth">${plan_data[i].bandwidth} mbps</td>
+                <td data-label="Price">&#8369; ${plan_data[i].price}</td>
+                <td data-label="Inclusions">${plan_data[i].inclusions}</td>
+                <td data-label="Status"><span class="badge ${tag}">${plan_data[i].status}</span></td>
+                <td data-label="View"><button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#view-plans" data-bs-whatever="${plan_data[i].plan_id}" id="edit-modal-btn"><i class="ri ri-eye-fill"></i></button></td>
             </tr>
         `)).draw(false);
     }

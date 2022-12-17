@@ -109,7 +109,10 @@ async function setViewAdminPage () {
     
     async function setAdminTable () {
         var t = $('#admins-table').DataTable( {
-            "searching": true
+            pageLength: 5,
+            lengthMenu: [5, 10, 20],
+            "searching": true,
+            "autoWidth": false
         });
 
         const [admin_statuses, admins] = await Promise.all ([fetchData('statuses/read.php?status_table=admin_status'), fetchData('views/admin_user_level.php?user_role=' + user_role)]);
@@ -126,11 +129,11 @@ async function setViewAdminPage () {
             t.row.add($(`
                 <tr>
                     <th scope="row" style="color: #012970;"><strong>${admins[i].admin_id}</strong></th>
-                    <td>${admins[i].first_name + " " + admins[i].last_name}</td>
-                    <td>${admins[i].role}</td>
-                    <td>${admins[i].admin_email}</td>
-                    <td><span class="badge ${tag}">${admins[i].status}</span></td>
-                    <td><button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#view-admins" data-bs-whatever="${admins[i].admin_id}" id="try_lang"><i class="ri ri-eye-fill"></i></button></td>
+                    <td data-label="Admin">${admins[i].first_name + " " + admins[i].last_name}</td>
+                    <td data-label="Role">${admins[i].role}</td>
+                    <td data-label="Email">${admins[i].admin_email}</td>
+                    <td data-label="Status"><span class="badge ${tag}">${admins[i].status}</span></td>
+                    <td data-label="View"><a href="../views/admin_data.php?acct=${admins[i].admin_id}"><button type="button" class="btn btn-outline-primary"><i class="ri ri-eye-fill"></i></button></a></td>
                 </tr>
             `)).draw(false);
         }
@@ -160,7 +163,7 @@ async function setViewAdminPage () {
         });
 
         t.draw();
-        t.columns.adjust().draw();
+        // t.columns.adjust().draw();
     }
     
     async function setViewModal () {

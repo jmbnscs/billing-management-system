@@ -64,11 +64,11 @@ async function setViewAdminPage () {
             t.row.add($(`
                 <tr>
                     <th scope="row" style="color: #012970;"><strong>${admins[i].admin_id}</strong></th>
-                    <td>${admins[i].admin_name}</td>
-                    <td>${admins[i].role}</td>
-                    <td>${admins[i].admin_email}</td>
-                    <td><span class="badge ${tag}">${admins[i].status}</span></td>
-                    <td><a href="../views/admin_data.php?acct=${admins[i].admin_id}" target="_blank"><button type="button" class="btn btn-outline-primary"><i class="ri ri-eye-fill"></i></button></a></td>
+                    <td data-label="Admin">${admins[i].admin_name}</td>
+                    <td data-label="Role">${admins[i].role}</td>
+                    <td data-label="Email">${admins[i].admin_email}</td>
+                    <td data-label="Status"><span class="badge ${tag}">${admins[i].status}</span></td>
+                    <td data-label="View"><a href="../views/admin_data.php?acct=${admins[i].admin_id}"><button type="button" class="btn btn-outline-primary"><i class="ri ri-eye-fill"></i></button></a></td>
                 </tr>
             `)).draw(false);
         }

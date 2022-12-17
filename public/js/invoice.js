@@ -51,11 +51,11 @@ async function setInvoicePage () {
         t.row.add($(`
             <tr>
                 <th scope="row" style="color: #012970;"><strong>${content[i].invoice_id}</strong></th>
-                <td>${content[i].customer_name}</td>
-                <td>${content[i].disconnection_date}</td>
-                <td>&#8369; ${content[i].running_balance}</td>
-                <td><span class="badge ${tag}">${content[i].status}</span></td>
-                <td><a href="../views/invoice_data.php?acct=${content[i].invoice_id}" target="_blank"><button type="button" class="btn btn-outline-primary"><i class="ri ri-eye-fill"></i></button></a></td>
+                <td data-label="Customer Name">${content[i].customer_name}</td>
+                <td data-label="Disconnection Date">${content[i].disconnection_date}</td>
+                <td data-label="Balance">&#8369; ${content[i].running_balance}</td>
+                <td data-label="Status"><span class="badge ${tag}">${content[i].status}</span></td>
+                <td data-label="View"><a href="../views/invoice_data.php?acct=${content[i].invoice_id}" target="_blank"><button type="button" class="btn btn-outline-primary"><i class="ri ri-eye-fill"></i></button></a></td>
             </tr>
         `)).draw(false);
     }
@@ -138,10 +138,10 @@ async function setPaymentRecordsPage() {
                 t.row.add($(`
                     <tr>
                         <th scope="row" style="color: #012970;"><strong>${content[i].payment_reference_id}</strong></th>
-                        <td>&#8369; ${content[i].amount_paid}</td>
-                        <td>${content[i].payment_date}</td>
-                        <td><span class="badge bg-danger">Untagged</span></td>
-                        <td>
+                        <td data-label="Amount Paid">&#8369; ${content[i].amount_paid}</td>
+                        <td data-label="Payment Date">${content[i].payment_date}</td>
+                        <td data-label="Status"><span class="badge bg-danger">Untagged</span></td>
+                        <td data-label="View">
                             <button type="button" class="btn btn-outline-info m-1" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="${content[i].payment_id}" ><i class="bi bi-eye"></i></button>
                         </td>
                     </tr>
@@ -153,10 +153,10 @@ async function setPaymentRecordsPage() {
                 t.row.add($(`
                     <tr>
                         <th scope="row" style="color: #012970;"><strong>${content[i].payment_reference_id}</strong></th>
-                        <td>&#8369; ${content[i].amount_paid}</td>
-                        <td>${content[i].payment_date}</td>
-                        <td><span class="badge bg-danger">Untagged</span></td>
-                        <td>
+                        <td data-label="Amount Paid">&#8369; ${content[i].amount_paid}</td>
+                        <td data-label="Payment Date">${content[i].payment_date}</td>
+                        <td data-label="Status"><span class="badge bg-danger">Untagged</span></td>
+                        <td data-label="Actions">
                             <button type="button" class="btn btn-outline-info m-1" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="${content[i].payment_id}" ><i class="bi bi-eye"></i></button>
                             <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-whatever="${content[i].payment_id}" id="dlt-act-btn"><i class="ri ri-delete-bin-5-fill"></i></button>
                         </td>
@@ -340,11 +340,11 @@ async function setProrateRecordsPage() {
                 t.row.add($(`
                     <tr>
                         <th scope="row" style="color: #012970;"><strong>${content[i].account_id}</strong></th>
-                        <td>${content[i].customer_name}</td>
-                        <td>${content[i].duration}</td>
-                        <td>&#8369; ${content[i].amount}</td>
-                        <td><span class="badge bg-danger">Uncharged</span></td>
-                        <td>
+                        <td data-label="Customer Name">${content[i].customer_name}</td>
+                        <td data-label="Duration">${content[i].duration}</td>
+                        <td data-label="Amount">&#8369; ${content[i].amount}</td>
+                        <td data-label="Status"><span class="badge bg-danger">Uncharged</span></td>
+                        <td data-label="View">
                             <button type="button" class="btn btn-outline-info m-1" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="${content[i].prorate_id}" ><i class="bi bi-eye"></i></button>
                         </td>
                     </tr>
@@ -356,11 +356,11 @@ async function setProrateRecordsPage() {
                 t.row.add($(`
                     <tr>
                         <th scope="row" style="color: #012970;"><strong>${content[i].account_id}</strong></th>
-                        <td>${content[i].customer_name}</td>
-                        <td>${content[i].duration}</td>
-                        <td>&#8369; ${content[i].amount}</td>
-                        <td><span class="badge bg-danger">Uncharged</span></td>
-                        <td>
+                        <td data-label="Customer Name">${content[i].customer_name}</td>
+                        <td data-label="Duration">${content[i].duration}</td>
+                        <td data-label="Amount">&#8369; ${content[i].amount}</td>
+                        <td data-label="Status"><span class="badge bg-danger">Uncharged</span></td>
+                        <td data-label="Actions">
                             <button type="button" class="btn btn-outline-info m-1" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="${content[i].prorate_id}" ><i class="bi bi-eye"></i></button>
                             <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-whatever="${content[i].prorate_id}" id="dlt-act-btn"><i class="ri ri-delete-bin-5-fill"></i></button>
                         </td>

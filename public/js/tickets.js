@@ -58,11 +58,11 @@ async function setActiveTicketsTable () {
             t.row.add($(`
             <tr>
                 <th scope="row" style="color: #012970;">${ticket_data[i].ticket_num}</th>
-                <td>${ticket_data[i].concern}</td>
-                <td>${ticket_data[i].date_filed}</td>
-                <td>${ticket_data[i].account_id}</td>
-                <td><span class="badge bg-danger">${ticket_data[i].ticket_status}</span></td>
-                <td>
+                <td data-label="Concern">${ticket_data[i].concern}</td>
+                <td data-label="Date Filed">${ticket_data[i].date_filed}</td>
+                <td data-label="Account #">${ticket_data[i].account_id}</td>
+                <td data-label="Status"><span class="badge bg-danger">${ticket_data[i].ticket_status}</span></td>
+                <td data-label="Actions">
                     <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#activeModal" data-bs-whatever="${ticket_data[i].ticket_num}" id="setName"><i class="bi bi-folder-fill"></i></button>
                 </td>
             </tr>
@@ -190,13 +190,13 @@ async function setPendingTicketsTable () {
             t.row.add($(`
             <tr>
                 <th scope="row"><a href="#">${ticket_data[i].ticket_num}</a></th>
-                <td>${ticket_data[i].concern}</td>
-                <td>${ticket_data[i].date_filed}</td>
-                <td>${ticket_data[i].account_id}</td>
-                <td>${ticket_data[i].user_level}</td>
-                <td>${ticket_data[i].admin_username}</td>
-                <td><span class="badge bg-warning">${ticket_data[i].ticket_status}</span></td>
-                <td>
+                <td data-label="Concern">${ticket_data[i].concern}</td>
+                <td data-label="Date Filed">${ticket_data[i].date_filed}</td>
+                <td data-label="Account #">${ticket_data[i].account_id}</td>
+                <td data-label="User Level">${ticket_data[i].user_level}</td>
+                <td data-label="Claimed By">${ticket_data[i].admin_username}</td>
+                <td data-label="Status"><span class="badge bg-warning">${ticket_data[i].ticket_status}</span></td>
+                <td data-label="Actions">
                     <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#pendingModal" data-bs-whatever="${ticket_data[i].ticket_num}" id="setName"><i class="bi bi-folder-fill"></i></button>
                 </td>
             </tr>
@@ -476,13 +476,13 @@ async function setResolvedTicketsTable () {
             t.row.add($(`
                 <tr>
                     <th scope="row"><a href="#">${ticket_data[i].ticket_num}</a></th>
-                    <td>${ticket_data[i].concern}</td>
-                    <td>${ticket_data[i].date_filed}</td>
-                    <td>${ticket_data[i].date_resolved}</td>
-                    <td>${ticket_data[i].account_id}</td>
-                    <td>${ticket_data[i].admin_username}</td>
-                    <td><span class="badge ${tag}">${ticket_data[i].ticket_status}</span></td>
-                    <td>
+                    <td data-label="Concern">${ticket_data[i].concern}</td>
+                    <td data-label="Date Filed">${ticket_data[i].date_filed}</td>
+                    <td data-label="Date Resolved">${ticket_data[i].date_resolved}</td>
+                    <td data-label="Account #">${ticket_data[i].account_id}</td>
+                    <td data-label="Resolved By">${ticket_data[i].admin_username}</td>
+                    <td data-label="Status"><span class="badge ${tag}">${ticket_data[i].ticket_status}</span></td>
+                    <td data-label="View">
                         <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#resolvedModal" data-bs-whatever="${ticket_data[i].ticket_num}" id="setName"><i class="ri ri-eye-fill"></i></button>
                     </td>
                 </tr>
@@ -534,13 +534,13 @@ async function setInvalidTicketsTable () {
             t.row.add($(`
             <tr>
                 <th scope="row"><a href="#">${ticket_data[i].ticket_num}</a></th>
-                <td>${ticket_data[i].concern}</td>
-                <td>${ticket_data[i].date_filed}</td>
-                <td><span class="badge bg-danger">${ticket_data[i].ticket_status}</span></td>
-                <td>${ticket_data[i].account_id}</td>
-                <td>${ticket_data[i].user_level}</td>
-                <td>${ticket_data[i].admin_username}</td>
-                <td>
+                <td data-label="Concern">${ticket_data[i].concern}</td>
+                <td data-label="Date Filed">${ticket_data[i].date_filed}</td>
+                <td data-label="Status"><span class="badge bg-danger">${ticket_data[i].ticket_status}</span></td>
+                <td data-label="Account #">${ticket_data[i].account_id}</td>
+                <td data-label="User Level">${ticket_data[i].user_level}</td>
+                <td data-label="Invalidated By">${ticket_data[i].admin_username}</td>
+                <td data-label="Actions">
                     <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#invalidatedModal" data-bs-whatever="${ticket_data[i].ticket_num}" id="setName"><i class="bi bi-folder-fill"></i></button>
                 </td>
             </tr>

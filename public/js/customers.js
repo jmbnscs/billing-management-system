@@ -93,12 +93,12 @@ async function setCustomerPage () {
             t.row.add($(`
                 <tr>
                     <th scope="row" style="color: #012970;">${customer_data[i].account_id}</th>
-                    <td>${customer_data[i].customer_name}</td>
-                    <td>${customer_data[i].plan}</td>
-                    <td>${customer_data[i].area}</td>
-                    <td><span class="badge ${tag}">${customer_data[i].status}</span></td>
-                    <td>&#8369; ${customer_data[i].balance}</td>
-                    <td><a href="../views/customer_data.php?acct=${customer_data[i].account_id}" target="_blank"><button type="button" class="btn btn-outline-primary""><i class="ri ri-eye-fill"></i></button><a></td>
+                    <td data-label="Customer Name">${customer_data[i].customer_name}</td>
+                    <td data-label="Subscription">${customer_data[i].plan}</td>
+                    <td data-label="Area">${customer_data[i].area}</td>
+                    <td data-label="Status"><span class="badge ${tag}">${customer_data[i].status}</span></td>
+                    <td data-label="Balance">&#8369; ${customer_data[i].balance}</td>
+                    <td data-label="View"><a href="../views/customer_data.php?acct=${customer_data[i].account_id}"><button type="button" class="btn btn-outline-primary""><i class="ri ri-eye-fill"></i></button><a></td>
                 </tr>
             `)).draw(false);
         }

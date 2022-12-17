@@ -334,7 +334,7 @@ async function setUserLevelPage() {
                     <li><i class="bi bi-check2-circle"></i> <em>and ${descriptions.length - 5} more.. </em></li>
                 </ul>
 
-                <a href="../views/user_level_data.php?user_role=${user_levels[i].user_role}" target="_blank" style="text-decorations:none; color:inherit;"><button class="btn btn-outline-success">View Role</button></a>
+                <a href="../views/user_level_data.php?user_role=${user_levels[i].user_role}" style="text-decorations:none; color:inherit;"><button class="btn btn-outline-success">View Role</button></a>
                 <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="${user_levels[i].user_id}">Edit Role</button>
             </div>
             </div>
@@ -343,6 +343,26 @@ async function setUserLevelPage() {
 
         container.innerHTML += content;
     }
+
+    const card = document.createElement('div');
+    card.classList = 'card-body';
+
+    const content = `
+        <div class="col-sm-4 user-cards">
+            <div class="card mt-3">
+            <div class="card-body">
+                <div class="add-new-role">
+                    <img src="../images/add-user-level.png" alt="Add New User Role">
+                    <br>
+                    <h5 class="text-center">Add New User Level</h5>
+                </div>
+            </div>
+            </div>
+        </div>
+        `;
+
+    container.innerHTML += content;
+
 
     $("#editModal").on("hidden.bs.modal", function () {
         // $('#save-btn').attr('disabled', true);
