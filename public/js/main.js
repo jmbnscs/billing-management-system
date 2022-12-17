@@ -1,7 +1,7 @@
 // Directories
-const DIR_API = 'http://localhost/gstech_api/api/';
-const DIR_MAIN = '/billing-management-system/public/';
-const DIR_APP = 'http://localhost/billing-management-system/app/includes/';
+const DIR_API = 'https://gstech-bms.000webhostapp.com/gstech_api/api/';
+const DIR_MAIN = '/bms/public/';
+const DIR_APP = 'https://gstech-bms.000webhostapp.com/bms/app/includes/';
 const DIR_CUR = window.location.pathname;
 
 // Constant Variables
