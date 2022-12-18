@@ -10,6 +10,8 @@ header('Content-Disposition: attachment; filename="' . $filename . '"');
 
 $data_header = ['account_id', 'start_date', 'plan_name', 'connection_name', 'area_name', 'first_name', 'middle_name', 'last_name', 'billing_address', 'mobile_number', 'email', 'birthdate', 'install_type_name', 'install_balance', 'install_status', 'billing_end_date', 'total_bill', 'running_balance'];
 
+echo $_POST['exportSubmit'];
+
 if(isset($_POST['exportSubmit'])){
 
     curl_setopt($ch, CURLOPT_URL, $url);
