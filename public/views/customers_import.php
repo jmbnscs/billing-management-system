@@ -44,7 +44,7 @@
 
         </div>
 
-        <div class="card hide" id="error-dl">
+        <!-- <div class="card hide" id="error-dl">
             <div class="card-header">
                 <h5>Download Error Record</h5>
             </div>
@@ -54,7 +54,7 @@
                     <a href="../../app/temp/uploaderror.csv" download><button class="btn btn-danger">Download</button></a>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <!-- 
         <div class="card">

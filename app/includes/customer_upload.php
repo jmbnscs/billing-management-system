@@ -98,6 +98,13 @@ if(isset($_POST['importSubmit'])){
                 foreach ($data_error as $fields) {
                     fputcsv($fp, $fields);
                 }
+                fclose($fp);
+
+                $fp = fopen($filepath, 'r');
+                fpassthru($fp);
+                fclose($fp);
+
+                fclose($csvFile);
                 $qstring = '?status=err';
                 // echo json_encode(
                 //     array (
@@ -105,10 +112,15 @@ if(isset($_POST['importSubmit'])){
                 //     )
                 // );
             }
-            fclose($fp);
-            fclose($csvFile);
         }
         else {
+            fclose($fp);
+
+            $fp = fopen($filepath, 'r');
+            fpassthru($fp);
+            fclose($fp);
+
+            fclose($csvFile);
             $qstring = '?status=err';
             // echo json_encode(
             //     array (
