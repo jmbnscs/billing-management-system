@@ -24,7 +24,7 @@ require_once('../helpers/tcpdf/tcpdf.php');
 
             curl_close($ch);
 
-            $url = DIR_API . "customer/read_single.php?account_id=" . $data['account_id'];
+            $url = DIR_API . "customer/read_single.php?account_id=" . $data->account_id;
             curl_setopt($ch, CURLOPT_URL, $url);
             $resp = curl_exec($ch);
             $customer = json_decode($resp, true);
