@@ -24,19 +24,11 @@ require_once('../helpers/tcpdf/tcpdf.php');
 
             curl_close($ch);
 
-            $url = DIR_API . "customer/read_single.php?account_id=" . $data->account_id;
+            $url = DIR_API . "customer/read_single.php?account_id=" . $data['account_id'];
             curl_setopt($ch, CURLOPT_URL, $url);
             $resp = curl_exec($ch);
             $customer = json_decode($resp, true);
             curl_close($ch);
-            
-            echo '<script>
-                alert( ' . $invoice_id . ' )
-            </script>';
-
-            echo '<script>
-                alert( ' . $data['account_id'] . ' )
-            </script>';
 
             $this->setTitle($customer['last_name'] . '-' . $bill_start->format('F') . '-Bill');
             
