@@ -2,7 +2,19 @@
 $ch = require 'curl.init.php';
 $url = DIR_API . "upload/customer.php";
 
-$data_error = array(['account_id', 'start_date', 'plan_name', 'connection_name', 'area_name', 'first_name', 'middle_name', 'last_name', 'billing_address', 'mobile_number', 'email', 'birthdate', 'install_type_name', 'install_balance', 'install_status', 'billing_end_date', 'total_bill', 'running_balance']);
+$filename = 'uploaderror.csv';
+$filepath = '../temp/' . $filename;
+
+header('Content-Type: text/csv');
+header('Content-Disposition: attachment; filename="' . $filename . '"');
+
+$data_header = ['account_id', 'start_date', 'plan_name', 'connection_name', 'area_name', 'first_name', 'middle_name', 'last_name', 'billing_address', 'mobile_number', 'email', 'birthdate', 'install_type_name', 'install_balance', 'install_status', 'billing_end_date', 'total_bill', 'running_balance'];
+
+$fp = fopen($filepath, 'w');
+fputcsv($fp, $data_header);
+fclose($fp);
+
+$data_error = array();
 
 if(isset($_POST['importSubmit'])){
     
@@ -14,7 +26,7 @@ if(isset($_POST['importSubmit'])){
         if(is_uploaded_file($_FILES['file']['tmp_name'])){
             
             $csvFile = fopen($_FILES['file']['tmp_name'], 'r');
-            $fp = fopen('../temp/uploaderror.csv', 'w');
+            $fp = fopen($filepath, 'w');
             
             fgetcsv($csvFile);
             
