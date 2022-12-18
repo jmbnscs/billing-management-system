@@ -139,16 +139,16 @@ async function setAdminData(admin_data) {
             });
 
             let activity, log = true;
-            if (admin.admin_status_id != $('#admin_status').val()) {
-                activity = 'Updated admin status [' + admin_id + ' - ' + admin.first_name + ' ' + admin.last_name + ']';
+            if (admin_data.admin_status_id != $('#admin_status').val()) {
+                activity = 'Updated admin status [' + admin_id + ' - ' + admin_data.first_name + ' ' + admin_data.last_name + ']';
                 log = await logActivity(activity, 'View Admins');
             }
-            if (admin.user_level_id != $('#role').val()) {
-                activity = 'Updated admin user level [' + admin_id + ' - ' + admin.first_name + ' ' + admin.last_name + ']';
+            if (admin_data.user_level_id != $('#role').val()) {
+                activity = 'Updated admin user level [' + admin_id + ' - ' + admin_data.first_name + ' ' + admin_data.last_name + ']';
                 log = await logActivity(activity, 'View Admins');
             }
-            if (admin.admin_email != $('#admin_email').val() || admin.mobile_number != $('#mobile_number').val() || admin.address != $('#address').val()) {
-                activity = 'Updated admin general information [' + admin_id + ' - ' + admin.first_name + ' ' + admin.last_name + ']';
+            if (admin_data.admin_email != $('#admin_email').val() || admin_data.mobile_number != $('#mobile_number').val() || admin_data.address != $('#address').val()) {
+                activity = 'Updated admin general information [' + admin_id + ' - ' + admin_data.first_name + ' ' + admin_data.last_name + ']';
                 log = await logActivity(activity, 'View Admins');
             }
 
