@@ -32,7 +32,7 @@ require_once('../helpers/tcpdf/tcpdf.php');
             
             echo '<script>
                 alert( ' . $customer . ' )
-            <script>';
+            </script>';
 
             $this->setTitle($customer['last_name'] . '-' . $bill_start->format('F') . '-Bill');
             
