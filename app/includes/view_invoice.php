@@ -30,7 +30,9 @@ require_once('../helpers/tcpdf/tcpdf.php');
             $customer = json_decode($resp, true);
             curl_close($ch);
             
-            echo $customer;
+            echo '<script>
+                alert( ' . $customer . ' )
+            <script>';
 
             $this->setTitle($customer['last_name'] . '-' . $bill_start->format('F') . '-Bill');
             
