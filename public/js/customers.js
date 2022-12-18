@@ -180,11 +180,10 @@ async function setCustomerPage () {
 async function setAddCustomerPage () {
     const add_customer = document.getElementById('add-customer');
 
-    // if (session_storage.getItem('account_id') == null && session_storage.getItem('account_id') == undefined) 
-    if (!"account_id" in sessionStorage) {
-        session_storage.setItem('account_id', await generateID('check/account_id.php?account_id=', "", 8));
+    if (session_storage.getItem('account_id') == null) {
+        sessionStorage.setItem('account_id', await generateID('check/account_id.php?account_id=', "", 8));
     }
-    $('#account_id').val(session_storage.getItem('account_id'));
+    $('#account_id').val(sessionStorage.getItem('account_id'));
 
     setAddDropdown();
 
@@ -317,7 +316,7 @@ async function setAddCustomerPage () {
             toastr.warning('Please provide the appropriate details on each field.');
         }
         else {
-            session_storage.removeItem('account_id');
+            sessionStorage.removeItem('account_id');
             addCustomer();
         }
     }
