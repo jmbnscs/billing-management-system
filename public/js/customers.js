@@ -39,6 +39,7 @@ $(document).ready(function () {
         restrictPages('customer-import');
         setImportCustomerPage();
         setExportCustomerPage();
+        setDownloadPage();
         $('#error-dl').addClass('hide');
         
         // if(user_id == 4|| user_id == 5 || user_id == 6) {
@@ -482,6 +483,27 @@ async function setExportCustomerPage () {
     const export_customer = document.getElementById('export-customer');
     export_customer.onsubmit = (e) => {
         $('#export-customer').attr('action', '../../app/includes/customer_export.php');
+        toastr.info("Preparing CSV File...");
+        // $.ajax({
+        //     url: '../../app/includes/customer_export.php',
+        //     cache: false,
+        //     success: function(response) {
+        //         var res = $.parseJSON(response);
+        //         console.log(res)
+        //     },
+        //     error: function (xhr, status, error, response) {
+        //         console.error(xhr);
+        //         var res = $.parseJSON(response);
+        //         console.log(res)
+        //     }
+        // });
+    };
+}
+
+async function setDownloadPage () {
+    const download_template = document.getElementById('download-template');
+    download_template.onsubmit = (e) => {
+        $('#download-template').attr('action', '../../app/includes/download_template.php');
         toastr.info("Preparing CSV File...");
         // $.ajax({
         //     url: '../../app/includes/customer_export.php',

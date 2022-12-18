@@ -92,7 +92,12 @@
 
             <div class="card-body">
                 <div class="col-md-8 mt-3">
-                    <a href="https://bms.gstechbms.online/bms/app/temp/template.csv" download><button class="btn btn-primary">Download</button></a>
+                    <form method="post" id="download-template" class="form-inline">
+                        <div class="form-group col-md-4 mt-4">
+                            <input type="submit" class="btn btn-primary form-control " name="downloadTemplate" value="Download">
+                        </div>
+                    </form>
+                    <!-- <a href="https://bms.gstechbms.online/bms/app/temp/template.csv" download><button class="btn btn-primary">Download</button></a> -->
                 </div>
             </div>
         </div>
