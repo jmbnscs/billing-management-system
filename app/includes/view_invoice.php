@@ -24,12 +24,11 @@ require_once('../helpers/tcpdf/tcpdf.php');
 
             curl_close($ch);
 
-            $ch1 = require 'curl.init.php';
             $url = DIR_API . "customer/read_single.php?account_id=" . $data['account_id'];
-            curl_setopt($ch1, CURLOPT_URL, $url);
-            $resp = curl_exec($ch1);
+            curl_setopt($ch, CURLOPT_URL, $url);
+            $resp = curl_exec($ch);
             $customer = json_decode($resp, true);
-            curl_close($ch1);
+            curl_close($ch);
 
             $this->setTitle($customer['last_name'] . '-' . $bill_start->format('F') . '-Bill');
             
