@@ -83,6 +83,12 @@ async function setAdminData(admin_data) {
             e.preventDefault();
             resetPassword();
         };
+
+        const save_admin = document.getElementById('save-admin');
+        save_admin.onsubmit = (e) => {
+            e.preventDefault();
+            updateAdminData();
+        };
     
         async function resetPassword() {
             let update_data = JSON.stringify({
@@ -100,6 +106,56 @@ async function setAdminData(admin_data) {
             }
             else {
                 toastr.error('Some error has occurred, please try again later.');
+            }
+        }
+
+        async function updateAdminData() {
+            const admin_id = $('#admin_id').val();
+            let user_level_id, admin_status_id;
+            if (admin_data.user_level_id == 2) {
+                user_level_id = admin_data.user_level_id;
+                admin_status_id = 1;
+            }
+            else {
+                user_level_id = $('#role').val();
+                admin_status_id = $('#admin_status').val();
+            }
+        
+            let admin_data = JSON.stringify({
+                'admin_id' : admin_id,
+                'admin_email' : $('#admin_email').val(),
+                'mobile_number' : $('#mobile_number').val(),
+                'address' : $('#address').val(),
+                'user_level_id' : user_level_id
+            });
+        
+            let status_data = JSON.stringify({
+                'admin_id' : admin_id,
+                'admin_status_id' : admin_status_id
+            });
+
+            let activity, log = true;
+            if (admin.admin_status_id != $('#admin_status').val()) {
+                activity = 'Updated admin status [' + admin_id + ' - ' + admin.first_name + ' ' + admin.last_name + ']';
+                log = await logActivity(activity, 'View Admins');
+            }
+            if (admin.user_level_id != $('#role').val()) {
+                activity = 'Updated admin user level [' + admin_id + ' - ' + admin.first_name + ' ' + admin.last_name + ']';
+                log = await logActivity(activity, 'View Admins');
+            }
+            if (admin.admin_email != $('#admin_email').val() || admin.mobile_number != $('#mobile_number').val() || admin.address != $('#address').val()) {
+                activity = 'Updated admin general information [' + admin_id + ' - ' + admin.first_name + ' ' + admin.last_name + ']';
+                log = await logActivity(activity, 'View Admins');
+            }
+
+            const [admin_content, status_content] = await Promise.all ([updateData('admin/update.php', admin_data), updateData('admin/update_status.php', status_data)]);
+
+            if (admin_content.message == 'success' && status_content.message == 'Admin Updated' && log) {
+                sessionStorage.setItem('save_message', "Admin Updated Successfully.");
+                window.location.reload();
+            }
+            else {
+                toastr.error("Admin was not updated.");
             }
         }
     });
