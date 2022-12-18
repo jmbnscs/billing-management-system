@@ -40,10 +40,10 @@ async function setAdminData(admin_data) {
 
         const [roles, statuses] = await Promise.all ([fetchData('user_level/read.php'), fetchData('statuses/read.php?status_table=admin_status')]);
 
-        // if (admin_data.user_level_id == 2) {
-        //     $('#admin-role-select').addClass('hide');
-        //     $('#admin-status-select').addClass('hide');
-        // }
+        if (admin_data.user_level_id == 2) {
+            $('#admin-role-select').addClass('hide');
+            $('#admin-status-select').addClass('hide');
+        }
 
         $("#admin_role_edt").empty();
         $("#admin_role_edt").append(`<option selected disabled value="">Choose Admin Role</option>`);
