@@ -63,7 +63,7 @@
                     <div class="row mb-3 position-relative">
                         <label for="mobile_number" class="col-sm-2 col-form-label required">Mobile Number</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="mobile_number" placeholder="Ex. 09XXXXXXXXX" pattern="[0]{1}[9]{1}[0-9]{9}" required>
+                            <input type="number" class="form-control" id="mobile_number" placeholder="Ex. 09XXXXXXXXX" pattern="[0]{1}[9]{1}[0-9]{9}" required maxlength="11" size="11">
                             <div class="invalid-feedback">Please enter the customer's mobile number.</div>
                         </div>
                     </div>

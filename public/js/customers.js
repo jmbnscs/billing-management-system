@@ -373,6 +373,7 @@ async function setAddCustomerPage () {
         account_content = await createData('account/create.php', account_data);
 
         console.log(account_content);
+        console.log(account_data);
 
         if (account_content.success) {
             customer_content = await createData('customer/create.php', customer_data);
@@ -383,6 +384,7 @@ async function setAddCustomerPage () {
         }
 
         console.log(customer_content);
+        console.log(customer_data);
 
         if (customer_content.success) {
             installation_content = await createData('installation/create.php', install_data);
@@ -393,6 +395,7 @@ async function setAddCustomerPage () {
         }
 
         console.log(installation_content);
+        console.log(install_data);
 
         if (installation_content.success) {
             ratings_content = await createData('ratings/create.php', rating_data);
@@ -403,6 +406,7 @@ async function setAddCustomerPage () {
         }
 
         console.log(ratings_content);
+        console.log(rating_data);
 
         let log = await logActivity('Created new customer account with Account ID # ' + account_id, 'Customer - Add New Account');
 
