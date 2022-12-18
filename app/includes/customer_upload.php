@@ -22,11 +22,12 @@ if(isset($_POST['importSubmit'])){
     
     if(!empty($_FILES['file']['name']) && in_array($_FILES['file']['type'], $csvMimes)){
         
+        $fp = fopen($filepath, 'w');
+
         // If the file is uploaded
         if(is_uploaded_file($_FILES['file']['tmp_name'])){
             
             $csvFile = fopen($_FILES['file']['tmp_name'], 'r');
-            $fp = fopen($filepath, 'w');
             
             fgetcsv($csvFile);
             
