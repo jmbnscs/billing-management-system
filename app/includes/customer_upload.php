@@ -18,7 +18,7 @@ if(isset($_POST['importSubmit'])){
             
             fgetcsv($csvFile);
             
-            while(($line = fgetcsv($csvFile)) !== FALSE){
+            while(($line = fgetcsv($csvFile)) != FALSE){
 
                 $account_id = isAccountIDExist($line[0]);
                 $mobile_number = formatMobileNumber($line[9]);
@@ -64,7 +64,7 @@ if(isset($_POST['importSubmit'])){
                     curl_close($ch);
                     $response = json_decode($resp, true);
 
-                    if ($response['success'] === true) {
+                    if ($response['success'] == true) {
                         // $qstring = '?status=succ';
                         continue;
                     }
@@ -74,7 +74,7 @@ if(isset($_POST['importSubmit'])){
                 }
             }
 
-            if (count($data_error) === 1) {
+            if (count($data_error) == 1) {
                 $qstring = '?status=succ';
                 // echo json_encode(
                 //     array (
@@ -118,10 +118,10 @@ if(isset($_POST['importSubmit'])){
 }
 
 function formatMobileNumber ($mobile_number) {
-	if((substr($mobile_number, 0, 2) === '09') && (strlen($mobile_number) === 11)) {
+	if((substr($mobile_number, 0, 2) == '09') && (strlen($mobile_number) == 11)) {
     	return $mobile_number;
     }
-    else if((substr($mobile_number, 0, 1) === '9') && (strlen($mobile_number) === 10)) {
+    else if((substr($mobile_number, 0, 1) == '9') && (strlen($mobile_number) == 10)) {
     	return '0' . $mobile_number;
     }
     else {
@@ -154,7 +154,7 @@ function isAccountIDExist ($account_id) {
     curl_close($ch);
     $response = json_decode($resp, true);
 
-    if ($response['message'] === 'success') {
+    if ($response['message'] == 'success') {
         return 'error';
     }
     else {
