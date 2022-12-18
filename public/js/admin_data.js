@@ -125,7 +125,7 @@ async function setAdminData(admin_data) {
                 admin_status_id = $('#admin_status').val();
             }
         
-            let admin_data = JSON.stringify({
+            let admin_data_update = JSON.stringify({
                 'admin_id' : admin_id,
                 'admin_email' : $('#admin_email').val(),
                 'mobile_number' : $('#mobile_number').val(),
@@ -152,7 +152,7 @@ async function setAdminData(admin_data) {
                 log = await logActivity(activity, 'View Admins');
             }
 
-            const [admin_content, status_content] = await Promise.all ([updateData('admin/update.php', admin_data), updateData('admin/update_status.php', status_data)]);
+            const [admin_content, status_content] = await Promise.all ([updateData('admin/update.php', admin_data_update), updateData('admin/update_status.php', status_data)]);
 
             if (admin_content.message == 'success' && status_content.message == 'Admin Updated' && log) {
                 sessionStorage.setItem('save_message', "Admin Updated Successfully.");
