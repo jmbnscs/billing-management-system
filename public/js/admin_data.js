@@ -41,6 +41,8 @@ async function setAdminData(admin_data) {
         const [roles, statuses] = await Promise.all ([fetchData('user_level/read.php'), fetchData('statuses/read.php?status_table=admin_status')]);
 
         if (admin_data.user_level_id == 2) {
+            $('#admin-role-select').removeAttr('required');
+            $('#admin-status-select').removeAttr('required');
             $('#admin-role-select').addClass('hide');
             $('#admin-status-select').addClass('hide');
         }
