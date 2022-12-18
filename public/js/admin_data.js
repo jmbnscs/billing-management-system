@@ -90,7 +90,7 @@ async function setAdminData(admin_data) {
                 'admin_password' : content.def_password
             });
     
-            const [update_content, log] = await Promise.all ([updateData('admin/reset_password.php', update_data), logActivity('Password Reset for Admin ' + content.def_username + ' - ' + admin_id, 'View Admins')]);
+            const [update_content, log] = await Promise.all ([updateData('admin/reset_password.php', update_data), logActivity('Password Reset for Admin ' + content.def_username + ' - ' + content.admin_id, 'View Admins')]);
     
             if (update_content.success && log) {
                 toastr.success('Password has been reset successfully.');
