@@ -1,5 +1,5 @@
-const DIR_API_LOAD = 'http://gstechbms-online.preview-domain.com/gstech_api/api/';
-const DIR_APP_LOAD = 'http://gstechbms-online.preview-domain.com/bms/app/includes/';
+const DIR_API_LOAD = '/gstech_api/api/';
+const DIR_APP_LOAD = '/bms/app/includes/';
 const today_date = new Date();
 // const today_date = new Date('2022-11-30');
 
