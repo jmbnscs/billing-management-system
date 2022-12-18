@@ -11,7 +11,7 @@ require_once('../helpers/tcpdf/tcpdf.php');
             $maillogo = '../images/mail-logo.png';
 
             $invoice_id = $_POST['invoice_id_btn'];
-            $ch = require 'curl.init.php';
+            $ch = require_once 'curl.init.php';
             $url = DIR_API . "invoice/read_single.php?invoice_id=" . $invoice_id;
             curl_setopt($ch, CURLOPT_URL, $url);
             $resp = curl_exec($ch);
@@ -22,13 +22,13 @@ require_once('../helpers/tcpdf/tcpdf.php');
             $bill_start = new DateTime($data['billing_period_start']);
             $bill_end = new DateTime($data['billing_period_end']);
 
-            // curl_close($ch);
+            curl_close($ch);
 
             $url = DIR_API . "customer/read_single.php?account_id=" . $data['account_id'];
             curl_setopt($ch, CURLOPT_URL, $url);
             $resp = curl_exec($ch);
             $customer = json_decode($resp, true);
-            // curl_close($ch);
+            curl_close($ch);
 
             $this->setTitle($customer['last_name'] . '-' . $bill_start->format('F') . '-Bill');
             
