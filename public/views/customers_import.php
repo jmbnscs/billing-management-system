@@ -92,7 +92,7 @@
 
             <div class="card-body">
                 <div class="col-md-8 mt-3">
-                    <a href="../../app/temp/template.csv" download><button class="btn btn-primary">Download</button></a>
+                    <a href="https://bms.gstechbms.online/bms/app/temp/template.csv" download><button class="btn btn-primary">Download</button></a>
                 </div>
             </div>
         </div>
