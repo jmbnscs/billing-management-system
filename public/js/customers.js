@@ -180,10 +180,10 @@ async function setCustomerPage () {
 async function setAddCustomerPage () {
     const add_customer = document.getElementById('add-customer');
 
-    if (localStorage.getItem('account_id') == null) {
-        localStorage.setItem('account_id', await generateID('check/account_id.php?account_id=', "", 8));
+    if (session_storage.getItem('account_id') == null) {
+        session_storage.setItem('account_id', await generateID('check/account_id.php?account_id=', "", 8));
     }
-    $('#account_id').val(localStorage.getItem('account_id'));
+    $('#account_id').val(session_storage.getItem('account_id'));
 
     setAddDropdown();
 
@@ -316,7 +316,7 @@ async function setAddCustomerPage () {
             toastr.warning('Please provide the appropriate details on each field.');
         }
         else {
-            localStorage.removeItem('account_id');
+            session_storage.removeItem('account_id');
             addCustomer();
         }
     }
