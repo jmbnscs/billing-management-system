@@ -126,7 +126,7 @@ async function setAdminData(admin_data) {
             }
         
             let admin_data_update = JSON.stringify({
-                'admin_id' : admin_id,
+                'admin_id' : admin_data.admin_id,
                 'admin_email' : $('#admin_email').val(),
                 'mobile_number' : $('#mobile_number').val(),
                 'address' : $('#address').val(),
@@ -134,21 +134,21 @@ async function setAdminData(admin_data) {
             });
         
             let status_data = JSON.stringify({
-                'admin_id' : admin_id,
+                'admin_id' : admin_data.admin_id,
                 'admin_status_id' : admin_status_id
             });
 
             let activity, log = true;
             if (admin_data.admin_status_id != $('#admin_status').val()) {
-                activity = 'Updated admin status [' + admin_id + ' - ' + admin_data.first_name + ' ' + admin_data.last_name + ']';
+                activity = 'Updated admin status [' + admin_data.admin_id + ' - ' + admin_data.first_name + ' ' + admin_data.last_name + ']';
                 log = await logActivity(activity, 'View Admins');
             }
             if (admin_data.user_level_id != $('#role').val()) {
-                activity = 'Updated admin user level [' + admin_id + ' - ' + admin_data.first_name + ' ' + admin_data.last_name + ']';
+                activity = 'Updated admin user level [' + admin_data.admin_id + ' - ' + admin_data.first_name + ' ' + admin_data.last_name + ']';
                 log = await logActivity(activity, 'View Admins');
             }
             if (admin_data.admin_email != $('#admin_email').val() || admin_data.mobile_number != $('#mobile_number').val() || admin_data.address != $('#address').val()) {
-                activity = 'Updated admin general information [' + admin_id + ' - ' + admin_data.first_name + ' ' + admin_data.last_name + ']';
+                activity = 'Updated admin general information [' + admin_data.admin_id + ' - ' + admin_data.first_name + ' ' + admin_data.last_name + ']';
                 log = await logActivity(activity, 'View Admins');
             }
 
