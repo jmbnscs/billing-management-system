@@ -123,15 +123,15 @@ async function setAdminData(admin_data) {
                 admin_status_id = 1;
             }
             else {
-                user_level_id = $('#role').val();
-                admin_status_id = $('#admin_status').val();
+                user_level_id = $('#admin_role_edt').val();
+                admin_status_id = $('#admin_status_edt').val();
             }
         
             let admin_data_update = JSON.stringify({
                 'admin_id' : admin_data.admin_id,
-                'admin_email' : $('#admin_email').val(),
-                'mobile_number' : $('#mobile_number').val(),
-                'address' : $('#address').val(),
+                'admin_email' : $('#email_edt').val(),
+                'mobile_number' : $('#mobile_number_edt').val(),
+                'address' : $('#address_edt').val(),
                 'user_level_id' : user_level_id
             });
         
@@ -141,15 +141,15 @@ async function setAdminData(admin_data) {
             });
 
             let activity, log = true;
-            if (admin_data.admin_status_id != $('#admin_status').val()) {
+            if (admin_data.admin_status_id != $('#admin_status_edt').val()) {
                 activity = 'Updated admin status [' + admin_data.admin_id + ' - ' + admin_data.first_name + ' ' + admin_data.last_name + ']';
                 log = await logActivity(activity, 'View Admins');
             }
-            if (admin_data.user_level_id != $('#role').val()) {
+            if (admin_data.user_level_id != $('#admin_role_edt').val()) {
                 activity = 'Updated admin user level [' + admin_data.admin_id + ' - ' + admin_data.first_name + ' ' + admin_data.last_name + ']';
                 log = await logActivity(activity, 'View Admins');
             }
-            if (admin_data.admin_email != $('#admin_email').val() || admin_data.mobile_number != $('#mobile_number').val() || admin_data.address != $('#address').val()) {
+            if (admin_data.admin_email != $('#email_edt').val() || admin_data.mobile_number != $('#mobile_number_edt').val() || admin_data.address != $('#address_edt').val()) {
                 activity = 'Updated admin general information [' + admin_data.admin_id + ' - ' + admin_data.first_name + ' ' + admin_data.last_name + ']';
                 log = await logActivity(activity, 'View Admins');
             }
