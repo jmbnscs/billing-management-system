@@ -31,7 +31,11 @@ require_once('../helpers/tcpdf/tcpdf.php');
             curl_close($ch);
             
             echo '<script>
-                alert( ' . $data->account_id . ' )
+                alert( ' . $invoice_id . ' )
+            </script>';
+
+            echo '<script>
+                alert( ' . $data['account_id'] . ' )
             </script>';
 
             $this->setTitle($customer['last_name'] . '-' . $bill_start->format('F') . '-Bill');
