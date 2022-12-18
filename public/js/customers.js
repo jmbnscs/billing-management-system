@@ -180,7 +180,7 @@ async function setCustomerPage () {
 async function setAddCustomerPage () {
     const add_customer = document.getElementById('add-customer');
 
-    if (session_storage.getItem('account_id') == null) {
+    if (session_storage.getItem('account_id') == null && session_storage.getItem('account_id') == undefined) {
         session_storage.setItem('account_id', await generateID('check/account_id.php?account_id=', "", 8));
     }
     $('#account_id').val(session_storage.getItem('account_id'));
