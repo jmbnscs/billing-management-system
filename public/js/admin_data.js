@@ -114,7 +114,7 @@ async function setAdminData(admin_data) {
         }
 
         async function updateAdminData() {
-            const admin_id = $('#admin_id').val();
+            const admin_id = admin_data.admin_id;
             let user_level_id, admin_status_id;
             if (admin_data.user_level_id == 2) {
                 user_level_id = admin_data.user_level_id;
