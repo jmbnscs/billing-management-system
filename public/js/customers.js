@@ -372,6 +372,8 @@ async function setAddCustomerPage () {
 
         account_content = await createData('account/create.php', account_data);
 
+        console.log(account_content);
+
         if (account_content.success) {
             customer_content = await createData('customer/create.php', customer_data);
         }
@@ -379,6 +381,8 @@ async function setAddCustomerPage () {
             const delete_account = await deleteData('account/delete.php', delete_data);
             (delete_account.success) ? displayErrorMessage() : displayErrorMessage();
         }
+
+        console.log(customer_content);
 
         if (customer_content.success) {
             installation_content = await createData('installation/create.php', install_data);
@@ -388,6 +392,8 @@ async function setAddCustomerPage () {
             (delete_account.success && delete_customer.success) ? displayErrorMessage() : displayErrorMessage();
         }
 
+        console.log(installation_content);
+
         if (installation_content.success) {
             ratings_content = await createData('ratings/create.php', rating_data);
         }
@@ -395,6 +401,8 @@ async function setAddCustomerPage () {
             const [delete_account, delete_customer, delete_installation] = await Promise.all ([deleteData('account/delete.php', delete_data), deleteData('customer/delete.php', delete_data), deleteData('installation/delete.php', delete_data)]);
             (delete_account.success && delete_customer.success && delete_installation.success) ? displayErrorMessage() : displayErrorMessage();
         }
+
+        console.log(ratings_content);
 
         let log = await logActivity('Created new customer account with Account ID # ' + account_id, 'Customer - Add New Account');
 
@@ -411,9 +419,9 @@ async function setAddCustomerPage () {
 
         function displayErrorMessage() {
             toastr.error('Some error has occurred, please try again later.');
-            setTimeout(function(){
-                window.location.reload();
-             }, 2000);
+            // setTimeout(function(){
+            //     window.location.reload();
+            //  }, 2000);
         }
 
     }
