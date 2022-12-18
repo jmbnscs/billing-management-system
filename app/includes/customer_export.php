@@ -17,8 +17,6 @@ if(isset($_POST['exportSubmit'])){
     curl_close($ch);
     $response = json_decode($resp, true);
 
-    echo $response;
-
     if ($response) {
         $fp = fopen($filepath, 'w');
         fputcsv($fp, $data_header);
