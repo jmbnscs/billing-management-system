@@ -44,17 +44,17 @@
 
         </div>
 
-        <!-- <div class="card hide" id="error-dl">
+        <div class="card hide" id="error-dl">
             <div class="card-header">
                 <h5>Download Error Record</h5>
             </div>
 
             <div class="card-body">
                 <div class="col-md-8 mt-3">
-                    <a href="../../app/temp/uploaderror.csv" download><button class="btn btn-danger">Download</button></a>
+                    <a href="https://bms.gstechbms.online/bms/app/temp/uploaderror.csv" download><button class="btn btn-danger">Download</button></a>
                 </div>
             </div>
-        </div> -->
+        </div>
 
         <!-- 
         <div class="card">

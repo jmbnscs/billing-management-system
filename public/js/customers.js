@@ -13,7 +13,7 @@ $(document).ready(function () {
     }
     else if (status == 'err') {
         toastr.warning('Some error has occurred, please check error file to update.');
-        // $('#error-dl').removeClass('hide');
+        $('#error-dl').removeClass('hide');
         // setTimeout(function(){
         //     window.location.replace('../views/customers_add.php');
         // }, 2000);
@@ -40,7 +40,7 @@ $(document).ready(function () {
         setImportCustomerPage();
         setExportCustomerPage();
         setDownloadPage();
-        // $('#error-dl').addClass('hide');
+        $('#error-dl').addClass('hide');
         
         // if(user_id == 4|| user_id == 5 || user_id == 6) {
         //     setErrorMessage();
