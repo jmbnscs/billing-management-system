@@ -176,7 +176,7 @@
             <div class="row pt-2">
               <div class="col-md-12" id="admin-role-select">
                   <div class="form-floating">
-                  <select id="admin_role_edt" class="form-select" required></select>
+                  <select id="admin_role_edt" class="form-select"></select>
                   <label for="admin_role_edt">Admin Role</label>
                   </div>
               </div>
@@ -185,7 +185,7 @@
             <div class="row pt-2">
               <div class="col-md-12" id="admin-status-select">
                   <div class="form-floating">
-                  <select id="admin_status_edt" class="form-select" required></select>
+                  <select id="admin_status_edt" class="form-select"></select>
                   <label for="admin_status_edt">Admin Status</label>
                   </div>
               </div>

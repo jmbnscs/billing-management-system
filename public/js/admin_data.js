@@ -44,6 +44,10 @@ async function setAdminData(admin_data) {
             $('#admin-role-select').addClass('hide');
             $('#admin-status-select').addClass('hide');
         }
+        else {
+            $('#admin-role-select').attr('required', true);
+            $('#admin-status-select').attr('required', true);
+        }
 
         $("#admin_role_edt").empty();
         $("#admin_role_edt").append(`<option selected disabled value="">Choose Admin Role</option>`);
