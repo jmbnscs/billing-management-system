@@ -134,7 +134,9 @@ async function setRecentActivity() {
     
     var t = $('#activity-logs-tbl').DataTable({
         pageLength : 5,
-        lengthMenu: [5, 10]
+        lengthMenu: [5, 10],
+        "searching": true,
+        "autoWidth": false,
     });
 
     for (var i = 0; i < content.length; i++) {
