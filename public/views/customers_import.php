@@ -51,7 +51,12 @@
 
             <div class="card-body">
                 <div class="col-md-8 mt-3">
-                    <a href="https://bms.gstechbms.online/bms/app/temp/uploaderror.csv" download><button class="btn btn-danger">Download</button></a>
+                    <form method="post" id="download-error" class="form-inline">
+                        <div class="form-group col-md-4 mt-4">
+                            <input type="submit" class="btn btn-danger form-control " name="downloadError" value="Download">
+                        </div>
+                    </form>
+                    <!-- <a href="https://bms.gstechbms.online/bms/app/temp/uploaderror.csv" download><button class="btn btn-danger">Download</button></a> -->
                 </div>
             </div>
         </div>

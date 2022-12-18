@@ -14,6 +14,7 @@ $(document).ready(function () {
     else if (status == 'err') {
         toastr.warning('Some error has occurred, please check error file to update.');
         $('#error-dl').removeClass('hide');
+        setDownloadError();
         // setTimeout(function(){
         //     window.location.replace('../views/customers_add.php');
         // }, 2000);
@@ -504,6 +505,27 @@ async function setDownloadPage () {
     const download_template = document.getElementById('download-template');
     download_template.onsubmit = (e) => {
         $('#download-template').attr('action', '../../app/includes/download_template.php');
+        toastr.info("Preparing CSV File...");
+        // $.ajax({
+        //     url: '../../app/includes/customer_export.php',
+        //     cache: false,
+        //     success: function(response) {
+        //         var res = $.parseJSON(response);
+        //         console.log(res)
+        //     },
+        //     error: function (xhr, status, error, response) {
+        //         console.error(xhr);
+        //         var res = $.parseJSON(response);
+        //         console.log(res)
+        //     }
+        // });
+    };
+}
+
+async function setDownloadError () {
+    const download_error = document.getElementById('download-error');
+    download_error.onsubmit = (e) => {
+        $('#download-error').attr('action', '../../app/includes/download_error.php');
         toastr.info("Preparing CSV File...");
         // $.ajax({
         //     url: '../../app/includes/customer_export.php',
