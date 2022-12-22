@@ -4,263 +4,111 @@ $(document).ready( function () {
     if (DIR_CUR == DIR_MAIN + 'views/invoice_payments_add.php') {
         restrictPages('invoice-payment-add');
         setAddPaymentPage();
-        // checkRestriction('payments', );
-        // if (user_id == 5 || user_id == 6) {
-        //     setErrorMessage();
-        //     window.location.replace("../views/dashboard.php");
-        // }
-        // else {
-        //     setAddPaymentPage();
-        // }
     }
     else if (DIR_CUR == DIR_MAIN + 'views/invoice_payments.php') {
         restrictPages('invoice-payment');
         setPaymentRecordsPage();
         restrictFunctions('payments');
-        // checkRestriction('payments', 'invoice-payment');
-        // if (user_id == 6) {
-        //     setErrorMessage();
-        //     window.location.replace("../views/dashboard.php");
-        // }
-        // else {
-        //     setPaymentRecordsPage();
-
-        //     if (user_id == 5) {
-        //         $('#edit-btn').addClass('hide');
-        //         $('#save-btn').addClass('hide');
-        //         $('#dlt-btn').addClass('hide');
-        //     }
-        // }
     }
     else if (DIR_CUR == DIR_MAIN + 'views/invoice_prorate.php') {
         restrictPages('invoice-prorate');
         setProrateRecordsPage();
         restrictFunctions('prorate');
-        // checkRestriction('prorate', 'invoice-prorate');
-
-
-        // if (user_id == 6) {
-        //     setErrorMessage();
-        //     window.location.replace("../views/dashboard.php");
-        // }
-        // else {
-        //     setProrateRecordsPage();
-
-        //     if (user_id == 5) {
-        //         $('#edit-btn').addClass('hide');
-        //         $('#save-btn').addClass('hide');
-        //         $('#dlt-btn').addClass('hide');
-        //     }
-        // }
     }
     else {
         setInvoicePage();
         restrictPages('invoice-page');
         restrictFunctions('invoice');
-        // checkRestriction('invoice', 'invoice-page');
     }
 });
-
-
 
 // -------------------------------------------------------------------- View Invoices JS
 async function setInvoicePage () {
     displaySuccessMessage();
-    setButtons();
-    setInvoiceTable();
-    setUpdateModal();
+
+    const [content, invoice_status, customers] = await Promise.all ([fetchData('views/invoice_unpaid.php'), fetchData('statuses/read.php?status_table=invoice_status'), fetchData('views/customer.php')]);
     
-    $("#editModal").on("hidden.bs.modal", function () {
-        $('#edit-btn').attr('hidden', false);
-        $('#save-btn').attr('hidden', true);
+    var t = $('#invoice-table').DataTable({
+        pageLength: 5,
+        lengthMenu: [5, 10, 20],
+        "searching": true,
+        "autoWidth": false
+    }), tag;
+
+    for (var i = 1; i < invoice_status.length; i++) {
+        var opt = `<option value='${invoice_status[i].status_name}'>${invoice_status[i].status_name}</option>`;
+        $("#invoice-status-filter").append(opt);
+    }
+
+    for (var i = 0; i < customers.length; i++) {
+        var opt = `<option value='${customers[i].customer_name}'>${customers[i].customer_name}</option>`;
+        $("#invoice-customer-filter").append(opt);
+    }
+
+    for (var i = 0; i < content.length; i++) {
+        (content[i].status == 'PAID') ? tag = 'bg-success' : tag = 'bg-danger';
+        
+        t.row.add($(`
+            <tr>
+                <th scope="row" style="color: #012970;"><strong>${content[i].invoice_id}</strong></th>
+                <td data-label="Customer Name">${content[i].customer_name}</td>
+                <td data-label="Disconnection Date">${content[i].disconnection_date}</td>
+                <td data-label="Balance">&#8369; ${content[i].running_balance}</td>
+                <td data-label="Status"><span class="badge ${tag}">${content[i].status}</span></td>
+                <td data-label="View"><a href="../views/invoice_data.php?acct=${content[i].invoice_id}" target="_blank"><button type="button" class="btn btn-outline-primary"><i class="ri ri-eye-fill"></i></button></a></td>
+            </tr>
+        `)).draw(false);
+    }
+
+    $("#invoice-table_filter.dataTables_filter").append($("#invoice-status-filter"));
+    $("#invoice-table_filter.dataTables_filter").append($("#invoice-customer-filter"));
+
+    var statusIndex = 0, customerIndex = 0;
+    $("#invoice-table th").each(function (i) {
+        if ($($(this)).html() == "Status") {
+            statusIndex = i; return false;
+        }
     });
 
-    async function setInvoiceTable() {
-        const [content, invoice_status, customers] = await Promise.all ([fetchData('views/invoice_unpaid.php'), fetchData('statuses/read.php?status_table=invoice_status'), fetchData('views/customer.php')]);
-    
-        var t = $('#invoice-table').DataTable({
-            "searching": true
-        }), tag;
-
-        for (var i = 1; i < invoice_status.length; i++) {
-            var opt = `<option value='${invoice_status[i].status_name}'>${invoice_status[i].status_name}</option>`;
-            $("#invoice-status-filter").append(opt);
+    $("#invoice-table th").each(function (i) {
+        if ($($(this)).html() == "Customer") {
+            customerIndex = i; return false;
         }
+    });
 
-        for (var i = 0; i < customers.length; i++) {
-            var opt = `<option value='${customers[i].customer_name}'>${customers[i].customer_name}</option>`;
-            $("#invoice-customer-filter").append(opt);
+    $.fn.dataTable.ext.search.push(
+        function (settings, data, dataIndex) {
+            var selectedItem = $('#invoice-status-filter').val()
+            var category = data[statusIndex];
+            if (selectedItem === "" || category.includes(selectedItem)) {
+            return true;
+            }
+            return false;
         }
+    );
 
-        for (var i = 0; i < content.length; i++) {
-            (content[i].status == 'PAID') ? tag = 'bg-success' : tag = 'bg-danger';
-            
-            t.row.add($(`
-                <tr>
-                    <th scope="row" style="color: #012970;"><strong>${content[i].invoice_id}</strong></th>
-                    <td>${content[i].customer_name}</td>
-                    <td>${content[i].disconnection_date}</td>
-                    <td>&#8369; ${content[i].running_balance}</td>
-                    <td><span class="badge ${tag}">${content[i].status}</span></td>
-                    <td><button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="${content[i].invoice_id}"><i class="ri ri-eye-fill"></i></button></td>
-                </tr>
-            `)).draw(false);
+    $.fn.dataTable.ext.search.push(
+        function (settings, data, dataIndex) {
+            var selectedItem = $('#invoice-customer-filter').val()
+            var category = data[customerIndex];
+            if (selectedItem === "" || category.includes(selectedItem)) {
+            return true;
+            }
+            return false;
         }
+    );
 
-        $("#invoice-table_filter.dataTables_filter").append($("#invoice-status-filter"));
-        $("#invoice-table_filter.dataTables_filter").append($("#invoice-customer-filter"));
-
-        var statusIndex = 0, customerIndex = 0;
-        $("#invoice-table th").each(function (i) {
-            if ($($(this)).html() == "Status") {
-                statusIndex = i; return false;
-            }
-        });
-
-        $("#invoice-table th").each(function (i) {
-            if ($($(this)).html() == "Customer") {
-                customerIndex = i; return false;
-            }
-        });
-
-        $.fn.dataTable.ext.search.push(
-            function (settings, data, dataIndex) {
-              var selectedItem = $('#invoice-status-filter').val()
-              var category = data[statusIndex];
-              if (selectedItem === "" || category.includes(selectedItem)) {
-                return true;
-              }
-              return false;
-            }
-        );
-
-        $.fn.dataTable.ext.search.push(
-            function (settings, data, dataIndex) {
-              var selectedItem = $('#invoice-customer-filter').val()
-              var category = data[customerIndex];
-              if (selectedItem === "" || category.includes(selectedItem)) {
-                return true;
-              }
-              return false;
-            }
-        );
-
-        $("#invoice-status-filter").change(function (e) {
-            t.draw();
-        });
-
-        $("#invoice-customer-filter").change(function (e) {
-            t.draw();
-        });
-
+    $("#invoice-status-filter").change(function (e) {
         t.draw();
-        t.columns.adjust().draw();
-    }
+    });
 
-    // Set View Invoice Modal
-    async function setUpdateModal () {
-        var updateModal = document.getElementById('editModal')
-        updateModal.addEventListener('show.bs.modal', async function (event) {
-    
-            var button = event.relatedTarget;
-            var invoice_id = button.getAttribute('data-bs-whatever');
-            
-            let data = await fetchData('invoice/read_single.php?invoice_id=' + invoice_id);
-            let customer_data = await fetchData('customer/read_single.php?account_id=' + data.account_id);
+    $("#invoice-customer-filter").change(function (e) {
+        t.draw();
+    });
 
-            var modalTitle = updateModal.querySelector('.modal-title');
-            modalTitle.textContent = customer_data.first_name + ' ' + customer_data.last_name + ' - Invoice Details';
+    t.draw();
+    // t.columns.adjust().draw();
 
-            // Display Invoice Details
-            $('#invoice_id').val(data.invoice_id);
-            $('#account_id').val(data.account_id);
-            $('#billing_period_start').val(data.billing_period_start);
-            $('#billing_period_end').val(data.billing_period_end);
-            $('#disconnection_date').val(data.disconnection_date);
-            $('#previous_bill').val(data.previous_bill);
-            $('#previous_payment').val(data.previous_payment);
-            $('#balance').val(data.balance);
-            $('#secured_cash').val(data.secured_cash);
-            $('#subscription_amount').val(data.subscription_amount);
-            $('#prorated_charge').val(data.prorated_charge);
-            $('#installation_charge').val(data.installation_charge);
-            $('#total_bill').val(data.total_bill);
-
-            $('#invoice_status_id').val(await getStatusName('invoice_status', data.invoice_status_id));
-            setTagElement('invoice_status_id', 2);
-
-            edit_fn.onclick = (e) => {
-                e.preventDefault();
-                $('#editModal').modal('hide');
-                setAddPaymentModal(data.account_id, invoice_id);
-            };
-
-            async function setAddPaymentModal (account_id, invoice_id) {
-                var addPaymentModal = document.getElementById('add-payment-md');
-            
-                update_fn.onsubmit = (e) => {
-                    e.preventDefault();
-                    processUpdate();
-                };
-    
-                async function processUpdate() {
-                    let ref_content = await fetchData('views/payment.php');
-                    let isExist = false;
-            
-                    for (var i = 0; i < ref_content.length; i++) {
-                        if ($('#payment_reference_id').val() == ref_content[i].ref_id) {
-                            isExist = true;
-                        }
-                    }
-            
-                    if (!isExist) {
-    
-                        let update_data = JSON.stringify({
-                            'account_id' : account_id,
-                            'payment_reference_id' : $('#payment_reference_id').val(),
-                            'amount_paid' : $('#amount_paid').val(),
-                            'payment_date' : $('#payment_date').val()
-                        });
-    
-                        let payment_data = JSON.stringify({
-                            'amount_paid' : $('#amount_paid').val(),
-                            'payment_reference_id' : $('#payment_reference_id').val(),
-                            'payment_date' : $('#payment_date').val()
-                        })
-    
-                        let rating_data = JSON.stringify({
-                            'account_id' : account_id,
-                            'invoice_status' : data.invoice_status_id
-                        });
-    
-                        const [update_content, payment_content, rating_content] = await Promise.all ([updateData('invoice/update.php', update_data), createData('payment/create.php', payment_data), updateData('ratings/update.php', rating_data)]);
-    
-                        let tag_data = JSON.stringify({
-                            'account_id' : account_id,
-                            'invoice_id' : invoice_id,
-                            'payment_id' : payment_content.payment_id
-                        });
-    
-                        const tag_content = await updateData('payment/update_tagged.php', tag_data);
-    
-                        let log = await logActivity('Updated payment for ' + account_id + ' with Invoice # ' + invoice_id, 'Unpaid Invoices');
-    
-                        if (update_content.message == 'Invoice Updated' && payment_content.success && tag_content.message == 'Payment Tagged' && rating_content.message == 'Rating Updated' && log) {
-                            sessionStorage.setItem('save_message', "Payment Updated Successfully.");
-                            window.location.reload();
-                        }
-                        else {
-                            toastr.error("Payment was not updated.");
-                        }
-                    }
-                    else {
-                        toastr.error('Payment Reference ID already exist.');
-                        $('#payment_reference_id').val(null);
-                    }
-                }
-            }
-        });
-    }
 }  // End of Invoice Records
 
 // -------------------------------------------------------------------- Payment Records JS
@@ -278,17 +126,22 @@ async function setPaymentRecordsPage() {
 
     async function setPaymentRecordsTable() {
         let content = await fetchData('payment/read_untagged.php');
-        var t = $('#payments-table').DataTable();
+        var t = $('#payments-table').DataTable({
+            pageLength: 5,
+            lengthMenu: [5, 10, 20],
+            "searching": true,
+            "autoWidth": false
+        });
 
         if (user_id == 5) {
             for (var i = 0; i < content.length; i++) {
                 t.row.add($(`
                     <tr>
                         <th scope="row" style="color: #012970;"><strong>${content[i].payment_reference_id}</strong></th>
-                        <td>&#8369; ${content[i].amount_paid}</td>
-                        <td>${content[i].payment_date}</td>
-                        <td><span class="badge bg-danger">Untagged</span></td>
-                        <td>
+                        <td data-label="Amount Paid">&#8369; ${content[i].amount_paid}</td>
+                        <td data-label="Payment Date">${content[i].payment_date}</td>
+                        <td data-label="Status"><span class="badge bg-danger">Untagged</span></td>
+                        <td data-label="View">
                             <button type="button" class="btn btn-outline-info m-1" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="${content[i].payment_id}" ><i class="bi bi-eye"></i></button>
                         </td>
                     </tr>
@@ -300,10 +153,10 @@ async function setPaymentRecordsPage() {
                 t.row.add($(`
                     <tr>
                         <th scope="row" style="color: #012970;"><strong>${content[i].payment_reference_id}</strong></th>
-                        <td>&#8369; ${content[i].amount_paid}</td>
-                        <td>${content[i].payment_date}</td>
-                        <td><span class="badge bg-danger">Untagged</span></td>
-                        <td>
+                        <td data-label="Amount Paid">&#8369; ${content[i].amount_paid}</td>
+                        <td data-label="Payment Date">${content[i].payment_date}</td>
+                        <td data-label="Status"><span class="badge bg-danger">Untagged</span></td>
+                        <td data-label="Actions">
                             <button type="button" class="btn btn-outline-info m-1" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="${content[i].payment_id}" ><i class="bi bi-eye"></i></button>
                             <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-whatever="${content[i].payment_id}" id="dlt-act-btn"><i class="ri ri-delete-bin-5-fill"></i></button>
                         </td>
@@ -324,6 +177,7 @@ async function setPaymentRecordsPage() {
             var button = event.relatedTarget;
             var payment_id = button.getAttribute('data-bs-whatever');
             let data = await fetchData('payment/read_single.php?payment_id=' + payment_id);
+            const customer = await fetchData('customer/read.php');
 
             var modalTitle = updateModal.querySelector('.modal-title');
             modalTitle.textContent = data.payment_reference_id;
@@ -333,6 +187,11 @@ async function setPaymentRecordsPage() {
             $('#payment_date').val(data.payment_date);
             $('#account_id').val(data.account_id);
             $('#tagged').val('Untagged');
+
+            for (var i = 0; i < customer.length; i++) {
+                var opt = `<option value='${customer[i].account_id}'>${customer[i].first_name} ${customer[i].last_name}</option>`;
+                $("#accounts-list").append(opt);
+            }
 
             toggleInputData('disabled', true);
             setTagElement('tagged', 2);
@@ -465,7 +324,10 @@ async function setProrateRecordsPage() {
         const [content, customers] = await Promise.all ([fetchData('views/prorate.php'), fetchData('views/customer.php')]);
 
         var t = $('#prorate-table').DataTable({
-            "searching": true
+            pageLength: 5,
+            lengthMenu: [5, 10, 20],
+            "searching": true,
+            "autoWidth": false
         });
 
         for (var i = 0; i < customers.length; i++) {
@@ -478,11 +340,11 @@ async function setProrateRecordsPage() {
                 t.row.add($(`
                     <tr>
                         <th scope="row" style="color: #012970;"><strong>${content[i].account_id}</strong></th>
-                        <td>${content[i].customer_name}</td>
-                        <td>${content[i].duration}</td>
-                        <td>&#8369; ${content[i].amount}</td>
-                        <td><span class="badge bg-danger">Uncharged</span></td>
-                        <td>
+                        <td data-label="Customer Name">${content[i].customer_name}</td>
+                        <td data-label="Duration">${content[i].duration}</td>
+                        <td data-label="Amount">&#8369; ${content[i].amount}</td>
+                        <td data-label="Status"><span class="badge bg-danger">Untagged</span></td>
+                        <td data-label="View">
                             <button type="button" class="btn btn-outline-info m-1" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="${content[i].prorate_id}" ><i class="bi bi-eye"></i></button>
                         </td>
                     </tr>
@@ -494,11 +356,11 @@ async function setProrateRecordsPage() {
                 t.row.add($(`
                     <tr>
                         <th scope="row" style="color: #012970;"><strong>${content[i].account_id}</strong></th>
-                        <td>${content[i].customer_name}</td>
-                        <td>${content[i].duration}</td>
-                        <td>&#8369; ${content[i].amount}</td>
-                        <td><span class="badge bg-danger">Uncharged</span></td>
-                        <td>
+                        <td data-label="Customer Name">${content[i].customer_name}</td>
+                        <td data-label="Duration">${content[i].duration}</td>
+                        <td data-label="Amount">&#8369; ${content[i].amount}</td>
+                        <td data-label="Status"><span class="badge bg-danger">Untagged</span></td>
+                        <td data-label="Actions">
                             <button type="button" class="btn btn-outline-info m-1" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="${content[i].prorate_id}" ><i class="bi bi-eye"></i></button>
                             <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-whatever="${content[i].prorate_id}" id="dlt-act-btn"><i class="ri ri-delete-bin-5-fill"></i></button>
                         </td>
@@ -533,7 +395,7 @@ async function setProrateRecordsPage() {
         });
 
         t.draw();
-        t.columns.adjust().draw();
+        // t.columns.adjust().draw();
     }
     
     async function setUpdateModal () {
@@ -546,9 +408,13 @@ async function setProrateRecordsPage() {
 
             var modalTitle = updateModal.querySelector('.modal-title');
             modalTitle.textContent = data.customer_name;
+
+            const duration = data.duration;
             
             $('#account_id').val(data.account_id);
-            $('#duration').val(data.duration);
+            $('#duration_hours').val(duration.split(":")[0]);
+            $('#duration_minutes').val(duration.split(":")[1]);
+            $('#duration_seconds').val(duration.split(":")[2]);
             $('#prorate_charge').val(data.amount);
             $('#status').val('Uncharged');
 
@@ -556,7 +422,9 @@ async function setProrateRecordsPage() {
             toggleInputData('disabled', true);
 
             function toggleInputData (setAttr, bool) {
-                $('#duration').attr(setAttr, bool);
+                $('#duration_hours').attr(setAttr, bool);
+                $('#duration_minutes').attr(setAttr, bool);
+                $('#duration_seconds').attr(setAttr, bool);
             }
 
             edit_fn.onclick = (e) => {
@@ -573,7 +441,7 @@ async function setProrateRecordsPage() {
 
             async function processUpdate() {
                 const account_id = $('#account_id').val();
-                const duration = $('#duration').val();
+                const duration = $('#duration_hours').val() + ':' + $('#duration_minutes').val() + ':' + $('#duration_seconds').val();
 
                 let update_data = JSON.stringify({
                     'account_id' : account_id,

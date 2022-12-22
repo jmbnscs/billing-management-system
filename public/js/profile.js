@@ -8,6 +8,9 @@ $(document).ready( () => {
         sessionStorage.setItem('edit', false);
         document.getElementById('edit-profile').click();
     }
+    else if ((window.location.href).split("=")[1] == 'activityLogs') {
+        document.getElementById('activity-logs').click();
+    }
     else {
         document.getElementById('overview-profile').click();
     }
@@ -17,6 +20,7 @@ $(document).ready( () => {
 async function setProfilePage() {
     const data = await getAdminData(admin_id);
     const user = await getUserLevel(data.user_level_id);
+    $('#admin-icon').text((data.first_name).charAt(0) + (data.last_name).charAt(0));
     $('#profile-name').text(data.first_name + ' ' + data.last_name);
     $('#profile-role').text(user.user_role);
 
@@ -37,6 +41,9 @@ async function setProfilePage() {
     $('#edit-number').val(data.mobile_number);
     $('#edit-bday').val(data.birthdate);
     $('#edit-address').val(data.address);
+
+    // Activity Logs
+    setRecentActivity();
 
     const edit_profile = document.getElementById('edit-form');
     edit_profile.onsubmit = (e) => {
@@ -120,4 +127,71 @@ async function setProfilePage() {
             toastr.error('Current Password do not match.');
         }
     }
+}
+
+async function setRecentActivity() {
+    const content = await fetchData('logs/read_admin_all_logs.php?admin_id=' + admin_id);
+    
+    var t = $('#activity-logs-tbl').DataTable({
+        pageLength : 5,
+        lengthMenu: [5, 10],
+        "searching": true,
+        "autoWidth": false,
+    });
+
+    for (var i = 0; i < content.length; i++) {
+
+        t.row.add($(`
+            <tr>
+                <th scope="row" style="color: #012970;"><strong>${content[i].id}</strong></th>
+                <td>${content[i].page_accessed}</td>
+                <td>${content[i].date_accessed.split(' ')[0]}</td>
+                <td>${content[i].date_accessed.split(' ')[1]}</td>
+                <td><button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#view-activity-modal" data-bs-whatever="${content[i].id}"><i class="ri ri-eye-fill"></i></button></td>
+            </tr>
+        `)).draw(false);
+    }
+
+    setViewModal('view-activity-modal', content);
+}
+
+// Set View Modal
+async function setViewModal (table, data) {
+    var viewModal = document.getElementById(table)
+    viewModal.addEventListener('show.bs.modal', async function (event) {
+        var modalTitle = viewModal.querySelector('.modal-title');
+        var button = event.relatedTarget;
+        var data_id = button.getAttribute('data-bs-whatever');
+        modalTitle.textContent = "Activity Log # " + data_id;
+        let id, content;
+
+        const selected_data = data.filter(item => item.id == data_id)[0];
+    
+        id = [
+            // '#activity_id', 
+            '#activity_page', 
+            '#activity_made', 
+            '#activity_date', 
+            '#activity_time',
+            '#activity_address',
+            '#activity_user_agent'
+        ];
+        content = [
+            // selected_data.id, 
+            selected_data.page_accessed, 
+            selected_data.activity,
+            selected_data.date_accessed.split(' ')[0], 
+            selected_data.date_accessed.split(' ')[1],
+            selected_data.ip_address,
+            selected_data.user_agent
+        ];
+
+        setContent();
+
+        function setContent () {
+            for (var i = 0; i < content.length; i++) {
+                $(id[i]).val(content[i]);
+            }
+        }
+    });
 }

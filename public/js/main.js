@@ -414,6 +414,7 @@ $('#account-settings').on('click', (e) => {
 
 // Logout Session
 function logout() {
+    logActivity('Logged out of Session', 'Login');
     sessionStorage.clear();
     localStorage.clear();
     $.ajax({

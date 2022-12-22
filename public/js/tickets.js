@@ -46,18 +46,23 @@ const invalid_ticket_btn = document.getElementById('invalid-btn');
 // -------------------------------------------------------------------- Active Ticket Page
 async function setActiveTicketsTable () {
     const ticket_data = await fetchData('views/ticket.php');
-    var t = $('#ticket-table').DataTable();
+    var t = $('#ticket-table').DataTable({
+        pageLength: 5,
+        lengthMenu: [5, 10, 20],
+        "searching": true,
+        "autoWidth": false
+    });
 
     for (var i = 0; i < ticket_data.length; i++) {
         if(ticket_data[i].user_level == user_id || user_id == 2) {
             t.row.add($(`
             <tr>
                 <th scope="row" style="color: #012970;">${ticket_data[i].ticket_num}</th>
-                <td>${ticket_data[i].concern}</td>
-                <td>${ticket_data[i].date_filed}</td>
-                <td>${ticket_data[i].account_id}</td>
-                <td><span class="badge bg-danger">${ticket_data[i].ticket_status}</span></td>
-                <td>
+                <td data-label="Concern">${ticket_data[i].concern}</td>
+                <td data-label="Date Filed">${ticket_data[i].date_filed}</td>
+                <td data-label="Account #">${ticket_data[i].account_id}</td>
+                <td data-label="Status"><span class="badge bg-danger">${ticket_data[i].ticket_status}</span></td>
+                <td data-label="Actions">
                     <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#activeModal" data-bs-whatever="${ticket_data[i].ticket_num}" id="setName"><i class="bi bi-folder-fill"></i></button>
                 </td>
             </tr>
@@ -173,20 +178,25 @@ async function invalidModal (ticket_num, page) {
 // -------------------------------------------------------------------- Pending Ticket Page
 async function setPendingTicketsTable () {
     const ticket_data = await fetchData('views/ticket_pending.php');
-    var t = $('#ticket-pending-table').DataTable();
+    var t = $('#ticket-pending-table').DataTable({
+        pageLength: 5,
+        lengthMenu: [5, 10, 20],
+        "searching": true,
+        "autoWidth": false
+    });
 
     for (var i = 0; i < ticket_data.length; i++) {
         if(ticket_data[i].admin_id == admin_id || admin_id == '11674') {
             t.row.add($(`
             <tr>
                 <th scope="row"><a href="#">${ticket_data[i].ticket_num}</a></th>
-                <td>${ticket_data[i].concern}</td>
-                <td>${ticket_data[i].date_filed}</td>
-                <td>${ticket_data[i].account_id}</td>
-                <td>${ticket_data[i].user_level}</td>
-                <td>${ticket_data[i].admin_username}</td>
-                <td><span class="badge bg-warning">${ticket_data[i].ticket_status}</span></td>
-                <td>
+                <td data-label="Concern">${ticket_data[i].concern}</td>
+                <td data-label="Date Filed">${ticket_data[i].date_filed}</td>
+                <td data-label="Account #">${ticket_data[i].account_id}</td>
+                <td data-label="User Level">${ticket_data[i].user_level}</td>
+                <td data-label="Claimed By">${ticket_data[i].admin_username}</td>
+                <td data-label="Status"><span class="badge bg-warning">${ticket_data[i].ticket_status}</span></td>
+                <td data-label="Actions">
                     <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#pendingModal" data-bs-whatever="${ticket_data[i].ticket_num}" id="setName"><i class="bi bi-folder-fill"></i></button>
                 </td>
             </tr>
@@ -213,7 +223,8 @@ async function pendingModal () {
             $('#resolve-btn').attr('data-bs-target', '#subscriptionModal');
         }
         else {
-            $('#resolve-btn').attr('data-bs-target', '#disconnectModal');
+            //$('#resolve-btn').attr('data-bs-target', '#disconnectModal');
+            $('#resolve-btn').attr('data-bs-target', '#defaultModal');
         }
 
         const [concern, ticket_status] = await Promise.all ([fetchData('concerns/read_single.php?concern_id=' + ticket.concern_id), getStatusName('ticket_status', ticket.ticket_status_id)]);
@@ -239,7 +250,8 @@ async function pendingModal () {
                 pendSubscriptionModal(ticket_num);
             }
             else {
-                pendDisconnectModal(ticket_num);
+                //pendDisconnectModal(ticket_num);
+                pendDefaultModal(ticket_num);
             }
         };
 
@@ -276,9 +288,11 @@ async function pendNetworkModal(ticket_num) {
         var yyyy = today.getFullYear();
         today = yyyy + '-' + mm + '-' + dd;
 
+        const duration_net = $('#duration_hours').val() + ':' + $('#duration_minutes').val() + ':' + $('#duration_seconds').val();
+
         const prorate_data = JSON.stringify({
             'account_id' : $('#account_id_net').val(),
-            'duration' : $('#duration_net').val(),
+            'duration' : duration_net,
             'ticket_num' : ticket_num
         });
 
@@ -367,24 +381,27 @@ async function pendSubscriptionModal(ticket_num) {
     }
 }
 
-async function pendDisconnectModal(ticket_num) {
-    var disconModal = document.getElementById('disconnectModal');
+async function pendDefaultModal(ticket_num) {
+    var disconModal = document.getElementById('defaultModal');
     var modalTitle = disconModal.querySelector('.modal-title');
-    modalTitle.textContent = ticket_num + ' -  Disconnection Ticket';
+    // modalTitle.textContent = ticket_num + ' -  Disconnection Ticket';
     
     const ticket = await fetchData('ticket/read_single.php?ticket_num=' + ticket_num);
     const [customer, plan, account] = await Promise.all ([fetchData('customer/read_single.php?account_id=' + ticket.account_id), fetchData('plan/read.php'), fetchData('account/read_single.php?account_id=' + ticket.account_id)]);
 
+    // Should be changed when new concern_category will be added
+    concern_category = (ticket.concern_id == 3) ? 'Disconnection' : 'General Concern'
+    modalTitle.textContent = ticket_num + ' - ' + concern_category; 
     $('#account_id_disc').val(ticket.account_id);
     $('#customer_name_disc').val(customer.first_name + ' ' + customer.last_name);
 
-    const resolve_disconnect = document.getElementById('disconnect-ticket-modal');
-    resolve_disconnect.onsubmit = (e) => {
+    const resolve_default = document.getElementById('default-ticket-modal');
+    resolve_default.onsubmit = (e) => {
         e.preventDefault();
-        disconnectTicketData();
+        defaultTicketData();
     };
 
-    async function disconnectTicketData() {
+    async function defaultTicketData() {
         const update_data = JSON.stringify({
             'ticket_num' : ticket_num,
             'resolution_details' : $('#resolution_details_disc').val(),
@@ -405,10 +422,53 @@ async function pendDisconnectModal(ticket_num) {
     }
 }
 
+// async function pendDisconnectModal(ticket_num) {
+//     var disconModal = document.getElementById('disconnectModal');
+//     var modalTitle = disconModal.querySelector('.modal-title');
+//     modalTitle.textContent = ticket_num + ' -  Disconnection Ticket';
+    
+//     const ticket = await fetchData('ticket/read_single.php?ticket_num=' + ticket_num);
+//     const [customer, plan, account] = await Promise.all ([fetchData('customer/read_single.php?account_id=' + ticket.account_id), fetchData('plan/read.php'), fetchData('account/read_single.php?account_id=' + ticket.account_id)]);
+
+//     $('#account_id_disc').val(ticket.account_id);
+//     $('#customer_name_disc').val(customer.first_name + ' ' + customer.last_name);
+
+//     const resolve_disconnect = document.getElementById('disconnect-ticket-modal');
+//     resolve_disconnect.onsubmit = (e) => {
+//         e.preventDefault();
+//         disconnectTicketData();
+//     };
+
+//     async function disconnectTicketData() {
+//         const update_data = JSON.stringify({
+//             'ticket_num' : ticket_num,
+//             'resolution_details' : $('#resolution_details_disc').val(),
+//             'date_resolved' : getDateToday(),
+//             'ticket_status_id' : 3,
+//             'admin_id' : admin_id
+//         });
+
+//         const [ticket_content, log] = await Promise.all ([updateData('ticket/update.php', update_data), logActivity('Resolved Ticket ' + ticket_num, 'Pending Tickets')]);
+    
+//         if (ticket_content.message == 'Ticket Updated' && log) {
+//             sessionStorage.setItem('save_message', "Ticket Resolved Successfully.");
+//             window.location.replace('../views/tickets_resolved.php');
+//         }
+//         else {
+//             toastr.error("Ticket was not resolved. " + ticket_content.message);
+//         }
+//     }
+// }
+
 // -------------------------------------------------------------------- Resolved Ticket Page
 async function setResolvedTicketsTable () {
     const ticket_data = await fetchData('views/ticket_resolved.php');
-    var t = $('#ticket-resolved-table').DataTable();
+    var t = $('#ticket-resolved-table').DataTable({
+        pageLength: 5,
+        lengthMenu: [5, 10, 20],
+        "searching": true,
+        "autoWidth": false
+    });
 
     for (var i = 0; i < ticket_data.length; i++) {
         var tag = 'bg-success';                   // Manager ID
@@ -416,13 +476,13 @@ async function setResolvedTicketsTable () {
             t.row.add($(`
                 <tr>
                     <th scope="row"><a href="#">${ticket_data[i].ticket_num}</a></th>
-                    <td>${ticket_data[i].concern}</td>
-                    <td>${ticket_data[i].date_filed}</td>
-                    <td>${ticket_data[i].date_resolved}</td>
-                    <td>${ticket_data[i].account_id}</td>
-                    <td>${ticket_data[i].admin_username}</td>
-                    <td><span class="badge ${tag}">${ticket_data[i].ticket_status}</span></td>
-                    <td>
+                    <td data-label="Concern">${ticket_data[i].concern}</td>
+                    <td data-label="Date Filed">${ticket_data[i].date_filed}</td>
+                    <td data-label="Date Resolved">${ticket_data[i].date_resolved}</td>
+                    <td data-label="Account #">${ticket_data[i].account_id}</td>
+                    <td data-label="Resolved By">${ticket_data[i].admin_username}</td>
+                    <td data-label="Status"><span class="badge ${tag}">${ticket_data[i].ticket_status}</span></td>
+                    <td data-label="View">
                         <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#resolvedModal" data-bs-whatever="${ticket_data[i].ticket_num}" id="setName"><i class="ri ri-eye-fill"></i></button>
                     </td>
                 </tr>
@@ -462,20 +522,25 @@ async function resolvedModal () {
 // -------------------------------------------------------------------- Invalid Ticket Page
 async function setInvalidTicketsTable () {
     const ticket_data = await fetchData('views/ticket_invalid.php');
-    var t = $('#ticket-invalid-table').DataTable();
+    var t = $('#ticket-invalid-table').DataTable({
+        pageLength: 5,
+        lengthMenu: [5, 10, 20],
+        "searching": true,
+        "autoWidth": false
+    });
 
     for (var i = 0; i < ticket_data.length; i++) {
         if(ticket_data[i].admin_id == admin_id || admin_id == '11674') {
             t.row.add($(`
             <tr>
                 <th scope="row"><a href="#">${ticket_data[i].ticket_num}</a></th>
-                <td>${ticket_data[i].concern}</td>
-                <td>${ticket_data[i].date_filed}</td>
-                <td><span class="badge bg-danger">${ticket_data[i].ticket_status}</span></td>
-                <td>${ticket_data[i].account_id}</td>
-                <td>${ticket_data[i].user_level}</td>
-                <td>${ticket_data[i].admin_username}</td>
-                <td>
+                <td data-label="Concern">${ticket_data[i].concern}</td>
+                <td data-label="Date Filed">${ticket_data[i].date_filed}</td>
+                <td data-label="Status"><span class="badge bg-danger">${ticket_data[i].ticket_status}</span></td>
+                <td data-label="Account #">${ticket_data[i].account_id}</td>
+                <td data-label="User Level">${ticket_data[i].user_level}</td>
+                <td data-label="Invalidated By">${ticket_data[i].admin_username}</td>
+                <td data-label="Actions">
                     <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#invalidatedModal" data-bs-whatever="${ticket_data[i].ticket_num}" id="setName"><i class="bi bi-folder-fill"></i></button>
                 </td>
             </tr>
@@ -558,15 +623,15 @@ async function invalidatedTicketsModal () {
 // -------------------------------------------------------------------- Add Ticket Page
 async function setCreateTicketPage () {
     const create_ticket = document.getElementById('create-ticket');
-    $('#ticket_num').val(await generateID('check/ticket_num.php?ticket_num=', "TN", 6));
+    // $('#ticket_num').val(await generateID('check/ticket_num.php?ticket_num=', "TN", 6));
     getExistingAccounts = await fetchData('account/read.php');
 
     // localStorage.removeItem('ticket_num');
 
-    if (localStorage.getItem('ticket_num') == null) {
-        localStorage.setItem('ticket_num', await generateID('check/ticket_num.php?ticket_num=', "TN", 6));
+    if (sessionStorage.getItem('ticket_num') == null) {
+        sessionStorage.setItem('ticket_num', await generateID('check/ticket_num.php?ticket_num=', "TN", 6));
     }
-    $('#ticket_num').val(localStorage.getItem('ticket_num'));
+    $('#ticket_num').val(sessionStorage.getItem('ticket_num'));
 
     setAddDropdown();
     $('#date_filed').val(getDateToday());
@@ -676,6 +741,7 @@ async function setCreateTicketPage () {
             const [ticket_content, log] = await Promise.all ([createData('ticket/create.php', create_data), logActivity('Created Ticket ' + ticket_num, 'Create a Ticket')]);
         
             if (ticket_content.message == 'Ticket Created' && log) {
+                sessionStorage.removeItem('ticket_num');
                 sessionStorage.setItem('save_message', "Ticket Created Successfully.");
                 window.location.replace('../views/tickets.php');
             }

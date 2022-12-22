@@ -3,9 +3,9 @@ require_once('../helpers/tcpdf/tcpdf.php');
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require '../phpmailer/src/Exception.php';
-require '../phpmailer/src/PHPMailer.php';
-require '../phpmailer/src/SMTP.php';
+require '../helpers/phpmailer/src/Exception.php';
+require '../helpers/phpmailer/src/PHPMailer.php';
+require '../helpers/phpmailer/src/SMTP.php';
 
     class PDF extends TCPDF {
         public $invoice_id;
@@ -58,11 +58,7 @@ require '../phpmailer/src/SMTP.php';
             $this->setCellPaddings(1, 1, 1, 1);
             $this->setCellMargins(1, 1, 1, 1);
     
-            // set color for background
-            // $this->SetFillColor(255, 255, 127);
             $this->Ln(4);
-            // $this->AddSpotColor('My TCPDF Blue', 200, 60, 10, 5);
-            // $this->SetFillSpotColor('My TCPDF Blue', 100);
             $this->SetFillColor(0, 0, 205);
             $this->Rect(0, 45, 240, 25, 'F', 0);
             $this->Ln(5);
@@ -170,16 +166,23 @@ require '../phpmailer/src/SMTP.php';
         }
 
         public function sendEmail ($customer, $data, $bill_date) {
+            $ch = require 'curl.init.php';
+            $url = DIR_API . "logs/get_mail_auth.php?id=1";
+            curl_setopt($ch, CURLOPT_URL, $url);
+            $resp = curl_exec($ch);
+            $mail_data = json_decode($resp, true);
+            curl_close($ch);
+
             $mail = new PHPMailer(true);
             $mail->isSMTP();
             $mail->Host = 'smtp.gmail.com';
             $mail->SMTPAuth = true;
-            $mail->Username = 'bill.gstech@gmail.com';
-            $mail->Password = 'kqrakwidvjjmstck';
+            $mail->Username = $mail_data['email'];
+            $mail->Password = $mail_data['password'];
             $mail->SMTPSecure = 'ssl';
             $mail->Port = 465;
 
-            $mail->setFrom('bill.gstech@gmail.com');
+            $mail->setFrom($mail_data['email']);
 
             $mail->addAddress($customer['email']);
 
@@ -241,16 +244,7 @@ require '../phpmailer/src/SMTP.php';
                 Please Do Not Reply.</p>
             ';
 
-            // if ($mail->send()) {
-            //     echo 'success';
-            // }
-            // else {
-            //     echo $mail->ErrorInfo;
-            // }
-
             $mail->send();
-
-            // echo $this->account_id;
         }
     }
 
@@ -258,7 +252,7 @@ require '../phpmailer/src/SMTP.php';
 
     $pdf->setCreator(PDF_CREATOR);
     $pdf->setAuthor('GSTechBMS');
-    $pdf->setSubject('TCPDF Tutorial');
+    $pdf->setSubject('GSTech Billing Statement');
     // $pdf->setKeywords('TCPDF, PDF, example, test, guide');
     
     $pdf->setHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE.' 001', PDF_HEADER_STRING, array(0,64,255), array(0,64,128));
@@ -279,7 +273,3 @@ require '../phpmailer/src/SMTP.php';
     $pdf->AddPage();
     
     $pdf->setTextShadow(array('enabled'=>true, 'depth_w'=>0.2, 'depth_h'=>0.2, 'color'=>array(196,196,196), 'opacity'=>1, 'blend_mode'=>'Normal'));
-    
-
-
-

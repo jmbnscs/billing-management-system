@@ -38,6 +38,7 @@ $(document).ready(function () {
     else if (DIR_CUR == DIR_MAIN + 'views/customers_import.php') {
         restrictPages('customer-import');
         setImportCustomerPage();
+        setExportCustomerPage();
         $('#error-dl').addClass('hide');
         
         // if(user_id == 4|| user_id == 5 || user_id == 6) {
@@ -67,7 +68,8 @@ async function setCustomerPage () {
         var t = $('#customer-table').DataTable({
             pageLength : 5,
             lengthMenu: [5, 10, 20],
-            "searching": true
+            "searching": true,
+            "autoWidth": false,
         }), tag;
 
         for (var i = 0; i < plans.length; i++) {
@@ -91,12 +93,12 @@ async function setCustomerPage () {
             t.row.add($(`
                 <tr>
                     <th scope="row" style="color: #012970;">${customer_data[i].account_id}</th>
-                    <td>${customer_data[i].customer_name}</td>
-                    <td>${customer_data[i].plan}</td>
-                    <td>${customer_data[i].area}</td>
-                    <td><span class="badge ${tag}">${customer_data[i].status}</span></td>
-                    <td>&#8369; ${customer_data[i].balance}</td>
-                    <td><a href="../views/customer_data.php?acct=${customer_data[i].account_id}" target="_blank"><button type="button" class="btn btn-outline-primary""><i class="ri ri-eye-fill"></i></button><a></td>
+                    <td data-label="Customer Name">${customer_data[i].customer_name}</td>
+                    <td data-label="Subscription">${customer_data[i].plan}</td>
+                    <td data-label="Area">${customer_data[i].area}</td>
+                    <td data-label="Status"><span class="badge ${tag}">${customer_data[i].status}</span></td>
+                    <td data-label="Balance">&#8369; ${customer_data[i].balance}</td>
+                    <td data-label="View"><a href="../views/customer_data.php?acct=${customer_data[i].account_id}"><button type="button" class="btn btn-outline-primary""><i class="ri ri-eye-fill"></i></button><a></td>
                 </tr>
             `)).draw(false);
         }
@@ -170,7 +172,7 @@ async function setCustomerPage () {
         });
 
         t.draw();
-        t.columns.adjust().draw();
+        // t.columns.adjust().draw();
     }
 }
 
@@ -458,6 +460,28 @@ async function setImportCustomerPage () {
         //         console.error(xhr);
         //         var res = $.parseJSON(response);
 
+        //     }
+        // });
+    };
+}
+
+// -------------------------------------------------------------------- Export Customer
+async function setExportCustomerPage () {
+    const export_customer = document.getElementById('export-customer');
+    export_customer.onsubmit = (e) => {
+        $('#export-customer').attr('action', '../../app/includes/customer_export.php');
+        toastr.info("Preparing CSV File...");
+        // $.ajax({
+        //     url: '../../app/includes/customer_export.php',
+        //     cache: false,
+        //     success: function(response) {
+        //         var res = $.parseJSON(response);
+        //         console.log(res)
+        //     },
+        //     error: function (xhr, status, error, response) {
+        //         console.error(xhr);
+        //         var res = $.parseJSON(response);
+        //         console.log(res)
         //     }
         // });
     };

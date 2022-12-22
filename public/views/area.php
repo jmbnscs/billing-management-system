@@ -5,11 +5,11 @@
   <main id="main" class="main">
 
     <div class="pagetitle">
-    <h1>Advanced Options</h1>
+    <h1>Area</h1>
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="dashboard.php">Home</a></li>
-          <li class="breadcrumb-item active">Area</li>
+          <li class="breadcrumb-item active">Advanced Options</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
@@ -41,24 +41,18 @@
 
         <!-- Area Details Table-->
                 <div class="col-12">
-                <div class="card area-details overflow-auto">
-                <br>
-                <div class="card-body">
                   <table class="table table-borderless" id="areas-table">
                     <thead>
                       <tr>
-                        <th scope="col">Area ID</th>
-                        <th scope="col">Area Type</th>
+                        <th scope="col">#</th>
+                        <th scope="col">Area Name</th>
                         <th scope="col">Actions</th>
                       </tr>
                     </thead>
-                    <tbody id="areas-data">
-                  </tbody>
+                    <tbody></tbody>
                 </table>
-              </div>
 
-              </div>
-     </div><!-- Area Details Table -->
+                </div><!-- Area Details Table -->
 
                 </div>
 
@@ -125,8 +119,7 @@
           <!-- Modal Footer -->
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" id="edit-btn">Edit</button>
-            <button type="submit" class="btn btn-success" id="save-btn" disabled>Save Changes</button>
+            <button type="submit" class="btn btn-success" id="save-btn">Save Changes</button>
           </div>
         </div>
       </div>

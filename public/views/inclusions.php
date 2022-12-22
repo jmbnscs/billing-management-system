@@ -5,11 +5,11 @@
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>Advanced Options</h1>
+      <h1>Inclusions</h1>
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="dashboard.php">Home</a></li>
-          <li class="breadcrumb-item active">Inclusion</li>
+          <li class="breadcrumb-item active">Advanced Options</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
@@ -41,23 +41,17 @@
 
         <!-- Inclusion Details Table-->
                 <div class="col-12">
-                <div class="card inclusion-details overflow-auto">
-                <br>
-                <div class="card-body">
                   <table class="table table-borderless" id="inclusions-table">
                     <thead>
                       <tr>
-                        <th scope="col">Inclusion ID</th>
+                        <th scope="col">#</th>
                         <th scope="col">Inclusion Name</th>
                         <th scope="col">Actions</th>
                       </tr>
                     </thead>
-                    <tbody id="inclusions-data">
-                  </tbody>
+                    <tbody></tbody>
                 </table>
-              </div>
 
-              </div>
      </div><!-- Inclusion Details Table -->
 
                 </div>
@@ -125,8 +119,7 @@
           <!-- Modal Footer -->
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" id="edit-btn">Edit</button>
-            <button type="submit" class="btn btn-success" id="save-btn" disabled>Save Changes</button>
+            <button type="submit" class="btn btn-success" id="save-btn">Save Changes</button>
           </div>
         </div>
       </div>

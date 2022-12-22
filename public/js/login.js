@@ -3,7 +3,6 @@ const cb = document.getElementById('remember_me');
 const un = document.getElementById('admin_username');
 const lbl = document.getElementById('un');
 
-/*global $, document, window, setTimeout, navigator, console, location*/
 $(document).ready(function () {
 
     'use strict';

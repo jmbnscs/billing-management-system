@@ -2,14 +2,22 @@
 body {
     font-family: "Montserrat", sans-serif;
 
-    background: url(../images/background4.png);
-    background-repeat: no-repeat;
+    background: url(../images/background4.png) no-repeat center center fixed;
+
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
     background-size: cover;
   }
   
   /* Main Container */
   .container {
     max-width: 900px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
   }
   
   a {
@@ -38,13 +46,8 @@ body {
     padding: 20px;
     background-size: cover;
     background-position: center center;
-    /* color: #fff; */
     min-height: 540px;
     position: relative;
-
-    /* Inalis ko kasi may puti sa gilid hahahaha */
-    /* box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3); */
-
     transition: all 0.6s cubic-bezier(1, -0.375, 0.285, 0.995);
     z-index: 9999;
   }

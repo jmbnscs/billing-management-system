@@ -1,9 +1,10 @@
 $(document).ready(function () {
     isDefault();
     restrictPages('misc-page');
+    displaySuccessMessage();
+    setButtons();
 
     if (DIR_CUR == DIR_MAIN + 'views/connection.php') {
-        restrictPages('')
         setConnectionPage();
     }
     else if (DIR_CUR == DIR_MAIN + 'views/concerns.php') {
@@ -41,15 +42,20 @@ async function setTable(api, table_name) {
         }
     }
 
-    var t = $(table_name).DataTable();
+    var t = $(table_name).DataTable({
+        pageLength: 5,
+        lengthMenu: [5, 10, 20],
+        "searching": true,
+        "autoWidth": false
+    });
 
     for (var i = 0; i < data.length; i++) {
         t.row.add($(`
             <tr>
-                <th scope="row"><a href="#">${id[i]}</a></th>
+                <th scope="row">${i+1}</th>
                 <td>${info[i]}</td>
                 <td>
-                    <button type="button" class="btn btn-outline-info m-1" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="${id[i]}" ><i class="bi bi-eye"></i></button>
+                    <button type="button" class="btn btn-outline-info m-1" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="${id[i]}" ><i class="bi bi-pencil"></i></button>
                     <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-whatever="${id[i]}" ><i class="ri ri-delete-bin-5-fill"></i></button>
                 </td>
             </tr>
@@ -59,110 +65,83 @@ async function setTable(api, table_name) {
 
 // -------------------------------------------------------------------- Connection Page
 function setConnectionPage() {
-    displaySuccessMessage();
-    setButtons();
     setTable('connection', '#connections-table');
-    setUpdateModal();
-    setDeleteModal();
-
-    $("#editModal").on("hidden.bs.modal", function () {
-        $('#save-btn').attr('disabled', true);
-        $('#edit-btn').attr('disabled', false);
-    });
 
     create_fn.onsubmit = (e) => {
         e.preventDefault();
         processCreate();
     };
 
-    async function setUpdateModal () {
-        var updateModal = document.getElementById('editModal')
-        updateModal.addEventListener('show.bs.modal', async function (event) {
-    
-            var button = event.relatedTarget;
-            var connection_id = button.getAttribute('data-bs-whatever');
-            let connection = await fetchData('connection/read_single.php?connection_id=' + connection_id);
+    var updateModal = document.getElementById('editModal');
+    updateModal.addEventListener('show.bs.modal', async function (event) {
 
-            var modalTitle = updateModal.querySelector('.modal-title');
-            modalTitle.textContent = connection_id + ' - ' + connection.connection_name;
+        var button = event.relatedTarget;
+        var connection_id = button.getAttribute('data-bs-whatever');
+        let connection = await fetchData('connection/read_single.php?connection_id=' + connection_id);
 
-            $('#connection_id').val(connection_id);
-            $('#connection_name_md').val(connection.connection_name);
+        var modalTitle = updateModal.querySelector('.modal-title');
+        modalTitle.textContent = 'Update Connection Type?';
 
-            toggleInputData('disabled', true);
+        $('#connection_id').val(connection_id);
+        $('#connection_name_md').val(connection.connection_name);
 
-            function toggleInputData (setAttr, bool) {
-                $('#connection_id').attr(setAttr, bool);
-                $('#connection_name_md').attr(setAttr, bool);
+        update_fn.onsubmit = (e) => {
+            e.preventDefault();
+            processUpdate();
+        };
+
+        async function processUpdate() {
+            const update_data = JSON.stringify({
+                'connection_id' : connection_id,
+                'connection_name' : $('#connection_name_md').val()
+            });
+
+            const [content, log] = await Promise.all ([updateData('connection/update.php', update_data), logActivity('Updated Connection # ' + connection_id, 'Connection - Overview')]);
+        
+            if (content.message == 'Connection Updated' && log) {
+                sessionStorage.setItem('save_message', "Connection Updated Successfully.");
+                window.location.reload();
             }
+            else {
+                toastr.error("Connection was not updated.");
+            }
+        }
+    });
 
-            edit_fn.onclick = (e) => {
-                e.preventDefault();
-                $('#save-btn').attr('disabled', false);
-                $('#edit-btn').attr('disabled', true);
-                toggleInputData('disabled', false);
-            };
+    var deleteModal = document.getElementById('deleteModal');
+    deleteModal.addEventListener('show.bs.modal', async function (event) {
 
-            update_fn.onsubmit = (e) => {
-                e.preventDefault();
-                processUpdate();
-            };
+        var button = event.relatedTarget;
+        var connection_id = button.getAttribute('data-bs-whatever');
+        let connection = await fetchData('connection/read_single.php?connection_id=' + connection_id);
 
-            async function processUpdate() {
-                const update_data = JSON.stringify({
-                    'connection_id' : connection_id,
-                    'connection_name' : $('#connection_name_md').val()
-                });
+        var modalTitle = deleteModal.querySelector('.modal-title');
+        modalTitle.textContent = "Delete " + connection.connection_name + "?";
 
-                const [content, log] = await Promise.all ([updateData('connection/update.php', update_data), logActivity('Updated Connection # ' + connection_id, 'Connection - Overview')]);
+        $('#connection_id_d').val(connection_id);
+        $('#connection_name_md_d').val(connection.connection_name);
+
+        delete_fn.onsubmit = (e) => {
+            e.preventDefault();
+            processDelete();
+        };
+
+        async function processDelete() {
+            const delete_data = JSON.stringify({
+                'connection_id' : connection_id
+            });
+
+            const [content, log] = await Promise.all ([deleteData('connection/delete.php', delete_data), logActivity('Deleted Connection # ' + connection_id, 'Connection - Overview')]);
             
-                if (content.message == 'Connection Updated' && log) {
-                    sessionStorage.setItem('save_message', "Connection Updated Successfully.");
-                    window.location.reload();
-                }
-                else {
-                    toastr.error("Connection was not updated.");
-                }
+            if (content.message == 'Connection Deleted' && log) {
+                sessionStorage.setItem('save_message', "Connection Deleted Successfully.");
+                window.location.reload();
             }
-        });
-    }
-    
-    async function setDeleteModal () {
-        var deleteModal = document.getElementById('deleteModal')
-        deleteModal.addEventListener('show.bs.modal', async function (event) {
-
-            var button = event.relatedTarget;
-            var connection_id = button.getAttribute('data-bs-whatever');
-            let connection = await fetchData('connection/read_single.php?connection_id=' + connection_id);
-
-            var modalTitle = deleteModal.querySelector('.modal-title');
-            modalTitle.textContent = "Delete " + connection.connection_name + "?";
-
-            $('#connection_id_d').val(connection_id);
-            $('#connection_name_md_d').val(connection.connection_name);
-
-            delete_fn.onsubmit = (e) => {
-                e.preventDefault();
-                processDelete();
-            };
-
-            async function processDelete() {
-                const delete_data = JSON.stringify({
-                    'connection_id' : connection_id
-                });
-
-                const [content, log] = await Promise.all ([deleteData('connection/delete.php', delete_data), logActivity('Deleted Connection # ' + connection_id, 'Connection - Overview')]);
-                
-                if (content.message == 'Connection Deleted' && log) {
-                    sessionStorage.setItem('save_message', "Connection Deleted Successfully.");
-                    window.location.reload();
-                }
-                else {
-                    toastr.error("Connection was not deleted.");
-                }
+            else {
+                toastr.error("Connection was not deleted.");
             }
-        });
-    }
+        }
+    });
     
     async function processCreate() {
         const create_data = JSON.stringify({
@@ -185,158 +164,131 @@ function setConnectionPage() {
 // End of Connection Page
 
 // -------------------------------------------------------------------- Concerns Page
-function setConcernsPage() {
-    displaySuccessMessage();
-    setButtons();
-    setConcernsTable();
-    setUpdateModal();
-    setDeleteModal();
-
-    $("#editModal").on("hidden.bs.modal", function () {
-        $('#save-btn').attr('disabled', true);
-        $('#edit-btn').attr('disabled', false);
-    });
-
+async function setConcernsPage() {
     create_fn.onsubmit = (e) => {
         e.preventDefault();
         processCreate();
     };
+
+    let concern_data = await getData('concerns');
+    var t = $('#concern-table').DataTable({
+        pageLength: 5,
+        lengthMenu: [5, 10, 20],
+        "searching": true,
+        "autoWidth": false
+    });
     
-    async function setConcernsTable () {
-        let concern_data = await getData('concerns');
-        var t = $('#concern-table').DataTable();
-    
-        for (var i = 0; i < concern_data.length; i++) {
-            t.row.add($(`
-                <tr>
-                    <th scope="row"><a href="#">${concern_data[i].concern_id}</a></th>
-                    <td>${concern_data[i].concern_category}</td>
-                    <td>
-                        <button type="button" class="btn btn-outline-info m-1" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="${concern_data[i].concern_id}" ><i class="bi bi-eye"></i></button>
-                        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-whatever="${concern_data[i].concern_id}" ><i class="ri ri-delete-bin-5-fill"></i></button>
-                    </td>
-                </tr>
-            `)).draw(false);
-        }
+    for (var i = 0; i < concern_data.length; i++) {
+        t.row.add($(`
+            <tr>
+                <th scope="row">${i + 1}</th>
+                <td>${concern_data[i].concern_category}</td>
+                <td>
+                    <button type="button" class="btn btn-outline-info m-1" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="${concern_data[i].concern_id}" ><i class="bi bi-pencil"></i></button>
+                    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-whatever="${concern_data[i].concern_id}" ><i class="ri ri-delete-bin-5-fill"></i></button>
+                </td>
+            </tr>
+        `)).draw(false);
     }
-    
-    async function setUpdateModal () {
-        var updateModal = document.getElementById('editModal')
-        updateModal.addEventListener('show.bs.modal', async function (event) {
-    
-            var button = event.relatedTarget;
-            var concern_id = button.getAttribute('data-bs-whatever');
-            let concern_data = await fetchData('concerns/read_single.php?concern_id=' + concern_id);
 
-            var modalTitle = updateModal.querySelector('.modal-title');
-            modalTitle.textContent = concern_data.concern_category;
+    var updateModal = document.getElementById('editModal')
+    updateModal.addEventListener('show.bs.modal', async function (event) {
 
-            (concern_data.customer_access == 0) ? $('#customer_access_md').attr('checked', 0) : $('#customer_access_md').attr('checked', 1);
-            $('#concern_id').val($('#customer_access_md').val());
-            $('#concern_category_md').val(concern_data.concern_category);
+        var button = event.relatedTarget;
+        var concern_id = button.getAttribute('data-bs-whatever');
+        let concern_data = await fetchData('concerns/read_single.php?concern_id=' + concern_id);
 
-            toggleInputData('disabled', true);
+        var modalTitle = updateModal.querySelector('.modal-title');
+        modalTitle.textContent = 'Update Concern Category?';
 
-            function toggleInputData (setAttr, bool) {
-                $('#concern_id').attr(setAttr, bool);
-                $('#concern_category_md').attr(setAttr, bool);
-                $('#customer_access_md').attr(setAttr, bool);
-            }
-            
-            edit_fn.onclick = (e) => {
-                e.preventDefault();
-                $('#save-btn').attr('disabled', false);
-                $('#edit-btn').attr('disabled', true);
-                toggleInputData('disabled', false);
-            };
+        // (concern_data.customer_access == 0) ? $('#customer_access_md').attr('checked', 0) : $('#customer_access_md').attr('checked', 1);
+        $('#concern_id').val(concern_data.concern_id);
+        $('#concern_category_md').val(concern_data.concern_category);
 
-            update_fn.onsubmit = (e) => {
-                e.preventDefault();
-                processUpdate();
-            };
+        update_fn.onsubmit = (e) => {
+            e.preventDefault();
+            processUpdate();
+        };
 
-            let customer_switch_md;
-            $('#customer_access_md').on('change', function() {
-                customer_switch_md = $(this).is(':checked');
+        // let customer_switch_md;
+        // $('#customer_access_md').on('change', function() {
+        //     customer_switch_md = $(this).is(':checked');
+        // });
+
+        async function processUpdate() {
+            // let customer_access;
+            // (customer_switch_md) ? customer_access = 1 : customer_access = 0;
+
+            const update_data = JSON.stringify({
+                'concern_id' : concern_id,
+                'concern_category' : $('#concern_category_md').val(),
+                'customer_access' : '1'
             });
 
-            async function processUpdate() {
-                let customer_access;
-                (customer_switch_md) ? customer_access = 1 : customer_access = 0;
-
-                const update_data = JSON.stringify({
-                    'concern_id' : concern_id,
-                    'concern_category' : $('#concern_category_md').val(),
-                    'customer_access' : customer_access
-                });
-
-                const [content, log] = await Promise.all ([updateData('concerns/update.php', update_data), logActivity('Updated Concern # ' + concern_id, 'Concerns - Overview')]);
-            
-                if (content.message == 'Concern Updated' && log) {
-                    sessionStorage.setItem('save_message', "Concern Category Updated Successfully.");
-                    window.location.reload();
-                }
-                else {
-                    toastr.error("Concern Category was not updated.");
-                }
+            const [content, log] = await Promise.all ([updateData('concerns/update.php', update_data), logActivity('Updated Concern # ' + concern_id, 'Concerns - Overview')]);
+        
+            if (content.message == 'Concern Updated' && log) {
+                sessionStorage.setItem('save_message', "Concern Category Updated Successfully.");
+                window.location.reload();
             }
-
-            function toggleSwitch(bool) {
-                $('#customer_access_md').attr('checked', bool);
+            else {
+                toastr.error("Concern Category was not updated.");
             }
-        });
-    }
-    
-    async function setDeleteModal () {
-        var deleteModal = document.getElementById('deleteModal')
-        deleteModal.addEventListener('show.bs.modal', async function (event) {
-    
-            var button = event.relatedTarget;
-            var concern_id = button.getAttribute('data-bs-whatever');
-            let concern_data = await fetchData('concerns/read_single.php?concern_id=' + concern_id);
+        }
 
-            var modalTitle = deleteModal.querySelector('.modal-title');
-            modalTitle.textContent = "Delete " + concern_data.concern_category + "?";
-
-            $('#concern_id_d').val(concern_id);
-            $('#concern_category_md_d').val(concern_data.concern_category);
-            (concern_data.customer_access == 0) ? $('#customer_access_md_d').attr('checked', false) : $('#customer_access_md_d').attr('checked', true);
-
-            delete_fn.onsubmit = (e) => {
-                e.preventDefault();
-                processDelete();
-            };
-
-            async function processDelete() {
-                const delete_data = JSON.stringify({
-                    'concern_id' : concern_id
-                });
-
-                const [content, log] = await Promise.all ([deleteData('concerns/delete.php', delete_data), logActivity('Deleted Concern # ' + concern_id, 'Concerns - Overview')]);
-                
-                if (content.message == 'Concern Deleted' && log) {
-                    sessionStorage.setItem('save_message', "Concern Category Deleted Successfully.");
-                    window.location.reload();
-                }
-                else {
-                    toastr.error("Concern Category was not deleted.");
-                }
-            }
-    
-        });
-    }
-    
-    let customer_switch;
-    $('#customer_access').on('change', function() {
-        customer_switch = $(this).is(':checked');
+        // function toggleSwitch(bool) {
+        //     $('#customer_access_md').attr('checked', bool);
+        // }
     });
+
+    var deleteModal = document.getElementById('deleteModal')
+    deleteModal.addEventListener('show.bs.modal', async function (event) {
+
+        var button = event.relatedTarget;
+        var concern_id = button.getAttribute('data-bs-whatever');
+        let concern_data = await fetchData('concerns/read_single.php?concern_id=' + concern_id);
+
+        var modalTitle = deleteModal.querySelector('.modal-title');
+        modalTitle.textContent = "Delete " + concern_data.concern_category + "?";
+
+        $('#concern_id_d').val(concern_id);
+        $('#concern_category_md_d').val(concern_data.concern_category);
+        (concern_data.customer_access == 0) ? $('#customer_access_md_d').attr('checked', false) : $('#customer_access_md_d').attr('checked', true);
+
+        delete_fn.onsubmit = (e) => {
+            e.preventDefault();
+            processDelete();
+        };
+
+        async function processDelete() {
+            const delete_data = JSON.stringify({
+                'concern_id' : concern_id
+            });
+
+            const [content, log] = await Promise.all ([deleteData('concerns/delete.php', delete_data), logActivity('Deleted Concern # ' + concern_id, 'Concerns - Overview')]);
+            
+            if (content.message == 'Concern Deleted' && log) {
+                sessionStorage.setItem('save_message', "Concern Category Deleted Successfully.");
+                window.location.reload();
+            }
+            else {
+                toastr.error("Concern Category was not deleted.");
+            }
+        }
+
+    });
+    
+    // let customer_switch;
+    // $('#customer_access').on('change', function() {
+    //     customer_switch = $(this).is(':checked');
+    // });
     async function processCreate() {
-        let customer_access;
-        (customer_switch) ? customer_access = 1 : customer_access = 0;
+        // let customer_access;
+        // (customer_switch) ? customer_access = 1 : customer_access = 0;
 
         const create_data = JSON.stringify({
             'concern_category' : $('#concern_category').val(),
-            'customer_access' : customer_access
+            'customer_access' : '1'
         });
 
         const [content, log] = await Promise.all ([createData('concerns/create.php', create_data), logActivity('Created new Concern Category - ' + $('#concern_category').val(), 'Concerns - Add Concern Category')]);
@@ -382,7 +334,7 @@ async function setUserLevelPage() {
                     <li><i class="bi bi-check2-circle"></i> <em>and ${descriptions.length - 5} more.. </em></li>
                 </ul>
 
-                <a href="../views/user_level_data.php?user_role=${user_levels[i].user_role}" target="_blank" style="text-decorations:none; color:inherit;"><button class="btn btn-outline-success">View Role</button></a>
+                <a href="../views/user_level_data.php?user_role=${user_levels[i].user_role}" style="text-decorations:none; color:inherit;"><button class="btn btn-outline-success">View Role</button></a>
                 <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="${user_levels[i].user_id}">Edit Role</button>
             </div>
             </div>
@@ -391,6 +343,26 @@ async function setUserLevelPage() {
 
         container.innerHTML += content;
     }
+
+    const card = document.createElement('div');
+    card.classList = 'card-body';
+
+    const content = `
+        <div class="col-sm-4 user-cards">
+            <div class="card mt-3">
+            <div class="card-body">
+                <div class="add-new-role">
+                    <img src="../images/add-user-level.png" alt="Add New User Role">
+                    <br>
+                    <h5 class="text-center">Add New User Level</h5>
+                </div>
+            </div>
+            </div>
+        </div>
+        `;
+
+    container.innerHTML += content;
+
 
     $("#editModal").on("hidden.bs.modal", function () {
         // $('#save-btn').attr('disabled', true);
@@ -571,111 +543,85 @@ async function setUserLevelPage() {
 
 // -------------------------------------------------------------------- Area Page
 function setAreaPage() {
-    displaySuccessMessage();
-    setButtons();
     setTable('area', '#areas-table');
-    setUpdateModal();
-    setDeleteModal();
-
-    $("#editModal").on("hidden.bs.modal", function () {
-        $('#save-btn').attr('disabled', true);
-        $('#edit-btn').attr('disabled', false);
-    });
 
     create_fn.onsubmit = (e) => {
         e.preventDefault();
         processCreate();
     };
-    
-    async function setUpdateModal () {
-        var updateModal = document.getElementById('editModal')
-        updateModal.addEventListener('show.bs.modal', async function (event) {
-    
-            var button = event.relatedTarget;
-            var area_id = button.getAttribute('data-bs-whatever');
-            let area_data = await fetchData('area/read_single.php?area_id=' + area_id);
 
-            var modalTitle = updateModal.querySelector('.modal-title');
-            modalTitle.textContent = area_data.area_name;
+    var updateModal = document.getElementById('editModal')
+    updateModal.addEventListener('show.bs.modal', async function (event) {
 
-            $('#area_id').val(area_id);
-            $('#area_name_md').val(area_data.area_name);
-            toggleInputData('disabled', true);
+        var button = event.relatedTarget;
+        var area_id = button.getAttribute('data-bs-whatever');
+        let area_data = await fetchData('area/read_single.php?area_id=' + area_id);
 
-            function toggleInputData (setAttr, bool) {
-                $('#area_id').attr(setAttr, bool);
-                $('#area_name_md').attr(setAttr, bool);
+        var modalTitle = updateModal.querySelector('.modal-title');
+        modalTitle.textContent = 'Update Area?';
+
+        $('#area_id').val(area_id);
+        $('#area_name_md').val(area_data.area_name);
+
+        update_fn.onsubmit = (e) => {
+            e.preventDefault();
+            processUpdate();
+        };
+
+        async function processUpdate() {
+            const area_name = $('#area_name_md').val();
+
+            const update_data = JSON.stringify({
+                'area_id' : area_id,
+                'area_name' : area_name
+            }); 
+
+            const [content, log] = await Promise.all ([updateData('area/update.php', update_data), logActivity('Updated Area # ' + area_id, 'Area - Overview')]);
+        
+            if (content.message == 'Area Updated' && log) {
+                sessionStorage.setItem('save_message', "Area Updated Successfully.");
+                window.location.reload();
             }
+            else {
+                toastr.error("Area was not updated.");
+            }
+        }
+    });
 
-            edit_fn.onclick = (e) => {
-                e.preventDefault();
-                $('#save-btn').attr('disabled', false);
-                $('#edit-btn').attr('disabled', true);
-                toggleInputData('disabled', false);
-            };
+    var deleteModal = document.getElementById('deleteModal')
+    deleteModal.addEventListener('show.bs.modal', async function (event) {
 
-            update_fn.onsubmit = (e) => {
-                e.preventDefault();
-                processUpdate();
-            };
+        var button = event.relatedTarget;
+        var area_id = button.getAttribute('data-bs-whatever');
+        let data = await fetchData('area/read_single.php?area_id=' + area_id);
 
-            async function processUpdate() {
-                const area_name = $('#area_name_md').val();
+        var modalTitle = deleteModal.querySelector('.modal-title');
+        modalTitle.textContent = "Delete " + data.area_name + "?";
 
-                const update_data = JSON.stringify({
-                    'area_id' : area_id,
-                    'area_name' : area_name
-                }); 
+        $('#area_id_d').val(area_id);
+        $('#area_name_md_d').val(data.area_name);
 
-                const [content, log] = await Promise.all ([updateData('area/update.php', update_data), logActivity('Updated Area # ' + area_id, 'Area - Overview')]);
+        delete_fn.onsubmit = (e) => {
+            e.preventDefault();
+            processDelete();
+        };
+
+        async function processDelete() {
+            const delete_data = JSON.stringify({
+                'area_id' : area_id
+            });
+
+            const [content, log] = await Promise.all ([deleteData('area/delete.php', delete_data), logActivity('Deleted Area # ' + area_id, 'Area - Overview')]);
             
-                if (content.message == 'Area Updated' && log) {
-                    sessionStorage.setItem('save_message', "Area Updated Successfully.");
-                    window.location.reload();
-                }
-                else {
-                    toastr.error("Area was not updated.");
-                }
+            if (content.message == 'Area Deleted' && log) {
+                sessionStorage.setItem('save_message', "Area Deleted Successfully.");
+                window.location.reload();
             }
-        });
-    }
-    
-    async function setDeleteModal () {
-        var deleteModal = document.getElementById('deleteModal')
-        deleteModal.addEventListener('show.bs.modal', async function (event) {
-    
-            var button = event.relatedTarget;
-            var area_id = button.getAttribute('data-bs-whatever');
-            let data = await fetchData('area/read_single.php?area_id=' + area_id);
-
-            var modalTitle = deleteModal.querySelector('.modal-title');
-            modalTitle.textContent = "Delete " + data.area_name + "?";
-
-            $('#area_id_d').val(area_id);
-            $('#area_name_md_d').val(data.area_name);
-
-            delete_fn.onsubmit = (e) => {
-                e.preventDefault();
-                processDelete();
-            };
-    
-            async function processDelete() {
-                const delete_data = JSON.stringify({
-                    'area_id' : area_id
-                });
-
-                const [content, log] = await Promise.all ([deleteData('area/delete.php', delete_data), logActivity('Deleted Area # ' + area_id, 'Area - Overview')]);
-                
-                if (content.message == 'Area Deleted' && log) {
-                    sessionStorage.setItem('save_message', "Area Deleted Successfully.");
-                    window.location.reload();
-                }
-                else {
-                    toastr.error("Area was not deleted.");
-                }
+            else {
+                toastr.error("Area was not deleted.");
             }
-        });
-    }
+        }
+    });
     
     async function processCreate() {
         const area_name = $('#area_name').val();
@@ -699,128 +645,103 @@ function setAreaPage() {
 // End of Area Page
 
 // -------------------------------------------------------------------- Inclusion Page
-function setInclusionPage() {
-    displaySuccessMessage();
-    setButtons();
-    setInclusionTable();
-    setUpdateModal();
-    setDeleteModal();
-
-    $("#editModal").on("hidden.bs.modal", function () {
-        $('#save-btn').attr('disabled', true);
-        $('#edit-btn').attr('disabled', false);
-    });
-
+async function setInclusionPage() {
     create_fn.onsubmit = (e) => {
         e.preventDefault();
         processCreate();
     };
-    
-    async function setInclusionTable() {
-        let data = await getData('inclusion');
-        var t = $('#inclusions-table').DataTable();
-    
-        for (var i = 0; i < data.length; i++) {
-            t.row.add($(`
-                <tr>
-                    <th scope="row"><a href="#">${data[i].inclusion_id}</a></th>
-                    <td>${data[i].inclusion_name}</td>
-                    <td>
-                        <button type="button" class="btn btn-outline-info m-1" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="${data[i].inclusion_id}" ><i class="bi bi-eye"></i></button>
-                        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-whatever="${data[i].inclusion_id}" ><i class="ri ri-delete-bin-5-fill"></i></button>
-                    </td>
-                </tr>
-            `)).draw(false);
+
+    let data = await getData('inclusion');
+    var t = $('#inclusions-table').DataTable({
+        pageLength: 5,
+        lengthMenu: [5, 10, 20],
+        "searching": true,
+        "autoWidth": false
+    });
+
+    for (var i = 0; i < data.length; i++) {
+        t.row.add($(`
+            <tr>
+                <th scope="row">${i + 1}</th>
+                <td>${data[i].inclusion_name}</td>
+                <td>
+                    <button type="button" class="btn btn-outline-info m-1" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="${data[i].inclusion_id}" ><i class="bi bi-pencil"></i></button>
+                    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-whatever="${data[i].inclusion_id}" ><i class="ri ri-delete-bin-5-fill"></i></button>
+                </td>
+            </tr>
+        `)).draw(false);
+    }
+
+    var updateModal = document.getElementById('editModal')
+    updateModal.addEventListener('show.bs.modal', async function (event) {
+
+        var button = event.relatedTarget;
+        var inclusion_id = button.getAttribute('data-bs-whatever');
+        let data = await fetchData('inclusion/read_single.php?inclusion_id=' + inclusion_id);
+
+        var modalTitle = updateModal.querySelector('.modal-title');
+        modalTitle.textContent = 'Update Inclusion?';
+
+        $('#inclusion_id').val(inclusion_id);
+        $('#inclusion_name_md').val(data.inclusion_name);
+
+        update_fn.onsubmit = (e) => {
+            e.preventDefault();
+            processUpdate();
+        };
+
+        async function processUpdate() {
+            const update_data = JSON.stringify({
+                'inclusion_id' : inclusion_id,
+                'inclusion_name' : $('#inclusion_name_md').val()
+            });
+
+            const [content, log] = await Promise.all ([updateData('inclusion/update.php', update_data), logActivity('Updated Inclusion # ' + inclusion_id, 'Inclusions - Overview')]);
+        
+            if (content.message == 'Inclusion Updated' && log) {
+                sessionStorage.setItem('save_message', "Inclusion Updated Successfully.");
+                window.location.reload();
+            }
+            else {
+                toastr.error("Inclusion was not updated.");
+            }
         }
-    }
-    
-    async function setUpdateModal () {
-        var updateModal = document.getElementById('editModal')
-        updateModal.addEventListener('show.bs.modal', async function (event) {
-    
-            var button = event.relatedTarget;
-            var inclusion_id = button.getAttribute('data-bs-whatever');
-            let data = await fetchData('inclusion/read_single.php?inclusion_id=' + inclusion_id);
+    });
 
-            var modalTitle = updateModal.querySelector('.modal-title');
-            modalTitle.textContent = data.inclusion_name;
+    var deleteModal = document.getElementById('deleteModal')
+    deleteModal.addEventListener('show.bs.modal', async function (event) {
 
-            $('#inclusion_id').val(inclusion_id);
-            $('#inclusion_name_md').val(data.inclusion_name);
-            toggleInputData('disabled', true);
+        var button = event.relatedTarget;
+        var inclusion_id = button.getAttribute('data-bs-whatever');
+        let data = await fetchData('inclusion/read_single.php?inclusion_id=' + inclusion_id);
 
-            function toggleInputData (setAttr, bool) {
-                $('#inclusion_id').attr(setAttr, bool);
-                $('#inclusion_name_md').attr(setAttr, bool);
+        var modalTitle = deleteModal.querySelector('.modal-title');
+        modalTitle.textContent = "Delete " + data.inclusion_name + "?";
+
+        $('#inclusion_id_d').val(inclusion_id);
+        $('#inclusion_name_md_d').val(data.inclusion_name);
+
+        delete_fn.onsubmit = (e) => {
+            e.preventDefault();
+            processDelete();
+        };
+
+        async function processDelete() {
+            const delete_data = JSON.stringify({
+                'inclusion_id' : inclusion_id
+            });
+
+            const [content, log] = await Promise.all ([deleteData('inclusion/delete.php', delete_data), logActivity('Deleted Inclusion # ' + inclusion_id, 'Inclusions - Overview')]);
+
+            if (content.message == 'Inclusion Deleted' && log) {
+                sessionStorage.setItem('save_message', "Inclusion Deleted Successfully.");
+                window.location.reload();
             }
-
-            edit_fn.onclick = (e) => {
-                e.preventDefault();
-                $('#save-btn').attr('disabled', false);
-                $('#edit-btn').attr('disabled', true);
-                toggleInputData('disabled', false);
-            };
-
-            update_fn.onsubmit = (e) => {
-                e.preventDefault();
-                processUpdate();
-            };
-
-            async function processUpdate() {
-                const update_data = JSON.stringify({
-                    'inclusion_id' : inclusion_id,
-                    'inclusion_name' : $('#inclusion_name_md').val()
-                });
-
-                const [content, log] = await Promise.all ([updateData('inclusion/update.php', update_data), logActivity('Updated Inclusion # ' + inclusion_id, 'Inclusions - Overview')]);
-            
-                if (content.message == 'Inclusion Updated' && log) {
-                    sessionStorage.setItem('save_message', "Inclusion Updated Successfully.");
-                    window.location.reload();
-                }
-                else {
-                    toastr.error("Inclusion was not updated.");
-                }
+            else {
+                toastr.error("Inclusion was not deleted.");
             }
-        });
-    }
-
-    async function setDeleteModal () {
-        var deleteModal = document.getElementById('deleteModal')
-        deleteModal.addEventListener('show.bs.modal', async function (event) {
-    
-            var button = event.relatedTarget;
-            var inclusion_id = button.getAttribute('data-bs-whatever');
-            let data = await fetchData('inclusion/read_single.php?inclusion_id=' + inclusion_id);
-
-            var modalTitle = deleteModal.querySelector('.modal-title');
-            modalTitle.textContent = "Delete " + data.inclusion_name + "?";
-
-            $('#inclusion_id_d').val(inclusion_id);
-            $('#inclusion_name_md_d').val(data.inclusion_name);
-    
-            delete_fn.onsubmit = (e) => {
-                e.preventDefault();
-                processDelete();
-            };
-
-            async function processDelete() {
-                const delete_data = JSON.stringify({
-                    'inclusion_id' : inclusion_id
-                });
-
-                const [content, log] = await Promise.all ([deleteData('inclusion/delete.php', delete_data), logActivity('Deleted Inclusion # ' + inclusion_id, 'Inclusions - Overview')]);
-
-                if (content.message == 'Inclusion Deleted' && log) {
-                    sessionStorage.setItem('save_message', "Inclusion Deleted Successfully.");
-                    window.location.reload();
-                }
-                else {
-                    toastr.error("Inclusion was not deleted.");
-                }
-            }
-        });
-    }
+        }
+    });
     
     async function processCreate() {
         const inclusion_name = $('#inclusion_name').val();
