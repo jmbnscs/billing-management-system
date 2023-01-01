@@ -8,7 +8,7 @@ $(document).ready(function () {
     if (status == 'succ') {
         toastr.success('Customer Records Imported Successfully.');
         setTimeout(function(){
-            window.location.replace('../views/customers.php');
+            window.location.replace('../views/customers');
         }, 2000);
     }
     else if (status == 'err') {
@@ -22,10 +22,10 @@ $(document).ready(function () {
     else if (status == 'invalid_file') {
         toastr.error('Please upload a valid csv file.');
         setTimeout(function(){
-            window.location.replace('../views/customers_import.php');
+            window.location.replace('../views/customers_import');
         }, 2000);
     }
-    else if (DIR_CUR == DIR_MAIN + 'views/customers_add.php') {
+    else if (DIR_CUR == DIR_MAIN + 'views/customers_add') {
         restrictPages('customer-add');
         setAddCustomerPage();
         
@@ -36,7 +36,7 @@ $(document).ready(function () {
         // else {
         // }
     }
-    else if (DIR_CUR == DIR_MAIN + 'views/customers_import.php') {
+    else if (DIR_CUR == DIR_MAIN + 'views/customers_import') {
         restrictPages('customer-import');
         setImportCustomerPage();
         setExportCustomerPage();
@@ -100,7 +100,7 @@ async function setCustomerPage () {
                     <td data-label="Area">${customer_data[i].area}</td>
                     <td data-label="Status"><span class="badge ${tag}">${customer_data[i].status}</span></td>
                     <td data-label="Balance">&#8369; ${customer_data[i].balance}</td>
-                    <td data-label="View"><a href="../views/customer_data.php?acct=${customer_data[i].account_id}"><button type="button" class="btn btn-outline-primary""><i class="ri ri-eye-fill"></i></button><a></td>
+                    <td data-label="View"><a href="../views/customer_data?acct=${customer_data[i].account_id}"><button type="button" class="btn btn-outline-primary""><i class="ri ri-eye-fill"></i></button><a></td>
                 </tr>
             `)).draw(false);
         }
@@ -415,7 +415,7 @@ async function setAddCustomerPage () {
         if (ratings_content.success && log) {
             toastr.success('Customer Created Successfully.');
             setTimeout(function(){
-                window.location.replace('../views/customers.php');
+                window.location.replace('../views/customers');
              }, 2000);
         }
         else {

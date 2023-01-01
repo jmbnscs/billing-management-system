@@ -17,7 +17,7 @@ $(document).ready(function () {
         setRecentActivity();
     }
     else {
-        window.location.replace('../views/login.php');
+        window.location.replace('../views/login');
     }
     
 });

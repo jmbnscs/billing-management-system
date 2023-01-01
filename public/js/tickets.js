@@ -2,18 +2,18 @@ $(document).ready(function () {
     isDefault();
     restrictPages('ticket-page');
     
-    if (DIR_CUR == DIR_MAIN + 'views/tickets_create.php') {
+    if (DIR_CUR == DIR_MAIN + 'views/tickets_create') {
         restrictPages('ticket-create');
         setCreateTicketPage();
     }
-    else if (DIR_CUR == DIR_MAIN + 'views/tickets_resolved.php') {
+    else if (DIR_CUR == DIR_MAIN + 'views/tickets_resolved') {
         restrictPages('ticket-resolved');
         displaySuccessMessage();
 
         setResolvedTicketsTable();
         resolvedModal();
     }
-    else if (DIR_CUR == DIR_MAIN + 'views/tickets_pending.php') {
+    else if (DIR_CUR == DIR_MAIN + 'views/tickets_pending') {
         restrictPages('ticket-pending');
         displaySuccessMessage();
 
@@ -21,7 +21,7 @@ $(document).ready(function () {
         pendingModal();
         restrictFunctions('pending');
     }
-    else if (DIR_CUR == DIR_MAIN + 'views/tickets_invalid.php') {
+    else if (DIR_CUR == DIR_MAIN + 'views/tickets_invalid') {
         restrictPages('ticket-invalid');
         displaySuccessMessage();
 
@@ -126,7 +126,7 @@ async function activeModal () {
             
                 if (claim_content.message == 'Ticket Claimed' && log) {
                     sessionStorage.setItem('save_message', "Ticket Claimed Successfully.");
-                    window.location.replace('../views/tickets_pending.php');
+                    window.location.replace('../views/tickets_pending');
                 }
                 else {
                     toastr.error("Ticket was not claimed. " + claim_content.message);
@@ -167,7 +167,7 @@ async function invalidModal (ticket_num, page) {
     
         if (claim_content.message == 'Ticket Claimed' && log) {
             sessionStorage.setItem('save_message', "Ticket Invalidated Successfully.");
-            window.location.replace('../views/tickets_invalid.php');;
+            window.location.replace('../views/tickets_invalid');;
         }
         else {
             toastr.error("Ticket was not invalidated. " + claim_content.message);
@@ -177,7 +177,7 @@ async function invalidModal (ticket_num, page) {
 
 // -------------------------------------------------------------------- Pending Ticket Page
 async function setPendingTicketsTable () {
-    const ticket_data = await fetchData('views/ticket_pending.php');
+    const ticket_data = await fetchData('views/ticket_pending');
     var t = $('#ticket-pending-table').DataTable({
         pageLength: 5,
         lengthMenu: [5, 10, 20],
@@ -308,7 +308,7 @@ async function pendNetworkModal(ticket_num) {
     
         if ((prorate_content.message == 'Prorate Created') && (ticket_content.message == 'Ticket Updated') && log) {
             sessionStorage.setItem('save_message', "Ticket Resolved Successfully.");
-            window.location.replace('../views/tickets_resolved.php');
+            window.location.replace('../views/tickets_resolved');
         }
         else {
             toastr.error("Ticket was not updated. " + ticket_content.message + " " + prorate_content.message);
@@ -373,7 +373,7 @@ async function pendSubscriptionModal(ticket_num) {
     
         if (account_content.success && ticket_content.message == 'Ticket Updated' && log) {
             sessionStorage.setItem('save_message', "Ticket Resolved Successfully.");
-            window.location.replace('../views/tickets_resolved.php');
+            window.location.replace('../views/tickets_resolved');
         }
         else {
             toastr.error("Ticket was not updated. " + ticket_content.message + " " + account_content.message);
@@ -414,7 +414,7 @@ async function pendDefaultModal(ticket_num) {
     
         if (ticket_content.message == 'Ticket Updated' && log) {
             sessionStorage.setItem('save_message', "Ticket Resolved Successfully.");
-            window.location.replace('../views/tickets_resolved.php');
+            window.location.replace('../views/tickets_resolved');
         }
         else {
             toastr.error("Ticket was not resolved. " + ticket_content.message);
@@ -595,7 +595,7 @@ async function invalidatedTicketsModal () {
         
             if (reactivate_content.message == 'Ticket Claimed' && log) {
                 sessionStorage.setItem('save_message', "Ticket Re-Activated Successfully.");
-                window.location.replace('../views/tickets.php');
+                window.location.replace('../views/tickets');
             }
             else {
                 toastr.error("Ticket was not re-activated. " + reactivate_content.message);
@@ -743,7 +743,7 @@ async function setCreateTicketPage () {
             if (ticket_content.message == 'Ticket Created' && log) {
                 sessionStorage.removeItem('ticket_num');
                 sessionStorage.setItem('save_message', "Ticket Created Successfully.");
-                window.location.replace('../views/tickets.php');
+                window.location.replace('../views/tickets');
             }
             else {
                 toastr.error(ticket_content.message);

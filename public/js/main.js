@@ -1,7 +1,7 @@
 // Directories
-const DIR_API = 'https://bms.gstechbms.online/gstech_api/api/';
+const DIR_API = location.protocol + '//' + location.host + '/gstech_api/api/';
 const DIR_MAIN = '/bms/public/';
-const DIR_APP = 'http://bms.gstechbms.online/bms/app/includes/';
+const DIR_APP = location.protocol + '//' + location.host + '/bms/app/includes/';
 const DIR_CUR = window.location.pathname;
 
 // Constant Variables
@@ -30,13 +30,13 @@ $(document).ready( () => {
         setToastr();
     }
     else {
-        window.location.replace('../views/login.php');
+        window.location.replace('../views/login');
     }
 });
 
 function checkDefaults() {
     if (admin_id === undefined || admin_id == 'null' || admin_id === null || admin_id == 'undefined') {
-        window.location.replace('../views/login.php');
+        window.location.replace('../views/login');
     }
     else {
         return true;
@@ -46,7 +46,7 @@ function checkDefaults() {
 // Check if still using Default Password
 function isDefault () {
     if (hashed == 0) { 
-        window.location.replace('../views/profile.php');
+        window.location.replace('../views/profile');
     }
 }
 
@@ -380,7 +380,7 @@ function restrictPages (dir) {
                 if (key == dir) {
                     if (data[key] == 0) {
                         setErrorMessage();
-                        window.location.replace("../views/dashboard.php");
+                        window.location.replace("../views/dashboard");
                     }
                 }
             });
@@ -409,7 +409,7 @@ $(() => {
 $('#account-settings').on('click', (e) => {
     e.preventDefault();
     sessionStorage.setItem('edit', true);
-    window.location.replace('../views/profile.php');
+    window.location.replace('../views/profile');
 })
 
 // Logout Session
@@ -421,7 +421,7 @@ function logout() {
         url: '../../app/includes/logout.inc.php',
         cache: false,
         success: function() {
-            window.location.replace('../views/login.php');
+            window.location.replace('../views/login');
         },
         error: function (xhr, status, error) {
             console.error(xhr)
