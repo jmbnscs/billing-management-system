@@ -2,6 +2,12 @@
 $ch = require 'curl.init.php';
 $url = DIR_API . "upload/customer.php";
 
+$filename = 'uploaderror.csv';
+$filepath = '../temp/' . $filename;
+
+header('Content-Type: text/csv');
+header('Content-Disposition: attachment; filename="' . $filename . '"');
+
 $data_error = array(['account_id', 'start_date', 'plan_name', 'connection_name', 'area_name', 'first_name', 'middle_name', 'last_name', 'billing_address', 'mobile_number', 'email', 'birthdate', 'install_type_name', 'install_balance', 'install_status', 'billing_end_date', 'total_bill', 'running_balance']);
 
 if(isset($_POST['importSubmit'])){
@@ -10,15 +16,16 @@ if(isset($_POST['importSubmit'])){
     
     if(!empty($_FILES['file']['name']) && in_array($_FILES['file']['type'], $csvMimes)){
         
+        $fp = fopen($filepath, 'w');
+
         // If the file is uploaded
         if(is_uploaded_file($_FILES['file']['tmp_name'])){
             
             $csvFile = fopen($_FILES['file']['tmp_name'], 'r');
-            $fp = fopen('../temp/uploaderror.csv', 'w');
             
             fgetcsv($csvFile);
             
-            while(($line = fgetcsv($csvFile)) !== FALSE){
+            while(($line = fgetcsv($csvFile)) != FALSE){
 
                 $account_id = isAccountIDExist($line[0]);
                 $mobile_number = formatMobileNumber($line[9]);
@@ -64,7 +71,7 @@ if(isset($_POST['importSubmit'])){
                     curl_close($ch);
                     $response = json_decode($resp, true);
 
-                    if ($response['success'] === true) {
+                    if ($response['success'] == true) {
                         // $qstring = '?status=succ';
                         continue;
                     }
@@ -74,7 +81,7 @@ if(isset($_POST['importSubmit'])){
                 }
             }
 
-            if (count($data_error) === 1) {
+            if (count($data_error) == 1) {
                 $qstring = '?status=succ';
                 // echo json_encode(
                 //     array (
@@ -86,6 +93,8 @@ if(isset($_POST['importSubmit'])){
                 foreach ($data_error as $fields) {
                     fputcsv($fp, $fields);
                 }
+                fclose($fp);
+                fclose($csvFile);
                 $qstring = '?status=err';
                 // echo json_encode(
                 //     array (
@@ -93,10 +102,10 @@ if(isset($_POST['importSubmit'])){
                 //     )
                 // );
             }
-            fclose($fp);
-            fclose($csvFile);
         }
         else {
+            fclose($fp);
+            fclose($csvFile);
             $qstring = '?status=err';
             // echo json_encode(
             //     array (
@@ -118,10 +127,10 @@ if(isset($_POST['importSubmit'])){
 }
 
 function formatMobileNumber ($mobile_number) {
-	if((substr($mobile_number, 0, 2) === '09') && (strlen($mobile_number) === 11)) {
+	if((substr($mobile_number, 0, 2) == '09') && (strlen($mobile_number) == 11)) {
     	return $mobile_number;
     }
-    else if((substr($mobile_number, 0, 1) === '9') && (strlen($mobile_number) === 10)) {
+    else if((substr($mobile_number, 0, 1) == '9') && (strlen($mobile_number) == 10)) {
     	return '0' . $mobile_number;
     }
     else {
@@ -154,7 +163,7 @@ function isAccountIDExist ($account_id) {
     curl_close($ch);
     $response = json_decode($resp, true);
 
-    if ($response['message'] === 'success') {
+    if ($response['message'] == 'success') {
         return 'error';
     }
     else {

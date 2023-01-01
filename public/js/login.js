@@ -67,8 +67,8 @@ $(document).ready(function () {
 });
 
 // -------------------------------- Backend JS --------------------------------
-const DIR_API = 'http://localhost/gstech_api/api/';
-const DIR_APP = 'http://localhost/billing-management-system/app/includes/';
+const DIR_API = 'https://bms.gstechbms.online/gstech_api/api/';
+const DIR_APP = 'http://bms.gstechbms.online/bms/app/includes/';
 
 async function login () {
     const admin_username = $('#admin_username').val();

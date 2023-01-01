@@ -12,8 +12,9 @@ $(document).ready(function () {
         }, 2000);
     }
     else if (status == 'err') {
-        toastr.warning('Some error has occurred, please download file to update.');
+        toastr.warning('Some error has occurred, please check error file to update.');
         $('#error-dl').removeClass('hide');
+        setDownloadError();
         // setTimeout(function(){
         //     window.location.replace('../views/customers_add.php');
         // }, 2000);
@@ -39,6 +40,7 @@ $(document).ready(function () {
         restrictPages('customer-import');
         setImportCustomerPage();
         setExportCustomerPage();
+        setDownloadPage();
         $('#error-dl').addClass('hide');
         
         // if(user_id == 4|| user_id == 5 || user_id == 6) {
@@ -180,10 +182,10 @@ async function setCustomerPage () {
 async function setAddCustomerPage () {
     const add_customer = document.getElementById('add-customer');
 
-    if (localStorage.getItem('account_id') == null) {
-        localStorage.setItem('account_id', await generateID('check/account_id.php?account_id=', "", 8));
+    if (sessionStorage.getItem('account_id') == null) {
+        sessionStorage.setItem('account_id', await generateID('check/account_id.php?account_id=', "", 8));
     }
-    $('#account_id').val(localStorage.getItem('account_id'));
+    $('#account_id').val(sessionStorage.getItem('account_id'));
 
     setAddDropdown();
 
@@ -316,7 +318,7 @@ async function setAddCustomerPage () {
             toastr.warning('Please provide the appropriate details on each field.');
         }
         else {
-            localStorage.removeItem('account_id');
+            sessionStorage.removeItem('account_id');
             addCustomer();
         }
     }
@@ -372,6 +374,9 @@ async function setAddCustomerPage () {
 
         account_content = await createData('account/create.php', account_data);
 
+        console.log(account_content);
+        console.log(account_data);
+
         if (account_content.success) {
             customer_content = await createData('customer/create.php', customer_data);
         }
@@ -379,6 +384,9 @@ async function setAddCustomerPage () {
             const delete_account = await deleteData('account/delete.php', delete_data);
             (delete_account.success) ? displayErrorMessage() : displayErrorMessage();
         }
+
+        console.log(customer_content);
+        console.log(customer_data);
 
         if (customer_content.success) {
             installation_content = await createData('installation/create.php', install_data);
@@ -388,6 +396,9 @@ async function setAddCustomerPage () {
             (delete_account.success && delete_customer.success) ? displayErrorMessage() : displayErrorMessage();
         }
 
+        console.log(installation_content);
+        console.log(install_data);
+
         if (installation_content.success) {
             ratings_content = await createData('ratings/create.php', rating_data);
         }
@@ -395,6 +406,9 @@ async function setAddCustomerPage () {
             const [delete_account, delete_customer, delete_installation] = await Promise.all ([deleteData('account/delete.php', delete_data), deleteData('customer/delete.php', delete_data), deleteData('installation/delete.php', delete_data)]);
             (delete_account.success && delete_customer.success && delete_installation.success) ? displayErrorMessage() : displayErrorMessage();
         }
+
+        console.log(ratings_content);
+        console.log(rating_data);
 
         let log = await logActivity('Created new customer account with Account ID # ' + account_id, 'Customer - Add New Account');
 
@@ -411,9 +425,9 @@ async function setAddCustomerPage () {
 
         function displayErrorMessage() {
             toastr.error('Some error has occurred, please try again later.');
-            setTimeout(function(){
-                window.location.reload();
-             }, 2000);
+            // setTimeout(function(){
+            //     window.location.reload();
+            //  }, 2000);
         }
 
     }
@@ -470,6 +484,48 @@ async function setExportCustomerPage () {
     const export_customer = document.getElementById('export-customer');
     export_customer.onsubmit = (e) => {
         $('#export-customer').attr('action', '../../app/includes/customer_export.php');
+        toastr.info("Preparing CSV File...");
+        // $.ajax({
+        //     url: '../../app/includes/customer_export.php',
+        //     cache: false,
+        //     success: function(response) {
+        //         var res = $.parseJSON(response);
+        //         console.log(res)
+        //     },
+        //     error: function (xhr, status, error, response) {
+        //         console.error(xhr);
+        //         var res = $.parseJSON(response);
+        //         console.log(res)
+        //     }
+        // });
+    };
+}
+
+async function setDownloadPage () {
+    const download_template = document.getElementById('download-template');
+    download_template.onsubmit = (e) => {
+        $('#download-template').attr('action', '../../app/includes/download_template.php');
+        toastr.info("Preparing CSV File...");
+        // $.ajax({
+        //     url: '../../app/includes/customer_export.php',
+        //     cache: false,
+        //     success: function(response) {
+        //         var res = $.parseJSON(response);
+        //         console.log(res)
+        //     },
+        //     error: function (xhr, status, error, response) {
+        //         console.error(xhr);
+        //         var res = $.parseJSON(response);
+        //         console.log(res)
+        //     }
+        // });
+    };
+}
+
+async function setDownloadError () {
+    const download_error = document.getElementById('download-error');
+    download_error.onsubmit = (e) => {
+        $('#download-error').attr('action', '../../app/includes/download_error.php');
         toastr.info("Preparing CSV File...");
         // $.ajax({
         //     url: '../../app/includes/customer_export.php',

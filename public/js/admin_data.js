@@ -41,8 +41,14 @@ async function setAdminData(admin_data) {
         const [roles, statuses] = await Promise.all ([fetchData('user_level/read.php'), fetchData('statuses/read.php?status_table=admin_status')]);
 
         if (admin_data.user_level_id == 2) {
+            $('#admin-role-select').removeAttr('required');
+            $('#admin-status-select').removeAttr('required');
             $('#admin-role-select').addClass('hide');
             $('#admin-status-select').addClass('hide');
+        }
+        else {
+            $('#admin-role-select').attr('required', true);
+            $('#admin-status-select').attr('required', true);
         }
 
         $("#admin_role_edt").empty();
@@ -83,6 +89,12 @@ async function setAdminData(admin_data) {
             e.preventDefault();
             resetPassword();
         };
+
+        const save_admin = document.getElementById('save-admin');
+        save_admin.onsubmit = (e) => {
+            e.preventDefault();
+            updateAdminData();
+        };
     
         async function resetPassword() {
             let update_data = JSON.stringify({
@@ -90,7 +102,7 @@ async function setAdminData(admin_data) {
                 'admin_password' : content.def_password
             });
     
-            const [update_content, log] = await Promise.all ([updateData('admin/reset_password.php', update_data), logActivity('Password Reset for Admin ' + content.def_username + ' - ' + admin_id, 'View Admins')]);
+            const [update_content, log] = await Promise.all ([updateData('admin/reset_password.php', update_data), logActivity('Password Reset for Admin ' + content.def_username + ' - ' + content.admin_id, 'View Admins')]);
     
             if (update_content.success && log) {
                 toastr.success('Password has been reset successfully.');
@@ -100,6 +112,56 @@ async function setAdminData(admin_data) {
             }
             else {
                 toastr.error('Some error has occurred, please try again later.');
+            }
+        }
+
+        async function updateAdminData() {
+            const admin_id = admin_data.admin_id;
+            let user_level_id, admin_status_id;
+            if (admin_data.user_level_id == 2) {
+                user_level_id = admin_data.user_level_id;
+                admin_status_id = 1;
+            }
+            else {
+                user_level_id = $('#admin_role_edt').val();
+                admin_status_id = $('#admin_status_edt').val();
+            }
+        
+            let admin_data_update = JSON.stringify({
+                'admin_id' : admin_data.admin_id,
+                'admin_email' : $('#email_edt').val(),
+                'mobile_number' : $('#mobile_number_edt').val(),
+                'address' : $('#address_edt').val(),
+                'user_level_id' : user_level_id
+            });
+        
+            let status_data = JSON.stringify({
+                'admin_id' : admin_data.admin_id,
+                'admin_status_id' : admin_status_id
+            });
+
+            let activity, log = true;
+            if (admin_data.admin_status_id != $('#admin_status_edt').val()) {
+                activity = 'Updated admin status [' + admin_data.admin_id + ' - ' + admin_data.first_name + ' ' + admin_data.last_name + ']';
+                log = await logActivity(activity, 'View Admins');
+            }
+            if (admin_data.user_level_id != $('#admin_role_edt').val()) {
+                activity = 'Updated admin user level [' + admin_data.admin_id + ' - ' + admin_data.first_name + ' ' + admin_data.last_name + ']';
+                log = await logActivity(activity, 'View Admins');
+            }
+            if (admin_data.admin_email != $('#email_edt').val() || admin_data.mobile_number != $('#mobile_number_edt').val() || admin_data.address != $('#address_edt').val()) {
+                activity = 'Updated admin general information [' + admin_data.admin_id + ' - ' + admin_data.first_name + ' ' + admin_data.last_name + ']';
+                log = await logActivity(activity, 'View Admins');
+            }
+
+            const [admin_content, status_content] = await Promise.all ([updateData('admin/update.php', admin_data_update), updateData('admin/update_status.php', status_data)]);
+
+            if (admin_content.message == 'success' && status_content.message == 'Admin Updated' && log) {
+                sessionStorage.setItem('save_message', "Admin Updated Successfully.");
+                window.location.reload();
+            }
+            else {
+                toastr.error("Admin was not updated.");
             }
         }
     });
