@@ -15,6 +15,7 @@ $(document).ready(function () {
         setCollection();
         setTicketOverview();
         setRecentActivity();
+        downloadReports();
     }
     else {
         window.location.replace('../views/login');
@@ -43,6 +44,15 @@ function setEventListener() {
     uncharged_this_year.addEventListener('click', (e) => {
         filterProrateCard('year');
     }, false);
+}
+
+// Download Full Report
+async function downloadReports () {
+    const download_reports = document.getElementById('download-reports');
+    download_reports.onsubmit = (e) => {
+        $('#download-reports').attr('action', '../../app/includes/download_reports.php');
+        toastr.info("Preparing Report...");
+    };
 }
 
 // Recent Activity

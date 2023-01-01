@@ -3,15 +3,26 @@
   include '../models/navbar.html'; ?>
 
 <main id="main" class="main">
-<div class="pagetitle">
-  <h1>Dashboard</h1>
-  <nav>
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="dashboard.php">Home</a></li>
-      <li class="breadcrumb-item active">Dashboard</li>
-    </ol>
-  </nav>
-</div><!-- End Page Title -->
+<div class="row">
+  <div class="pagetitle col-sm-10">
+    <h1>Dashboard</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="dashboard.php">Home</a></li>
+        <li class="breadcrumb-item active">Dashboard</li>
+      </ol>
+    </nav>
+  </div><!-- End Page Title -->
+
+  <div class="col-sm-2 pb-3">
+    <form method="post" id="download-reports" class="form-inline" target="_blank">
+        <div class="form-group mx-auto">
+            <input type="submit" class="btn btn-primary form-control " name="downloadReport" value="Download Full Report">
+        </div>
+    </form>
+  </div>
+</div>
+
 
 <section class="section dashboard">
 
