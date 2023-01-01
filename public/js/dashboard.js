@@ -15,7 +15,6 @@ $(document).ready(function () {
         setCollection();
         setTicketOverview();
         setRecentActivity();
-        downloadReports();
     }
     else {
         window.location.replace('../views/login');
@@ -44,15 +43,6 @@ function setEventListener() {
     uncharged_this_year.addEventListener('click', (e) => {
         filterProrateCard('year');
     }, false);
-}
-
-// Download Full Report
-async function downloadReports () {
-    const download_reports = document.getElementById('download-reports');
-    download_reports.onsubmit = (e) => {
-        $('#download-reports').attr('action', '../../app/includes/download_reports.php');
-        toastr.info("Preparing Report...");
-    };
 }
 
 // Recent Activity
@@ -242,59 +232,59 @@ async function setRevenueReports() {
           }
         }
       });
-}
 
-function setMonthLabel() {
-    let months = ["January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"];
+    async function getRevenueData() {
+        let content = await fetchData('payment/read.php');
+        let current = new Date().getMonth(), i = 6, prev_year = new Date().getFullYear() - 1, data = new Array(), revenue = 0.00, check = 0;
 
-    let current = new Date().getMonth();
-    let labels = new Array(), i = 6;
-
-    while (i !== 0) {
-        if (current <= 0) {
-            current = 12;
-        }
-        labels.push(months[current - 1]);
-        current--;
-        i--;
-    }
-    return labels.reverse();
-}
-
-async function getRevenueData() {
-    let content = await fetchData('payment/read.php');
-    let current = new Date().getMonth(), i = 6, prev_year = new Date().getFullYear() - 1, data = new Array(), revenue = 0.00, check = 0;
-
-    while (i !== 0) {
-        if (current <= 0) {
-            current = 12;
-            check = 1;
-        }
-
-        if (check == 1) {
-            for (var j = 0; j < content.length; j++) {
-                if (parseInt(content[j].payment_date.split('-')[1]) == current && parseInt(content[j].payment_date.split('-')[0] == prev_year)) {
-                    revenue = parseFloat(revenue) + parseFloat(content[j].amount_paid);
-                }
+        while (i !== 0) {
+            if (current <= 0) {
+                current = 12;
+                check = 1;
             }
-            data.push(parseFloat(revenue));
-        }
-        else {
-            for (var j = 0; j < content.length; j++) {
-                if (parseInt(content[j].payment_date.split('-')[1]) == current) {
-                    revenue = parseFloat(revenue) + parseFloat(content[j].amount_paid);
-                }
-            }
-            data.push(parseFloat(revenue));
-        }
-        
 
-        i--;
-        current--;
-        revenue = 0.00;
+            if (check == 1) {
+                for (var j = 0; j < content.length; j++) {
+                    if (parseInt(content[j].payment_date.split('-')[1]) == current || parseInt(content[j].payment_date.split('-')[0] == prev_year)) {
+                        revenue = parseFloat(revenue) + parseFloat(content[j].amount_paid);
+                    }
+                }
+                data.push(parseFloat(revenue));
+            }
+            else {
+                for (var j = 0; j < content.length; j++) {
+                    if (parseInt(content[j].payment_date.split('-')[1]) == current) {
+                        revenue = parseFloat(revenue) + parseFloat(content[j].amount_paid);
+                    }
+                }
+                data.push(parseFloat(revenue));
+            }
+            
+
+            i--;
+            current--;
+            revenue = 0.00;
+        }
+        return data.reverse();
     }
-    return data.reverse();
+
+    function setMonthLabel() {
+        let months = ["January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"];
+    
+        let current = new Date().getMonth();
+        let labels = new Array(), i = 6;
+    
+        while (i !== 0) {
+            if (current <= 0) {
+                current = 12;
+            }
+            labels.push(months[current - 1]);
+            current--;
+            i--;
+        }
+        return labels.reverse();
+    }
 }
 
 // Plan Preview
@@ -325,18 +315,18 @@ async function setPlanPreview() {
                 </tr>
         `)).draw(false);
     }
-}
 
-async function countPlanSubscribers(plan_id) {
-    let content = await fetchData('account/read.php'), counter = 0;
-
-    for (var i = 0; i < content.length; i++) {
-        if (content[i].plan_id == plan_id) {
-            counter = counter + 1;
+    async function countPlanSubscribers(plan_id) {
+        let content = await fetchData('account/read.php'), subscribers = 0;
+    
+        for (var i = 0; i < content.length; i++) {
+            if (content[i].plan_id == plan_id) {
+                subscribers = subscribers + 1;
+            }
         }
+    
+        return subscribers;
     }
-
-    return counter;
 }
 
 // Customer Preview
@@ -390,63 +380,64 @@ async function setCollection() {
         }]
     }
     });
-}
 
-async function setCollectionData() {
-    let paid = await getPaidUnpaidData(1);
-    let unpaid = await getPaidUnpaidData(2);
-    let acct_receivables = await getAccountReceivables();
-    let collection = [paid, unpaid, acct_receivables];
-    return collection;
-}
+    async function setCollectionData() {
+        let paid = await getPaidUnpaidData(1);
+        let unpaid = await getPaidUnpaidData(2);
+        let acct_receivables = await getAccountReceivables();
+        let collection = [paid, unpaid, acct_receivables];
+        return collection;
+    }
 
-async function getPaidUnpaidData(status_id) {
-    let content = await fetchData('invoice/read.php');
-    let amount = 0.00;
-    for (var i = 0; i < content.length; i++) {
-        if (parseInt(content[i].billing_period_end.split('-')[1]) == currentMonth && parseInt(content[i].billing_period_end.split('-')[0]) == currentYear) {
-            if (status_id == 1) {
-                if (content[i].invoice_status_id == 1) {
-                    amount = parseFloat(amount) + parseFloat(content[i].amount_paid);
+    async function getPaidUnpaidData(status_id) {
+        let content = await fetchData('invoice/read.php');
+        let amount = 0.00;
+        for (var i = 0; i < content.length; i++) {
+            if (parseInt(content[i].billing_period_end.split('-')[1]) == currentMonth && parseInt(content[i].billing_period_end.split('-')[0]) == currentYear) {
+                if (status_id == 1) {
+                    if (content[i].invoice_status_id == 1) {
+                        amount = parseFloat(amount) + parseFloat(content[i].amount_paid);
+                    }
                 }
-            }
-            else {
-                if (content[i].invoice_status_id !== 1) {
-                    amount = parseFloat(amount) + parseFloat(content[i].running_balance);
+                else {
+                    if (content[i].invoice_status_id !== 1) {
+                        amount = parseFloat(amount) + parseFloat(content[i].running_balance);
+                    }
                 }
             }
         }
+    
+        return amount;
     }
 
-    return amount;
-}
-
-async function getAccountReceivables() {
-    let content = await fetchData('account/read.php');
-    let acct_receivables = 0.00;
-    for (var i = 0; i < content.length; i++) {
-        if (content[i].billing_day > currentDay) {
-            acct_receivables = parseFloat(acct_receivables) + parseFloat(await getPlanPrice(content[i].plan_id));
+    async function getAccountReceivables() {
+        let content = await fetchData('account/read.php');
+        let acct_receivables = 0.00;
+        for (var i = 0; i < content.length; i++) {
+            if (content[i].billing_day > currentDay) {
+                acct_receivables = parseFloat(acct_receivables) + parseFloat(await getPlanPrice(content[i].plan_id));
+            }
         }
+        return acct_receivables;
     }
-    return acct_receivables;
-}
 
-async function getPlanPrice(plan_id) {
-    let content = await fetchData('plan/read_single.php?plan_id=' + plan_id);
-    return parseFloat(content.price);
+    async function getPlanPrice(plan_id) {
+        let content = await fetchData('plan/read_single.php?plan_id=' + plan_id);
+        return parseFloat(content.price);
+    }
 }
 
 // Ticket Overview
 async function setTicketOverview() {
-    let ticket_data = await setTicketData();
+    let ticket_data = await getTicketData();
     new Chart(document.querySelector('#ticket_overview'), {
     type: 'polarArea',
     data: {
         labels: [
         'Network Interruption',
         'Subscription Change',
-        'Disconnection'
+        'Disconnection',
+        'General Concern'
         ],
         datasets: [{
         label: 'Number of Customers',
@@ -454,31 +445,35 @@ async function setTicketOverview() {
         backgroundColor: [
             'rgb(75, 192, 192)',
             'rgb(54, 162, 235)',
-            'rgb(153, 102, 255)'
+            'rgb(153, 102, 255)',
+            'rgb(255, 205, 86)'
         ],
         hoverOffset: 4
         }]
     }
     });
-}
 
-async function setTicketData() {
-    let content = await fetchData('ticket/read.php');
-    let network = 0, subscription = 0, disconnection = 0;
-
-    for (var i = 0; i < content.length; i++) {
-        if (parseInt(content[i].date_filed.split('-')[1]) == currentMonth) {
-            if (content[i].concern_id == 1) {
-                network = network + 1;
-            }
-            else if (content[i].concern_id == 2) {
-                subscription = subscription + 1;
-            }
-            else if (content[i].concern_id == 3) {
-                disconnection = disconnection + 1;
+    async function getTicketData() {
+        let content = await fetchData('ticket/read.php');
+        let network = 0, subscription = 0, disconnection = 0, general = 0;
+    
+        for (var i = 0; i < content.length; i++) {
+            if (parseInt(content[i].date_filed.split('-')[1]) == currentMonth) {
+                if (content[i].concern_id == 1) {
+                    network = network + 1;
+                }
+                else if (content[i].concern_id == 2) {
+                    subscription = subscription + 1;
+                }
+                else if (content[i].concern_id == 3) {
+                    disconnection = disconnection + 1;
+                }
+                else if (content[i].concern_id == 4) {
+                    general = general + 1;
+                }
             }
         }
+    
+        return [network, subscription, disconnection, general];
     }
-
-    return [network, subscription, disconnection];
 }

@@ -4,25 +4,16 @@
 
 <main id="main" class="main">
 <div class="row">
-  <div class="pagetitle col-sm-10">
+  <div class="pagetitle col-sm-9">
     <h1>Dashboard</h1>
     <nav>
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="dashboard.php">Home</a></li>
+        <li class="breadcrumb-item"><a href="dashboard">Home</a></li>
         <li class="breadcrumb-item active">Dashboard</li>
       </ol>
     </nav>
   </div><!-- End Page Title -->
-
-  <div class="col-sm-2 pb-3">
-    <form method="post" id="download-reports" class="form-inline" target="_blank">
-        <div class="form-group mx-auto">
-            <input type="submit" class="btn btn-primary form-control " name="downloadReport" value="Download Full Report">
-        </div>
-    </form>
-  </div>
 </div>
-
 
 <section class="section dashboard">
 
@@ -106,7 +97,7 @@
           <div class="card info-card active-tickets-card">
 
             <div class="card-body">
-              <h5 class="card-title">Active Tickets</h5>
+              <h5 class="card-title">Active Tickets <span>| Today</span></h5>
 
               <div class="d-flex align-items-center">
                 <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
@@ -129,7 +120,7 @@
           <div class="card info-card claimed-tickets-card">
 
             <div class="card-body">
-              <h5 class="card-title">Claimed Tickets</h5>
+              <h5 class="card-title">Claimed Tickets <span>| Today</span></h5>
 
               <div class="d-flex align-items-center">
                 <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
