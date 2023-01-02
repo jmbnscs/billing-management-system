@@ -109,7 +109,7 @@ async function fetchData(page) {
 async function updateData(page, data) {
     let url = DIR_API + page;
     const updateResponse = await fetch(url, {
-        method : 'PUT',
+        method : 'POST',
         headers : {
             'Content-Type' : 'application/json'
         },
