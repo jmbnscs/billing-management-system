@@ -95,7 +95,7 @@
           <div class="card info-card active-tickets-card">
 
             <div class="card-body">
-              <h5 class="card-title">Active Tickets</h5>
+              <h5 class="card-title">Active Tickets <span> | Today</span></h5>
 
               <div class="d-flex align-items-center">
                 <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
@@ -118,7 +118,7 @@
           <div class="card info-card claimed-tickets-card">
 
             <div class="card-body">
-              <h5 class="card-title">Claimed Tickets</h5>
+              <h5 class="card-title">Claimed Tickets <span> | Today</span></h5>
 
               <div class="d-flex align-items-center">
                 <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
