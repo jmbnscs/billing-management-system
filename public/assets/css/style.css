@@ -436,7 +436,7 @@ h6 {
   min-width: 300px;
   /* padding-left: 600px; */
   position: relative;
-  float: right;
+  /* float: left; */
 }
 
 @media (max-width: 1199px) {

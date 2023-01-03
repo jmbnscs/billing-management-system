@@ -50,6 +50,27 @@ function isDefault () {
     }
 }
 
+// Live Search
+function showResult(str) {
+    if (str.length == 0) {
+      document.getElementById("livesearch").innerHTML="";
+      document.getElementById("livesearch").style.border="0px";
+      return;
+    }
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange=function() {
+      if (this.readyState == 4 && this.status == 200) {
+        document.getElementById("livesearch").innerHTML = this.responseText;
+        document.getElementById("livesearch").style.border = "1px solid #A5ACB2";
+        document.getElementById("livesearch").style.background = "white";
+        document.getElementById("livesearch").style.minWidth = "300px";
+        document.getElementById("livesearch").style.position = "absolute";
+      }
+    }
+    xmlhttp.open("GET", DIR_APP + "/livesearch.php?q=" +str, true);
+    xmlhttp.send();
+}
+
 // Log Admin Activity
 async function logActivity(activity, page_accessed) {
     let url = DIR_APP + 'log_activity.php';
