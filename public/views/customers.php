@@ -44,8 +44,8 @@
               <th scope="col">Customer</th>
               <th scope="col">Plan</th>
               <th scope="col">Area</th>
-              <th scope="col">Status</th>
               <th scope="col">Balance</th>
+              <th scope="col">Status</th>
               <th scope="col">View</th>
             </tr>
           </thead>
