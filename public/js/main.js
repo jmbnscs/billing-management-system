@@ -1,6 +1,6 @@
 // Directories
-const DIR_API = location.protocol + '//' + location.host + '/gstech_api/api/';
-const DIR_MAIN = '/bms/public/';
+const DIR_API = location.protocol + '//' + location.host + '/gstech/api/';
+const DIR_MAIN = '/admin/public/';
 const DIR_APP = location.protocol + '//' + location.host + '/admin/app/includes/';
 const DIR_CUR = window.location.pathname;
 
