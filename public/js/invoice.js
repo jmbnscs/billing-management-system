@@ -1,16 +1,16 @@
 $(document).ready( function () {
     isDefault();
 
-    if (DIR_CUR == DIR_MAIN + 'views/invoice_payments_add.php') {
+    if (DIR_CUR == DIR_MAIN + 'views/invoice_payments_add') {
         restrictPages('invoice-payment-add');
         setAddPaymentPage();
     }
-    else if (DIR_CUR == DIR_MAIN + 'views/invoice_payments.php') {
+    else if (DIR_CUR == DIR_MAIN + 'views/invoice_payments') {
         restrictPages('invoice-payment');
         setPaymentRecordsPage();
         restrictFunctions('payments');
     }
-    else if (DIR_CUR == DIR_MAIN + 'views/invoice_prorate.php') {
+    else if (DIR_CUR == DIR_MAIN + 'views/invoice_prorate') {
         restrictPages('invoice-prorate');
         setProrateRecordsPage();
         restrictFunctions('prorate');
@@ -55,7 +55,7 @@ async function setInvoicePage () {
                 <td data-label="Disconnection Date">${content[i].disconnection_date}</td>
                 <td data-label="Balance">&#8369; ${content[i].running_balance}</td>
                 <td data-label="Status"><span class="badge ${tag}">${content[i].status}</span></td>
-                <td data-label="View"><a href="../views/invoice_data.php?acct=${content[i].invoice_id}" target="_blank"><button type="button" class="btn btn-outline-primary"><i class="ri ri-eye-fill"></i></button></a></td>
+                <td data-label="View"><a href="../views/invoice_data?acct=${content[i].invoice_id}" target="_blank"><button type="button" class="btn btn-outline-primary"><i class="ri ri-eye-fill"></i></button></a></td>
             </tr>
         `)).draw(false);
     }
@@ -619,7 +619,7 @@ async function setAddPaymentPage () {
             if (payment_content.success && log) {
                 toastr.success('Payment Record Created Successfully.');
                 setTimeout(function(){
-                    window.location.replace('../views/invoice_payments.php');
+                    window.location.replace('../views/invoice_payments');
                     }, 2000);
             }
             else {

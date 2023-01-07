@@ -195,7 +195,7 @@
                       <div class="col-sm-11 m-auto">
                         <h5 class="card-title">Activity Logs</h5>
                           <div class="container overflow-auto activity-logs-tbl">
-                          <table class="table-profile table-borderless" id="activity-logs-tbl">
+                          <table class="table table-borderless" id="activity-logs-tbl">
                             <thead>
                               <tr>
                                 <th scope="col">ID</th>

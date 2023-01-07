@@ -68,7 +68,7 @@ async function setViewAdminPage () {
                     <td data-label="Role">${admins[i].role}</td>
                     <td data-label="Email">${admins[i].admin_email}</td>
                     <td data-label="Status"><span class="badge ${tag}">${admins[i].status}</span></td>
-                    <td data-label="View"><a href="../views/admin_data.php?acct=${admins[i].admin_id}"><button type="button" class="btn btn-outline-primary"><i class="ri ri-eye-fill"></i></button></a></td>
+                    <td data-label="View"><a href="../views/admin_data?acct=${admins[i].admin_id}"><button type="button" class="btn btn-outline-primary"><i class="ri ri-eye-fill"></i></button></a></td>
                 </tr>
             `)).draw(false);
         }
@@ -309,7 +309,7 @@ async function setAddAdminPage () {
             
             toastr.success('Admin Created Successfully.');
                 setTimeout(function(){
-                    window.location.replace('../views/admins.php');
+                    window.location.replace('../views/admins');
                  }, 2000);
             
         }

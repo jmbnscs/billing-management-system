@@ -182,12 +182,13 @@ async function setActivities() {
     for (var i = 0; i < content.length; i++) {
         if (content[i].page_accessed != 'Login') {
             t.row.add($(`
-            <tr>
-                <th scope="row" style="color: #012970;"><strong>${counter}</strong></th>
-                <td>${content[i].page_accessed}</td>
-                <td>${content[i].activity}</td>
-                <td>${content[i].date_accessed}</td>
-            </tr>
+                <tr>
+                    <th scope="row" style="color: #012970;"><strong>${content[i].id}</strong></th>
+                    <td>${content[i].page_accessed}</td>
+                    <td>${content[i].date_accessed.split(' ')[0]}</td>
+                    <td>${content[i].date_accessed.split(' ')[1]}</td>
+                    <td><button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#view-activity-modal" data-bs-whatever="${content[i].id}"><i class="ri ri-eye-fill"></i></button></td>
+                </tr>
             `)).draw(false);
         }
         else {
@@ -196,6 +197,45 @@ async function setActivities() {
                 
         counter++;
     }
+
+    var viewModal = document.getElementById('view-activity-modal')
+    viewModal.addEventListener('show.bs.modal', async function (event) {
+        var modalTitle = viewModal.querySelector('.modal-title');
+        var button = event.relatedTarget;
+        var data_id = button.getAttribute('data-bs-whatever');
+        modalTitle.textContent = "Activity Log # " + data_id;
+
+        let id, data;
+
+        const selected_data = content.filter(item => item.id == data_id)[0];
+    
+        id = [
+            // '#activity_id', 
+            '#activity_page', 
+            '#activity_made', 
+            '#activity_date', 
+            '#activity_time',
+            '#activity_address',
+            '#activity_user_agent'
+        ];
+        data = [
+            // selected_data.id, 
+            selected_data.page_accessed, 
+            selected_data.activity,
+            selected_data.date_accessed.split(' ')[0], 
+            selected_data.date_accessed.split(' ')[1],
+            selected_data.ip_address,
+            selected_data.user_agent
+        ];
+
+        setContent();
+
+        function setContent () {
+            for (var i = 0; i < data.length; i++) {
+                $(id[i]).val(data[i]);
+            }
+        }
+    });
 }
 
 async function setTicketHistory() {

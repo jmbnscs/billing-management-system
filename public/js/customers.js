@@ -8,7 +8,7 @@ $(document).ready(function () {
     if (status == 'succ') {
         toastr.success('Customer Records Imported Successfully.');
         setTimeout(function(){
-            window.location.replace('../views/customers.php');
+            window.location.replace('../views/customers');
         }, 2000);
     }
     else if (status == 'err') {
@@ -22,34 +22,19 @@ $(document).ready(function () {
     else if (status == 'invalid_file') {
         toastr.error('Please upload a valid csv file.');
         setTimeout(function(){
-            window.location.replace('../views/customers_import.php');
+            window.location.replace('../views/customers_import');
         }, 2000);
     }
-    else if (DIR_CUR == DIR_MAIN + 'views/customers_add.php') {
+    else if (DIR_CUR == DIR_MAIN + 'views/customers_add') {
         restrictPages('customer-add');
         setAddCustomerPage();
-        
-        // if(user_id == 4|| user_id == 5 || user_id == 6) {
-        //     setErrorMessage();
-        //     window.location.replace("../views/dashboard.php");
-        // }
-        // else {
-        // }
     }
-    else if (DIR_CUR == DIR_MAIN + 'views/customers_import.php') {
+    else if (DIR_CUR == DIR_MAIN + 'views/customers_import') {
         restrictPages('customer-import');
         setImportCustomerPage();
         setExportCustomerPage();
         setDownloadPage();
         $('#error-dl').addClass('hide');
-        
-        // if(user_id == 4|| user_id == 5 || user_id == 6) {
-        //     setErrorMessage();
-        //     window.location.replace("../views/dashboard.php");
-        // }
-        // else {
-        //     setAddCustomerPage();
-        // }
     }
     else {
         restrictPages('customer-page');
@@ -62,120 +47,113 @@ $(document).ready(function () {
 async function setCustomerPage () {
     const [plans, areas, customer_statuses, customer_data] = await Promise.all ([fetchData('plan/read.php'), fetchData('area/read.php'), fetchData('statuses/read.php?status_table=account_status'), fetchData('views/customer.php')]);
 
-    setCustomerTable();
-    // setViewModal();
+    var t = $('#customer-table').DataTable({
+        pageLength : 5,
+        lengthMenu: [5, 10, 20],
+        "searching": true,
+        "autoWidth": false,
+    }), tag;
 
-    function setCustomerTable () {
-        
-        var t = $('#customer-table').DataTable({
-            pageLength : 5,
-            lengthMenu: [5, 10, 20],
-            "searching": true,
-            "autoWidth": false,
-        }), tag;
-
-        for (var i = 0; i < plans.length; i++) {
-            var opt = `<option value='${plans[i].plan_name}'>${plans[i].plan_name}</option>`;
-            $("#plan-filter").append(opt);
-        }
-
-        for (var i = 0; i < areas.length; i++) {
-            var opt = `<option value='${areas[i].area_name}'>${areas[i].area_name}</option>`;
-            $("#area-filter").append(opt);
-        }
-
-        for (var i = 0; i < customer_statuses.length; i++) {
-            var opt = `<option value='${customer_statuses[i].status_name}'>${customer_statuses[i].status_name}</option>`;
-            $("#customer-status-filter").append(opt);
-        }
-
-        for (var i = 0; i < customer_data.length; i++) {
-            (customer_data[i].status == 'ACTIVE') ? tag = 'bg-success' : tag = 'bg-danger';
-    
-            t.row.add($(`
-                <tr>
-                    <th scope="row" style="color: #012970;">${customer_data[i].account_id}</th>
-                    <td data-label="Customer Name">${customer_data[i].customer_name}</td>
-                    <td data-label="Subscription">${customer_data[i].plan}</td>
-                    <td data-label="Area">${customer_data[i].area}</td>
-                    <td data-label="Status"><span class="badge ${tag}">${customer_data[i].status}</span></td>
-                    <td data-label="Balance">&#8369; ${customer_data[i].balance}</td>
-                    <td data-label="View"><a href="../views/customer_data.php?acct=${customer_data[i].account_id}"><button type="button" class="btn btn-outline-primary""><i class="ri ri-eye-fill"></i></button><a></td>
-                </tr>
-            `)).draw(false);
-        }
-
-        $("#customer-table_filter.dataTables_filter").append($("#plan-filter"));
-        $("#customer-table_filter.dataTables_filter").append($("#area-filter"));
-        $("#customer-table_filter.dataTables_filter").append($("#customer-status-filter"));
-
-        var planIndex = 0, areaIndex = 0, statusIndex = 0;
-        $("#customer-table th").each(function (i) {
-            if ($($(this)).html() == "Plan") {
-                planIndex = i; return false;
-            }
-        });
-
-        $("#customer-table th").each(function (i) {
-            if ($($(this)).html() == "Area") {
-                areaIndex = i; return false;
-            }
-        });
-
-        $("#customer-table th").each(function (i) {
-            if ($($(this)).html() == "Status") {
-                statusIndex = i; return false;
-            }
-        });
-
-        $.fn.dataTable.ext.search.push(
-        function (settings, data, dataIndex) {
-            var selectedItem = $('#plan-filter').val()
-            var category = data[planIndex];
-            if (selectedItem === "" || category.includes(selectedItem)) {
-            return true;
-            }
-            return false;
-        }
-        );
-        
-        $.fn.dataTable.ext.search.push(
-            function (settings, data, dataIndex) {
-              var selectedItem = $('#area-filter').val()
-              var category = data[areaIndex];
-              if (selectedItem === "" || category.includes(selectedItem)) {
-                return true;
-              }
-              return false;
-            }
-        );
-
-        $.fn.dataTable.ext.search.push(
-            function (settings, data, dataIndex) {
-              var selectedItem = $('#customer-status-filter').val()
-              var category = data[statusIndex];
-              if (selectedItem === "" || category.includes(selectedItem)) {
-                return true;
-              }
-              return false;
-            }
-        );
-
-        $("#plan-filter").change(function (e) {
-            t.draw();
-        });
-
-        $("#area-filter").change(function (e) {
-            t.draw();
-        });
-
-        $("#customer-status-filter").change(function (e) {
-            t.draw();
-        });
-
-        t.draw();
-        // t.columns.adjust().draw();
+    for (var i = 0; i < plans.length; i++) {
+        var opt = `<option value='${plans[i].plan_name}'>${plans[i].plan_name}</option>`;
+        $("#plan-filter").append(opt);
     }
+
+    for (var i = 0; i < areas.length; i++) {
+        var opt = `<option value='${areas[i].area_name}'>${areas[i].area_name}</option>`;
+        $("#area-filter").append(opt);
+    }
+
+    for (var i = 0; i < customer_statuses.length; i++) {
+        var opt = `<option value='${customer_statuses[i].status_name}'>${customer_statuses[i].status_name}</option>`;
+        $("#customer-status-filter").append(opt);
+    }
+
+    for (var i = 0; i < customer_data.length; i++) {
+        (customer_data[i].status == 'ACTIVE') ? tag = 'bg-success' : tag = 'bg-danger';
+
+        t.row.add($(`
+            <tr>
+                <th scope="row" style="color: #012970;">${customer_data[i].account_id}</th>
+                <td data-label="Customer Name">${customer_data[i].customer_name}</td>
+                <td data-label="Subscription">${customer_data[i].plan}</td>
+                <td data-label="Area">${customer_data[i].area}</td>
+                <td data-label="Balance">&#8369; ${customer_data[i].balance}</td>
+                <td data-label="Status"><span class="badge ${tag}">${customer_data[i].status}</span></td>
+                <td data-label="View"><a href="../views/customer_data?acct=${customer_data[i].account_id}"><button type="button" class="btn btn-outline-primary""><i class="ri ri-eye-fill"></i></button><a></td>
+            </tr>
+        `)).draw(false);
+    }
+
+    $("#customer-table_filter.dataTables_filter").append($("#plan-filter"));
+    $("#customer-table_filter.dataTables_filter").append($("#area-filter"));
+    $("#customer-table_filter.dataTables_filter").append($("#customer-status-filter"));
+
+    var planIndex = 0, areaIndex = 0, statusIndex = 0;
+    $("#customer-table th").each(function (i) {
+        if ($($(this)).html() == "Plan") {
+            planIndex = i; return false;
+        }
+    });
+
+    $("#customer-table th").each(function (i) {
+        if ($($(this)).html() == "Area") {
+            areaIndex = i; return false;
+        }
+    });
+
+    $("#customer-table th").each(function (i) {
+        if ($($(this)).html() == "Status") {
+            statusIndex = i; return false;
+        }
+    });
+
+    $.fn.dataTable.ext.search.push(
+    function (settings, data, dataIndex) {
+        var selectedItem = $('#plan-filter').val()
+        var category = data[planIndex];
+        if (selectedItem === "" || category.includes(selectedItem)) {
+        return true;
+        }
+        return false;
+    }
+    );
+    
+    $.fn.dataTable.ext.search.push(
+        function (settings, data, dataIndex) {
+          var selectedItem = $('#area-filter').val()
+          var category = data[areaIndex];
+          if (selectedItem === "" || category.includes(selectedItem)) {
+            return true;
+          }
+          return false;
+        }
+    );
+
+    $.fn.dataTable.ext.search.push(
+        function (settings, data, dataIndex) {
+          var selectedItem = $('#customer-status-filter').val()
+          var category = data[statusIndex];
+          if (selectedItem === "" || category.includes(selectedItem)) {
+            return true;
+          }
+          return false;
+        }
+    );
+
+    $("#plan-filter").change(function (e) {
+        t.draw();
+    });
+
+    $("#area-filter").change(function (e) {
+        t.draw();
+    });
+
+    $("#customer-status-filter").change(function (e) {
+        t.draw();
+    });
+
+    t.draw();
 }
 
 // -------------------------------------------------------------------- Add Customer
@@ -415,7 +393,7 @@ async function setAddCustomerPage () {
         if (ratings_content.success && log) {
             toastr.success('Customer Created Successfully.');
             setTimeout(function(){
-                window.location.replace('../views/customers.php');
+                window.location.replace('../views/customers');
              }, 2000);
         }
         else {

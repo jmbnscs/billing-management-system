@@ -217,11 +217,12 @@ async function setInvoiceHistory() {
     for (var i = 0; i < content.length; i++) {
         let status = await getStatusName('invoice_status', content[i].invoice_status_id);
         (status == 'PAID') ? tag = 'bg-success' : tag = 'bg-danger';
+        let dc_date = new Date(content[i].disconnection_date);
         
         t.row.add($(`
             <tr>
                 <th scope="row" style="color: #012970;">${content[i].invoice_id}</th>
-                <td data-label="Disconnection Date">${content[i].disconnection_date}</td>
+                <td data-label="Disconnection Date">${dc_date.toLocaleDateString('en-US')}</td>
                 <td data-label="Running Balance">&#8369; ${content[i].running_balance}</td>
                 <td data-label="Status"><span class="badge ${tag}">${status}</span></td>
                 <td data-label="View"><button type="submit" class="btn btn-outline-primary" value="${content[i].invoice_id}" name="invoice_id_btn"><i class="ri ri-eye-fill"></i></button></td>
@@ -274,7 +275,7 @@ async function setPaymentHistory() {
             <tr>
                 <th scope="row" style="color: #012970;"><strong>${content[i].payment_reference_id}</strong></th>
                 <td data-label="Amount Paid">&#8369; ${content[i].amount_paid}</td>
-                <td data-label="Payment Date">${content[i].payment_date}</td>
+                <td data-label="Payment Date">${(new Date(content[i].payment_date)).toLocaleDateString('en-US')}</td>
                 <td data-label="Status"><span class="badge ${tag}">${payment_status}</span></td>
                 <td data-label="View"><button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#view-payment" data-bs-whatever="${content[i].payment_id}"><i class="ri ri-eye-fill"></i></button></td>
             </tr>

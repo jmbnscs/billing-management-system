@@ -7,7 +7,7 @@
     <h1>Customer List</h1>
     <nav>
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="dashboard.php">Home</a></li>
+        <li class="breadcrumb-item"><a href="dashboard">Home</a></li>
         <li class="breadcrumb-item active">Customers</li>
       </ol>
     </nav>
@@ -44,8 +44,8 @@
               <th scope="col">Customer</th>
               <th scope="col">Plan</th>
               <th scope="col">Area</th>
-              <th scope="col">Status</th>
               <th scope="col">Balance</th>
+              <th scope="col">Status</th>
               <th scope="col">View</th>
             </tr>
           </thead>

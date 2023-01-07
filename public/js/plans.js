@@ -1,7 +1,7 @@
 $(document).ready(function () {
     isDefault();
 
-    if (DIR_CUR == DIR_MAIN + 'views/plans_add.php') {
+    if (DIR_CUR == DIR_MAIN + 'views/plans_add') {
         restrictPages('plan-add');
         setAddPlanPage();
     }

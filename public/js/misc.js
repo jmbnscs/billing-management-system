@@ -4,19 +4,19 @@ $(document).ready(function () {
     displaySuccessMessage();
     setButtons();
 
-    if (DIR_CUR == DIR_MAIN + 'views/connection.php') {
+    if (DIR_CUR == DIR_MAIN + 'views/connection') {
         setConnectionPage();
     }
-    else if (DIR_CUR == DIR_MAIN + 'views/concerns.php') {
+    else if (DIR_CUR == DIR_MAIN + 'views/concerns') {
         setConcernsPage();
     }
-    else if (DIR_CUR == DIR_MAIN + 'views/user_level.php') {
+    else if (DIR_CUR == DIR_MAIN + 'views/user_level') {
         setUserLevelPage();
     }
-    else if (DIR_CUR == DIR_MAIN + 'views/area.php') {
+    else if (DIR_CUR == DIR_MAIN + 'views/area') {
         setAreaPage();
     }
-    else if (DIR_CUR == DIR_MAIN + 'views/inclusions.php') {
+    else if (DIR_CUR == DIR_MAIN + 'views/inclusions') {
         setInclusionPage();
     }
 });
@@ -153,7 +153,7 @@ function setConnectionPage() {
         if (content.message = 'Connection Created' && log) {
             toastr.success('Connection Created Successfully.');
             setTimeout(function(){
-                window.location.replace('../views/connection.php');
+                window.location.replace('../views/connection');
              }, 2000);
         }
         else {
@@ -296,7 +296,7 @@ async function setConcernsPage() {
         if (content.message = 'Concern Created' && log) {
             toastr.success('Concern Category Created Successfully.');
             setTimeout(function(){
-                window.location.replace('../views/concerns.php');
+                window.location.replace('../views/concerns');
              }, 2000);
         }
         else {
@@ -334,7 +334,7 @@ async function setUserLevelPage() {
                     <li><i class="bi bi-check2-circle"></i> <em>and ${descriptions.length - 5} more.. </em></li>
                 </ul>
 
-                <a href="../views/user_level_data.php?user_role=${user_levels[i].user_role}" style="text-decorations:none; color:inherit;"><button class="btn btn-outline-success">View Role</button></a>
+                <a href="../views/user_level_data?user_role=${user_levels[i].user_role}" style="text-decorations:none; color:inherit;"><button class="btn btn-outline-success">View Role</button></a>
                 <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="${user_levels[i].user_id}">Edit Role</button>
             </div>
             </div>
@@ -634,7 +634,7 @@ function setAreaPage() {
         if (content.message = 'Area Created' && log) {
             toastr.success('Area Created Successfully.');
             setTimeout(function(){
-                window.location.replace('../views/area.php');
+                window.location.replace('../views/area');
              }, 2000);
         }
         else {
@@ -755,7 +755,7 @@ async function setInclusionPage() {
         if (content.message = 'Inclusion Created' && log) {
             toastr.success('Inclusion Created Successfully.');
             setTimeout(function(){
-                window.location.replace('../views/inclusions.php');
+                window.location.replace('../views/inclusions');
              }, 2000);
         }
         else {
