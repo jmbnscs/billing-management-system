@@ -40,6 +40,7 @@
         <table class="table table-borderless" id="customer-table">
           <thead>
             <tr>
+              <th scope="col">#</th>
               <th scope="col">ID</th>
               <th scope="col">Customer</th>
               <th scope="col">Plan</th>

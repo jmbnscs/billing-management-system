@@ -74,7 +74,8 @@ async function setCustomerPage () {
 
         t.row.add($(`
             <tr>
-                <th scope="row" style="color: #012970;">${customer_data[i].account_id}</th>
+                <th scope="row" style="color: #012970;">${i+1}</th>
+                <td data-label="Account ID">${customer_data[i].account_id}</td>
                 <td data-label="Customer Name">${customer_data[i].customer_name}</td>
                 <td data-label="Subscription">${customer_data[i].plan}</td>
                 <td data-label="Area">${customer_data[i].area}</td>
