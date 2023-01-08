@@ -221,9 +221,9 @@ async function setInvoiceHistory() {
         
         t.row.add($(`
             <tr>
-                <th scope="row" style="color: #012970;">${content[i].invoice_id}</th>
+                <th scope="row" style="color: #012970;">${i+1}</th>
+                <td data-label="Invoice ID">${content[i].invoice_id}</td>
                 <td data-label="Disconnection Date">${dc_date.toLocaleDateString('en-US')}</td>
-                <td data-label="Running Balance">&#8369; ${content[i].running_balance}</td>
                 <td data-label="Status"><span class="badge ${tag}">${status}</span></td>
                 <td data-label="View"><button type="submit" class="btn btn-outline-primary" value="${content[i].invoice_id}" name="invoice_id_btn"><i class="ri ri-eye-fill"></i></button></td>
             </tr>
@@ -273,7 +273,8 @@ async function setPaymentHistory() {
         
         t.row.add($(`
             <tr>
-                <th scope="row" style="color: #012970;"><strong>${content[i].payment_reference_id}</strong></th>
+                <th scope="row" style="color: #012970;"><strong>${i+1}</strong></th>
+                <td data-label="Reference ID">${content[i].payment_reference_id}</td>
                 <td data-label="Amount Paid">&#8369; ${content[i].amount_paid}</td>
                 <td data-label="Payment Date">${(new Date(content[i].payment_date)).toLocaleDateString('en-US')}</td>
                 <td data-label="Status"><span class="badge ${tag}">${payment_status}</span></td>
@@ -306,7 +307,7 @@ async function setProrateHistory() {
 
         t.row.add($(`
             <tr>
-                <th scope="row" style="color: #012970;"><strong>${content[i].prorate_id}</strong></th>
+                <th scope="row" style="color: #012970;"><strong>${i+1}</strong></th>
                 <td data-label="Duration">${content[i].duration}</td>
                 <td data-label="Discount">&#8369; ${content[i].prorate_charge}</td>
                 <td data-label="Ticket Number">${content[i].ticket_num}</td>
@@ -388,7 +389,8 @@ async function setTicketHistory() {
         
         t.row.add($(`
             <tr>
-                <th scope="row" style="color: #012970;"><strong>${content[i].ticket_num}</strong></th>
+                <th scope="row" style="color: #012970;"><strong>${i+1}</strong></th>
+                <td data-label="Ticket #">${content[i].ticket_num}</td>
                 <td data-label="Category">${concern.concern_category}</td>
                 <td data-label="Admin">${admin_username}</td>
                 <td data-label="Status"><span class="badge ${tag}">${status}</span></td>
