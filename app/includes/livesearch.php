@@ -18,12 +18,13 @@ if ($status_code == 200) {
     foreach ($data as $row) {
       // echo $row['page_name'] . '<br>';
       if (str_contains(strtolower($row['page_name']), $q)) {
+        $page_dir = explode('.', $row['page_dir'])[0];
         if ($row['page_dir'] != '-' && !str_contains(strtolower($row['page_name']), 'data')) {
           if ($hint == "") {
-            $hint = "<a style='padding: 15px;' href='" . $row['page_dir'] . "' target='_blank'>" . $row['page_name'] . "</a>";
+            $hint = "<a style='padding: 15px;' href='" . $page_dir . "' target='_blank'>" . $row['page_name'] . "</a>";
           }
           else {
-            $hint = $hint . "<br/> <a style='padding: 15px;' href='" . $row['page_dir'] . "' target='_blank'>" . $row['page_name'] . "</a>";
+            $hint = $hint . "<br/> <a style='padding: 15px;' href='" . $page_dir . "' target='_blank'>" . $row['page_name'] . "</a>";
           }
         }
       }
