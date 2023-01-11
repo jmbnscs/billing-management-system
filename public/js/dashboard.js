@@ -308,7 +308,7 @@ async function setPlanPreview() {
         t.row.add($(`
             <tr>
                 <th scope="row">${content[i].plan_name}</th>
-                <td>${content[i].bandwidth} mbps</td>
+                <td data-label="Bandwidth">${content[i].bandwidth} mbps</td>
                 <td>&#8369; ${content[i].price}</td>
                 <td><span class="badge ${tag}">${content[i].status}</span></td>
                 <td>${subscribers}</td>

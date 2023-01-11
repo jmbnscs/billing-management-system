@@ -171,10 +171,15 @@ async function setActivities() {
     var t = $('#activity-table').DataTable( {
         // dom : 'Bfrtip',
         pageLength: 10,
-        lengthMenu: [10, 20, 50],
+        lengthMenu: [10, 20, 30],
         "searching": true,
         "autoWidth": false,
     });
+
+    if (user_id == 2) {
+        var opt = `<option value='Automated System'>Automated System</option>`;
+        $("#pages-filter").append(opt);
+    }
 
     const content = await fetchData('logs/read_admin_all_logs.php?admin_id=' + admindata_id);
     let counter = 1;
@@ -197,6 +202,32 @@ async function setActivities() {
                 
         counter++;
     }
+
+    $("#activity-table_filter.dataTables_filter").append($("#pages-filter"));
+
+    var pagesIndex = 0;
+    $("#activity-table th").each(function (i) {
+        if ($($(this)).html() == "Page") {
+            pagesIndex = i; return false;
+        }
+    });
+
+    $.fn.dataTable.ext.search.push(
+        function (settings, data, dataIndex) {
+            var selectedItem = $('#pages-filter').val()
+            var category = data[pagesIndex];
+            if (selectedItem === "" || category.includes(selectedItem)) {
+            return true;
+            }
+            return false;
+        }
+    );
+
+    $("#pages-filter").change(function (e) {
+        t.draw();
+    });
+
+    t.draw();
 
     var viewModal = document.getElementById('view-activity-modal')
     viewModal.addEventListener('show.bs.modal', async function (event) {
@@ -239,25 +270,38 @@ async function setActivities() {
 }
 
 async function setTicketHistory() {
+    const statuses = await fetchData('statuses/read.php?status_table=ticket_status');
+
     var t = $('#tickets-table').DataTable( {
         pageLength: 10,
-        lengthMenu: [10, 20, 50],
+        lengthMenu: [10, 20, 30],
         "searching": true,
         "autoWidth": false,
     });
+
+    for (var i = 0; i < statuses.length; i++) {
+        var opt = `<option value='${statuses[i].status_name}'>${statuses[i].status_name}</option>`;
+        $("#status-filter").append(opt);
+    }
 
     const content = await fetchData('ticket/read_single_admin.php?admin_id=' + admindata_id);
     let counter = 1;
 
     for (var i = 0; i < content.length; i++) {
+        
         if (content[i].page_accessed != 'Login') {
             let [concern, status] = await Promise.all ([fetchData('concerns/read_single.php?concern_id=' + content[i].concern_id), getStatusName('ticket_status', content[i].ticket_status_id)]);
+
+            let tag;
+
+            (status == 'RESOLVED') ? tag = 'bg-success' : (status == 'PENDING') ? tag = 'bg-warning' : tag = 'bg-danger';
+
             t.row.add($(`
             <tr>
                 <th scope="row" style="color: #012970;"><strong>${counter}</strong></th>
-                <td>${content[i].ticket_num}</td>
-                <td>${concern.concern_category}</td>
-                <td>${status}</td>
+                <td data-label="Ticket #">${content[i].ticket_num}</td>
+                <td data-label="Category">${concern.concern_category}</td>
+                <td data-label="Status"><span class="badge ${tag}">${status}</span></td>
             </tr>
             `)).draw(false);
         }
@@ -267,4 +311,30 @@ async function setTicketHistory() {
                 
         counter++;
     }
+
+    $("#tickets-table_filter.dataTables_filter").append($("#status-filter"));
+
+    var statusIndex = 0;
+    $("#tickets-table th").each(function (i) {
+        if ($($(this)).html() == "Status") {
+            statusIndex = i; return false;
+        }
+    });
+
+    $.fn.dataTable.ext.search.push(
+        function (settings, data, dataIndex) {
+            var selectedItem = $('#status-filter').val()
+            var category = data[statusIndex];
+            if (selectedItem === "" || category.includes(selectedItem)) {
+            return true;
+            }
+            return false;
+        }
+    );
+
+    $("#status-filter").change(function (e) {
+        t.draw();
+    });
+
+    t.draw();
 }

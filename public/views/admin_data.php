@@ -78,6 +78,20 @@
                             <div class="p-2">
                                 <h5 class="card-title p-2">Logs</h5>
 
+                                <!-- Filter Dropdown -->
+                                <div>
+                                  <select id="pages-filter" class="form-select table-filter" style="display: inline; width: 200px; margin-left: 25px;">
+                                    <option value="">Select All: Pages</option>
+                                    <option value="Customer">Customer</option>
+                                    <option value="Invoice">Invoice</option>
+                                    <option value="Plan">Plan</option>
+                                    <option value="Ticket">Ticket</option>
+                                    <option value="Admin">Admin</option>
+                                    <option value="Profile">Profile</option>
+                                    <option value="Payment">Payment</option>
+                                  </select>
+                                </div>
+
                                 <table class="table table-borderless" id="activity-table">
                                     <thead class="table-light">
                                         <tr>
@@ -106,6 +120,12 @@
                         <div class="col-sm-12">
                             <div class="p-2">
                                 <h5 class="card-title p-2">Ticket History</h5>
+
+                                <div>
+                                  <select id="status-filter" class="form-select table-filter" style="display: inline; width: 200px; margin-left: 25px;">
+                                    <option value="">Select All: Status</option>
+                                  </select>
+                                </div>
 
                                 <table class="table" id="tickets-table">
                                     <thead class="table-light">

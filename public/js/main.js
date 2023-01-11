@@ -418,7 +418,7 @@ $(() => {
     $('#drop-' + nav_id).removeClass('collapsed');
     $('#' + nav_id + '-nav').addClass('show');
 
-    if (id == 'nav-dashboard' || id == 'nav-profile') {
+    if (id == 'nav-dashboard' || id == 'nav-profile' || id == 'nav-admins') {
         document.getElementById(id).classList.remove('collapsed');
     }
     if (nav_id == 'connection' || nav_id == 'concerns' || nav_id == 'user' || nav_id == 'inclusions' || nav_id == 'area') {
