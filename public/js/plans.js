@@ -280,9 +280,91 @@ async function setPlansPage () {
             const save_plan = document.getElementById('save-plan');
             save_plan.onsubmit = (e) => {
                 e.preventDefault();
-                processUpdate();
+                checkValidity();
             };
     
+            var req_elem = document.getElementById('save-plan').querySelectorAll("[required]");
+
+            async function checkValidity() {
+                resetElements();
+                var counter = 0;
+                
+                for (var i = 0; i < req_elem.length; i++) {
+                    if (req_elem[i].value == '') {
+                        req_elem[i].classList.add('invalid-input');
+                        req_elem[i].nextElementSibling.classList.add('d-block');
+                        counter++;
+                    }
+                    else {
+                        console.log(DIR_API)
+                        if (req_elem[i].id == 'plan_name') {
+                            const plan_name = await fetchData('check/plan_name.php?plan_name=' + req_elem[i].value);
+                            if (plan_name.exist && (modalTitle.textContent != req_elem[i].value)) {
+                                console.log(modalTitle.textContent)
+                                console.log(req_elem[i].value)
+                                req_elem[i].classList.add('invalid-input');
+                                req_elem[i].nextElementSibling.classList.add('d-block');
+                                $(($('#' + req_elem[i].id).next()).text("Plan name already exist."));
+                                counter++;
+                            }
+                            else if (!isNaN(req_elem[i].value) && req_elem[i].value) {
+                                req_elem[i].classList.add('invalid-input');
+                                req_elem[i].nextElementSibling.classList.add('d-block');
+                                $(($('#' + req_elem[i].id).next()).text("Plan name must not be just numbers."));
+                                counter++;
+                            }
+                            else {
+                                showValid();
+                            }
+                        }
+                        else if (req_elem[i].id == 'bandwidth') {
+                            if (req_elem[i].value < 5) {
+                                req_elem[i].classList.add('invalid-input');
+                                req_elem[i].nextElementSibling.classList.add('d-block');
+                                $(($('#' + req_elem[i].id).next()).text("Bandwidth must at least be 5 mbps."));
+                                counter++;
+                            }
+                            else {
+                                showValid();
+                            }
+                        }
+                        else if (req_elem[i].id == 'price') {
+                            if (req_elem[i].value < 1) {
+                                req_elem[i].classList.add('invalid-input');
+                                req_elem[i].nextElementSibling.classList.add('d-block');
+                                $(($('#' + req_elem[i].id).next()).text('Plan price should at least be \u20B1 1.00'));
+                                counter++;
+                            }
+                            else {
+                                showValid();
+                            }
+                        }
+                        else {
+                            showValid();
+                        }
+        
+                        function showValid() {
+                            req_elem[i].classList.add('valid-input');
+                        }
+                    }
+                } 
+        
+                if (counter > 0) {
+                    toastr.warning('Please provide the appropriate details on each field.');
+                }
+                else {
+                    processUpdate();
+                }
+            }
+
+            function resetElements() {
+                for (var i = 0; i < req_elem.length; i++) {
+                    $('#' + req_elem[i].id).removeClass('valid-input');
+                    $('#' + req_elem[i].id).removeClass('invalid-input');
+                    $(($('#' + req_elem[i].id).next()).removeClass('d-block'));
+                }
+            }
+
             async function processUpdate() {
                 const plan_id = $('#plan_id').val();
                 const plan_name = $('#plan_name').val();

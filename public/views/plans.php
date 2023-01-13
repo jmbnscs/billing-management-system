@@ -130,6 +130,9 @@
                 <div class="col-md-12">
                   <div class="form-floating">
                     <input type="text" class="form-control" id="plan_name" placeholder="Plan Name" required>
+                    <div class="invalid-feedback">
+                        Please enter a valid plan name.
+                    </div>
                     <label for="plan_name">Plan Name</label>
                   </div>
                 </div>
@@ -137,6 +140,9 @@
                 <div class="col-md-12">
                   <div class="form-floating">
                     <input type="text" class="form-control" id="bandwidth" placeholder="Bandwidth" required>
+                    <div class="invalid-feedback">
+                        Please enter bandwidth.
+                    </div>
                     <label for="bandwidth">Bandwidth</label>
                   </div>
                 </div>
@@ -144,6 +150,9 @@
                 <div class="col-md-12">
                   <div class="form-floating">
                     <input type="text" class="form-control" id="price" placeholder="Price" required>
+                    <div class="invalid-feedback">
+                        Please enter plan price.
+                    </div>
                     <label for="price">Price</label>
                   </div>
                 </div>
