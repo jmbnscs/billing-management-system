@@ -2,10 +2,13 @@ $(document).ready(function () {
     isDefault();
     restrictPages('misc-page');
     displaySuccessMessage();
-    setButtons();
+    // setButtons();
 
-    if (DIR_CUR == DIR_MAIN + 'views/connection') {
+    if (DIR_CUR == DIR_MAIN + 'views/options') {
         setConnectionPage();
+        setConcernsPage();
+        setInclusionPage();
+        setAreaPage();
     }
     else if (DIR_CUR == DIR_MAIN + 'views/concerns') {
         setConcernsPage();
@@ -42,6 +45,17 @@ async function setTable(api, table_name) {
         }
     }
 
+    var edit_modal_id = '', delete_modal_id = '';
+
+    if (table_name == '#connections-table') {
+        edit_modal_id = '#connEditModal';
+        delete_modal_id = '#connDeleteModal';
+    }
+    else if (table_name == '#areas-table') {
+        edit_modal_id = '#areaEditModal';
+        delete_modal_id = '#areaDeleteModal';
+    }
+
     var t = $(table_name).DataTable({
         pageLength: 5,
         lengthMenu: [5, 10, 20],
@@ -55,8 +69,8 @@ async function setTable(api, table_name) {
                 <th scope="row">${i+1}</th>
                 <td>${info[i]}</td>
                 <td>
-                    <button type="button" class="btn btn-outline-info m-1" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="${id[i]}" ><i class="bi bi-pencil"></i></button>
-                    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-whatever="${id[i]}" ><i class="ri ri-delete-bin-5-fill"></i></button>
+                    <button type="button" class="btn btn-outline-info m-1" data-bs-toggle="modal" data-bs-target="${edit_modal_id}" data-bs-whatever="${id[i]}" ><i class="bi bi-pencil"></i></button>
+                    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="${delete_modal_id}" data-bs-whatever="${id[i]}" ><i class="ri ri-delete-bin-5-fill"></i></button>
                 </td>
             </tr>
         `)).draw(false);
@@ -67,12 +81,20 @@ async function setTable(api, table_name) {
 function setConnectionPage() {
     setTable('connection', '#connections-table');
 
-    create_fn.onsubmit = (e) => {
+    create_fn = document.getElementById('conn-create-new');
+    create_fn.onsubmit = async (e) => {
         e.preventDefault();
-        processCreate();
+        const result = await fetchData('check/connection_name.php?connection_name=' + $('#connection_name').val());
+        if (result.exist) {
+            toastr.error(result.error);
+            $('#connection_name').val(null);
+        }
+        else {
+            processCreate();
+        }
     };
 
-    var updateModal = document.getElementById('editModal');
+    var updateModal = document.getElementById('connEditModal');
     updateModal.addEventListener('show.bs.modal', async function (event) {
 
         var button = event.relatedTarget;
@@ -85,6 +107,7 @@ function setConnectionPage() {
         $('#connection_id').val(connection_id);
         $('#connection_name_md').val(connection.connection_name);
 
+        update_fn = document.getElementById('conn-update-data');
         update_fn.onsubmit = (e) => {
             e.preventDefault();
             processUpdate();
@@ -108,7 +131,7 @@ function setConnectionPage() {
         }
     });
 
-    var deleteModal = document.getElementById('deleteModal');
+    var deleteModal = document.getElementById('connDeleteModal');
     deleteModal.addEventListener('show.bs.modal', async function (event) {
 
         var button = event.relatedTarget;
@@ -120,7 +143,8 @@ function setConnectionPage() {
 
         $('#connection_id_d').val(connection_id);
         $('#connection_name_md_d').val(connection.connection_name);
-
+        
+        delete_fn = document.getElementById('conn-delete-data');
         delete_fn.onsubmit = (e) => {
             e.preventDefault();
             processDelete();
@@ -153,7 +177,7 @@ function setConnectionPage() {
         if (content.message = 'Connection Created' && log) {
             toastr.success('Connection Created Successfully.');
             setTimeout(function(){
-                window.location.replace('../views/connection');
+                window.location.replace('../views/options');
              }, 2000);
         }
         else {
@@ -165,9 +189,17 @@ function setConnectionPage() {
 
 // -------------------------------------------------------------------- Concerns Page
 async function setConcernsPage() {
-    create_fn.onsubmit = (e) => {
+    create_fn = document.getElementById('concerns-create-new');
+    create_fn.onsubmit = async (e) => {
         e.preventDefault();
-        processCreate();
+        const result = await fetchData('check/concern_category.php?concern_category=' + $('#concern_category').val());
+        if (result.exist) {
+            toastr.error(result.error);
+            $('#concern_category').val(null);
+        }
+        else {
+            processCreate();
+        }
     };
 
     let concern_data = await getData('concerns');
@@ -184,14 +216,14 @@ async function setConcernsPage() {
                 <th scope="row">${i + 1}</th>
                 <td>${concern_data[i].concern_category}</td>
                 <td>
-                    <button type="button" class="btn btn-outline-info m-1" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="${concern_data[i].concern_id}" ><i class="bi bi-pencil"></i></button>
-                    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-whatever="${concern_data[i].concern_id}" ><i class="ri ri-delete-bin-5-fill"></i></button>
+                    <button type="button" class="btn btn-outline-info m-1" data-bs-toggle="modal" data-bs-target="#concernsEditModal" data-bs-whatever="${concern_data[i].concern_id}" ><i class="bi bi-pencil"></i></button>
+                    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#concernsDeleteModal" data-bs-whatever="${concern_data[i].concern_id}" ><i class="ri ri-delete-bin-5-fill"></i></button>
                 </td>
             </tr>
         `)).draw(false);
     }
 
-    var updateModal = document.getElementById('editModal')
+    var updateModal = document.getElementById('concernsEditModal')
     updateModal.addEventListener('show.bs.modal', async function (event) {
 
         var button = event.relatedTarget;
@@ -205,6 +237,7 @@ async function setConcernsPage() {
         $('#concern_id').val(concern_data.concern_id);
         $('#concern_category_md').val(concern_data.concern_category);
 
+        update_fn = document.getElementById('concerns-update-data');
         update_fn.onsubmit = (e) => {
             e.preventDefault();
             processUpdate();
@@ -241,7 +274,7 @@ async function setConcernsPage() {
         // }
     });
 
-    var deleteModal = document.getElementById('deleteModal')
+    var deleteModal = document.getElementById('concernsDeleteModal')
     deleteModal.addEventListener('show.bs.modal', async function (event) {
 
         var button = event.relatedTarget;
@@ -255,6 +288,7 @@ async function setConcernsPage() {
         $('#concern_category_md_d').val(concern_data.concern_category);
         (concern_data.customer_access == 0) ? $('#customer_access_md_d').attr('checked', false) : $('#customer_access_md_d').attr('checked', true);
 
+        delete_fn = document.getElementById('concerns-delete-data');
         delete_fn.onsubmit = (e) => {
             e.preventDefault();
             processDelete();
@@ -296,7 +330,7 @@ async function setConcernsPage() {
         if (content.message = 'Concern Created' && log) {
             toastr.success('Concern Category Created Successfully.');
             setTimeout(function(){
-                window.location.replace('../views/concerns');
+                window.location.replace('../views/options');
              }, 2000);
         }
         else {
@@ -545,12 +579,20 @@ async function setUserLevelPage() {
 function setAreaPage() {
     setTable('area', '#areas-table');
 
-    create_fn.onsubmit = (e) => {
+    create_fn = document.getElementById('area-create-new');
+    create_fn.onsubmit = async (e) => {
         e.preventDefault();
-        processCreate();
+        const result = await fetchData('check/area_name.php?area_name=' + $('#area_name').val());
+        if (result.exist) {
+            toastr.error(result.error);
+            $('#area_name').val(null);
+        }
+        else {
+            processCreate();
+        }
     };
 
-    var updateModal = document.getElementById('editModal')
+    var updateModal = document.getElementById('areaEditModal')
     updateModal.addEventListener('show.bs.modal', async function (event) {
 
         var button = event.relatedTarget;
@@ -563,6 +605,7 @@ function setAreaPage() {
         $('#area_id').val(area_id);
         $('#area_name_md').val(area_data.area_name);
 
+        update_fn = document.getElementById('area-update-data');
         update_fn.onsubmit = (e) => {
             e.preventDefault();
             processUpdate();
@@ -588,7 +631,7 @@ function setAreaPage() {
         }
     });
 
-    var deleteModal = document.getElementById('deleteModal')
+    var deleteModal = document.getElementById('areaDeleteModal')
     deleteModal.addEventListener('show.bs.modal', async function (event) {
 
         var button = event.relatedTarget;
@@ -601,6 +644,7 @@ function setAreaPage() {
         $('#area_id_d').val(area_id);
         $('#area_name_md_d').val(data.area_name);
 
+        delete_fn = document.getElementById('area-delete-data');
         delete_fn.onsubmit = (e) => {
             e.preventDefault();
             processDelete();
@@ -634,7 +678,7 @@ function setAreaPage() {
         if (content.message = 'Area Created' && log) {
             toastr.success('Area Created Successfully.');
             setTimeout(function(){
-                window.location.replace('../views/area');
+                window.location.replace('../views/options');
              }, 2000);
         }
         else {
@@ -646,9 +690,17 @@ function setAreaPage() {
 
 // -------------------------------------------------------------------- Inclusion Page
 async function setInclusionPage() {
-    create_fn.onsubmit = (e) => {
+    create_fn = document.getElementById('inclusion-create-new');
+    create_fn.onsubmit = async (e) => {
         e.preventDefault();
-        processCreate();
+        const result = await fetchData('check/inclusion_name.php?inclusion_name=' + $('#inclusion_name').val());
+        if (result.exist) {
+            toastr.error(result.error);
+            $('#inclusion_name').val(null);
+        }
+        else {
+            processCreate();
+        }
     };
 
     let data = await getData('inclusion');
@@ -665,14 +717,14 @@ async function setInclusionPage() {
                 <th scope="row">${i + 1}</th>
                 <td>${data[i].inclusion_name}</td>
                 <td>
-                    <button type="button" class="btn btn-outline-info m-1" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="${data[i].inclusion_id}" ><i class="bi bi-pencil"></i></button>
-                    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-whatever="${data[i].inclusion_id}" ><i class="ri ri-delete-bin-5-fill"></i></button>
+                    <button type="button" class="btn btn-outline-info m-1" data-bs-toggle="modal" data-bs-target="#inclusionEditModal" data-bs-whatever="${data[i].inclusion_id}" ><i class="bi bi-pencil"></i></button>
+                    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#inclusionDeleteModal" data-bs-whatever="${data[i].inclusion_id}" ><i class="ri ri-delete-bin-5-fill"></i></button>
                 </td>
             </tr>
         `)).draw(false);
     }
 
-    var updateModal = document.getElementById('editModal')
+    var updateModal = document.getElementById('inclusionEditModal')
     updateModal.addEventListener('show.bs.modal', async function (event) {
 
         var button = event.relatedTarget;
@@ -685,6 +737,7 @@ async function setInclusionPage() {
         $('#inclusion_id').val(inclusion_id);
         $('#inclusion_name_md').val(data.inclusion_name);
 
+        update_fn = document.getElementById('inclusion-update-data');
         update_fn.onsubmit = (e) => {
             e.preventDefault();
             processUpdate();
@@ -708,7 +761,7 @@ async function setInclusionPage() {
         }
     });
 
-    var deleteModal = document.getElementById('deleteModal')
+    var deleteModal = document.getElementById('inclusionDeleteModal')
     deleteModal.addEventListener('show.bs.modal', async function (event) {
 
         var button = event.relatedTarget;
@@ -721,6 +774,7 @@ async function setInclusionPage() {
         $('#inclusion_id_d').val(inclusion_id);
         $('#inclusion_name_md_d').val(data.inclusion_name);
 
+        delete_fn = document.getElementById('inclusion-delete-data');
         delete_fn.onsubmit = (e) => {
             e.preventDefault();
             processDelete();
@@ -755,7 +809,7 @@ async function setInclusionPage() {
         if (content.message = 'Inclusion Created' && log) {
             toastr.success('Inclusion Created Successfully.');
             setTimeout(function(){
-                window.location.replace('../views/inclusions');
+                window.location.replace('../views/options');
              }, 2000);
         }
         else {
