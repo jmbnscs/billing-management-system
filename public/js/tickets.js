@@ -4,7 +4,7 @@ $(document).ready(function () {
     
     if (DIR_CUR == DIR_MAIN + 'views/tickets_create') {
         restrictPages('ticket-create');
-        setCreateTicketPage();
+        newTicketModal();
     }
     else if (DIR_CUR == DIR_MAIN + 'views/tickets_resolved') {
         restrictPages('ticket-resolved');
@@ -200,7 +200,7 @@ async function setViewTickets () {
     // --------------------------- End Resolved Tickets
 
     // --------------------------- Create Ticket Modal
-    setCreateTicketPage();
+    newTicketModal();
 }
 
 async function invalidModal (ticket_num, page) {
@@ -246,14 +246,14 @@ async function setPendingTicketsTable () {
     });
 
     for (var i = 0; i < ticket_data.length; i++) {
-        if(ticket_data[i].admin_id == admin_id || admin_id == '11674') {
+        if(ticket_data[i].admin_id == admin_id || user_id == 2) {
             t.row.add($(`
             <tr>
-                <th scope="row"><a href="#">${ticket_data[i].ticket_num}</a></th>
-                <td data-label="Concern">${ticket_data[i].concern}</td>
-                <td data-label="Date Filed">${ticket_data[i].date_filed}</td>
+                <th scope="row" style="color: #012970;">${i+1}</th>
+                <td data-label="Concern">${ticket_data[i].ticket_num}</td>
                 <td data-label="Account #">${ticket_data[i].account_id}</td>
-                <td data-label="User Level">${ticket_data[i].user_level}</td>
+                <td data-label="Concern">${ticket_data[i].concern}</td>
+                <td data-label="Date Filed">${new Date(ticket_data[i].date_filed).toLocaleDateString('en-US')}</td>
                 <td data-label="Claimed By">${ticket_data[i].admin_username}</td>
                 <td data-label="Status"><span class="badge bg-warning">${ticket_data[i].ticket_status}</span></td>
                 <td data-label="Actions">
@@ -368,7 +368,7 @@ async function pendNetworkModal(ticket_num) {
     
         if ((prorate_content.message == 'Prorate Created') && (ticket_content.message == 'Ticket Updated') && log) {
             sessionStorage.setItem('save_message', "Ticket Resolved Successfully.");
-            window.location.replace('../views/tickets_resolved');
+            window.location.replace('../views/tickets');
         }
         else {
             toastr.error("Ticket was not updated. " + ticket_content.message + " " + prorate_content.message);
@@ -433,7 +433,7 @@ async function pendSubscriptionModal(ticket_num) {
     
         if (account_content.success && ticket_content.message == 'Ticket Updated' && log) {
             sessionStorage.setItem('save_message', "Ticket Resolved Successfully.");
-            window.location.replace('../views/tickets_resolved');
+            window.location.replace('../views/tickets');
         }
         else {
             toastr.error("Ticket was not updated. " + ticket_content.message + " " + account_content.message);
@@ -474,7 +474,7 @@ async function pendDefaultModal(ticket_num) {
     
         if (ticket_content.message == 'Ticket Updated' && log) {
             sessionStorage.setItem('save_message', "Ticket Resolved Successfully.");
-            window.location.replace('../views/tickets_resolved');
+            window.location.replace('../views/tickets');
         }
         else {
             toastr.error("Ticket was not resolved. " + ticket_content.message);
@@ -512,7 +512,7 @@ async function pendDefaultModal(ticket_num) {
     
 //         if (ticket_content.message == 'Ticket Updated' && log) {
 //             sessionStorage.setItem('save_message', "Ticket Resolved Successfully.");
-//             window.location.replace('../views/tickets_resolved.php');
+//             window.location.replace('../views/tickets');
 //         }
 //         else {
 //             toastr.error("Ticket was not resolved. " + ticket_content.message);
@@ -624,7 +624,7 @@ async function invalidatedTicketsModal () {
 }
 
 // -------------------------------------------------------------------- Add Ticket Page
-async function setCreateTicketPage () {
+async function newTicketModal () {
     const create_ticket = document.getElementById('create-ticket');
     // $('#ticket_num').val(await generateID('check/ticket_num.php?ticket_num=', "TN", 6));
     getExistingAccounts = await fetchData('account/read.php');

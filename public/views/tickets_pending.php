@@ -4,7 +4,7 @@
 
 <main id="main" class="main">
   <div class="pagetitle">
-    <h1>Pending Tickets</h1>
+    <h1>Claimed Tickets</h1>
     <nav>
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="dashboard.php">Home</a></li>
@@ -21,13 +21,13 @@
         <table class="table table-borderless" id="ticket-pending-table">
           <thead>
             <tr>
+              <th scope="col">#</th>
               <th scope="col">Ticket Number</th>
+              <th scope="col">Account ID</th>
               <th scope="col">Concern</th>
               <th scope="col">Date Filed</th>
-              <th scope="col">Account ID</th>
-              <th scope="col">User Level</th>
               <th scope="col">Claimed By</th>
-              <th scope="col">Ticket Status</th>
+              <th scope="col">Status</th>
               <th scope="col">View / Resolve</th>
             </tr>
           </thead>
@@ -70,7 +70,7 @@
                   
                   <div class="col-md-12">
                     <div class="form-floating">
-                      <input type="text" class="form-control" id="concern_details" placeholder="Concern Details" readonly>
+                      <textarea class="form-control" id="concern_details" readonly></textarea>
                       <label for="concern_details">Concern Details</label>
                     </div>
                   </div>
@@ -307,7 +307,7 @@
                   <div class="col-md-12">
                     <div class="form-floating">
                       <input type="text" class="form-control" id="concern_details_invalid" placeholder="Concern Details" readonly>
-                      <label for="concern_details_invalid">Concern Detailsr</label>
+                      <label for="concern_details_invalid">Concern Details</label>
                     </div>
                   </div>
           </div>
