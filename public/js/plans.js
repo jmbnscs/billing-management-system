@@ -39,10 +39,7 @@ async function setPlansPage () {
         $("#deact-inclusions-filter").append(opt);
     }
 
-    // for (var i = 0; i < statuses.length; i++) {
-    //     var opt = `<option value='${statuses[i].status_name}'>${statuses[i].status_name}</option>`;
-    //     $("#status-filter").append(opt);
-    // }
+    var active_counter = 1, deact_counter = 1;
 
     for (var i = 0; i < plan_data.length; i++) {
         (plan_data[i].status == 'ACTIVE') ? tag = 'bg-success' : tag = 'bg-danger';
@@ -50,7 +47,7 @@ async function setPlansPage () {
         if (plan_data[i].status == 'ACTIVE') {
             active_table.row.add($(`
             <tr>
-                <th scope="row" style="color: #012970;">${i+1}</th>
+                <th scope="row" style="color: #012970;">${active_counter}</th>
                 <td data-label="Plan Name">${plan_data[i].plan_name}</td>
                 <td data-label="Bandwidth">${plan_data[i].bandwidth} mbps</td>
                 <td data-label="Price">&#8369; ${plan_data[i].price}</td>
@@ -59,11 +56,13 @@ async function setPlansPage () {
                 <td data-label="View"><button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#view-plans" data-bs-whatever="${plan_data[i].plan_id}" id="edit-modal-btn"><i class="ri ri-eye-fill"></i></button></td>
             </tr>
             `)).draw(false);
+
+            active_counter++;
         }
         else {
             deact_table.row.add($(`
             <tr>
-                <th scope="row" style="color: #012970;">${i+1}</th>
+                <th scope="row" style="color: #012970;">${deact_counter}</th>
                 <td data-label="Plan Name">${plan_data[i].plan_name}</td>
                 <td data-label="Bandwidth">${plan_data[i].bandwidth} mbps</td>
                 <td data-label="Price">&#8369; ${plan_data[i].price}</td>
@@ -72,6 +71,8 @@ async function setPlansPage () {
                 <td data-label="View"><button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#view-plans" data-bs-whatever="${plan_data[i].plan_id}" id="edit-modal-btn"><i class="ri ri-eye-fill"></i></button></td>
             </tr>
             `)).draw(false);
+
+            deact_counter++;
         }
         
     }
@@ -80,18 +81,18 @@ async function setPlansPage () {
     $("#deactivated-table_filter.dataTables_filter").append($("#deact-inclusions-filter"));
     // $("#active-table_filter.dataTables_filter").append($("#status-filter"));
 
-    var inclusionsIndex = 0, statusIndex = 0;
-    $("#active-table th").each(function (i) {
-        if ($($(this)).html() == "Inclusion") {
-            inclusionsIndex = i; return false;
-        }
-    });
+    // var inclusionsIndex = 0, statusIndex = 0;
+    // $("#active-table th").each(function (i) {
+    //     if ($($(this)).html() == "Inclusion") {
+    //         inclusionsIndex = i; return false;
+    //     }
+    // });
 
-    $("#deactivated-table th").each(function (i) {
-        if ($($(this)).html() == "Inclusion") {
-            inclusionsIndex = i; return false;
-        }
-    });
+    // $("#deactivated-table th").each(function (i) {
+    //     if ($($(this)).html() == "Inclusion") {
+    //         inclusionsIndex = i; return false;
+    //     }
+    // });
 
     // $("#active-table th").each(function (i) {
     //     if ($($(this)).html() == "Status") {
@@ -101,8 +102,12 @@ async function setPlansPage () {
 
     $.fn.dataTable.ext.search.push(
         function (settings, data, dataIndex) {
+            if (settings.nTable.id !== 'active-table'){
+                return true;
+            }
+
             var selectedItem = $('#active-inclusions-filter').val()
-            var category = data[inclusionsIndex];
+            var category = data[4];
             if (selectedItem === "" || category.includes(selectedItem)) {
             return true;
             }
@@ -112,8 +117,12 @@ async function setPlansPage () {
 
     $.fn.dataTable.ext.search.push(
         function (settings, data, dataIndex) {
+            if (settings.nTable.id !== 'deactivated-table'){
+                return true;
+            }
+
             var selectedItem = $('#deact-inclusions-filter').val()
-            var category = data[inclusionsIndex];
+            var category = data[4];
             if (selectedItem === "" || category.includes(selectedItem)) {
             return true;
             }
