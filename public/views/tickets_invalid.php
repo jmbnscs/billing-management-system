@@ -21,12 +21,11 @@
         <table class="table table-borderless" id="ticket-invalid-table">
           <thead>
             <tr>
+              <th scope="col">#</th>
               <th scope="col">Ticket Number</th>
+              <th scope="col">Account ID</th>
               <th scope="col">Concern</th>
               <th scope="col">Date Filed</th>
-              <th scope="col">Ticket Status</th>
-              <th scope="col">Account ID</th>
-              <th scope="col">User Level</th>
               <th scope="col">Invalidated By</th>
               <th scope="col">View / Delete</th>
             </tr>
@@ -70,7 +69,7 @@
                   
                   <div class="col-md-12">
                     <div class="form-floating">
-                      <input type="text" class="form-control" id="concern_details" placeholder="Concern Details" readonly>
+                      <textarea class="form-control" id="concern_details" readonly></textarea>
                       <label for="concern_details">Concern Details</label>
                     </div>
                   </div>

@@ -250,7 +250,7 @@ async function setPendingTicketsTable () {
             t.row.add($(`
             <tr>
                 <th scope="row" style="color: #012970;">${i+1}</th>
-                <td data-label="Concern">${ticket_data[i].ticket_num}</td>
+                <td data-label="Ticket #">${ticket_data[i].ticket_num}</td>
                 <td data-label="Account #">${ticket_data[i].account_id}</td>
                 <td data-label="Concern">${ticket_data[i].concern}</td>
                 <td data-label="Date Filed">${new Date(ticket_data[i].date_filed).toLocaleDateString('en-US')}</td>
@@ -536,12 +536,11 @@ async function setInvalidTicketsTable () {
         if(ticket_data[i].admin_id == admin_id || admin_id == '11674') {
             t.row.add($(`
             <tr>
-                <th scope="row"><a href="#">${ticket_data[i].ticket_num}</a></th>
-                <td data-label="Concern">${ticket_data[i].concern}</td>
-                <td data-label="Date Filed">${ticket_data[i].date_filed}</td>
-                <td data-label="Status"><span class="badge bg-danger">${ticket_data[i].ticket_status}</span></td>
+                <th scope="row" style="color: #012970;">${i+1}</th>
+                <td data-label="Ticket #">${ticket_data[i].ticket_num}</td>
                 <td data-label="Account #">${ticket_data[i].account_id}</td>
-                <td data-label="User Level">${ticket_data[i].user_level}</td>
+                <td data-label="Concern">${ticket_data[i].concern}</td>
+                <td data-label="Date Filed">${new Date(ticket_data[i].date_filed).toLocaleDateString('en-US')}</td>
                 <td data-label="Invalidated By">${ticket_data[i].admin_username}</td>
                 <td data-label="Actions">
                     <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#invalidatedModal" data-bs-whatever="${ticket_data[i].ticket_num}" id="setName"><i class="bi bi-folder-fill"></i></button>
