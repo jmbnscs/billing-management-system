@@ -37,6 +37,14 @@
           <!-- Active Tickets -->
           <div class="tab-pane fade show active" id="active-tickets" role="tabpanel" aria-labelledby="active-tab">
 
+            <!-- Filter Dropdown -->
+            <div>
+              <select id="active-concerns-filter" class="form-select table-filter" style="display: inline; width: 200px; margin-left: 25px;">
+                <option value="">Show All: Concerns</option>
+              </select>
+            </div>
+            <!-- End Filter Dropdown -->
+
             <table class="table table-borderless" id="active-ticket-table">
               <thead>
                 <tr>
@@ -57,6 +65,14 @@
 
           <!-- Resolved Tickets -->
           <div class="tab-pane fade" id="resolved-tickets" role="tabpanel" aria-labelledby="resolved-tab">
+
+            <!-- Filter Dropdown -->
+            <div>
+              <select id="resolved-concerns-filter" class="form-select table-filter" style="display: inline; width: 200px; margin-left: 25px;">
+                <option value="">Show All: Concerns</option>
+              </select>
+            </div>
+            <!-- End Filter Dropdown -->
 
             <table class="table table-borderless" id="resolved-ticket-table">
               <thead>

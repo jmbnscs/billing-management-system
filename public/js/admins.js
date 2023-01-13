@@ -81,8 +81,10 @@ async function setViewAdminPage () {
             $("#locked-role-filter").append(opt);
         }
 
+        var active_counter = 1, inactive_counter = 1, suspended_counter = 1, locked_counter = 1;
+
         for (var i = 0; i < admins.length; i++) {
-            var tag, active_counter = 1, inactive_counter = 1, suspended_counter = 1, locked_counter = 1;
+            var tag;
             (admins[i].status == 'Active') ? tag = 'bg-success' : tag = 'bg-danger';
 
             if (admins[i].status == 'Active') {
@@ -98,7 +100,7 @@ async function setViewAdminPage () {
                 </tr>
                 `)).draw(false);
 
-                active_counter += 1;
+                active_counter++;
             }
             else if (admins[i].status == 'Inactive') {
                 inactive_table.row.add($(`
@@ -113,7 +115,7 @@ async function setViewAdminPage () {
                 </tr>
                 `)).draw(false);
 
-                inactive_counter += 1;
+                inactive_counter++;
             }
             else if (admins[i].status == 'Suspended') {
                 suspended_table.row.add($(`
@@ -128,7 +130,7 @@ async function setViewAdminPage () {
                 </tr>
                 `)).draw(false);
 
-                suspended_counter += 1;
+                suspended_counter++;
             }
             else if (admins[i].status == 'Locked') {
                 locked_table.row.add($(`
@@ -143,7 +145,7 @@ async function setViewAdminPage () {
                 </tr>
                 `)).draw(false);
 
-                locked_counter += 1;
+                locked_counter++;
             }
             
             
@@ -153,54 +155,15 @@ async function setViewAdminPage () {
         $("#inactive-admins-table_filter.dataTables_filter").append($("#inactive-role-filter"));
         $("#suspended-admins-table_filter.dataTables_filter").append($("#suspended-role-filter"));
         $("#locked-admins-table_filter.dataTables_filter").append($("#locked-role-filter"));
-        // $("#admins-table_filter.dataTables_filter").append($("#status-filter"));
-
-        // var statusIndex = 0, roleIndex = 0;
-        // $("#admins-table th").each(function (i) {
-        //     if ($($(this)).html() == "Status") {
-        //         statusIndex = i; return false;
-        //     }
-        // });
-
-        $("#active-admins-table th").each(function (i) {
-            if ($($(this)).html() == "Role") {
-                roleIndex = i; return false;
-            }
-        });
-
-        $("#inactive-admins-table th").each(function (i) {
-            if ($($(this)).html() == "Role") {
-                roleIndex = i; return false;
-            }
-        });
-
-        $("#suspended-admins-table th").each(function (i) {
-            if ($($(this)).html() == "Role") {
-                roleIndex = i; return false;
-            }
-        });
-
-        $("#locked-admins-table th").each(function (i) {
-            if ($($(this)).html() == "Role") {
-                roleIndex = i; return false;
-            }
-        });
-
-        // $.fn.dataTable.ext.search.push(
-        //     function (settings, data, dataIndex) {
-        //       var selectedItem = $('#status-filter').val()
-        //       var category = data[statusIndex];
-        //       if (selectedItem === "" || category.includes(selectedItem)) {
-        //         return true;
-        //       }
-        //       return false;
-        //     }
-        //   );
 
         $.fn.dataTable.ext.search.push(
         function (settings, data, dataIndex) {
-            var selectedItem = $('#active-role-filter').val()
-            var category = data[roleIndex];
+            if (settings.nTable.id !== 'active-admins-table'){
+                return true;
+            }
+
+            var selectedItem = $('#active-role-filter').val();
+            var category = data[3];
             if (selectedItem === "" || category.includes(selectedItem)) {
             return true;
             }
@@ -210,8 +173,12 @@ async function setViewAdminPage () {
 
         $.fn.dataTable.ext.search.push(
             function (settings, data, dataIndex) {
-                var selectedItem = $('#inactive-role-filter').val()
-                var category = data[roleIndex];
+                if (settings.nTable.id !== 'inactive-admins-table'){
+                    return true;
+                }
+
+                var selectedItem = $('#inactive-role-filter').val();
+                var category = data[3];
                 if (selectedItem === "" || category.includes(selectedItem)) {
                 return true;
                 }
@@ -221,8 +188,12 @@ async function setViewAdminPage () {
 
         $.fn.dataTable.ext.search.push(
             function (settings, data, dataIndex) {
-                var selectedItem = $('#suspended-role-filter').val()
-                var category = data[roleIndex];
+                if (settings.nTable.id !== 'suspended-admins-table'){
+                    return true;
+                }
+                
+                var selectedItem = $('#suspended-role-filter').val();
+                var category = data[3];
                 if (selectedItem === "" || category.includes(selectedItem)) {
                 return true;
                 }
@@ -232,18 +203,18 @@ async function setViewAdminPage () {
 
         $.fn.dataTable.ext.search.push(
             function (settings, data, dataIndex) {
-                var selectedItem = $('#locked-role-filter').val()
-                var category = data[roleIndex];
+                if (settings.nTable.id !== 'locked-admins-table'){
+                    return true;
+                }
+                
+                var selectedItem = $('#locked-role-filter').val();
+                var category = data[3];
                 if (selectedItem === "" || category.includes(selectedItem)) {
                 return true;
                 }
                 return false;
             }
         );
-
-        // $("#status-filter").change(function (e) {
-        //     t.draw();
-        // });
 
         $("#active-role-filter").change(function (e) {
             active_table.draw();

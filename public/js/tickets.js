@@ -45,18 +45,26 @@ const invalid_ticket_btn = document.getElementById('invalid-btn');
 
 // -------------------------------------------------------------------- View Tickets Page
 async function setViewTickets () {
+    const concerns = await fetchData('concerns/read.php');
+
     // --------------------------- Active Tickets
     const active_tickets = await fetchData('views/ticket.php');
-    var t = $('#active-ticket-table').DataTable({
+    var active_table = $('#active-ticket-table').DataTable({
         pageLength: 5,
         lengthMenu: [5, 10, 20],
         "searching": true,
         "autoWidth": false
     });
 
+    for (var i = 0; i < concerns.length; i++) {
+        var opt = `<option value='${concerns[i].concern_category}'>${concerns[i].concern_category}</option>`;
+        $("#active-concerns-filter").append(opt);
+        $("#resolved-concerns-filter").append(opt);
+    }
+
     for (var i = 0; i < active_tickets.length; i++) {
         if(active_tickets[i].user_level == user_id || user_id == 2) {
-            t.row.add($(`
+            active_table.row.add($(`
             <tr>
                 <th scope="row" style="color: #012970;">${i+1}</th>
                 <td data-label="Ticket #">${active_tickets[i].ticket_num}</td>
@@ -71,6 +79,26 @@ async function setViewTickets () {
             `)).draw(false);
         }
     }
+
+    $("#active-ticket-table_filter.dataTables_filter").append($("#active-concerns-filter"));
+    $.fn.dataTable.ext.search.push(
+        function (settings, data, dataIndex) {
+            if (settings.nTable.id !== 'active-ticket-table'){
+                return true;
+            }
+
+            var selectedItem = $('#active-concerns-filter').val();
+            var category = data[3];
+            if (selectedItem === "" || category.includes(selectedItem)) {
+            return true;
+            }
+            return false;
+        }
+    );
+
+    $("#active-concerns-filter").change(function (e) {
+        active_table.draw();
+    });
 
     var activeModal = document.getElementById('activeModal')
     activeModal.addEventListener('show.bs.modal', async function (event) {
@@ -146,7 +174,7 @@ async function setViewTickets () {
 
     // --------------------------- Resolved Tickets
     const resolved_tickets = await fetchData('views/ticket_resolved.php');
-    var t = $('#resolved-ticket-table').DataTable({
+    var resolved_table = $('#resolved-ticket-table').DataTable({
         pageLength: 5,
         lengthMenu: [5, 10, 20],
         "searching": true,
@@ -155,7 +183,7 @@ async function setViewTickets () {
 
     for (var i = 0; i < resolved_tickets.length; i++) {
         if(resolved_tickets[i].admin_id == admin_id || user_id == 2) {
-            t.row.add($(`
+            resolved_table.row.add($(`
                 <tr>
                     <th scope="row"><a href="#">${i+1}</a></th>
                     <td data-label="Ticket #">${resolved_tickets[i].ticket_num}</td>
@@ -170,6 +198,26 @@ async function setViewTickets () {
             `)).draw(false);
         }
     }
+
+    $("#resolved-ticket-table_filter.dataTables_filter").append($("#resolved-concerns-filter"));
+    $.fn.dataTable.ext.search.push(
+        function (settings, data, dataIndex) {
+            if (settings.nTable.id !== 'resolved-ticket-table'){
+                return true;
+            }
+
+            var selectedItem = $('#resolved-concerns-filter').val();
+            var category = data[3];
+            if (selectedItem === "" || category.includes(selectedItem)) {
+            return true;
+            }
+            return false;
+        }
+    );
+
+    $("#resolved-concerns-filter").change(function (e) {
+        resolved_table.draw();
+    });
 
     var resModal = document.getElementById('resolvedModal')
     resModal.addEventListener('show.bs.modal', async function (event) {
@@ -237,17 +285,23 @@ async function invalidModal (ticket_num, page) {
 
 // -------------------------------------------------------------------- Pending Ticket Page
 async function setPendingTicketsTable () {
+    const concerns = await fetchData('concerns/read.php');
     const ticket_data = await fetchData('views/ticket_pending.php');
-    var t = $('#ticket-pending-table').DataTable({
+    var pending_table = $('#ticket-pending-table').DataTable({
         pageLength: 5,
         lengthMenu: [5, 10, 20],
         "searching": true,
         "autoWidth": false
     });
 
+    for (var i = 0; i < concerns.length; i++) {
+        var opt = `<option value='${concerns[i].concern_category}'>${concerns[i].concern_category}</option>`;
+        $("#pending-concerns-filter").append(opt);
+    }
+
     for (var i = 0; i < ticket_data.length; i++) {
         if(ticket_data[i].admin_id == admin_id || user_id == 2) {
-            t.row.add($(`
+            pending_table.row.add($(`
             <tr>
                 <th scope="row" style="color: #012970;">${i+1}</th>
                 <td data-label="Ticket #">${ticket_data[i].ticket_num}</td>
@@ -263,6 +317,23 @@ async function setPendingTicketsTable () {
             `)).draw(false);
         }
     }
+
+    $("#ticket-pending-table_filter.dataTables_filter").append($("#pending-concerns-filter"));
+    $.fn.dataTable.ext.search.push(
+        function (settings, data, dataIndex) {
+            var selectedItem = $('#pending-concerns-filter').val();
+            var category = data[3];
+            if (selectedItem === "" || category.includes(selectedItem)) {
+            return true;
+            }
+            return false;
+        }
+    );
+
+    $("#pending-concerns-filter").change(function (e) {
+        pending_table.draw();
+    });
+
 }
 
 async function pendingModal () {
@@ -524,17 +595,24 @@ async function pendDefaultModal(ticket_num) {
 
 // -------------------------------------------------------------------- Invalid Ticket Page
 async function setInvalidTicketsTable () {
+    const concerns = await fetchData('concerns/read.php');
+
     const ticket_data = await fetchData('views/ticket_invalid.php');
-    var t = $('#ticket-invalid-table').DataTable({
+    var invalid_table = $('#ticket-invalid-table').DataTable({
         pageLength: 5,
         lengthMenu: [5, 10, 20],
         "searching": true,
         "autoWidth": false
     });
 
+    for (var i = 0; i < concerns.length; i++) {
+        var opt = `<option value='${concerns[i].concern_category}'>${concerns[i].concern_category}</option>`;
+        $("#invalid-concerns-filter").append(opt);
+    }
+
     for (var i = 0; i < ticket_data.length; i++) {
         if(ticket_data[i].admin_id == admin_id || admin_id == '11674') {
-            t.row.add($(`
+            invalid_table.row.add($(`
             <tr>
                 <th scope="row" style="color: #012970;">${i+1}</th>
                 <td data-label="Ticket #">${ticket_data[i].ticket_num}</td>
@@ -549,6 +627,22 @@ async function setInvalidTicketsTable () {
             `)).draw(false);
         }
     }
+
+    $("#ticket-invalid-table_filter.dataTables_filter").append($("#invalid-concerns-filter"));
+    $.fn.dataTable.ext.search.push(
+        function (settings, data, dataIndex) {
+            var selectedItem = $('#invalid-concerns-filter').val();
+            var category = data[3];
+            if (selectedItem === "" || category.includes(selectedItem)) {
+            return true;
+            }
+            return false;
+        }
+    );
+
+    $("#invalid-concerns-filter").change(function (e) {
+        invalid_table.draw();
+    });
 }
 
 async function invalidatedTicketsModal () {
