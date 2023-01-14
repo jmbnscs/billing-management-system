@@ -696,18 +696,20 @@ async function setUserLevelPage() {
             else if (key == 'invoice-payment-add' && user_page_access[key] == 1) {
                 $('#pay-add').prop('checked', true);
             }
-            else if (key == 'admin-add' && user_page_access[key] == 1) {
-                $('#adm-add').prop('checked', true);
-            }
-            else if (key == 'plan-add' && user_page_access[key] == 1) {
-                $('#plans-add').prop('checked', true);
-            }
-            else if (key == 'ticket-create' && user_page_access[key] == 1) {
-                $('#tkt-add').prop('checked', true);
-            }
           });
 
         Object.keys(user_buttons_access).forEach(key => {
+            // Add
+            if (key == 'admins-add' && user_buttons_access[key] == 1) {
+                $('#adm-add').prop('checked', true);
+            }
+            else if (key == 'plans-add' && user_buttons_access[key] == 1) {
+                $('#plans-add').prop('checked', true);
+            }
+            else if (key == 'tickets-add' && user_buttons_access[key] == 1) {
+                $('#tkt-add').prop('checked', true);
+            }
+
             // Edit
             if (key == 'custdata-edit' && user_buttons_access[key] == 1) {
                 $('#cust-edit').prop('checked', 1);
@@ -758,14 +760,85 @@ async function setUserLevelPage() {
         };
 
         async function processUpdate() {
-            console.log($('#cust-view').is(':checked'));
-            let customer_list, customer_add;
+            // console.log($('#cust-view').is(':checked'));
+
+            let customer_list, invoice_view, invoice_payment, invoice_prorate, admin_view, plan_view, ticket_page;
             $('#cust-view').is(':checked') ? customer_list = 1 : customer_list = 0;
+            $('#inv-view').is(':checked') ? invoice_view = 1 : invoice_view = 0;
+            $('#pay-view').is(':checked') ? invoice_payment = 1 : invoice_payment = 0;
+            $('#pro-view').is(':checked') ? invoice_prorate = 1 : invoice_prorate = 0;
+            $('#adm-view').is(':checked') ? admin_view = 1 : admin_view = 0;
+            $('#plans-view').is(':checked') ? plan_view = 1 : plan_view = 0;
+            $('#tkt-view').is(':checked') ? ticket_page = 1 : ticket_page = 0;
+
+            let customer_add, invoice_payment_add, admin_add, plan_add, ticket_create, ticket_active, ticket_invalid;
             $('#cust-add').is(':checked') ? customer_add = 1 : customer_add = 0;
-            // const update_data = JSON.stringify({
-            //     'user_id' : data_id,
-            //     'user_role' : $('#user_role').val()
-            // });
+            $('#pay-add').is(':checked') ? invoice_payment_add = 1 : invoice_payment_add = 0;
+
+            $('#tkt-edit').is(':checked') ? ticket_active = 1 : ticket_active = 0;
+            $('#tkt-dlt').is(':checked') ? ticket_invalid = 1 : ticket_invalid = 0;
+
+            const pages_update_data = JSON.stringify({
+                'user_id' : data_id,
+                
+                'customer_list' : customer_list,
+                'invoice_view' : invoice_view,
+                'invoice_payment' : invoice_payment,
+                'invoice_prorate' : invoice_prorate,
+                'admin_view' : admin_view,
+                'plan_view' : plan_view,
+                'ticket_page' : ticket_page,
+
+                'customer_add' : customer_add,
+                'invoice_payment_add' : invoice_payment_add,
+                'ticket_active' : ticket_active,
+                'ticket_invalid' : ticket_invalid
+            });
+
+            let admins_add, plans_add, tickets_add, custdata_edit, payments_edit, prorate_edit, admindata_edit, plans_edit, active_claim, payments_dlt, prorate_dlt, active_invalid;
+            $('#adm-add').is(':checked') ? admins_add = 1 : admins_add = 0;
+            $('#plans-add').is(':checked') ? plans_add = 1 : plans_add = 0;
+            $('#tkt-add').is(':checked') ? tickets_add = 1 : tickets_add = 0;
+
+            $('#cust-edit').is(':checked') ? custdata_edit = 1 : custdata_edit = 0;
+            $('#pay-edit').is(':checked') ? payments_edit = 1 : payments_edit = 0;
+            $('#pro-edit').is(':checked') ? prorate_edit = 1 : prorate_edit = 0;
+            $('#adm-edit').is(':checked') ? admindata_edit = 1 : admindata_edit = 0;
+            $('#plans-edit').is(':checked') ? plans_edit = 1 : plans_edit = 0;
+            $('#tkt-edit').is(':checked') ? active_claim = 1 : active_claim = 0;
+
+            $('#pay-dlt').is(':checked') ? payments_dlt = 1 : payments_dlt = 0;
+            $('#pro-dlt').is(':checked') ? prorate_dlt = 1 : prorate_dlt = 0;
+            $('#tkt-dlt').is(':checked') ? active_invalid = 1 : active_invalid = 0;
+
+            const buttons_update_data = JSON.stringify({
+                'user_id' : data_id,
+
+                'admins_add' : admins_add,
+                'plans_add' : plans_add,
+                'tickets_add' : tickets_add,
+                
+                'custdata_edit' : custdata_edit,
+                'payments_edit' : payments_edit,
+                'prorate_edit' : prorate_edit,
+                'admindata_edit' : admindata_edit,
+                'plans_edit' : plans_edit,
+                'active_claim' : active_claim,
+
+                'payments_dlt' : payments_dlt,
+                'prorate_dlt' : prorate_dlt,
+                'active_invalid' : active_invalid
+            });
+
+            const [pages_update, buttons_update, log] = await Promise.all ([updateData('restriction/update_pages_restriction.php', pages_update_data), updateData('restriction/update_buttons_restriction.php', buttons_update_data), logActivity('Adv. Options - Edit User Level Access [' + userlevel_data.user_role + ']', 'Advanced Options')]);
+
+            if (pages_update.success && buttons_update.success && log) {
+                sessionStorage.setItem('save_message', "User Role Updated Successfully.");
+                window.location.reload();
+            }
+            else {
+                toastr.error("User Role was not updated.");
+            }
 
             // const [content, log] = await Promise.all ([updateData('user_level/update.php', update_data), logActivity('Updated User Level # ' + data_id, 'User Level - Overview')]);
         
