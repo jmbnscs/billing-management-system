@@ -15,7 +15,7 @@
     </div>
 
     <div class="col-md-3 justify-content-center">
-      <button type="button" class="btn btn-primary mt-3 w-100" data-bs-toggle="modal" data-bs-target="#add-plans">+ Add New Plan</button>
+      <button type="button" class="btn btn-primary mt-3 w-100" data-bs-toggle="modal" data-bs-target="#add-plans" id="add-btn">+ Add New Plan</button>
     </div>
   </div><!-- End Page Title -->
 

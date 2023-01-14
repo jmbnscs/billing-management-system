@@ -63,7 +63,7 @@ async function setViewTickets () {
     }
 
     for (var i = 0; i < active_tickets.length; i++) {
-        if(active_tickets[i].user_level == user_id || user_id == 2) {
+        if(active_tickets[i].user_level == user_id || user_id == 2 || user_id == 5) {
             active_table.row.add($(`
             <tr>
                 <th scope="row" style="color: #012970;">${i+1}</th>
