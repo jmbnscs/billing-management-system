@@ -2,6 +2,7 @@ $(document).ready(function () {
     isDefault();
     setDefaultSetting();
     restrictFunctions('invoice');
+    restrictFunctions('payments');
 });
 
 let customer_name;
@@ -48,7 +49,7 @@ async function setDefaultSetting() {
     
             $('#payment-table').find('tbody').append(`
                 <tr class="table-light">
-                    <th scope="row" colspan="2" class="text-end pe-4">Running Balance: </th>
+                    <th scope="row" colspan="2" class="text-end pe-4">Current Invoice Running Balance (LESS: Previous Bill): </th>
                     <td>\u20B1 ${invoice_data.running_balance}</td>
                 </tr>
             `);
@@ -61,7 +62,7 @@ async function setDefaultSetting() {
             `);
             $('#payment-table').find('tbody').append(`
                 <tr class="table-light">
-                    <th scope="row" colspan="2" class="text-end pe-4">Running Balance: </th>
+                    <th scope="row" colspan="2" class="text-end pe-4">Current Invoice Running Balance (LESS: Previous Bill): </th>
                     <td>\u20B1 ${invoice_data.running_balance}</td>
                 </tr>
             `);

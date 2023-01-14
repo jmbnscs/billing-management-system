@@ -385,6 +385,9 @@ async function restrictFunctions (page) {
         if (key.split("-")[0] == page) {
             if (restriction[key] == 0) {
                 $('#' + key.split("-")[1] + '-btn').addClass('hide');
+                if (key.split('-')[1] == 'edit') {
+                    $('#save-btn').addClass('hide');
+                }
             }
         }
     });

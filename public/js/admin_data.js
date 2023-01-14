@@ -168,7 +168,7 @@ async function setAdminData(admin_data) {
 }
 
 async function setActivities() {
-    var t = $('#activity-table').DataTable( {
+    var act_table = $('#activity-table').DataTable( {
         // dom : 'Bfrtip',
         pageLength: 10,
         lengthMenu: [10, 20, 30],
@@ -186,12 +186,13 @@ async function setActivities() {
 
     for (var i = 0; i < content.length; i++) {
         if (content[i].page_accessed != 'Login') {
-            t.row.add($(`
+            act_table.row.add($(`
                 <tr>
-                    <th scope="row" style="color: #012970;"><strong>${content[i].id}</strong></th>
+                    <th scope="row" style="color: #012970;"><strong>${counter}</strong></th>
                     <td>${content[i].page_accessed}</td>
-                    <td>${content[i].date_accessed.split(' ')[0]}</td>
-                    <td>${content[i].date_accessed.split(' ')[1]}</td>
+                    <td>${new Date(content[i].date_accessed.split(' ')[0]).toLocaleDateString('PHT')}</td>
+                    <td>${new Date(content[i].date_accessed).toLocaleTimeString('PHT',
+                    {timeZone:'Asia/Manila',hour12:true,hour:'numeric',minute:'numeric'})}</td>
                     <td><button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#view-activity-modal" data-bs-whatever="${content[i].id}"><i class="ri ri-eye-fill"></i></button></td>
                 </tr>
             `)).draw(false);
@@ -205,17 +206,14 @@ async function setActivities() {
 
     $("#activity-table_filter.dataTables_filter").append($("#pages-filter"));
 
-    var pagesIndex = 0;
-    $("#activity-table th").each(function (i) {
-        if ($($(this)).html() == "Page") {
-            pagesIndex = i; return false;
-        }
-    });
-
     $.fn.dataTable.ext.search.push(
         function (settings, data, dataIndex) {
+            if (settings.nTable.id !== 'activity-table'){
+                return true;
+            }
+
             var selectedItem = $('#pages-filter').val()
-            var category = data[pagesIndex];
+            var category = data[1];
             if (selectedItem === "" || category.includes(selectedItem)) {
             return true;
             }
@@ -224,10 +222,10 @@ async function setActivities() {
     );
 
     $("#pages-filter").change(function (e) {
-        t.draw();
+        act_table.draw();
     });
 
-    t.draw();
+    act_table.draw();
 
     var viewModal = document.getElementById('view-activity-modal')
     viewModal.addEventListener('show.bs.modal', async function (event) {
@@ -239,7 +237,19 @@ async function setActivities() {
         let id, data;
 
         const selected_data = content.filter(item => item.id == data_id)[0];
-    
+
+        var browserName = (function (agent) {        switch (true) {
+            case agent.indexOf("edge") > -1: return "MS Edge";
+            case agent.indexOf("edg/") > -1: return "Edge ( chromium based)";
+            case agent.indexOf("opr") > -1 && !!window.opr: return "Opera";
+            case agent.indexOf("chrome") > -1 && !!window.chrome: return "Chrome";
+            case agent.indexOf("trident") > -1: return "MS IE";
+            case agent.indexOf("firefox") > -1: return "Mozilla Firefox";
+            case agent.indexOf("safari") > -1: return "Safari";
+            default: return "other";
+        }
+        })(selected_data.user_agent.toLowerCase());
+
         id = [
             // '#activity_id', 
             '#activity_page', 
@@ -253,10 +263,11 @@ async function setActivities() {
             // selected_data.id, 
             selected_data.page_accessed, 
             selected_data.activity,
-            selected_data.date_accessed.split(' ')[0], 
-            selected_data.date_accessed.split(' ')[1],
+            new Date(selected_data.date_accessed.split(' ')[0]).toLocaleDateString('PHT'), 
+            new Date(selected_data.date_accessed).toLocaleTimeString('PHT',
+            {timeZone:'Asia/Manila',hour12:true,hour:'numeric',minute:'numeric'}),
             selected_data.ip_address,
-            selected_data.user_agent
+            browserName
         ];
 
         setContent();
@@ -323,6 +334,10 @@ async function setTicketHistory() {
 
     $.fn.dataTable.ext.search.push(
         function (settings, data, dataIndex) {
+            if (settings.nTable.id !== 'tickets-table'){
+                return true;
+            }
+
             var selectedItem = $('#status-filter').val()
             var category = data[statusIndex];
             if (selectedItem === "" || category.includes(selectedItem)) {

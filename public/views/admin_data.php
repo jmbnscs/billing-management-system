@@ -127,7 +127,7 @@
                                   </select>
                                 </div>
 
-                                <table class="table" id="tickets-table">
+                                <table class="table table-borderless" id="tickets-table">
                                     <thead class="table-light">
                                         <tr>
                                             <th scope="col">#</th>

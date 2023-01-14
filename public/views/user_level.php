@@ -14,29 +14,27 @@
       </nav>
     </div><!-- End Page Title -->
 
-    <section class="section user-level">
-      <div class="row" id="user-role-body">
+<section class="section user-level">
+  <div class="row" id="user-role-body">
 
-        <!-- Templates -->
+    <!-- <div class="col-sm-4 user-cards">
+      <div class="card mt-3">
+        <div class="card-body">
+          <h5 id="user-title"></h5>
+          <h6 id="user-total">Total users with this role: 1</h6>
+          <ul>
+            <li><span><i class="bi bi-check2-circle"></i></span>1</li>
+            <li><span><i class="bi bi-check2-circle"></i></span>1</li>
+            <li><span><i class="bi bi-check2-circle"></i></span>1</li>
+          </ul>
 
-        <!-- <div class="col-sm-4 user-cards">
-          <div class="card mt-3">
-            <div class="card-body">
-              <h5>Title</h5>
-              <h6>Total users with this role: 1</h6>
-              <ul>
-                <li><span><i class="bi bi-check2-circle"></i></span>1</li>
-                <li><span><i class="bi bi-check2-circle"></i></span>1</li>
-                <li><span><i class="bi bi-check2-circle"></i></span>1</li>
-              </ul>
-
-              <button class="btn btn-outline-success">View Role</button>
-              <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="x">Edit Role</button>
-            </div>
-          </div>
-        </div> -->
-
+          <button class="btn btn-outline-success">View Role</button>
+          <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="x">Edit Role</button>
+        </div>
       </div>
+    </div> -->
+
+  </div>
 
     
       <!-- <div class="row">
@@ -109,10 +107,10 @@
 
         </div>
       </div> -->
-    </section>
+</section>
 
 <!-- User Level Modal -->
-<form id="update-data">
+<form id="user-update-data">
   <!-- Modal Dialog Scrollable -->
   <div class="modal fade" id="editModal" tabindex="-1">
       <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg">
@@ -158,10 +156,10 @@
                     <input class="form-check-input" type="checkbox" id="cust-edit" value="1" name="check">
                     <label class="form-check-label" for="cust-edit">Edit</label>
                   </div>
-                  <div class="form-check form-check-inline pe-3">
+                  <!-- <div class="form-check form-check-inline pe-3">
                     <input class="form-check-input" type="checkbox" id="cust-dlt" value="1" name="check">
                     <label class="form-check-label" for="cust-dlt">Delete</label>
-                  </div>
+                  </div> -->
                 </div>
 
                 <div class="mb-1">
@@ -170,18 +168,18 @@
                     <input class="form-check-input" type="checkbox" id="inv-view" value="1" name="check">
                     <label class="form-check-label" for="inv-view">View</label>
                   </div>
-                  <div class="form-check form-check-inline pe-3">
+                  <!-- <div class="form-check form-check-inline pe-3">
                     <input class="form-check-input" type="checkbox" id="inv-add" value="1" name="check">
                     <label class="form-check-label" for="inv-add">Add</label>
-                  </div>
-                  <div class="form-check form-check-inline pe-3">
+                  </div> -->
+                  <!-- <div class="form-check form-check-inline pe-3">
                     <input class="form-check-input" type="checkbox" id="inv-edit" value="1" name="check">
                     <label class="form-check-label" for="inv-edit">Edit</label>
                   </div>
                   <div class="form-check form-check-inline pe-3">
                     <input class="form-check-input" type="checkbox" id="inv-dlt" value="1" name="check">
                     <label class="form-check-label" for="inv-dlt">Delete</label>
-                  </div>
+                  </div> -->
                 </div>
 
                 <div class="mb-1">
@@ -210,10 +208,10 @@
                     <input class="form-check-input" type="checkbox" id="pro-view" value="1" name="check">
                     <label class="form-check-label" for="pro-view">View</label>
                   </div>
-                  <div class="form-check form-check-inline pe-3">
+                  <!-- <div class="form-check form-check-inline pe-3">
                     <input class="form-check-input" type="checkbox" id="pro-add" value="1" name="check">
                     <label class="form-check-label" for="pro-add">Add</label>
-                  </div>
+                  </div> -->
                   <div class="form-check form-check-inline pe-3">
                     <input class="form-check-input" type="checkbox" id="pro-edit" value="1" name="check">
                     <label class="form-check-label" for="pro-edit">Edit</label>
@@ -222,6 +220,26 @@
                     <input class="form-check-input" type="checkbox" id="pro-dlt" value="1" name="check">
                     <label class="form-check-label" for="pro-dlt">Delete</label>
                   </div>
+                </div>
+
+                <div class="mb-1">
+                  <label class="title">Admin Management</label>
+                  <div class="form-check form-check-inline pe-3">
+                    <input class="form-check-input" type="checkbox" id="adm-view" value="1" name="check">
+                    <label class="form-check-label" for="adm-view">View</label>
+                  </div>
+                  <div class="form-check form-check-inline pe-3">
+                    <input class="form-check-input" type="checkbox" id="adm-add" value="1" name="check">
+                    <label class="form-check-label" for="adm-add">Add</label>
+                  </div>
+                  <div class="form-check form-check-inline pe-3">
+                    <input class="form-check-input" type="checkbox" id="adm-edit" value="1" name="check">
+                    <label class="form-check-label" for="adm-edit">Edit</label>
+                  </div>
+                  <!-- <div class="form-check form-check-inline pe-3">
+                    <input class="form-check-input" type="checkbox" id="adm-dlt" value="1" name="check">
+                    <label class="form-check-label" for="adm-dlt">Delete</label>
+                  </div> -->
                 </div>
 
                 <div class="mb-1">
@@ -238,10 +256,10 @@
                     <input class="form-check-input" type="checkbox" id="plans-edit" value="1" name="check">
                     <label class="form-check-label" for="plans-edit">Edit</label>
                   </div>
-                  <div class="form-check form-check-inline pe-3">
+                  <!-- <div class="form-check form-check-inline pe-3">
                     <input class="form-check-input" type="checkbox" id="plans-dlt" value="1" name="check">
                     <label class="form-check-label" for="plans-dlt">Delete</label>
-                  </div>
+                  </div> -->
                 </div>
 
                 <div class="mb-1">
