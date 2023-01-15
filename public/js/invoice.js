@@ -27,59 +27,100 @@ async function setInvoicePage () {
     displaySuccessMessage();
 
     const [content, invoice_status, customers] = await Promise.all ([fetchData('views/invoice_unpaid.php'), fetchData('statuses/read.php?status_table=invoice_status'), fetchData('views/customer.php')]);
+
+    let tag;
     
-    var t = $('#invoice-table').DataTable({
+    var unpaid_table = $('#unpaid-invoice-table').DataTable({
         pageLength: 5,
         lengthMenu: [5, 10, 20],
         "searching": true,
         "autoWidth": false
-    }), tag;
+    });
 
-    for (var i = 1; i < invoice_status.length; i++) {
-        var opt = `<option value='${invoice_status[i].status_name}'>${invoice_status[i].status_name}</option>`;
-        $("#invoice-status-filter").append(opt);
-    }
+    var overdue_table = $('#overdue-invoice-table').DataTable({
+        pageLength: 5,
+        lengthMenu: [5, 10, 20],
+        "searching": true,
+        "autoWidth": false
+    });
+
+    var disconnection_table = $('#disconnection-invoice-table').DataTable({
+        pageLength: 5,
+        lengthMenu: [5, 10, 20],
+        "searching": true,
+        "autoWidth": false
+    });
 
     for (var i = 0; i < customers.length; i++) {
         var opt = `<option value='${customers[i].customer_name}'>${customers[i].customer_name}</option>`;
-        $("#invoice-customer-filter").append(opt);
+        $("#unpaid-customer-filter").append(opt);
+        $("#overdue-customer-filter").append(opt);
+        $("#disconnection-customer-filter").append(opt);
     }
 
+    let unpaid_counter = 1, overdue_counter = 1, disconnection_counter = 1;
     for (var i = 0; i < content.length; i++) {
         (content[i].status == 'PAID') ? tag = 'bg-success' : tag = 'bg-danger';
-        
-        t.row.add($(`
+
+        if (content[i].status == 'UNPAID') {
+            unpaid_table.row.add($(`
             <tr>
-                <th scope="row" style="color: #012970;"><strong>${content[i].invoice_id}</strong></th>
+                <th scope="row" style="color: #012970;"><strong>${unpaid_counter}</strong></th>
+                <td data-label="Invoice ID">${content[i].invoice_id}</td>
                 <td data-label="Customer Name">${content[i].customer_name}</td>
-                <td data-label="Disconnection Date">${content[i].disconnection_date}</td>
+                <td data-label="Disconnection Date">${new Date(content[i].disconnection_date).toLocaleDateString('PHT')}</td>
                 <td data-label="Balance">&#8369; ${content[i].running_balance}</td>
                 <td data-label="Status"><span class="badge ${tag}">${content[i].status}</span></td>
                 <td data-label="View"><a href="../views/invoice_data?acct=${content[i].invoice_id}" target="_blank"><button type="button" class="btn btn-outline-primary"><i class="ri ri-eye-fill"></i></button></a></td>
             </tr>
-        `)).draw(false);
+            `)).draw(false);
+
+            unpaid_counter++;
+        }
+        else if (content[i].status == 'OVERDUE') {
+            overdue_table.row.add($(`
+            <tr>
+                <th scope="row" style="color: #012970;"><strong>${overdue_counter}</strong></th>
+                <td data-label="Invoice ID">${content[i].invoice_id}</td>
+                <td data-label="Customer Name">${content[i].customer_name}</td>
+                <td data-label="Disconnection Date">${new Date(content[i].disconnection_date).toLocaleDateString('PHT')}</td>
+                <td data-label="Balance">&#8369; ${content[i].running_balance}</td>
+                <td data-label="Status"><span class="badge ${tag}">${content[i].status}</span></td>
+                <td data-label="View"><a href="../views/invoice_data?acct=${content[i].invoice_id}" target="_blank"><button type="button" class="btn btn-outline-primary"><i class="ri ri-eye-fill"></i></button></a></td>
+            </tr>
+            `)).draw(false);
+
+            overdue_counter++;
+        }
+        else {
+            disconnection_table.row.add($(`
+            <tr>
+                <th scope="row" style="color: #012970;"><strong>${disconnection_counter}</strong></th>
+                <td data-label="Invoice ID">${content[i].invoice_id}</td>
+                <td data-label="Customer Name">${content[i].customer_name}</td>
+                <td data-label="Disconnection Date">${new Date(content[i].disconnection_date).toLocaleDateString('PHT')}</td>
+                <td data-label="Balance">&#8369; ${content[i].running_balance}</td>
+                <td data-label="Status"><span class="badge ${tag}">${content[i].status}</span></td>
+                <td data-label="View"><a href="../views/invoice_data?acct=${content[i].invoice_id}" target="_blank"><button type="button" class="btn btn-outline-primary"><i class="ri ri-eye-fill"></i></button></a></td>
+            </tr>
+            `)).draw(false);
+
+            disconnection_counter++;
+        }
     }
 
-    $("#invoice-table_filter.dataTables_filter").append($("#invoice-status-filter"));
-    $("#invoice-table_filter.dataTables_filter").append($("#invoice-customer-filter"));
-
-    var statusIndex = 0, customerIndex = 0;
-    $("#invoice-table th").each(function (i) {
-        if ($($(this)).html() == "Status") {
-            statusIndex = i; return false;
-        }
-    });
-
-    $("#invoice-table th").each(function (i) {
-        if ($($(this)).html() == "Customer") {
-            customerIndex = i; return false;
-        }
-    });
+    $("#unpaid-invoice-table_filter.dataTables_filter").append($("#unpaid-customer-filter"));
+    $("#overdue-invoice-table_filter.dataTables_filter").append($("#overdue-customer-filter"));
+    $("#disconnection-invoice-table_filter.dataTables_filter").append($("#disconnection-customer-filter"));
 
     $.fn.dataTable.ext.search.push(
         function (settings, data, dataIndex) {
-            var selectedItem = $('#invoice-status-filter').val()
-            var category = data[statusIndex];
+            if (settings.nTable.id !== 'unpaid-invoice-table'){
+                return true;
+            }
+
+            var selectedItem = $('#unpaid-customer-filter').val()
+            var category = data[2];
             if (selectedItem === "" || category.includes(selectedItem)) {
             return true;
             }
@@ -89,8 +130,12 @@ async function setInvoicePage () {
 
     $.fn.dataTable.ext.search.push(
         function (settings, data, dataIndex) {
-            var selectedItem = $('#invoice-customer-filter').val()
-            var category = data[customerIndex];
+            if (settings.nTable.id !== 'overdue-invoice-table'){
+                return true;
+            }
+
+            var selectedItem = $('#overdue-customer-filter').val()
+            var category = data[2];
             if (selectedItem === "" || category.includes(selectedItem)) {
             return true;
             }
@@ -98,16 +143,36 @@ async function setInvoicePage () {
         }
     );
 
-    $("#invoice-status-filter").change(function (e) {
-        t.draw();
+    $.fn.dataTable.ext.search.push(
+        function (settings, data, dataIndex) {
+            if (settings.nTable.id !== 'disconnection-invoice-table'){
+                return true;
+            }
+
+            var selectedItem = $('#disconnection-customer-filter').val()
+            var category = data[2];
+            if (selectedItem === "" || category.includes(selectedItem)) {
+            return true;
+            }
+            return false;
+        }
+    );
+
+    $("#unpaid-customer-filter").change(function (e) {
+        unpaid_table.draw();
     });
 
-    $("#invoice-customer-filter").change(function (e) {
-        t.draw();
+    $("#overdue-customer-filter").change(function (e) {
+        overdue_table.draw();
     });
 
-    t.draw();
-    // t.columns.adjust().draw();
+    $("#disconnection-customer-filter").change(function (e) {
+        disconnection_table.draw();
+    });
+
+    unpaid_table.draw();
+    overdue_table.draw();
+    disconnection_table.draw();
 
 }  // End of Invoice Records
 
