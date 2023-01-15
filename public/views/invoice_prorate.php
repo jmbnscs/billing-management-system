@@ -4,7 +4,7 @@
 
 <main id="main" class="main">
   <div class="pagetitle">
-    <h1>Uncharged Prorate Records</h1>
+    <h1>Untagged Prorate Records</h1>
     <nav>
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="dashboard.php">Home</a></li>
