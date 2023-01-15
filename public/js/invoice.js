@@ -283,12 +283,14 @@ async function setPaymentRecordsPage() {
             })
 
             const [invoice_content, payment_content, rating_content] = await Promise.all ([updateData('invoice/update.php', invoice_data), updateData('payment/update_tagged.php', payment_data), updateData('ratings/update.php', rating_data)]);
-    
-            const log = await logActivity('Tagged Payment ' + payment_reference_id + ' to ' + account_id + ' in Invoice # ' + invoice_content.invoice_id, 'Untagged Payments');
         
-            if (invoice_content.success && payment_content.success && rating_content.success && log) {
-                sessionStorage.setItem('save_message', "Payment Updated Successfully.");
-                window.location.reload();
+            if (invoice_content.success && payment_content.success && rating_content.success) {
+                const log = await logActivity('Tagged Payment ' + payment_reference_id + ' to ' + account_id + ' in Invoice # ' + invoice_content.invoice_id, 'Untagged Payments');
+
+                if (log) {
+                    sessionStorage.setItem('save_message', "Payment Updated Successfully.");
+                    window.location.reload();
+                }
             }
             else {
                 toastr.error("Payment was not updated.");
