@@ -316,7 +316,7 @@ async function setPaymentRecordsPage() {
                 console.log(invoice_content + payment_content + rating_content);
                 const log = await logActivity('Tagged Payment ' + payment_reference_id + ' to ' + account_id + ' in Invoice # ' + invoice_content.invoice_id, 'Untagged Payments');
             
-                if (invoice_content.message == 'Invoice Updated' && payment_content.message == 'Payment Tagged' && rating_content.message == 'Rating Updated' && log) {
+                if (invoice_content.success && payment_content.success && rating_content.success && log) {
                     sessionStorage.setItem('save_message', "Payment Updated Successfully.");
                     window.location.reload();
                 }
