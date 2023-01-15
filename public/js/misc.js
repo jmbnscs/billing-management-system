@@ -586,23 +586,25 @@ async function setInclusionPage() {
 
 // -------------------------------------------------------------------- User Level Page
 async function setUserLevelPage() {
-    // setButtons();
     const user_levels = await fetchData('user_level/read.php');
 
     const container = document.getElementById('user-role-body');
 
-    for (var i = 1; i < user_levels.length; i++) {
+    for (var i = 1; i < 5; i++) {
         const descriptions = await fetchData('pages/get_descriptions.php?user_id=' + user_levels[i].user_id);
         const countUsers = await fetchData('views/admin_user_level.php?user_role=' + user_levels[i].user_role);
         const card = document.createElement('div');
+        let users_count;
         card.classList = 'card-body';
+
+        (countUsers.message != 'No Accounts Found') ? users_count = countUsers.length : users_count = 0;
 
         const content = `
         <div class="col-sm-4 user-cards">
             <div class="card mt-3">
             <div class="card-body">
                 <h5>${user_levels[i].user_role}</h5>
-                <h6>Total users with this role: ${Object.keys(countUsers).length}</h6>
+                <h6>Total users with this role: ${users_count}</h6>
                 <ul>
                     <li><i class="bi bi-check2-circle"></i> ${descriptions[0]}</li>
                     <li><i class="bi bi-check2-circle"></i> ${descriptions[1]}</li>
@@ -612,8 +614,8 @@ async function setUserLevelPage() {
                     <li><i class="bi bi-check2-circle"></i> <em>and ${descriptions.length - 5} more.. </em></li>
                 </ul>
 
-                <a href="../views/user_level_data?user_role=${user_levels[i].user_role}" style="text-decorations:none; color:inherit;"><button class="btn btn-outline-success">View Role</button></a>
-                <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="${user_levels[i].user_id}">Edit Role</button>
+                <a href="../views/user_level_data?user_role=${user_levels[i].user_role}" style="text-decorations:none; color:inherit;"><button class="btn btn-outline-success w-25">View</button></a>
+                <button class="btn btn-outline-primary w-25" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="${user_levels[i].user_id}">Edit</button>
             </div>
             </div>
         </div>
@@ -622,31 +624,40 @@ async function setUserLevelPage() {
         container.innerHTML += content;
     }
 
-    const card = document.createElement('div');
-    card.classList = 'card-body';
+    for (var i = 5; i < user_levels.length; i++) {
+        const descriptions = await fetchData('pages/get_descriptions.php?user_id=' + user_levels[i].user_id);
+        const countUsers = await fetchData('views/admin_user_level.php?user_role=' + user_levels[i].user_role);
+        const card = document.createElement('div');
+        let users_count;
+        card.classList = 'card-body';
 
-    const content = `
+        (countUsers.message != 'No Accounts Found') ? users_count = countUsers.length : users_count = 0;
+
+        const content = `
         <div class="col-sm-4 user-cards">
             <div class="card mt-3">
             <div class="card-body">
-                <div class="add-new-role">
-                    <img src="../images/add-user-level.png" alt="Add New User Role">
-                    <br>
-                    <h5 class="text-center">Add New User Level</h5>
+                <h5>${user_levels[i].user_role}</h5>
+                <h6>Total users with this role: ${users_count}</h6>
+                <ul>
+                    <li><i class="bi bi-check2-circle"></i> ${descriptions[0]}</li>
+                    <li><i class="bi bi-check2-circle"></i> ${descriptions[1]}</li>
+                    <li><i class="bi bi-check2-circle"></i> ${descriptions[2]}</li>
+                    <li><i class="bi bi-check2-circle"></i> ${descriptions[3]}</li>
+                    <li><i class="bi bi-check2-circle"></i> ${descriptions[4]}</li>
+                    <li><i class="bi bi-check2-circle"></i> <em>and ${descriptions.length - 5} more.. </em></li>
+                </ul>
+
+                <a href="../views/user_level_data?user_role=${user_levels[i].user_role}" style="text-decorations:none; color:inherit;"><button class="btn btn-outline-success w-25">View</button></a>
+                <button class="btn btn-outline-primary w-25" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="${user_levels[i].user_id}">Edit</button>
+                <button class="btn btn-outline-danger w-25" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-whatever="${user_levels[i].user_id}">Delete</button>
                 </div>
-            </div>
             </div>
         </div>
         `;
 
-    container.innerHTML += content;
-
-
-    $("#editModal").on("hidden.bs.modal", function () {
-        // $('#save-btn').attr('disabled', true);
-        // $('#edit-btn').attr('disabled', false);
-        // Reset checkbox here?
-    });
+        container.innerHTML += content;
+    }
 
     var updateModal = document.getElementById('editModal');
     updateModal.addEventListener('show.bs.modal', async function (event) {
@@ -760,7 +771,12 @@ async function setUserLevelPage() {
         };
 
         async function processUpdate() {
-            // console.log($('#cust-view').is(':checked'));
+            const user_role = $('#user_role').val();
+
+            const user_update_data = JSON.stringify({
+                'user_id' : data_id,
+                'user_role' : user_role
+            });
 
             let customer_list, invoice_view, invoice_payment, invoice_prorate, admin_view, plan_view, ticket_page;
             $('#cust-view').is(':checked') ? customer_list = 1 : customer_list = 0;
@@ -771,7 +787,7 @@ async function setUserLevelPage() {
             $('#plans-view').is(':checked') ? plan_view = 1 : plan_view = 0;
             $('#tkt-view').is(':checked') ? ticket_page = 1 : ticket_page = 0;
 
-            let customer_add, invoice_payment_add, admin_add, plan_add, ticket_create, ticket_active, ticket_invalid;
+            let customer_add, invoice_payment_add, ticket_active, ticket_invalid;
             $('#cust-add').is(':checked') ? customer_add = 1 : customer_add = 0;
             $('#pay-add').is(':checked') ? invoice_payment_add = 1 : invoice_payment_add = 0;
 
@@ -830,148 +846,166 @@ async function setUserLevelPage() {
                 'active_invalid' : active_invalid
             });
 
-            const [pages_update, buttons_update, log] = await Promise.all ([updateData('restriction/update_pages_restriction.php', pages_update_data), updateData('restriction/update_buttons_restriction.php', buttons_update_data), logActivity('Adv. Options - Edit User Level Access [' + userlevel_data.user_role + ']', 'Advanced Options')]);
-
-            if (pages_update.success && buttons_update.success && log) {
-                sessionStorage.setItem('save_message', "User Role Updated Successfully.");
-                window.location.reload();
-            }
-            else {
-                toastr.error("User Role was not updated.");
+            let user_update_sucess = true;
+            if (user_role != userlevel_data.user_role) {
+                const user_update = await updateData('user_level/update.php', user_update_data);
+                (user_update.success) ? user_update_sucess = true : user_update_sucess = false;
             }
 
-            // const [content, log] = await Promise.all ([updateData('user_level/update.php', update_data), logActivity('Updated User Level # ' + data_id, 'User Level - Overview')]);
-        
-            // if (content.message == 'User Level Updated' && log) {
-            //     sessionStorage.setItem('save_message', "User Role Updated Successfully.");
-            //     window.location.reload();
-            // }
-            // else {
-            //     toastr.error("User Role was not updated.");
-            // }
-        }
-    });
+            if (user_update_sucess) {
+                const [pages_update, buttons_update, log] = await Promise.all ([updateData('restriction/update_pages_restriction.php', pages_update_data), updateData('restriction/update_buttons_restriction.php', buttons_update_data), logActivity('Adv. Options - Edit User Level Access [' + userlevel_data.user_role + ']', 'Advanced Options')]);
 
-    // setUpdateModal();
-    
-}
-// function setUserLevelPage() {
-//     displaySuccessMessage();
-//     setButtons();
-//     setTable('user_level', '#userlevel-table');
-//     setUpdateModal();
-//     setDeleteModal();
-
-    // $("#editModal").on("hidden.bs.modal", function () {
-    // });
-
-//     create_fn.onsubmit = (e) => {
-//         e.preventDefault();
-//         processCreate();
-//     };
-    
-    async function setUpdateModal () {
-        var updateModal = document.getElementById('editModal');
-        updateModal.addEventListener('show.bs.modal', async function (event) {
-
-            var button = event.relatedTarget;
-            var data_id = button.getAttribute('data-bs-whatever');
-            let userlevel_data = await fetchData('user_level/read_single.php?user_id=' + data_id);
-
-            var modalTitle = updateModal.querySelector('.modal-title');
-            modalTitle.textContent = userlevel_data.user_role;
-
-            $('#user_id').val(data_id);
-            $('#user_role').val(userlevel_data.user_role);
-
-            $('#select_all').change( (e) => {
-                toggle($('#select_all').is(':checked'));
-            });
-
-            function toggle(bool) {
-                checkboxes = document.getElementsByName('check');
-                for(var i = 0; i < checkboxes.length; i++) {
-                    (bool) ? $('#' + checkboxes[i].id).prop('checked', true) : $('#' + checkboxes[i].id).prop('checked', false);
-                }
-            }
-            update_fn.onsubmit = (e) => {
-                e.preventDefault();
-                // processUpdate();
-            };
-
-            async function processUpdate() {
-                const update_data = JSON.stringify({
-                    'user_id' : data_id,
-                    'user_role' : $('#user_role').val()
-                });
-
-                const [content, log] = await Promise.all ([updateData('user_level/update.php', update_data), logActivity('Updated User Level # ' + data_id, 'User Level - Overview')]);
-            
-                if (content.message == 'User Level Updated' && log) {
+                if (pages_update.success && buttons_update.success && log) {
                     sessionStorage.setItem('save_message', "User Role Updated Successfully.");
                     window.location.reload();
                 }
-                else {
-                    toastr.error("User Role was not updated.");
+            }
+
+            toastr.error("User Role was not updated.");
+        }
+    });
+
+    var addModal = document.getElementById('addModal');
+    addModal.addEventListener('show.bs.modal', async function (event) {
+
+        toggle(false);
+
+        $('#add_select_all').change( (e) => {
+            toggle($('#add_select_all').is(':checked'));
+        });
+
+        function toggle(bool) {
+            addcheckboxes = document.getElementsByName('add_check');
+            for(var i = 0; i < addcheckboxes.length; i++) {
+                (bool) ? $('#' + addcheckboxes[i].id).prop('checked', true) : $('#' + addcheckboxes[i].id).prop('checked', false);
+            }
+        }
+
+        create_fn = document.getElementById('user-add-data');
+        create_fn.onsubmit = (e) => {
+            e.preventDefault();
+            processCreate();
+        };
+
+        async function processCreate() {
+            const user_add_data = JSON.stringify({
+                'user_role' : $('#add_user_role').val()
+            });
+
+            let customer_list, invoice_view, invoice_payment, invoice_prorate, admin_view, plan_view, ticket_page;
+            $('#add-cust-view').is(':checked') ? customer_list = 1 : customer_list = 0;
+            $('#add-inv-view').is(':checked') ? invoice_view = 1 : invoice_view = 0;
+            $('#add-pay-view').is(':checked') ? invoice_payment = 1 : invoice_payment = 0;
+            $('#add-pro-view').is(':checked') ? invoice_prorate = 1 : invoice_prorate = 0;
+            $('#add-adm-view').is(':checked') ? admin_view = 1 : admin_view = 0;
+            $('#add-plans-view').is(':checked') ? plan_view = 1 : plan_view = 0;
+            $('#add-tkt-view').is(':checked') ? ticket_page = 1 : ticket_page = 0;
+
+            let customer_add, invoice_payment_add, ticket_active, ticket_invalid;
+            $('#add-cust-add').is(':checked') ? customer_add = 1 : customer_add = 0;
+            $('#add-pay-add').is(':checked') ? invoice_payment_add = 1 : invoice_payment_add = 0;
+
+            $('#add-tkt-edit').is(':checked') ? ticket_active = 1 : ticket_active = 0;
+            $('#add-tkt-dlt').is(':checked') ? ticket_invalid = 1 : ticket_invalid = 0;
+
+            let admins_add, plans_add, tickets_add, custdata_edit, payments_edit, prorate_edit, admindata_edit, plans_edit, active_claim, payments_dlt, prorate_dlt, active_invalid;
+            $('#add-adm-add').is(':checked') ? admins_add = 1 : admins_add = 0;
+            $('#add-plans-add').is(':checked') ? plans_add = 1 : plans_add = 0;
+            $('#add-tkt-add').is(':checked') ? tickets_add = 1 : tickets_add = 0;
+
+            $('#add-cust-edit').is(':checked') ? custdata_edit = 1 : custdata_edit = 0;
+            $('#add-pay-edit').is(':checked') ? payments_edit = 1 : payments_edit = 0;
+            $('#add-pro-edit').is(':checked') ? prorate_edit = 1 : prorate_edit = 0;
+            $('#add-adm-edit').is(':checked') ? admindata_edit = 1 : admindata_edit = 0;
+            $('#add-plans-edit').is(':checked') ? plans_edit = 1 : plans_edit = 0;
+            $('#add-tkt-edit').is(':checked') ? active_claim = 1 : active_claim = 0;
+
+            $('#add-pay-dlt').is(':checked') ? payments_dlt = 1 : payments_dlt = 0;
+            $('#add-pro-dlt').is(':checked') ? prorate_dlt = 1 : prorate_dlt = 0;
+            $('#add-tkt-dlt').is(':checked') ? active_invalid = 1 : active_invalid = 0;
+
+            const user_add = await createData('user_level/create.php', user_add_data);
+
+            if (user_add.success) {
+                const pages_add_data = JSON.stringify({
+                    'user_id' : user_add.user_id,
+                    
+                    'customer_list' : customer_list,
+                    'invoice_view' : invoice_view,
+                    'invoice_payment' : invoice_payment,
+                    'invoice_prorate' : invoice_prorate,
+                    'admin_view' : admin_view,
+                    'plan_view' : plan_view,
+                    'ticket_page' : ticket_page,
+    
+                    'customer_add' : customer_add,
+                    'invoice_payment_add' : invoice_payment_add,
+                    'ticket_active' : ticket_active,
+                    'ticket_invalid' : ticket_invalid
+                });
+
+                const buttons_add_data = JSON.stringify({
+                    'user_id' : user_add.user_id,
+    
+                    'admins_add' : admins_add,
+                    'plans_add' : plans_add,
+                    'tickets_add' : tickets_add,
+                    
+                    'custdata_edit' : custdata_edit,
+                    'payments_edit' : payments_edit,
+                    'prorate_edit' : prorate_edit,
+                    'admindata_edit' : admindata_edit,
+                    'plans_edit' : plans_edit,
+                    'active_claim' : active_claim,
+    
+                    'payments_dlt' : payments_dlt,
+                    'prorate_dlt' : prorate_dlt,
+                    'active_invalid' : active_invalid
+                });
+
+                const [pages_create, buttons_create, log] = await Promise.all ([createData('restriction/create_pages_restriction.php', pages_add_data), createData('restriction/create_buttons_restriction.php', buttons_add_data), logActivity('Adv. Options - Add New User Level [' + $('#add_user_role').val() + ']', 'Advanced Options')]);
+
+                if (pages_create.success && buttons_create.success && log) {
+                    sessionStorage.setItem('save_message', "New User Level Added Successfully.");
+                    window.location.reload();
                 }
             }
-        });
-    }
-    
-//     async function setDeleteModal () {
-//         var deleteModal = document.getElementById('deleteModal')
-//         deleteModal.addEventListener('show.bs.modal', async function (event) {
-    
-//             var button = event.relatedTarget;
-//             var data_id = button.getAttribute('data-bs-whatever');
-//             let userlevel_data = await fetchData('user_level/read_single.php?user_id=' + data_id);
 
-//             var modalTitle = deleteModal.querySelector('.modal-title');
-//             modalTitle.textContent = "Delete " + userlevel_data.user_role + "?";
+            toastr.error("Some error occured, please try again.");
+        }
+    });
 
-//             $('#user_id_d').val(data_id);
-//             $('#user_role_md_d').val(userlevel_data.user_role);
-    
-//             delete_fn.onsubmit = (e) => {
-//                 e.preventDefault();
-//                 processDelete();
-//             };
+    var deleteModal = document.getElementById('deleteModal')
+    deleteModal.addEventListener('show.bs.modal', async function (event) {
 
-//             async function processDelete() {
-//                 const delete_data = JSON.stringify({
-//                     'user_id' : data_id
-//                 });
+        var button = event.relatedTarget;
+        var data_id = button.getAttribute('data-bs-whatever');
+        let data = await fetchData('user_level/read_single.php?user_id=' + data_id);
 
-//                 const [content, log] = await Promise.all ([deleteData('user_level/delete.php', delete_data), logActivity('Deleted User Level # ' + data_id, 'User Level - Overview')]);
-                
-//                 if (content.message == 'User Level Deleted' && log) {
-//                     sessionStorage.setItem('save_message', "User Role Deleted Successfully.");
-//                     window.location.reload();
-//                 }
-//                 else {
-//                     toastr.error("User Role was not deleted.");
-//                 }
-//             }
-//         });
-//     }
-    
-//     async function processCreate() {
-//         const create_data = JSON.stringify({
-//             'user_role' : $('#user_role').val()
-//         });
+        $('#user_role_md_d').val(data.user_role);
 
-//         const [content, log] = await Promise.all ([createData('user_level/create.php', create_data), logActivity('Created new User Role - ' + $('#user_role').val(), 'User Level - Add User Level')]) 
-        
-//         if (content.message = 'User Level Created' && log) {
-//             toastr.success('User Role Created Successfully.');
-//             setTimeout(function(){
-//                 window.location.replace('../views/user_level.php');
-//              }, 2000);
-//         }
-//         else {
-//             toastr.error("User Role was not created.");
-//         }
-//     }
-// }
+        delete_fn = document.getElementById('user-delete-data');
+        delete_fn.onsubmit = (e) => {
+            e.preventDefault();
+            processDelete();
+        };
+
+        async function processDelete() {
+            const delete_data = JSON.stringify({
+                'user_id' : data_id
+            });
+
+            const [content, log] = await Promise.all ([deleteData('user_level/delete.php', delete_data), logActivity('Adv. Options - Deleted User Level [' + data.user_role + ']', 'Advanced Options')]);
+
+            if (content.success && log) {
+                sessionStorage.setItem('save_message', "User Level Deleted Successfully.");
+                window.location.reload();
+            }
+            else {
+                toastr.error("User Level was not deleted.");
+            }
+        }
+    });
+}
 // End of User Level Page
 
