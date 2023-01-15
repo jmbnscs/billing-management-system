@@ -253,8 +253,9 @@ async function setUserRolePrivileges(role_data) {
                     window.location.reload();
                 }
             }
-
-            toastr.error("User Role was not updated.");
+            else {
+                toastr.error("User Role was not updated.");
+            }
         }
     });
 }

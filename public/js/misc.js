@@ -860,8 +860,9 @@ async function setUserLevelPage() {
                     window.location.reload();
                 }
             }
-
-            toastr.error("User Role was not updated.");
+            else {
+                toastr.error("User Role was not updated.");
+            }
         }
     });
 
@@ -970,8 +971,10 @@ async function setUserLevelPage() {
                     window.location.reload();
                 }
             }
+            else {
+                toastr.error("Some error occured, please try again.");
+            }
 
-            toastr.error("Some error occured, please try again.");
         }
     });
 
