@@ -195,6 +195,7 @@ async function setPaymentRecordsPage() {
         untagged_table.row.add($(`
             <tr>
                 <th scope="row" style="color: #012970;"><strong>${i+1}</strong></th>
+                <td data-label="Payment Center">${untagged_content[i].payment_center}</td>
                 <td data-label="Reference ID">${untagged_content[i].payment_reference_id}</td>
                 <td data-label="Amount Paid">&#8369; ${untagged_content[i].amount_paid}</td>
                 <td data-label="Payment Date">${new Date(untagged_content[i].payment_date).toLocaleDateString('PHT')}</td>
@@ -215,6 +216,19 @@ async function setPaymentRecordsPage() {
         var payment_id = button.getAttribute('data-bs-whatever');
         let data = await fetchData('payment/read_single.php?payment_id=' + payment_id);
         const customer = await fetchData('customer/read.php');
+        const payment_centers = await fetchData('payment/read_payment_centers.php');
+
+        $("#edit_untagged_payment_centers").empty();
+        $("#edit_untagged_payment_centers").append(`<option selected disabled value="">Choose Payment Center</option>`);
+        for (var i = 0; i < payment_centers.length; i++) {
+            if (payment_centers[i].center_id == data.payment_center) {
+                var opt = `<option selected value='${payment_centers[i].center_id}' style='color: blue'>${payment_centers[i].payment_center}</option>`;
+            }
+            else {
+                var opt = `<option value='${payment_centers[i].center_id}'>${payment_centers[i].payment_center}</option>`;
+            }
+            $("#edit_untagged_payment_centers").append(opt);
+        }
 
         $('#edit_untagged_amount_paid').val(data.amount_paid);
         $('#edit_untagged_reference_id').val(data.payment_reference_id);
@@ -245,6 +259,7 @@ async function setPaymentRecordsPage() {
             const payment_reference_id = $('#edit_untagged_reference_id').val();
             const amount_paid = $('#edit_untagged_amount_paid').val();
             const payment_date = $('#edit_untagged_payment_date').val();
+            const payment_center = $('#edit_untagged_payment_centers').val();
 
             const latest_invoice = await fetchData('invoice/read_latest.php?account_id=' + account_id);
 
@@ -256,6 +271,7 @@ async function setPaymentRecordsPage() {
             });
 
             let payment_data = JSON.stringify({
+                'payment_center' : payment_center,
                 'account_id' : account_id,
                 'invoice_id' : latest_invoice.invoice_id,
                 'payment_id' : payment_id
@@ -268,7 +284,6 @@ async function setPaymentRecordsPage() {
 
             const [invoice_content, payment_content, rating_content] = await Promise.all ([updateData('invoice/update.php', invoice_data), updateData('payment/update_tagged.php', payment_data), updateData('ratings/update.php', rating_data)]);
     
-            console.log(invoice_content + payment_content + rating_content);
             const log = await logActivity('Tagged Payment ' + payment_reference_id + ' to ' + account_id + ' in Invoice # ' + invoice_content.invoice_id, 'Untagged Payments');
         
             if (invoice_content.success && payment_content.success && rating_content.success && log) {
@@ -341,6 +356,7 @@ async function setPaymentRecordsPage() {
         advanced_table.row.add($(`
             <tr>
                 <th scope="row" style="color: #012970;"><strong>${i+1}</strong></th>
+                <td data-label="Reference ID">${advanced_content[i].payment_center}</td>
                 <td data-label="Reference ID">${advanced_content[i].payment_reference_id}</td>
                 <td data-label="Amount Paid">&#8369; ${advanced_content[i].amount_paid}</td>
                 <td data-label="Payment Date">${new Date(advanced_content[i].payment_date).toLocaleDateString('PHT')}</td>
@@ -367,6 +383,7 @@ async function setPaymentRecordsPage() {
         setTagElement('view_advanced_tagged', 1);
 
         id = [
+            '#view_advanced_payment_centers', 
             '#view_advanced_reference_id', 
             '#view_advanced_amount_paid', 
             '#view_advanced_payment_date', 
@@ -374,8 +391,9 @@ async function setPaymentRecordsPage() {
             '#view_advanced_tagged'
         ];
         content = [
+            data.payment_center_name, 
             data.payment_reference_id, 
-            data.amount_paid, 
+            '\u20B1 ' + data.amount_paid, 
             formatDateString(data.payment_date), 
             data.invoice_id, 
             'Tagged'
@@ -501,6 +519,12 @@ async function untaggedAddPayment () {
     today.setDate(today.getDate() - 30);
     setDateRange('#add_untagged_payment_date', today);
 
+    const payment_centers = await fetchData('payment/read_payment_centers.php');
+        for (var i = 0; i < payment_centers.length; i++) {
+            var opt = `<option value='${payment_centers[i].center_id}'>${payment_centers[i].payment_center}</option>`;
+            $("#add_untagged_payment_centers").append(opt);
+        }
+
     const create_fn = document.getElementById('untagged-create-new');
     create_fn.onsubmit = (e) => {
         e.preventDefault();
@@ -584,6 +608,7 @@ async function untaggedAddPayment () {
         const payment_ref = $('#add_untagged_reference_id').val();
 
         const payment_data = JSON.stringify({
+            'payment_center' : $('#add_untagged_payment_centers').val(),
             'amount_paid' : $('#add_untagged_amount_paid').val(),
             'payment_reference_id' : payment_ref,
             'payment_date' : $('#add_untagged_payment_date').val()

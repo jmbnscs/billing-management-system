@@ -96,6 +96,7 @@
               <table class="table table-borderless" id="payment-table">
                 <thead>
                   <th>Payment Date</th>
+                  <th>Payment Center</th>
                   <th>Reference ID</th>
                   <th>Amount Paid</th>
                 </thead>
