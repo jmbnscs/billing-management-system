@@ -42,15 +42,16 @@ async function setDefaultSetting() {
                 $('#payment-table').find('tbody').append(`
                     <tr>
                         <th scope="row">${formatDateString(payment_data[i].payment_date)}</th>
+                        <td>${payment_data[i].payment_center}</td>
                         <td>${payment_data[i].payment_reference_id}</td>
-                        <td>${payment_data[i].amount_paid}</td>
+                        <td>&#8369; ${payment_data[i].amount_paid}</td>
                     </tr>
                 `);
             }
     
             $('#payment-table').find('tbody').append(`
                 <tr class="table-light">
-                    <th scope="row" colspan="2" class="text-end pe-4">Current Invoice Running Balance (LESS: Previous Bill): </th>
+                    <th scope="row" colspan="3" class="text-end pe-4">Current Invoice Running Balance (LESS: Previous Bill): </th>
                     <td>\u20B1 ${invoice_data.running_balance}</td>
                 </tr>
             `);
@@ -63,7 +64,7 @@ async function setDefaultSetting() {
             `);
             $('#payment-table').find('tbody').append(`
                 <tr class="table-light">
-                    <th scope="row" colspan="2" class="text-end pe-4">Current Invoice Running Balance (LESS: Previous Bill): </th>
+                    <th scope="row" colspan="3" class="text-end pe-4">Current Invoice Running Balance (LESS: Previous Bill): </th>
                     <td>\u20B1 ${invoice_data.running_balance}</td>
                 </tr>
             `);
@@ -116,6 +117,7 @@ async function setDefaultSetting() {
 
             if (payment_content.success && update_content.success && rating_content.success) {
                 let tag_data = JSON.stringify({
+                    'payment_center' : $('#payment_centers').val(),
                     'account_id' : invoice_data.account_id,
                     'invoice_id' : invoice_id,
                     'payment_id' : payment_content.payment_id

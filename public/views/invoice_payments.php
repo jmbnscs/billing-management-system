@@ -52,6 +52,7 @@
               <thead>
                 <tr>
                   <th scope="col">#</th>
+                  <th scope="col">Payment Center</th>
                   <th scope="col">Payment Ref. ID</th>
                   <th scope="col">Amount</th>
                   <th scope="col">Payment Date</th>
@@ -80,6 +81,7 @@
               <thead>
                 <tr>
                   <th scope="col">#</th>
+                  <th scope="col">Payment Center</th>
                   <th scope="col">Payment Ref. ID</th>
                   <th scope="col">Amount</th>
                   <th scope="col">Payment Date</th>
@@ -147,11 +149,22 @@
 
             <!-- Modal Body -->
             <div class="modal-body row g-3">
+              <div class="col-md-12">
+                <div class="form-floating">
+                  <select class="form-control required" id="add_untagged_payment_centers" required>
+                    <option selected disabled value="">Choose Payment Center</option>
+                  </select>
+                  <label for="add_untagged_payment_centers" class="required">Payment Center</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal-body row g-3">
                 <div class="col-md-12">
                   <div class="form-floating">
                     <input type="text" class="form-control" id="add_untagged_reference_id" placeholder="Payment Reference ID" required>
                     <div class="invalid-feedback">Please enter valid reference ID.</div>
-                    <label for="add_untagged_reference_id">Payment Reference ID</label>
+                    <label for="add_untagged_reference_id" class="required">Payment Reference ID</label>
                   </div>
                 </div>
             </div>
@@ -161,7 +174,7 @@
                   <div class="form-floating">
                     <input type="number" class="form-control" id="add_untagged_amount_paid" placeholder="Amount Paid" min="1" required>
                     <div class="invalid-feedback">Please enter amount paid.</div>
-                    <label for="add_untagged_amount_paid">Amount Paid</label>
+                    <label for="add_untagged_amount_paid" class="required">Amount Paid</label>
                   </div>
                 </div>
             </div>
@@ -171,7 +184,7 @@
                   <div class="form-floating">
                     <input type="date" class="form-control custom-date" id="add_untagged_payment_date" placeholder="Payment Date" required>
                     <div class="invalid-feedback">Please choose payment date.</div>
-                    <label for="add_untagged_payment_date">Payment Date</label>
+                    <label for="add_untagged_payment_date" class="required">Payment Date</label>
                   </div>
                 </div>
             </div>
@@ -203,6 +216,13 @@
           <!-- Modal Body -->
           <div class="modal-body row g-3">
             
+                <div class="col-md-12">
+                  <div class="form-floating">
+                    <select class="form-control required" id="edit_untagged_payment_centers" placeholder="Payment Center" required></select>
+                    <label for="edit_untagged_payment_centers">Payment Center</label>
+                  </div>
+                </div>
+
                 <div class="col-md-12">
                   <div class="form-floating">
                     <input type="text" class="form-control" id="edit_untagged_reference_id" placeholder="Reference ID" required>
@@ -385,6 +405,13 @@
 
         <!-- Modal Body -->
         <div class="modal-body">
+          <div class="row mb-3">
+            <label for="view_advanced_payment_centers" class="col-sm-4 col-form-label">Payment Center</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" id="view_advanced_payment_centers" value="" readonly>
+            </div>
+          </div>
+
           <div class="row mb-3">
             <label for="view_advanced_reference_id" class="col-sm-4 col-form-label">Reference ID</label>
             <div class="col-sm-8">
