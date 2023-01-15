@@ -107,7 +107,7 @@ async function logActivity(activity, page_accessed) {
 async function createData(page, data) {
     let url = DIR_API + page;
     const createResponse = await fetch(url, {
-        method : 'PUT',
+        method : 'POST',
         headers : {
             'Content-Type' : 'application/json'
         },
