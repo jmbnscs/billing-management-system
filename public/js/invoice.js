@@ -3,7 +3,7 @@ $(document).ready( function () {
 
     if (DIR_CUR == DIR_MAIN + 'views/invoice_payments_add') {
         restrictPages('invoice-payment-add');
-        setAddPaymentPage();
+        untaggedAddPayment();
     }
     else if (DIR_CUR == DIR_MAIN + 'views/invoice_payments') {
         restrictPages('invoice-payment');
@@ -27,59 +27,100 @@ async function setInvoicePage () {
     displaySuccessMessage();
 
     const [content, invoice_status, customers] = await Promise.all ([fetchData('views/invoice_unpaid.php'), fetchData('statuses/read.php?status_table=invoice_status'), fetchData('views/customer.php')]);
+
+    let tag;
     
-    var t = $('#invoice-table').DataTable({
+    var unpaid_table = $('#unpaid-invoice-table').DataTable({
         pageLength: 5,
         lengthMenu: [5, 10, 20],
         "searching": true,
         "autoWidth": false
-    }), tag;
+    });
 
-    for (var i = 1; i < invoice_status.length; i++) {
-        var opt = `<option value='${invoice_status[i].status_name}'>${invoice_status[i].status_name}</option>`;
-        $("#invoice-status-filter").append(opt);
-    }
+    var overdue_table = $('#overdue-invoice-table').DataTable({
+        pageLength: 5,
+        lengthMenu: [5, 10, 20],
+        "searching": true,
+        "autoWidth": false
+    });
+
+    var disconnection_table = $('#disconnection-invoice-table').DataTable({
+        pageLength: 5,
+        lengthMenu: [5, 10, 20],
+        "searching": true,
+        "autoWidth": false
+    });
 
     for (var i = 0; i < customers.length; i++) {
         var opt = `<option value='${customers[i].customer_name}'>${customers[i].customer_name}</option>`;
-        $("#invoice-customer-filter").append(opt);
+        $("#unpaid-customer-filter").append(opt);
+        $("#overdue-customer-filter").append(opt);
+        $("#disconnection-customer-filter").append(opt);
     }
 
+    let unpaid_counter = 1, overdue_counter = 1, disconnection_counter = 1;
     for (var i = 0; i < content.length; i++) {
         (content[i].status == 'PAID') ? tag = 'bg-success' : tag = 'bg-danger';
-        
-        t.row.add($(`
+
+        if (content[i].status == 'UNPAID') {
+            unpaid_table.row.add($(`
             <tr>
-                <th scope="row" style="color: #012970;"><strong>${content[i].invoice_id}</strong></th>
+                <th scope="row" style="color: #012970;"><strong>${unpaid_counter}</strong></th>
+                <td data-label="Invoice ID">${content[i].invoice_id}</td>
                 <td data-label="Customer Name">${content[i].customer_name}</td>
-                <td data-label="Disconnection Date">${content[i].disconnection_date}</td>
+                <td data-label="Disconnection Date">${new Date(content[i].disconnection_date).toLocaleDateString('PHT')}</td>
                 <td data-label="Balance">&#8369; ${content[i].running_balance}</td>
                 <td data-label="Status"><span class="badge ${tag}">${content[i].status}</span></td>
                 <td data-label="View"><a href="../views/invoice_data?acct=${content[i].invoice_id}" target="_blank"><button type="button" class="btn btn-outline-primary"><i class="ri ri-eye-fill"></i></button></a></td>
             </tr>
-        `)).draw(false);
+            `)).draw(false);
+
+            unpaid_counter++;
+        }
+        else if (content[i].status == 'OVERDUE') {
+            overdue_table.row.add($(`
+            <tr>
+                <th scope="row" style="color: #012970;"><strong>${overdue_counter}</strong></th>
+                <td data-label="Invoice ID">${content[i].invoice_id}</td>
+                <td data-label="Customer Name">${content[i].customer_name}</td>
+                <td data-label="Disconnection Date">${new Date(content[i].disconnection_date).toLocaleDateString('PHT')}</td>
+                <td data-label="Balance">&#8369; ${content[i].running_balance}</td>
+                <td data-label="Status"><span class="badge ${tag}">${content[i].status}</span></td>
+                <td data-label="View"><a href="../views/invoice_data?acct=${content[i].invoice_id}" target="_blank"><button type="button" class="btn btn-outline-primary"><i class="ri ri-eye-fill"></i></button></a></td>
+            </tr>
+            `)).draw(false);
+
+            overdue_counter++;
+        }
+        else {
+            disconnection_table.row.add($(`
+            <tr>
+                <th scope="row" style="color: #012970;"><strong>${disconnection_counter}</strong></th>
+                <td data-label="Invoice ID">${content[i].invoice_id}</td>
+                <td data-label="Customer Name">${content[i].customer_name}</td>
+                <td data-label="Disconnection Date">${new Date(content[i].disconnection_date).toLocaleDateString('PHT')}</td>
+                <td data-label="Balance">&#8369; ${content[i].running_balance}</td>
+                <td data-label="Status"><span class="badge ${tag}">${content[i].status}</span></td>
+                <td data-label="View"><a href="../views/invoice_data?acct=${content[i].invoice_id}" target="_blank"><button type="button" class="btn btn-outline-primary"><i class="ri ri-eye-fill"></i></button></a></td>
+            </tr>
+            `)).draw(false);
+
+            disconnection_counter++;
+        }
     }
 
-    $("#invoice-table_filter.dataTables_filter").append($("#invoice-status-filter"));
-    $("#invoice-table_filter.dataTables_filter").append($("#invoice-customer-filter"));
-
-    var statusIndex = 0, customerIndex = 0;
-    $("#invoice-table th").each(function (i) {
-        if ($($(this)).html() == "Status") {
-            statusIndex = i; return false;
-        }
-    });
-
-    $("#invoice-table th").each(function (i) {
-        if ($($(this)).html() == "Customer") {
-            customerIndex = i; return false;
-        }
-    });
+    $("#unpaid-invoice-table_filter.dataTables_filter").append($("#unpaid-customer-filter"));
+    $("#overdue-invoice-table_filter.dataTables_filter").append($("#overdue-customer-filter"));
+    $("#disconnection-invoice-table_filter.dataTables_filter").append($("#disconnection-customer-filter"));
 
     $.fn.dataTable.ext.search.push(
         function (settings, data, dataIndex) {
-            var selectedItem = $('#invoice-status-filter').val()
-            var category = data[statusIndex];
+            if (settings.nTable.id !== 'unpaid-invoice-table'){
+                return true;
+            }
+
+            var selectedItem = $('#unpaid-customer-filter').val()
+            var category = data[2];
             if (selectedItem === "" || category.includes(selectedItem)) {
             return true;
             }
@@ -89,8 +130,12 @@ async function setInvoicePage () {
 
     $.fn.dataTable.ext.search.push(
         function (settings, data, dataIndex) {
-            var selectedItem = $('#invoice-customer-filter').val()
-            var category = data[customerIndex];
+            if (settings.nTable.id !== 'overdue-invoice-table'){
+                return true;
+            }
+
+            var selectedItem = $('#overdue-customer-filter').val()
+            var category = data[2];
             if (selectedItem === "" || category.includes(selectedItem)) {
             return true;
             }
@@ -98,16 +143,36 @@ async function setInvoicePage () {
         }
     );
 
-    $("#invoice-status-filter").change(function (e) {
-        t.draw();
+    $.fn.dataTable.ext.search.push(
+        function (settings, data, dataIndex) {
+            if (settings.nTable.id !== 'disconnection-invoice-table'){
+                return true;
+            }
+
+            var selectedItem = $('#disconnection-customer-filter').val()
+            var category = data[2];
+            if (selectedItem === "" || category.includes(selectedItem)) {
+            return true;
+            }
+            return false;
+        }
+    );
+
+    $("#unpaid-customer-filter").change(function (e) {
+        unpaid_table.draw();
     });
 
-    $("#invoice-customer-filter").change(function (e) {
-        t.draw();
+    $("#overdue-customer-filter").change(function (e) {
+        overdue_table.draw();
     });
 
-    t.draw();
-    // t.columns.adjust().draw();
+    $("#disconnection-customer-filter").change(function (e) {
+        disconnection_table.draw();
+    });
+
+    unpaid_table.draw();
+    overdue_table.draw();
+    disconnection_table.draw();
 
 }  // End of Invoice Records
 
@@ -115,152 +180,272 @@ async function setInvoicePage () {
 async function setPaymentRecordsPage() {
     displaySuccessMessage();
     setButtons();
-    setPaymentRecordsTable();
-    setUpdateModal();
-    setDeleteModal();
 
-    $("#editModal").on("hidden.bs.modal", function () {
-        $('#save-btn').attr('disabled', true);
-        $('#edit-btn').attr('disabled', false);
+    // -------------------------------- Untagged Payments
+    let untagged_content = await fetchData('payment/read_untagged.php');
+        
+    var untagged_table = $('#untagged-payments-table').DataTable({
+        pageLength: 5,
+        lengthMenu: [5, 10, 20],
+        "searching": true,
+        "autoWidth": false
     });
 
-    async function setPaymentRecordsTable() {
-        let content = await fetchData('payment/read_untagged.php');
-        var t = $('#payments-table').DataTable({
-            pageLength: 5,
-            lengthMenu: [5, 10, 20],
-            "searching": true,
-            "autoWidth": false
-        });
-
-        if (user_id == 5) {
-            for (var i = 0; i < content.length; i++) {
-                t.row.add($(`
-                    <tr>
-                        <th scope="row" style="color: #012970;"><strong>${content[i].payment_reference_id}</strong></th>
-                        <td data-label="Amount Paid">&#8369; ${content[i].amount_paid}</td>
-                        <td data-label="Payment Date">${content[i].payment_date}</td>
-                        <td data-label="Status"><span class="badge bg-danger">Untagged</span></td>
-                        <td data-label="View">
-                            <button type="button" class="btn btn-outline-info m-1" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="${content[i].payment_id}" ><i class="bi bi-eye"></i></button>
-                        </td>
-                    </tr>
-                `)).draw(false);
-            }
-        }
-        else {
-            for (var i = 0; i < content.length; i++) {
-                t.row.add($(`
-                    <tr>
-                        <th scope="row" style="color: #012970;"><strong>${content[i].payment_reference_id}</strong></th>
-                        <td data-label="Amount Paid">&#8369; ${content[i].amount_paid}</td>
-                        <td data-label="Payment Date">${content[i].payment_date}</td>
-                        <td data-label="Status"><span class="badge bg-danger">Untagged</span></td>
-                        <td data-label="Actions">
-                            <button type="button" class="btn btn-outline-info m-1" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="${content[i].payment_id}" ><i class="bi bi-eye"></i></button>
-                            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-whatever="${content[i].payment_id}" id="dlt-act-btn"><i class="ri ri-delete-bin-5-fill"></i></button>
-                        </td>
-                    </tr>
-                `)).draw(false);
-            }
-        }
-
-        // if(user_id == 2) {
-        //     $('#dlt-btn').addClass('hide');
-        // }
+    for (var i = 0; i < untagged_content.length; i++) {
+        untagged_table.row.add($(`
+            <tr>
+                <th scope="row" style="color: #012970;"><strong>${i+1}</strong></th>
+                <td data-label="Reference ID">${untagged_content[i].payment_reference_id}</td>
+                <td data-label="Amount Paid">&#8369; ${untagged_content[i].amount_paid}</td>
+                <td data-label="Payment Date">${new Date(untagged_content[i].payment_date).toLocaleDateString('PHT')}</td>
+                <td data-label="Status"><span class="badge bg-danger">Untagged</span></td>
+                <td data-label="Actions">
+                    <button type="button" class="btn btn-outline-info m-1" data-bs-toggle="modal" data-bs-target="#edit-untagged-modal" data-bs-whatever="${untagged_content[i].payment_id}" ><i class="bi bi-eye"></i></button>
+                    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#delete-untagged-modal" data-bs-whatever="${untagged_content[i].payment_id}" id="dlt-btn"><i class="ri ri-delete-bin-5-fill"></i></button>
+                </td>
+            </tr>
+        `)).draw(false);
     }
+
+    // Update Untagged Modal
+    var untaggedUpdateModal = document.getElementById('edit-untagged-modal')
+    untaggedUpdateModal.addEventListener('show.bs.modal', async function (event) {
+
+        var button = event.relatedTarget;
+        var payment_id = button.getAttribute('data-bs-whatever');
+        let data = await fetchData('payment/read_single.php?payment_id=' + payment_id);
+        const customer = await fetchData('customer/read.php');
+
+        $('#edit_untagged_amount_paid').val(data.amount_paid);
+        $('#edit_untagged_reference_id').val(data.payment_reference_id);
+        $('#edit_untagged_payment_date').val(data.payment_date);
+        $('#edit_untagged_account_id').val(data.account_id);
+        $('#edit_untagged_tagged').val('Untagged');
+
+        for (var i = 0; i < customer.length; i++) {
+            var opt = `<option value='${customer[i].account_id}'>${customer[i].first_name} ${customer[i].last_name}</option>`;
+            $("#untagged-accounts-list").append(opt);
+        }
+
+        setTagElement('edit_untagged_tagged', 2);
+
+        const update_fn = document.getElementById('untagged-update-data');
+        update_fn.onsubmit = async (e) => {
+            e.preventDefault();
+            if (await isAccountIDExist($('#edit_untagged_account_id').val())) {
+                untaggedProcessUpdate();
+            }
+            else {
+                toastr.error('Account ID does not exist.');
+            }
+        };
+
+        async function untaggedProcessUpdate() {
+            const account_id = $('#edit_untagged_account_id').val();
+            const payment_reference_id = $('#edit_untagged_reference_id').val();
+            const amount_paid = $('#edit_untagged_amount_paid').val();
+            const payment_date = $('#edit_untagged_payment_date').val();
+
+            const latest_invoice = await fetchData('invoice/read_latest.php?account_id=' + account_id);
+
+            let invoice_data = JSON.stringify({
+                'account_id' : account_id,
+                'payment_reference_id' : payment_reference_id,
+                'amount_paid' : amount_paid,
+                'payment_date' : payment_date
+            });
+
+            let payment_data = JSON.stringify({
+                'account_id' : account_id,
+                'invoice_id' : latest_invoice.invoice_id,
+                'payment_id' : payment_id
+            });
+
+            let rating_data = JSON.stringify({
+                'account_id' : account_id,
+                'invoice_status' : latest_invoice.invoice_status_id
+            })
+
+            const [invoice_content, payment_content, rating_content] = await Promise.all ([updateData('invoice/update.php', invoice_data), updateData('payment/update_tagged.php', payment_data), updateData('ratings/update.php', rating_data)]);
+    
+            console.log(invoice_content + payment_content + rating_content);
+            const log = await logActivity('Tagged Payment ' + payment_reference_id + ' to ' + account_id + ' in Invoice # ' + invoice_content.invoice_id, 'Untagged Payments');
+        
+            if (invoice_content.success && payment_content.success && rating_content.success && log) {
+                sessionStorage.setItem('save_message', "Payment Updated Successfully.");
+                window.location.reload();
+            }
+            else {
+                toastr.error("Payment was not updated.");
+            }
+        }
+        
+    });
+    // End Update Untagged Modal
+
+    // Delete Untagged Modal
+    var untaggedDeleteModal = document.getElementById('delete-untagged-modal')
+    untaggedDeleteModal.addEventListener('show.bs.modal', async function (event) {
+
+        var button = event.relatedTarget;
+        var payment_id = button.getAttribute('data-bs-whatever');
+        let data = await fetchData('payment/read_single.php?payment_id=' + payment_id);
+        
+        $('#dlt_untagged_amount_paid').val(data.amount_paid);
+        $('#dlt_untagged_reference_id').val(data.payment_reference_id);
+        $('#dlt_untagged_payment_date').val(data.payment_date);
+        $('#dlt_untagged_tagged').val('Untagged');
+
+        setTagElement('dlt_untagged_tagged', 2);
+
+        const delete_fn = document.getElementById('untagged-delete-data');
+        delete_fn.onsubmit = (e) => {
+            e.preventDefault();
+            processDelete();
+        };
+
+        async function processDelete() {
+            const delete_data = JSON.stringify({
+                'payment_id' : payment_id
+            });
+            const response = await deleteData('payment/delete.php', delete_data);
+
+            const log = await logActivity('Deleted Payment Record #' + payment_id + ' [' + data.payment_reference_id + ']', 'Untagged Payments');
+            
+            if (response.success && log) {
+                sessionStorage.setItem('save_message', "Payment Record Deleted Successfully.");
+                window.location.reload();
+            }
+            else {
+                toastr.error("Payment Record was not deleted.");
+            }
+        }
+        
+    });
+
+    untaggedAddPayment();
+
+    // -------------------------------- End Untagged Payments
+
+    // -------------------------------- Advanced Payments
+    let advanced_content = await fetchData('payment/read_advanced_payments.php');
+
+    var advanced_table = $('#advanced-payments-table').DataTable({
+        pageLength: 5,
+        lengthMenu: [5, 10, 20],
+        "searching": true,
+        "autoWidth": false
+    });
+
+    for (var i = 0; i < advanced_content.length; i++) {
+        advanced_table.row.add($(`
+            <tr>
+                <th scope="row" style="color: #012970;"><strong>${i+1}</strong></th>
+                <td data-label="Reference ID">${advanced_content[i].payment_reference_id}</td>
+                <td data-label="Amount Paid">&#8369; ${advanced_content[i].amount_paid}</td>
+                <td data-label="Payment Date">${new Date(advanced_content[i].payment_date).toLocaleDateString('PHT')}</td>
+                <td data-label="Status"><span class="badge bg-success">Tagged</span></td>
+                <td data-label="Actions">
+                    <button type="button" class="btn btn-outline-info m-1" data-bs-toggle="modal" data-bs-target="#view-advanced-modal" data-bs-whatever="${advanced_content[i].payment_id}" ><i class="bi bi-eye"></i></button>
+                </td>
+            </tr>
+        `)).draw(false);
+    }
+
+    var advancedViewModal = document.getElementById('view-advanced-modal')
+    advancedViewModal.addEventListener('show.bs.modal', async function (event) {
+
+        var button = event.relatedTarget;
+        var data_id = button.getAttribute('data-bs-whatever');
+        let data, id, content;
+        data = await fetchData('payment/read_single.php?payment_id=' + data_id);
+        const account_data = await fetchData('customer/read_single.php?account_id=' + data.account_id);
+
+        var modalTitle = advancedViewModal.querySelector('.modal-title');
+        modalTitle.textContent = account_data.first_name + ' ' + account_data.last_name;
+
+        setTagElement('view_advanced_tagged', 1);
+
+        id = [
+            '#view_advanced_reference_id', 
+            '#view_advanced_amount_paid', 
+            '#view_advanced_payment_date', 
+            '#view_advanced_invoice_id', 
+            '#view_advanced_tagged'
+        ];
+        content = [
+            data.payment_reference_id, 
+            data.amount_paid, 
+            formatDateString(data.payment_date), 
+            data.invoice_id, 
+            'Tagged'
+        ];
+
+        for (var i = 0; i < content.length; i++) {
+            $(id[i]).val(content[i]);
+        }
+        
+    });
+
+    advancedAddPayment ()
+    
+    // -------------------------------- End Advanced Payments
+
+    // -------------------------------- Pending Approval Payments
+    let pending_approval_content = await fetchData('payment/read_pending_approval.php');
+    var approval_table = $('#approval-payments-table').DataTable({
+        pageLength: 5,
+        lengthMenu: [5, 10, 20],
+        "searching": true,
+        "autoWidth": false
+    });
+    
+    for (var i = 0; i < pending_approval_content.length; i++) {
+        approval_table.row.add($(`
+            <tr>
+                <th scope="row" style="color: #012970;"><strong>${i+1}</strong></th>
+                <td data-label="Reference ID">${pending_approval_content[i].approval_id}</td>
+                <td data-label="Account ID">${pending_approval_content[i].account_id}</td>
+                <td data-label="Date Uploaded">${new Date(pending_approval_content[i].date_uploaded).toLocaleDateString('PHT')}</td>
+                <td data-label="Status"><span class="badge bg-danger">${pending_approval_content[i].status}</span></td>
+                <td data-label="Actions">
+                    <button type="button" class="btn btn-outline-info m-1" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="${pending_approval_content[i].payment_id}" ><i class="bi bi-eye"></i></button>
+                    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-whatever="${pending_approval_content[i].payment_id}" id="dlt-btn"><i class="ri ri-delete-bin-5-fill"></i></button>
+                </td>
+            </tr>
+        `)).draw(false);
+    }
+    // -------------------------------- End Pending Approval Payments
+
+    // -------------------------------- Invalid Approval Payments
+    let invalid_approval_content = await fetchData('payment/read_invalid_approval.php');
+
+    var invalid_table = $('#invalid-payments-table').DataTable({
+        pageLength: 5,
+        lengthMenu: [5, 10, 20],
+        "searching": true,
+        "autoWidth": false
+    });
+
+    for (var i = 0; i < invalid_approval_content.length; i++) {
+        invalid_table.row.add($(`
+            <tr>
+                <th scope="row" style="color: #012970;"><strong>${i+1}</strong></th>
+                <td data-label="Reference ID">${invalid_approval_content[i].approval_id}</td>
+                <td data-label="Account ID">${invalid_approval_content[i].account_id}</td>
+                <td data-label="Date Uploaded">${new Date(invalid_approval_content[i].date_uploaded).toLocaleDateString('PHT')}</td>
+                <td data-label="Status"><span class="badge bg-danger">${invalid_approval_content[i].status}</span></td>
+                <td data-label="Actions">
+                    <button type="button" class="btn btn-outline-info m-1" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="${invalid_approval_content[i].payment_id}" ><i class="bi bi-eye"></i></button>
+                    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-whatever="${invalid_approval_content[i].payment_id}" id="dlt-btn"><i class="ri ri-delete-bin-5-fill"></i></button>
+                </td>
+            </tr>
+        `)).draw(false);
+    }
+    // -------------------------------- End Invalid Approval Payments
     
     async function setUpdateModal () {
-        var updateModal = document.getElementById('editModal')
-        updateModal.addEventListener('show.bs.modal', async function (event) {
-    
-            var button = event.relatedTarget;
-            var payment_id = button.getAttribute('data-bs-whatever');
-            let data = await fetchData('payment/read_single.php?payment_id=' + payment_id);
-            const customer = await fetchData('customer/read.php');
-
-            var modalTitle = updateModal.querySelector('.modal-title');
-            modalTitle.textContent = data.payment_reference_id;
-            
-            $('#amount_paid').val(data.amount_paid);
-            $('#payment_reference_id').val(data.payment_reference_id);
-            $('#payment_date').val(data.payment_date);
-            $('#account_id').val(data.account_id);
-            $('#tagged').val('Untagged');
-
-            for (var i = 0; i < customer.length; i++) {
-                var opt = `<option value='${customer[i].account_id}'>${customer[i].first_name} ${customer[i].last_name}</option>`;
-                $("#accounts-list").append(opt);
-            }
-
-            toggleInputData('disabled', true);
-            setTagElement('tagged', 2);
-
-            function toggleInputData (setAttr, bool) {
-                $('#amount_paid').attr(setAttr, bool);
-                $('#payment_reference_id').attr(setAttr, bool);
-                $('#payment_date').attr(setAttr, bool);
-                $('#account_id').attr(setAttr, bool);
-            }
-
-            edit_fn.onclick = (e) => {
-                e.preventDefault();
-                $('#save-btn').attr('disabled', false);
-                $('#edit-btn').attr('disabled', true);
-                toggleInputData('disabled', false);
-            };
-
-            update_fn.onsubmit = async (e) => {
-                e.preventDefault();
-                if (await isAccountIDExist($('#account_id').val())) {
-                    processUpdate();
-                }
-                else {
-                    toastr.error('Account ID does not exist.');
-                }
-            };
-
-            async function processUpdate() {
-                const account_id = $('#account_id').val();
-                const payment_reference_id = $('#payment_reference_id').val();
-                const amount_paid = $('#amount_paid').val();
-                const payment_date = $('#payment_date').val();
-
-                const latest_invoice = await fetchData('invoice/read_latest.php?account_id=' + account_id);
-
-                let invoice_data = JSON.stringify({
-                    'account_id' : account_id,
-                    'payment_reference_id' : payment_reference_id,
-                    'amount_paid' : amount_paid,
-                    'payment_date' : payment_date
-                });
-
-                let payment_data = JSON.stringify({
-                    'account_id' : account_id,
-                    'invoice_id' : latest_invoice.invoice_id,
-                    'payment_id' : payment_id
-                });
-
-                let rating_data = JSON.stringify({
-                    'account_id' : account_id,
-                    'invoice_status' : latest_invoice.invoice_status_id
-                })
-
-                const [invoice_content, payment_content, rating_content] = await Promise.all ([updateData('invoice/update.php', invoice_data), updateData('payment/update_tagged.php', payment_data), updateData('ratings/update.php', rating_data)]);
         
-                console.log(invoice_content + payment_content + rating_content);
-                const log = await logActivity('Tagged Payment ' + payment_reference_id + ' to ' + account_id + ' in Invoice # ' + invoice_content.invoice_id, 'Untagged Payments');
-            
-                if (invoice_content.message == 'Invoice Updated' && payment_content.message == 'Payment Tagged' && rating_content.message == 'Rating Updated' && log) {
-                    sessionStorage.setItem('save_message', "Payment Updated Successfully.");
-                    window.location.reload();
-                }
-                else {
-                    toastr.error("Payment was not updated.");
-                }
-            }
-            
-        });
     }
     
     async function setDeleteModal () {
@@ -307,6 +492,253 @@ async function setPaymentRecordsPage() {
     }
     
 } // End of Payment Records
+
+
+// -------------------------------------------------------------------- Add Payment Record JS
+async function untaggedAddPayment () {
+    var today = new Date();
+    $('#add_untagged_payment_date').val(getDateToday());
+    today.setDate(today.getDate() - 30);
+    setDateRange('#add_untagged_payment_date', today);
+
+    const create_fn = document.getElementById('untagged-create-new');
+    create_fn.onsubmit = (e) => {
+        e.preventDefault();
+        checkValidity();
+    };
+
+    var req_elem = document.getElementById('untagged-create-new').querySelectorAll("[required]");
+
+    async function checkValidity () {
+        resetElements();
+        var counter = 0;
+
+        for (var i = 0; i < req_elem.length; i++) {
+            if (req_elem[i].value == '') {
+                req_elem[i].classList.add('invalid-input');
+                req_elem[i].nextElementSibling.classList.add('d-block');
+                counter++;
+            }
+            else {
+                if (req_elem[i].id == 'add_untagged_reference_id') {
+                    const pay_ref = await fetchData('check/payment_ref.php?payment_reference_id=' + req_elem[i].value);
+                    if (pay_ref.exist) {
+                        req_elem[i].classList.add('invalid-input');
+                        req_elem[i].nextElementSibling.classList.add('d-block');
+                        $(($('#' + req_elem[i].id).next()).text("Payment Reference ID already exist."));
+                        counter++;
+                    }
+                    else {
+                        showValid();
+                    }
+                }
+                else if (req_elem[i].id == 'add_untagged_amount_paid') {
+                    if (req_elem[i].value < 1) {
+                        req_elem[i].classList.add('invalid-input');
+                        req_elem[i].nextElementSibling.classList.add('d-block');
+                        $(($('#' + req_elem[i].id).next()).text("Amount paid should at least be \u20B1 1.00"));
+                        counter++;
+                    }
+                    else {
+                        showValid();
+                    }
+                }
+                else if (req_elem[i].id == 'add_untagged_payment_date') {
+                    if (!isWithinRange(today, req_elem[i].value)) {
+                        req_elem[i].classList.add('invalid-input');
+                        req_elem[i].nextElementSibling.classList.add('d-block');
+                        $(($('#' + req_elem[i].id).next()).text('Payment date is not within range.'));
+                        counter++;
+                    }
+                    else {
+                        showValid();
+                    }
+                }
+                else {
+                    showValid();
+                }
+
+                function showValid() {
+                    req_elem[i].classList.add('valid-input');
+                }
+            }
+        } 
+
+        if (counter > 0) {
+            toastr.warning('Please provide the appropriate details on each field.');
+        }
+        else {
+            addPayment();
+        }
+    }
+
+    function resetElements() {
+        for (var i = 0; i < req_elem.length; i++) {
+            $('#' + req_elem[i].id).removeClass('valid-input');
+            $('#' + req_elem[i].id).removeClass('invalid-input');
+            $(($('#' + req_elem[i].id).next()).removeClass('d-block'));
+        }
+    }
+
+    async function addPayment () {
+        const payment_ref = $('#add_untagged_reference_id').val();
+
+        const payment_data = JSON.stringify({
+            'amount_paid' : $('#add_untagged_amount_paid').val(),
+            'payment_reference_id' : payment_ref,
+            'payment_date' : $('#add_untagged_payment_date').val()
+        });
+
+        const payment_content = await createData('payment/create.php', payment_data);
+        const log = await logActivity('Added new payment record with Reference ID # ' + payment_ref, 'Add Untagged Payment');
+    
+        if (payment_content.success && log) {
+            toastr.success('Payment Record Created Successfully.');
+            setTimeout(function(){
+                window.location.replace('../views/invoice_payments');
+                }, 2000);
+        }
+        else {
+            toastr.error(payment_content.message);
+            setTimeout(function(){
+                window.location.reload();
+                }, 2000);
+        }
+    }
+} // End of Add Payment Record 
+
+// -------------------------------------------------------------------- Add Advanced Payment Record JS
+async function advancedAddPayment () {
+    var today = new Date();
+    $('#add_advanced_payment_date').val(getDateToday());
+    today.setDate(today.getDate() - 30);
+    setDateRange('#add_advanced_payment_date', today);
+
+    const customer = await fetchData('customer/read.php');
+
+    for (var i = 0; i < customer.length; i++) {
+        var opt = `<option value='${customer[i].account_id}'>${customer[i].first_name} ${customer[i].last_name}</option>`;
+        $("#advanced-accounts-list").append(opt);
+    }
+
+    const create_fn = document.getElementById('advanced-create-new');
+    create_fn.onsubmit = (e) => {
+        e.preventDefault();
+        checkValidity();
+    };
+
+    var req_elem = document.getElementById('advanced-create-new').querySelectorAll("[required]");
+
+    async function checkValidity () {
+        resetElements();
+        var counter = 0;
+
+        for (var i = 0; i < req_elem.length; i++) {
+            if (req_elem[i].value == '') {
+                req_elem[i].classList.add('invalid-input');
+                req_elem[i].nextElementSibling.classList.add('d-block');
+                counter++;
+            }
+            else {
+                if (req_elem[i].id == 'add_advanced_reference_id') {
+                    const pay_ref = await fetchData('check/payment_ref.php?payment_reference_id=' + req_elem[i].value);
+                    if (pay_ref.exist) {
+                        req_elem[i].classList.add('invalid-input');
+                        req_elem[i].nextElementSibling.classList.add('d-block');
+                        $(($('#' + req_elem[i].id).next()).text("Payment Reference ID already exist."));
+                        counter++;
+                    }
+                    else {
+                        showValid();
+                    }
+                }
+                else if (req_elem[i].id == 'add_advanced_amount_paid') {
+                    if (req_elem[i].value < 1) {
+                        req_elem[i].classList.add('invalid-input');
+                        req_elem[i].nextElementSibling.classList.add('d-block');
+                        $(($('#' + req_elem[i].id).next()).text("Amount paid should at least be \u20B1 1.00"));
+                        counter++;
+                    }
+                    else {
+                        showValid();
+                    }
+                }
+                else if (req_elem[i].id == 'add_advanced_payment_date') {
+                    if (!isWithinRange(today, req_elem[i].value)) {
+                        req_elem[i].classList.add('invalid-input');
+                        req_elem[i].nextElementSibling.classList.add('d-block');
+                        $(($('#' + req_elem[i].id).next()).text('Payment date is not within range.'));
+                        counter++;
+                    }
+                    else {
+                        showValid();
+                    }
+                }
+                else if (req_elem[i].id == 'add_advanced_account_id') {
+                    const acct_id = await isAccountIDExist(req_elem[i].value);
+                    if (!acct_id) {
+                        req_elem[i].classList.add('invalid-input');
+                        req_elem[i].nextElementSibling.classList.add('d-block');
+                        $(($('#' + req_elem[i].id).next()).text("Account ID does not exist."));
+                        counter++;
+                    }
+                    else {
+                        showValid();
+                    }
+                }
+                else {
+                    showValid();
+                }
+
+                function showValid() {
+                    req_elem[i].classList.add('valid-input');
+                }
+            }
+        } 
+
+        if (counter > 0) {
+            toastr.warning('Please provide the appropriate details on each field.');
+        }
+        else {
+            addPayment();
+        }
+    }
+
+    function resetElements() {
+        for (var i = 0; i < req_elem.length; i++) {
+            $('#' + req_elem[i].id).removeClass('valid-input');
+            $('#' + req_elem[i].id).removeClass('invalid-input');
+            $(($('#' + req_elem[i].id).next()).removeClass('d-block'));
+        }
+    }
+
+    async function addPayment () {
+        const payment_ref = $('#add_advanced_reference_id').val();
+
+        const payment_data = JSON.stringify({
+            'account_id' : $('#add_advanced_account_id').val(),
+            'amount_paid' : $('#add_advanced_amount_paid').val(),
+            'payment_reference_id' : payment_ref,
+            'payment_date' : $('#add_advanced_payment_date').val()
+        });
+
+        const payment_content = await createData('payment/create_advanced_payment.php', payment_data);
+        const log = await logActivity('Added advanced payment record with Reference ID # ' + payment_ref, 'Add Advanced Payment');
+    
+        if (payment_content.success && log) {
+            toastr.success('Payment Record Created Successfully.');
+            setTimeout(function(){
+                window.location.replace('../views/invoice_payments');
+                }, 2000);
+        }
+        else {
+            toastr.error(payment_content.message);
+            setTimeout(function(){
+                window.location.reload();
+                }, 2000);
+        }
+    }
+} // End of Add Payment Record 
 
 // -------------------------------------------------------------------- Prorate Records JS
 async function setProrateRecordsPage() {
@@ -417,7 +849,7 @@ async function setProrateRecordsPage() {
             $('#duration_minutes').val(duration.split(":")[1]);
             $('#duration_seconds').val(duration.split(":")[2]);
             $('#prorate_charge').val(data.amount);
-            $('#status').val('Uncharged');
+            $('#status').val('Untagged');
 
             setTagElement('status', 2);
             toggleInputData('disabled', true);
@@ -451,7 +883,7 @@ async function setProrateRecordsPage() {
                 });
 
                 const update_content = await updateData('prorate/update.php', update_data);
-                const log = await logActivity('Updated Prorate Record # ' + prorate_id, 'Uncharged Prorates')
+                const log = await logActivity('Updated Prorate Record # ' + prorate_id, 'Untagged Prorates')
             
                 if (update_content.success && log) {
                     sessionStorage.setItem('save_message', "Prorate Record Updated Successfully.");
@@ -479,7 +911,7 @@ async function setProrateRecordsPage() {
             $('#customer_name_d').val(data.customer_name);
             $('#duration_d').val(data.duration);
             $('#prorate_charge_d').val(data.amount);
-            $('#status_d').val('Uncharged');
+            $('#status_d').val('Untagged');
 
             setTagElement('status_d', 2);
 
@@ -494,7 +926,7 @@ async function setProrateRecordsPage() {
                 });
 
                 const delete_content = await deleteData('prorate/delete.php', delete_data);
-                const log = await logActivity('Deleted Prorate Record # ' + prorate_id, 'Uncharged Prorates');
+                const log = await logActivity('Deleted Prorate Record # ' + prorate_id, 'Untagged Prorates');
             
                 if (delete_content.success && log) {
                     sessionStorage.setItem('save_message', "Prorate Record Deleted Successfully.");
@@ -507,131 +939,3 @@ async function setProrateRecordsPage() {
         });
     }
 } // End of Prorate Records 
-
-// -------------------------------------------------------------------- Add Payment Record JS
-async function setAddPaymentPage () {
-    setButtons();
-
-    var today = new Date();
-    $('#payment_date').val(getDateToday());
-    today.setDate(today.getDate() - 30);
-    setDateRange('#payment_date', today);
-
-    create_fn.onsubmit = (e) => {
-        e.preventDefault();
-        checkValidity();
-    };
-
-    var req_elem = document.getElementById('create-new').querySelectorAll("[required]");
-
-    async function checkValidity () {
-        resetElements();
-        var counter = 0;
-
-        for (var i = 0; i < req_elem.length; i++) {
-            if (req_elem[i].value == '') {
-                req_elem[i].classList.add('invalid-input');
-                req_elem[i].nextElementSibling.classList.add('d-block');
-                counter++;
-            }
-            else {
-                if (req_elem[i].id == 'payment_ref') {
-                    const pay_ref = await fetchData('check/payment_ref.php?payment_reference_id=' + req_elem[i].value);
-                    if (pay_ref.exist) {
-                        req_elem[i].classList.add('invalid-input');
-                        req_elem[i].nextElementSibling.classList.add('d-block');
-                        $(($('#' + req_elem[i].id).next()).text("Payment Reference ID already exist."));
-                        counter++;
-                    }
-                    else {
-                        showValid();
-                    }
-                }
-                else if (req_elem[i].id == 'amount_paid') {
-                    if (req_elem[i].value < 1) {
-                        req_elem[i].classList.add('invalid-input');
-                        req_elem[i].nextElementSibling.classList.add('d-block');
-                        $(($('#' + req_elem[i].id).next()).text("Amount paid should at least be \u20B1 1.00"));
-                        counter++;
-                    }
-                    else {
-                        showValid();
-                    }
-                }
-                else if (req_elem[i].id == 'payment_date') {
-                    if (!isWithinRange(today, req_elem[i].value)) {
-                        req_elem[i].classList.add('invalid-input');
-                        req_elem[i].nextElementSibling.classList.add('d-block');
-                        $(($('#' + req_elem[i].id).next()).text('Payment date is not within range.'));
-                        counter++;
-                    }
-                    else {
-                        showValid();
-                    }
-                }
-                else {
-                    showValid();
-                }
-
-                function showValid() {
-                    req_elem[i].classList.add('valid-input');
-                }
-            }
-        } 
-
-        if (counter > 0) {
-            toastr.warning('Please provide the appropriate details on each field.');
-        }
-        else {
-            addPayment();
-        }
-    }
-
-    function resetElements() {
-        for (var i = 0; i < req_elem.length; i++) {
-            $('#' + req_elem[i].id).removeClass('valid-input');
-            $('#' + req_elem[i].id).removeClass('invalid-input');
-            $(($('#' + req_elem[i].id).next()).removeClass('d-block'));
-        }
-    }
-
-    async function addPayment () {
-        const payment_ref = $('#payment_ref').val();
-        let ref_content = await fetchData('views/payment.php');
-        let isExist = false;
-
-        for (var i = 0; i < ref_content.length; i++) {
-            if (payment_ref == ref_content[i].ref_id) {
-                isExist = true;
-            }
-        }
-
-        if (!isExist) {
-            const payment_data = JSON.stringify({
-                'amount_paid' : $('#amount_paid').val(),
-                'payment_reference_id' : payment_ref,
-                'payment_date' : $('#payment_date').val()
-            });
-
-            const payment_content = await createData('payment/create.php', payment_data);
-            const log = await logActivity('Added new payment record with Reference ID # ' + payment_ref, 'Add Payment Record');
-        
-            if (payment_content.success && log) {
-                toastr.success('Payment Record Created Successfully.');
-                setTimeout(function(){
-                    window.location.replace('../views/invoice_payments');
-                    }, 2000);
-            }
-            else {
-                toastr.error(payment_content.message);
-                setTimeout(function(){
-                    window.location.reload();
-                    }, 2000);
-            }
-        }
-        else {
-            toastr.error('Payment Reference ID already exist.');
-            $('#payment_ref').val(null);
-        }
-    }
-} // End of Add Payment Record 

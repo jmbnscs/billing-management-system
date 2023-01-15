@@ -974,6 +974,7 @@ async function setUserLevelPage() {
             else {
                 toastr.error("Some error occured, please try again.");
             }
+
         }
     });
 
