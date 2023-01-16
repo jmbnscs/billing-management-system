@@ -343,6 +343,16 @@
 
           <!-- Modal Body -->
           <div class="modal-body row g-3">
+
+                <div class="col-md-12">
+                  <div class="form-floating">
+                    <select class="form-control required" id="add_advanced_payment_centers" required>
+                      <option selected disabled value="">Choose Payment Center</option>
+                    </select>
+                    <div class="invalid-feedback">Please choose a payment center.</div>
+                    <label for="add_advanced_payment_centers" class="required">Payment Center</label>
+                  </div>
+                </div>
             
                 <div class="col-md-12">
                   <div class="form-floating">
@@ -461,6 +471,213 @@
 
 <!-- ------------------------------------------------------ End Advanced Modals -->
 
+<!-- ------------------------------------------------------ Pending Approval Modals -->
+<!-- View Advanced Payment -->
+<div class="modal fade" id="view-pending-modal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg">
+      <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h5 class="modal-title"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <!-- Modal Body -->
+        <div class="modal-body">
+          <!-- Card with an image on top -->
+          <div class="card">
+            <a href="" target="_blank" id="uploaded_image_new_tab">
+              <img id="uploaded_image" class="img-fluid rounded-start mx-auto d-block" alt="..." data-action="zoom">
+            </a>
+          </div><!-- End Card with an image on top -->
+
+        </div>
+        <!-- End Modal Body -->
+
+        <!-- Modal Footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-success" id="edit-pending-btn" data-bs-toggle="modal" data-bs-target="#add-pending-modal">Approve</button>
+          <button type="submit" class="btn btn-danger" id="dlt-pending-btn" data-bs-toggle="modal" data-bs-target="#delete-pending-modal">Invalid</button>
+        </div>
+      </div>
+    </div>
+</div>
+<!-- End View Advanced Payment -->
+
+<!-- Add Approved Pending Payment -->
+<form id="pending-create-new" novalidate>
+  <!-- Modal Dialog Scrollable -->
+  <div class="modal fade" id="add-pending-modal" tabindex="-1">
+      <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg">
+        <div class="modal-content">
+
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h5 class="modal-title">Approve Pending Payment</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+
+          <!-- Modal Body -->
+          <div class="modal-body row g-3">
+
+            <!-- Card with an image on left -->
+            <div class="card mb-3">
+              <div class="row g-3">
+                <div class="col-md-4">
+                  <a href="" target="_blank" id="add_uploaded_image_new_tab">
+                    <img id="add_uploaded_image" class="img-fluid rounded-start mx-auto d-block" alt="..." data-action="zoom">
+                  </a>
+                </div>
+
+                <div class="col-md-8">
+                  <div class="card-body row g-3">
+
+                    <div class="col-md-12 pt-3">
+                      <div class="form-floating">
+                        <input type="number" class="form-control" id="add_pending_account_id" placeholder="Account ID" readonly>
+                        <label for="add_pending_account_id">Account ID</label>
+                      </div>
+                    </div>
+
+                    <div class="col-md-12">
+                      <div class="form-floating">
+                        <select class="form-control required" id="add_pending_payment_centers" required>
+                          <option selected disabled value="">Choose Payment Center</option>
+                        </select>
+                        <div class="invalid-feedback">Please choose a payment center.</div>
+                        <label for="add_pending_payment_centers" class="required">Payment Center</label>
+                      </div>
+                    </div>
+                
+                    <div class="col-md-12">
+                      <div class="form-floating">
+                        <input type="text" class="form-control" id="add_pending_reference_id" placeholder="Reference ID" required>
+                        <div class="invalid-feedback">Please enter valid reference ID.</div>
+                        <label for="add_pending_reference_id">Reference ID</label>
+                      </div>
+                    </div>
+
+                    <div class="col-md-12">
+                      <div class="form-floating">
+                        <input type="number" class="form-control" id="add_pending_amount_paid" placeholder="Amount Paid" required>
+                        <div class="invalid-feedback">Please enter amount paid.</div>
+                        <label for="add_pending_amount_paid">Amount Paid</label>
+                      </div>
+                    </div>
+
+                    <div class="col-md-12">
+                      <div class="form-floating">
+                        <input type="date" class="form-control" id="add_pending_payment_date" placeholder="Payment Date" required>
+                        <div class="invalid-feedback">Please choose payment date.</div>
+                        <label for="add_pending_payment_date">Payment Date</label>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div><!-- End Card with an image on left -->
+
+                
+
+          </div>
+          <!-- End Modal Body -->
+
+          <!-- Modal Footer -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-success" id="edit-btn">Save Changes</button>
+          </div>
+        </div>
+      </div>
+  </div>
+</form> 
+<!-- End Advanced Payment -->
+
+<!-- ------------------------------------------------------ End Pending Approval Modals -->
+
+<!-- Delete Pending Payment -->
+<form id="pending-delete-data">
+  <div class="modal fade" id="delete-pending-modal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Invalidate Pending Payment?</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <!-- Modal Body -->
+        <div class="modal-body row g-3">
+
+          <!-- Card with an image on bottom -->
+          <div class="card">
+            <div class="card-body">
+              <div class="col-md-12">
+                <div class="form-floating">
+                  <input type="number" class="form-control" id="dlt_pending_account_id" placeholder="Account ID" readonly>
+                  <label for="dlt_pending_account_id">Account ID</label>
+                </div>
+              </div>
+            </div>
+
+            <a href="" target="_blank" id="dlt_uploaded_image_new_tab">
+              <img id="dlt_uploaded_image" class="img-fluid rounded-start mx-auto d-block" alt="..." data-action="zoom">
+            </a>
+          </div>
+          <!-- End Card with an image on bottom -->
+
+            
+
+        </div>
+        <!-- End Modal Body -->
+      
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-danger">Invalid</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+<!-- Delete Pending Payment -->
+
+<!-- View Invalid Payment -->
+<form id="react-invalid-data">
+  <div class="modal fade" id="view-invalid-modal" tabindex="-1">
+      <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg">
+        <div class="modal-content">
+
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h5 class="modal-title"></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+
+          <!-- Modal Body -->
+          <div class="modal-body">
+            <!-- Card with an image on top -->
+            <div class="card">
+              <a href="" target="_blank" id="inv_uploaded_image_new_tab">
+                <img id="inv_uploaded_image" class="img-fluid rounded-start mx-auto d-block" alt="..." data-action="zoom">
+              </a>
+            </div><!-- End Card with an image on top -->
+
+          </div>
+          <!-- End Modal Body -->
+
+          <!-- Modal Footer -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-success" id="reactivate-invalid-btn">Re-activate</button>
+          </div>
+        </div>
+      </div>
+  </div>
+</form>
+<!-- End View Invalid Payment -->
+<!-- ------------------------------------------------------ End Pending Modal -->
 
 </main>
 <!-- End #main -->
