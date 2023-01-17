@@ -20,7 +20,7 @@
       <div class="card-body">
         <ul class="nav nav-tabs d-flex" role="tablist">
           <li class="nav-item flex-fill" role="presentation">
-            <button class="nav-link w-100 active" id="unpaid-tab" data-bs-toggle="tab" data-bs-target="#unpaid-invoice" type="button" role="tab" aria-controls="unpaid" aria-selected="true">Unpaid</button>
+            <button class="nav-link w-100 active" id="unpaid-tab" data-bs-toggle="tab" data-bs-target="#unpaid-invoice" type="button" role="tab" aria-controls="unpaid" aria-selected="true">Due</button>
           </li>
           <li class="nav-item flex-fill" role="presentation">
             <button class="nav-link w-100" id="overdue-tab" data-bs-toggle="tab" data-bs-target="#overdue-invoice" type="button" role="tab" aria-controls="overdue" aria-selected="false">Overdue</button>
@@ -34,6 +34,9 @@
 
           <!-- Unpaid Invoice Tab -->
           <div class="tab-pane fade show active" id="unpaid-invoice" role="tabpanel" aria-labelledby="active-tab">
+            
+            <h5 class="card-title">Due Invoices</h5>
+            
             <!-- Filter Dropdown -->
             <div>
               <select id="unpaid-customer-filter" class="form-select table-filter" style="display: inline; width: 200px; margin-left: 25px;">
@@ -61,6 +64,9 @@
 
           <!-- Overdue Invoice Tab -->
           <div class="tab-pane fade" id="overdue-invoice" role="tabpanel" aria-labelledby="active-tab">
+
+            <h5 class="card-title">Overdue Invoices</h5>
+
             <!-- Filter Dropdown -->
             <div>
               <select id="overdue-customer-filter" class="form-select table-filter" style="display: inline; width: 200px; margin-left: 25px;">
@@ -88,6 +94,9 @@
 
           <!-- Disconnection Invoice Tab -->
           <div class="tab-pane fade" id="disconnection-invoice" role="tabpanel" aria-labelledby="active-tab">
+
+            <h5 class="card-title">Invoices For Disconnection</h5>
+            
             <!-- Filter Dropdown -->
             <div>
               <select id="disconnection-customer-filter" class="form-select table-filter" style="display: inline; width: 200px; margin-left: 25px;">

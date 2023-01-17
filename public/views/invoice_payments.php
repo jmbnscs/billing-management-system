@@ -96,6 +96,13 @@
 
           <!-- For Approval Payment Records -->
           <div class="tab-pane fade" id="approval-payments" role="tabpanel" aria-labelledby="approval-tab">
+
+            <!-- <div class="row">
+              <div class="col-md-9">
+                <h5 class="card-title">Customer Uploaded Payment Records</h5>
+              </div>
+            </div> -->
+            <h5 class="card-title">Customer Uploaded Payment Records</h5>
         
             <table class="table table-borderless" id="approval-payments-table">
               <thead>
@@ -114,6 +121,8 @@
 
           <!-- Invalid Payment Records -->
           <div class="tab-pane fade" id="invalid-payments" role="tabpanel" aria-labelledby="invalid-tab">
+
+            <h5 class="card-title">Invalid Customer Uploaded Payment Records</h5>
         
             <table class="table table-borderless" id="invalid-payments-table">
               <thead>
