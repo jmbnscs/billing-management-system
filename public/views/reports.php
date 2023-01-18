@@ -5,7 +5,7 @@
 <main id="main" class="main">
   <div class="row pagetitle">
     <div class="col-md-9">
-      <h1>View Plans</h1>
+      <h1>View Reports</h1>
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="dashboard">Home</a></li>
