@@ -9,240 +9,190 @@
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="dashboard">Home</a></li>
-          <li class="breadcrumb-item active">Plans</li>
+          <li class="breadcrumb-item active">Reports</li>
         </ol>
       </nav>
     </div>
+  </div>
 
-    <div class="col-md-3 justify-content-center">
-      <button type="button" class="btn btn-primary mt-3 w-100" data-bs-toggle="modal" data-bs-target="#add-plans" id="add-btn">+ Add New Plan</button>
-    </div>
-  </div><!-- End Page Title -->
-
-  <!-- Plans Table -->
-  <div class="col-12">
-    <div class="card recent-sales overflow-auto">
-      <br>
+  <form id="generate-report">
+    <div class="card p-3">
       <div class="card-body">
-
-        <ul class="nav nav-tabs d-flex" role="tablist">
-          <li class="nav-item flex-fill" role="presentation">
-            <button class="nav-link w-100 active" id="active-tab" data-bs-toggle="tab" data-bs-target="#active-plans" type="button" role="tab" aria-controls="active" aria-selected="true">Active</button>
-          </li>
-          <li class="nav-item flex-fill" role="presentation">
-            <button class="nav-link w-100" id="deactivated-tab" data-bs-toggle="tab" data-bs-target="#deactivated-plans" type="button" role="tab" aria-controls="deactivated" aria-selected="false">Deactivated</button>
-          </li>
-        </ul>
-
-        <div class="tab-content pt-2">
-          <!-- Active Plans -->
-          <div class="tab-pane fade show active" id="active-plans" role="tabpanel" aria-labelledby="active-tab">
-            <!-- Filter Dropdown -->
-            <div>
-              <select id="active-inclusions-filter" class="form-select table-filter" style="display: inline; width: 200px; margin-left: 25px;">
-                <option value="">Select All: Inclusion</option>
-                <option value="None">None</option>
-              </select>
-            </div>
-
-            <!-- <div>
-              <select id="status-filter" class="form-select table-filter" style="display: inline; width: 200px; margin-left: 25px;">
-                <option value="">Select All: Status</option>
-              </select>
-            </div> -->
-            <!-- End Filter Dropdown -->
-
-            <table class="table table-borderless" id="active-table">
-              <thead>
-                <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Plan Name</th>
-                  <th scope="col">Bandwidth</th>
-                  <th scope="col">Price</th>
-                  <th scope="col">Inclusion</th>
-                  <th scope="col">Status</th>
-                  <th scope="col">View</th>
-                </tr>
-              </thead>
-              <tbody id="plan-data">
-              </tbody>
-            </table>
+        <!-- <h5 class="card-title">Default Card</h5> -->
+        <div class="row">
+          <div class="col-md-4">
+            <label for="report_type" class="form-label">Report</label>
+            <select class="form-select" aria-label="Report Type" id="report_type" required>
+              <option selected disabled value="">Please select report:</option>
+              <option value="1">Sales Report</option>
+              <option value="2">Installation Report</option>
+              <option value="3">Prorates Report</option>
+              <option value="4">Customer Report</option>
+              <option value="5">Invoice Report</option>
+              <option value="6">Admin Logs Report</option>
+              <option value="7">Income Summary Report</option>
+            </select>
           </div>
-          
-          <!-- Deactivated Plans -->
-          <div class="tab-pane fade" id="deactivated-plans" role="tabpanel" aria-labelledby="deactivated-tab">
-            <!-- Filter Dropdown -->
-            <div>
-              <select id="deact-inclusions-filter" class="form-select table-filter" style="display: inline; width: 200px; margin-left: 25px;">
-                <option value="">Select All: Inclusion</option>
-                <option value="None">None</option>
-              </select>
-            </div>
 
-            <!-- <div>
-              <select id="status-filter" class="form-select table-filter" style="display: inline; width: 200px; margin-left: 25px;">
-                <option value="">Select All: Status</option>
-              </select>
-            </div> -->
-            <!-- End Filter Dropdown -->
+          <div class="col-md-5"></div>
 
-            <table class="table table-borderless" id="deactivated-table">
-              <thead>
-                <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Plan Name</th>
-                  <th scope="col">Bandwidth</th>
-                  <th scope="col">Price</th>
-                  <th scope="col">Inclusion</th>
-                  <th scope="col">Status</th>
-                  <th scope="col">View</th>
-                </tr>
-              </thead>
-              <tbody id="plan-data">
-              </tbody>
-            </table>
+          <div class="col-md-3 p-3"><button type="submit" class="btn btn-success w-100">Generate Report</button></div>
+        
+        </div>
+
+        <div class="row pt-3">
+          <div class="col-md-4">
+            <label for="date_from" class="form-label">From:</label>
+            <input type="month" class="form-control" id="date_from" min="2021-09" required>
+          </div>
+
+          <div class="col-md-4">
+            <label for="date_to" class="form-label">To:</label>
+            <input type="month" class="form-control" id="date_to" required>
           </div>
         </div>
+
+        <!-- Customer Reports Sub Filter -->
+        <div class="row pt-3 hide" id="customer_filter">
+          <div class="col-md-4">
+            <label for="customer_status" class="form-label">Status</label>
+            <select class="form-select" aria-label="Status" id="customer_status">
+              <option disabled value="">Please select status:</option>
+              <option selected value="0">All</option>
+              <option value="1">Active</option>
+              <option value="2">Inactive</option>
+              <option value="3">Disconnected</option>
+            </select>
+          </div>
+
+          <div class="col-md-4">
+            <label for="customer_area" class="form-label">Area</label>
+            <select class="form-select" aria-label="Area" id="customer_area">
+              <option disabled value="">Please select area:</option>
+              <option selected value="0">All</option>
+            </select>
+          </div> 
+        </div>
+        <!-- Customer Reports Sub Filter -->
+
+        <!-- Invoice Reports Sub Filter -->
+        <div class="row pt-3 hide" id="invoice_filter">
+          <div class="col-md-4">
+            <label for="invoice_status" class="form-label">Status</label>
+            <select class="form-select" aria-label="Status" id="invoice_status">
+              <option disabled value="">Please select status:</option>
+              <option selected value="0">All</option>
+              <option value="1">Paid</option>
+              <option value="2">Unpaid</option>
+              <option value="3">Overdue</option>
+              <option value="4">For Disconnection</option>
+            </select>
+          </div>
+        </div>
+        <!-- Invoice Reports Sub Filter -->
+
+        <!-- Sales Reports Display -->
+        <div class="row pt-5 hide" id="sales-reports-container">
+          <div class="col-md-8">
+            <h5 id="sales-reports-title" style="border-bottom: 2px solid black;"></h5>
+          </div>
+
+          <table class="table table-striped" id="sales-reports-table">
+            <thead id="sales-reports-column-header"></thead>
+            <tbody id="sales-reports-body"></tbody>
+            <tfoot id="sales-reports-column-footer"></tfoot>
+          </table>
+        </div>
+        <!-- End Sales Reports Display -->
+
+        <!-- Installation Reports Display -->
+        <div class="row pt-5 hide" id="install-reports-container">
+          <div class="col-md-8">
+            <h5 id="install-reports-title" style="border-bottom: 2px solid black;"></h5>
+          </div>
+
+          <table class="table table-striped" id="install-reports-table">
+            <thead id="install-reports-column-header"></thead>
+            <tbody id="install-reports-body"></tbody>
+            <tfoot id="install-reports-column-footer"></tfoot>
+          </table>
+        </div>
+        <!-- End Installation Reports Display -->
+
+        <!-- Prorate Reports Display -->
+        <div class="row pt-5 hide" id="prorate-reports-container">
+          <div class="col-md-8">
+            <h5 id="prorate-reports-title" style="border-bottom: 2px solid black;"></h5>
+          </div>
+
+          <table class="table table-striped" id="prorate-reports-table">
+            <thead id="prorate-reports-column-header"></thead>
+            <tbody id="prorate-reports-body"></tbody>
+            <tfoot id="prorate-reports-column-footer"></tfoot>
+          </table>
+        </div>
+        <!-- End Prorate Reports Display -->
+
+        <!-- Customer Reports Display -->
+        <div class="row pt-5 hide" id="customer-reports-container">
+          <div class="col-md-8">
+            <h5 id="customer-reports-title" style="border-bottom: 2px solid black;"></h5>
+          </div>
+
+          <table class="table table-striped" id="customer-reports-table">
+            <thead id="customer-reports-column-header"></thead>
+            <tbody id="customer-reports-body"></tbody>
+            <tfoot id="customer-reports-column-footer"></tfoot>
+          </table>
+        </div>
+        <!-- End Customer Reports Display -->
+
+        <!-- Invoice Reports Display -->
+        <div class="row pt-5 hide" id="invoice-reports-container">
+          <div class="col-md-8">
+            <h5 id="invoice-reports-title" style="border-bottom: 2px solid black;"></h5>
+          </div>
+
+          <table class="table table-striped" id="invoice-reports-table">
+            <thead id="invoice-reports-column-header"></thead>
+            <tbody id="invoice-reports-body"></tbody>
+            <tfoot id="invoice-reports-column-footer"></tfoot>
+          </table>
+        </div>
+        <!-- End Invoice Reports Display -->
+
+        <!-- Admin Logs Reports Display -->
+        <div class="row pt-5 hide" id="logs-reports-container">
+          <div class="col-md-8">
+            <h5 id="logs-reports-title" style="border-bottom: 2px solid black;"></h5>
+          </div>
+
+          <table class="table table-striped" id="logs-reports-table">
+            <thead id="logs-reports-column-header"></thead>
+            <tbody id="logs-reports-body"></tbody>
+            <tfoot id="logs-reports-column-footer"></tfoot>
+          </table>
+        </div>
+        <!-- End Admin Logs Reports Display -->
+
+        <!-- Income Summary Reports Display -->
+        <div class="row pt-5 hide" id="income-reports-container">
+          <div class="col-md-8">
+            <h5 id="income-reports-title" style="border-bottom: 2px solid black;">Income Report Summary</h5>
+          </div>
+
+          <table class="table table-borderless" id="income-reports-table">
+            <thead id="income-reports-column-header"></thead>
+            <tbody id="income-reports-body"></tbody>
+            <tfoot id="income-reports-column-footer"></tfoot>
+          </table>
+        </div>
+        <!-- End Income Summary Reports Display -->
+        
       </div>
     </div>
-  </div><!-- End Plans Table -->
-
-<!-- Update Plan Modal -->
-<form id="save-plan">
-    <div class="modal fade" id="view-plans" tabindex="-1">
-        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-m">
-          <div class="modal-content">
-
-            <div class="modal-header">
-              <h5 class="modal-title"></h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-
-            <!-- Modal Body -->
-            <div class="modal-body row g-3">
-                <div class="col-md-12">
-                  <div class="form-floating">
-                    <input type="text" class="form-control" id="plan_id" placeholder="Plan ID" readonly>
-                    <label for="plan_id">Plan ID</label>
-                  </div>
-                </div>
-
-                <div class="col-md-12">
-                  <div class="form-floating">
-                    <input type="text" class="form-control" id="plan_name" placeholder="Plan Name" required>
-                    <div class="invalid-feedback">
-                        Please enter a valid plan name.
-                    </div>
-                    <label for="plan_name">Plan Name</label>
-                  </div>
-                </div>
-
-                <div class="col-md-12">
-                  <div class="form-floating">
-                    <input type="text" class="form-control" id="bandwidth" placeholder="Bandwidth" required>
-                    <div class="invalid-feedback">
-                        Please enter bandwidth.
-                    </div>
-                    <label for="bandwidth">Bandwidth</label>
-                  </div>
-                </div>
-
-                <div class="col-md-12">
-                  <div class="form-floating">
-                    <input type="text" class="form-control" id="price" placeholder="Price" required>
-                    <div class="invalid-feedback">
-                        Please enter plan price.
-                    </div>
-                    <label for="price">Price</label>
-                  </div>
-                </div>
-
-                <div class="col-md-12">
-                  <div class="form-floating">
-                    <select id="plan_status_id" class="form-select" required></select>
-                    <label for="plan_status_id">Status</label>
-                  </div>
-                </div>
-
-                <div class="col-md-12">
-                  <div class="form-floating">
-                    <select class="form-control selectpicker" id="inclusion" multiple aria-label="size 5 select example" data-actions-box="true"></select>
-                    <label for="inclusion">Inclusion(s)</label>
-                  </div>
-                </div>
-            </div>
-
-            <!-- Modal Footer -->
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary" id="edit-plan">Edit</button>
-              <button type="submit" class="btn btn-success" id="save-plan-btn" disabled>Save Changes</button>
-            </div>
-          </div>
-        </div>
-    </div><!-- End Modal Dialog Scrollable-->
-</form>
-
-<!-- Add New Plan Modal -->
-<form id="add-plan" novalidate>
-    <div class="modal fade" id="add-plans" tabindex="-1">
-        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-m">
-          <div class="modal-content">
-
-            <div class="modal-header">
-              <h5 class="modal-title">Create Plan</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-
-            <!-- Modal Body -->
-            <div class="modal-body row g-3">
-                <div class="col-md-12">
-                  <div class="form-floating">
-                    <input type="text" class="form-control" id="plan_name_add" placeholder="Plan Name" required>
-                    <div class="invalid-feedback">
-                        Please enter a valid plan name.
-                    </div>
-                    <label for="plan_name_add" class="required">Plan Name</label>
-                  </div>
-                </div>
-
-                <div class="col-md-12">
-                  <div class="form-floating">
-                    <input type="number" class="form-control" id="bandwidth_add" placeholder="Bandwidth" min="5" required>
-                    <div class="invalid-feedback">
-                        Please enter bandwidth.
-                    </div>
-                    <label for="bandwidth_add" class="required">Bandwidth</label>
-                  </div>
-                </div>
-
-                <div class="col-md-12">
-                  <div class="form-floating">
-                    <input type="number" class="form-control" id="price_add" min="1" placeholder="Price" required>
-                    <div class="invalid-feedback">
-                        Please enter plan price.
-                    </div>
-                    <label for="price_add" class="required">Price</label>
-                  </div>
-                </div>
-
-                <div class="col-md-12">
-                  <div class="form-floating">
-                    <select class="form-control selectpicker" id="inclusion_add" multiple aria-label="size 5 select example" data-actions-box="true"></select>
-                    <label for="inclusion_add">Inclusion(s)</label>
-                  </div>
-                </div>
-            </div>
-
-            <!-- Modal Footer -->
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="submit" class="btn btn-success" id="add-plan-btn">Submit</button>
-            </div>
-          </div>
-        </div>
-    </div><!-- End Modal Dialog Scrollable-->
-</form>
+  </form>
+  
 
 </main><!-- End #main -->
 
@@ -258,16 +208,33 @@
   <script src="../assets/vendor/tinymce/tinymce.min.js"></script>
   <script src="../assets/vendor/php-email-form/validate.js"></script>
 
-  <!-- Copied from Kyla -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/css/bootstrap-select.min.css" integrity="sha512-mR/b5Y7FRsKqrYZou7uysnOdCIJib/7r5QeJMFvLNHNhtye3xJp1TdJVPLtetkukFn227nKpXD9OjUc09lx97Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/js/bootstrap-select.min.js" integrity="sha512-FHZVRMUW9FsXobt+ONiix6Z0tIkxvQfxtCSirkKc5Sb4TKHmqq1dZa8DphF0XqKb3ldLu/wgMa8mT6uXiLlRlw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <!-- DataTable -->
+  <link rel="stylesheet" type="text/css"  href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css" />
+  <link rel="stylesheet" type="text/css"  href="https://cdn.datatables.net/buttons/1.4.0/css/buttons.dataTables.min.css" />
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+  <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.27/build/pdfmake.min.js"></script>
+  <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.27/build/vfs_fonts.js"></script>
+  <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/1.4.0/js/dataTables.buttons.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/1.4.0/js/buttons.flash.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/1.4.0/js/buttons.html5.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/1.4.0/js/buttons.print.min.js"></script>
+  <!-- <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script> 
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.3.1/js/buttons.html5.min.js"></script> -->
+
+  <!-- Datepicker -->
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 
   <!-- Template Main JS File -->
   <script src="../assets/js/main.js"></script>
 
   <!-- Backend JS File -->
   <script src="../js/main.js"></script>
-  <script src="../js/plans.js"></script>
+  <script src="../js/reports.js"></script>
 
 </body>
 </html>
