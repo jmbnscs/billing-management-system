@@ -89,6 +89,9 @@ function setConnectionPage() {
             toastr.error(result.error);
             $('#connection_name').val(null);
         }
+        else if (isWithSpecialChars($('#connection_name').val())) {
+            toastr.error('Special characters not allowed.');
+        }
         else {
             processCreate();
         }
@@ -110,7 +113,12 @@ function setConnectionPage() {
         update_fn = document.getElementById('conn-update-data');
         update_fn.onsubmit = (e) => {
             e.preventDefault();
-            processUpdate();
+            if (isWithSpecialChars($('#connection_name_md').val())) {
+                toastr.error('Special characters not allowed.');
+            }
+            else {
+                processUpdate();
+            }
         };
 
         async function processUpdate() {
@@ -192,10 +200,15 @@ async function setConcernsPage() {
     create_fn = document.getElementById('concerns-create-new');
     create_fn.onsubmit = async (e) => {
         e.preventDefault();
+
         const result = await fetchData('check/concern_category.php?concern_category=' + $('#concern_category').val());
+
         if (result.exist) {
             toastr.error(result.error);
             $('#concern_category').val(null);
+        }
+        else if (isWithSpecialChars($('#concern_category').val())) {
+            toastr.error('Special characters not allowed.');
         }
         else {
             processCreate();
@@ -240,7 +253,12 @@ async function setConcernsPage() {
         update_fn = document.getElementById('concerns-update-data');
         update_fn.onsubmit = (e) => {
             e.preventDefault();
-            processUpdate();
+            if (isWithSpecialChars($('#concern_category_md').val())) {
+                toastr.error('Special characters not allowed.');
+            }
+            else {
+                processUpdate();
+            }
         };
 
         // let customer_switch_md;
@@ -352,6 +370,9 @@ function setAreaPage() {
             toastr.error(result.error);
             $('#area_name').val(null);
         }
+        else if (isWithSpecialChars($('#area_name').val())) {
+            toastr.error('Special characters not allowed.');
+        }
         else {
             processCreate();
         }
@@ -373,7 +394,12 @@ function setAreaPage() {
         update_fn = document.getElementById('area-update-data');
         update_fn.onsubmit = (e) => {
             e.preventDefault();
-            processUpdate();
+            if (isWithSpecialChars($('#area_name_md').val())) {
+                toastr.error('Special characters not allowed.');
+            }
+            else {
+                processUpdate();
+            }
         };
 
         async function processUpdate() {
@@ -463,6 +489,9 @@ async function setInclusionPage() {
             toastr.error(result.error);
             $('#inclusion_name').val(null);
         }
+        else if (isWithSpecialChars($('#inclusion_name').val())) {
+            toastr.error('Special characters not allowed.');
+        }
         else {
             processCreate();
         }
@@ -505,7 +534,12 @@ async function setInclusionPage() {
         update_fn = document.getElementById('inclusion-update-data');
         update_fn.onsubmit = (e) => {
             e.preventDefault();
-            processUpdate();
+            if (isWithSpecialChars($('#inclusion_name_md').val())) {
+                toastr.error('Special characters not allowed.');
+            }
+            else {
+                processUpdate();
+            }
         };
 
         async function processUpdate() {
@@ -764,10 +798,25 @@ async function setUserLevelPage() {
             }
         }
 
+        function isChecked() {
+            addcheckboxes = document.getElementsByName('add_check');
+            for(var i = 0; i < addcheckboxes.length; i++) {
+                if($('#' + addcheckboxes[i].id).is(':checked')) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         update_fn = document.getElementById('user-update-data');
         update_fn.onsubmit = (e) => {
             e.preventDefault();
-            processUpdate();
+            if(isChecked()) {
+                processUpdate();
+            }
+            else {
+                toastr.error("User Role was not updated. Please check at least one.");
+            }
         };
 
         async function processUpdate() {
@@ -882,10 +931,25 @@ async function setUserLevelPage() {
             }
         }
 
+        function isChecked() {
+            addcheckboxes = document.getElementsByName('add_check');
+            for(var i = 0; i < addcheckboxes.length; i++) {
+                if($('#' + addcheckboxes[i].id).is(':checked')) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         create_fn = document.getElementById('user-add-data');
         create_fn.onsubmit = (e) => {
             e.preventDefault();
-            processCreate();
+            if(isChecked()) {
+                processCreate();
+            }
+            else {
+                toastr.error("User Role was not added. Please check at least one.");
+            }
         };
 
         async function processCreate() {
@@ -998,7 +1062,7 @@ async function setUserLevelPage() {
                 'user_id' : data_id
             });
 
-            const [content, log] = await Promise.all ([deleteData('user_level/delete.php', delete_data), logActivity('Adv. Options - Deleted User Level [' + data.user_role + ']', 'Advanced Options')]);
+            const [content, delete_pages, delete_buttons, log] = await Promise.all ([deleteData('user_level/delete.php', delete_data), deleteData('restriction/delete_pages_restriction.php', delete_data),deleteData('restriction/delete_buttons_restriction.php', delete_data), logActivity('Adv. Options - Deleted User Level [' + data.user_role + ']', 'Advanced Options')]);
 
             if (content.success && log) {
                 sessionStorage.setItem('save_message', "User Level Deleted Successfully.");

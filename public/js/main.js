@@ -201,6 +201,17 @@ async function isAccountIDExist(account_id) {
     return false;
 }
 
+function isWithSpecialChars(data) {
+    let regex = new RegExp("^[a-zA-Z0-9 -.]+$");
+
+    if (!regex.test(data)) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
 // Functions to format data display
 async function generateID(fetch_page, added_string, size) {
     while (true) {
