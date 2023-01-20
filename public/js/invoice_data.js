@@ -115,9 +115,9 @@ async function setDefaultSetting() {
 
             const [update_content, payment_content, rating_content] = await Promise.all ([updateData('invoice/update.php', update_data), createData('payment/create.php', payment_data), updateData('ratings/update.php', rating_data)]);
 
-            console.log(payment_content.success);
-            console.log(update_content.success);
-            console.log(rating_content.success);
+            // console.log(payment_content.success);
+            // console.log(update_content.success);
+            // console.log(rating_content.success);
 
             if (payment_content.success && update_content.success && rating_content.success) {
                 let tag_data = JSON.stringify({
@@ -129,13 +129,13 @@ async function setDefaultSetting() {
     
                 const tag_content = await updateData('payment/update_tagged.php', tag_data);
 
-                console.log(tag_content);
+                // console.log(tag_content);
 
                 let log = await logActivity('Updated payment for ' + invoice_data.account_id + ' with Invoice # ' + invoice_id, 'Unpaid Invoices');
 
                 if (tag_content.success && log) {
                     sessionStorage.setItem('save_message', "Payment Updated Successfully.");
-                    // window.location.reload();
+                    window.location.reload();
                 }
             }
             else {
