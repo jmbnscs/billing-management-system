@@ -89,6 +89,9 @@ function setConnectionPage() {
             toastr.error(result.error);
             $('#connection_name').val(null);
         }
+        else if (isWithSpecialChars($('#connection_name').val())) {
+            toastr.error('Special characters not allowed.');
+        }
         else {
             processCreate();
         }
@@ -110,7 +113,12 @@ function setConnectionPage() {
         update_fn = document.getElementById('conn-update-data');
         update_fn.onsubmit = (e) => {
             e.preventDefault();
-            processUpdate();
+            if (isWithSpecialChars($('#connection_name_md').val())) {
+                toastr.error('Special characters not allowed.');
+            }
+            else {
+                processUpdate();
+            }
         };
 
         async function processUpdate() {
@@ -192,10 +200,15 @@ async function setConcernsPage() {
     create_fn = document.getElementById('concerns-create-new');
     create_fn.onsubmit = async (e) => {
         e.preventDefault();
+
         const result = await fetchData('check/concern_category.php?concern_category=' + $('#concern_category').val());
+
         if (result.exist) {
             toastr.error(result.error);
             $('#concern_category').val(null);
+        }
+        else if (isWithSpecialChars($('#concern_category').val())) {
+            toastr.error('Special characters not allowed.');
         }
         else {
             processCreate();
@@ -240,7 +253,12 @@ async function setConcernsPage() {
         update_fn = document.getElementById('concerns-update-data');
         update_fn.onsubmit = (e) => {
             e.preventDefault();
-            processUpdate();
+            if (isWithSpecialChars($('#concern_category_md').val())) {
+                toastr.error('Special characters not allowed.');
+            }
+            else {
+                processUpdate();
+            }
         };
 
         // let customer_switch_md;
@@ -352,6 +370,9 @@ function setAreaPage() {
             toastr.error(result.error);
             $('#area_name').val(null);
         }
+        else if (isWithSpecialChars($('#area_name').val())) {
+            toastr.error('Special characters not allowed.');
+        }
         else {
             processCreate();
         }
@@ -373,7 +394,12 @@ function setAreaPage() {
         update_fn = document.getElementById('area-update-data');
         update_fn.onsubmit = (e) => {
             e.preventDefault();
-            processUpdate();
+            if (isWithSpecialChars($('#area_name_md').val())) {
+                toastr.error('Special characters not allowed.');
+            }
+            else {
+                processUpdate();
+            }
         };
 
         async function processUpdate() {
@@ -463,6 +489,9 @@ async function setInclusionPage() {
             toastr.error(result.error);
             $('#inclusion_name').val(null);
         }
+        else if (isWithSpecialChars($('#inclusion_name').val())) {
+            toastr.error('Special characters not allowed.');
+        }
         else {
             processCreate();
         }
@@ -505,7 +534,12 @@ async function setInclusionPage() {
         update_fn = document.getElementById('inclusion-update-data');
         update_fn.onsubmit = (e) => {
             e.preventDefault();
-            processUpdate();
+            if (isWithSpecialChars($('#inclusion_name_md').val())) {
+                toastr.error('Special characters not allowed.');
+            }
+            else {
+                processUpdate();
+            }
         };
 
         async function processUpdate() {

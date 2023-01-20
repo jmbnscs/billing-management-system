@@ -196,6 +196,13 @@ async function setAddCustomerPage () {
             $('#middle_name').addClass('invalid-input');
             $($('#middle_name').next()).addClass('d-block');
         }
+        else if (isWithSpecialChars($('#middle_name').val())) {
+            $('#middle_name').removeClass('valid-input');
+            $('#middle_name').addClass('invalid-input');
+            $($('#middle_name').next()).addClass('d-block');
+            $(($('#middle_name').next()).text("Special characters not allowed."));
+            counter++;
+        }
         
         for (var i = 0; i < req_elem.length; i++) {
             if (req_elem[i].value == '') {
@@ -211,6 +218,12 @@ async function setAddCustomerPage () {
                         $(($('#' + req_elem[i].id).next()).text("First name must not be a number."));
                         counter++;
                     }
+                    else if (isWithSpecialChars(req_elem[i].value)) {
+                        req_elem[i].classList.add('invalid-input');
+                        req_elem[i].nextElementSibling.classList.add('d-block');
+                        $(($('#' + req_elem[i].id).next()).text("Special characters not allowed."));
+                        counter++;
+                    }
                     else {
                         showValid();
                     }
@@ -220,6 +233,12 @@ async function setAddCustomerPage () {
                         req_elem[i].classList.add('invalid-input');
                         req_elem[i].nextElementSibling.classList.add('d-block');
                         $(($('#' + req_elem[i].id).next()).text("Last name must not be a number."));
+                        counter++;
+                    }
+                    else if (isWithSpecialChars(req_elem[i].value)) {
+                        req_elem[i].classList.add('invalid-input');
+                        req_elem[i].nextElementSibling.classList.add('d-block');
+                        $(($('#' + req_elem[i].id).next()).text("Special characters not allowed."));
                         counter++;
                     }
                     else {
