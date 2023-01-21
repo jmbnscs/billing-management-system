@@ -1,7 +1,8 @@
 <?php 
   include '../models/header.html';
   include '../models/navbar.html'; 
-  include '../../app/includes/customer_upload.php'; ?>
+//   include '../../app/includes/customer_upload.php'; 
+?>
 
 <main id="main" class="main">
 

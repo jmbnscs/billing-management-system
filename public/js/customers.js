@@ -15,6 +15,8 @@ $(document).ready(function () {
         toastr.warning('Some error has occurred, please check error file to update.');
         $('#error-dl').removeClass('hide');
         setDownloadError();
+        resetURL();
+        
         // setTimeout(function(){
         //     window.location.replace('../views/customers_add.php');
         // }, 2000);
@@ -24,6 +26,7 @@ $(document).ready(function () {
         setTimeout(function(){
             window.location.replace('../views/customers_import');
         }, 2000);
+        resetURL();
     }
     else if (DIR_CUR == DIR_MAIN + 'views/customers_add') {
         restrictPages('customer-add');
@@ -42,6 +45,12 @@ $(document).ready(function () {
         setCustomerPage();
     }
 });
+
+function resetURL() {
+    history.replaceState && history.replaceState(
+        null, '', location.pathname + location.search.replace(/[\?&]status=[^&]+/, '').replace(/^&/, '?')
+      );
+}
 
 // -------------------------------------------------------------------- View Customers
 async function setCustomerPage () {
@@ -462,6 +471,7 @@ async function setImportCustomerPage () {
     const import_customer = document.getElementById('upload-customer');
     import_customer.onsubmit = (e) => {
         $('#upload-customer').attr('action', '../../app/includes/customer_upload.php');
+
         // $.ajax({
         //     url: '../../app/includes/customer_upload.php',
         //     cache: false,
@@ -473,6 +483,22 @@ async function setImportCustomerPage () {
         //         var res = $.parseJSON(response);
 
         //     }
+        // });
+        // console.log('here');
+        // var file_data = $("#uploadFile").prop("files")[0];   // Getting the properties of file from file field
+        // var form_data = new FormData();                  // Creating object of FormData class
+        // form_data.append("file", file_data);              // Appending parameter named file with properties of file_field to form_data
+        // $.ajax({
+        //         url: "../../app/includes/customer_upload.php",
+        //         dataType: 'json',
+        //         cache: false,
+        //         contentType: false,
+        //         processData: false,
+        //         data: form_data,                         // Setting the data attribute of ajax with file_data
+        //         type: 'post',
+        //         success: function(data) {
+        //             console.log(data);
+        //         }
         // });
     };
 }
