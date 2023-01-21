@@ -1,7 +1,7 @@
 // Directories
-const DIR_API = location.protocol + '//' + location.host + '/gstech_api/api/';
-const DIR_MAIN = '/bms/public/';
-const DIR_APP = location.protocol + '//' + location.host + '/bms/app/includes/';
+const DIR_API = location.protocol + '//' + location.host + '/pilotapi/api/';
+const DIR_MAIN = '/pilotbms/public/';
+const DIR_APP = location.protocol + '//' + location.host + '/pilotbms/app/includes/';
 const DIR_CUR = window.location.pathname;
 
 // Constant Variables
