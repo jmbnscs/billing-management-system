@@ -18,7 +18,7 @@
                 <!-- Brand Box -->
                 <div class="col-sm-6 brand">
                     <div>
-                        <img src="../images/gstech-logo-vector.png" class="heading">
+                        <img src="../images/admin-logo.png" class="heading">
                     </div>
                 </div>
 
