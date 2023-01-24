@@ -24,8 +24,12 @@ if(isset($_POST['importSubmit'])){
             $csvFile = fopen($_FILES['file']['tmp_name'], 'r');
             
             fgetcsv($csvFile);
-            
+
             while(($line = fgetcsv($csvFile)) != FALSE){
+
+                if ($line[0] == 'account_id') {
+                    break;
+                }
 
                 $account_id = isAccountIDExist($line[0]);
                 $mobile_number = formatMobileNumber($line[9]);
