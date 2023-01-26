@@ -426,19 +426,31 @@ async function setTicketOverview() {
         let network = 0, subscription = 0, disconnection = 0, general = 0;
     
         for (var i = 0; i < content.length; i++) {
-            if (parseInt(content[i].date_filed.split('-')[1]) == currentMonth) {
-                if (content[i].concern_id == 1) {
-                    network = network + 1;
-                }
-                else if (content[i].concern_id == 2) {
-                    subscription = subscription + 1;
-                }
-                else if (content[i].concern_id == 3) {
-                    disconnection = disconnection + 1;
-                }
-                else if (content[i].concern_id == 4) {
-                    general = general + 1;
-                }
+            // if (parseInt(content[i].date_filed.split('-')[1]) == currentMonth) {
+            //     if (content[i].concern_id == 1) {
+            //         network = network + 1;
+            //     }
+            //     else if (content[i].concern_id == 2) {
+            //         subscription = subscription + 1;
+            //     }
+            //     else if (content[i].concern_id == 3) {
+            //         disconnection = disconnection + 1;
+            //     }
+            //     else if (content[i].concern_id == 4) {
+            //         general = general + 1;
+            //     }
+            // }
+            if (content[i].concern_id == 1) {
+                network = network + 1;
+            }
+            else if (content[i].concern_id == 2) {
+                subscription = subscription + 1;
+            }
+            else if (content[i].concern_id == 3) {
+                disconnection = disconnection + 1;
+            }
+            else if (content[i].concern_id == 4) {
+                general = general + 1;
             }
         }
     

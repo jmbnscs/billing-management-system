@@ -201,7 +201,7 @@
       <div class="card">
 
         <div class="card-body pb-0">
-            <h5 class="card-title">Customer Preview <span>| Year 2022</span></h5>
+            <h5 class="card-title">Customer Preview <span>| This Year</span></h5>
             <canvas id="customer_preview" style="max-height: 400px;"></canvas>
           <br>
 
@@ -212,7 +212,7 @@
       <div class="card">
 
         <div class="card-body pb-0">
-          <h5 class="card-title">Submitted Tickets <span>| This Month</span></h5>
+          <h5 class="card-title">Submitted Tickets <span>| All</span></h5>
           
           <canvas id="ticket_overview" style="max-height: 300px;"></canvas>
           <br>
