@@ -26,7 +26,7 @@ $(document).ready( function () {
 async function setInvoicePage () {
     displaySuccessMessage();
 
-    const [content, invoice_status, customers] = await Promise.all ([fetchData('views/invoice_unpaid.php'), fetchData('statuses/read.php?status_table=invoice_status'), fetchData('views/customer.php')]);
+    const [content, invoice_status, customers] = await Promise.all ([fetchData('views/invoice_unpaid_account.php'), fetchData('statuses/read.php?status_table=invoice_status'), fetchData('views/customer.php')]);
 
     let tag;
     
