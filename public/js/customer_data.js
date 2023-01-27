@@ -157,32 +157,32 @@ async function setCustomerData(customer_data) {
         
             let activity, log = true, details = account_id + ' - ' + customer_data.first_name + ' ' + customer_data.last_name;
             if (customer.mobile_number != $('#mobile_number_edt').val()) {
-                activity = 'Updated customer mobile number [' + details + '].';
-                log = await logActivity(activity, 'Customer List');
+                activity = 'Save Changes - Mobile Number [' + details + '].';
+                log = await logActivity(activity, 'Customer Data');
             }
             if (customer.email != $('#email_edt').val()) {
-                activity = 'Updated customer email [' + details + '].';
-                log = await logActivity(activity, 'Customer List');
+                activity = 'Save Changes - Email [' + details + '].';
+                log = await logActivity(activity, 'Customer Data');
             }
             if (customer.billing_address != $('#billing_address_edt').val()) {
-                activity = 'Updated customer billing address [' + details + '].';
-                log = await logActivity(activity, 'Customer List');
+                activity = 'Save Changes - Billing Address [' + details + '].';
+                log = await logActivity(activity, 'Customer Data');
             }
             if (account.plan_id != $('#plan_id_edt').val()) {
-                activity = 'Updated account subscription plan [' + details + '].';
-                log = await logActivity(activity, 'Customer List');
+                activity = 'Save Changes - Subscription Plan [' + details + '].';
+                log = await logActivity(activity, 'Customer Data');
             }
             if (account.connection_id != $('#connection_id_edt').val()) {
-                activity = 'Updated account connection type [' + details + '].';
-                log = await logActivity(activity, 'Customer List');
+                activity = 'Save Changes - Connection Type [' + details + '].';
+                log = await logActivity(activity, 'Customer Data');
             }
             if (account.account_status_id != $('#account_status_id_edt').val()) {
-                activity = 'Updated account status [' + details + '].';
-                log = await logActivity(activity, 'Customer List');
+                activity = 'Save Changes - Status [' + details + '].';
+                log = await logActivity(activity, 'Customer Data');
             }
             if (account.area_id != $('#area_id_edt').val()) {
-                activity = 'Updated account area [' + details + '].';
-                log = await logActivity(activity, 'Customer List');
+                activity = 'Save Changes - Area [' + details + '].';
+                log = await logActivity(activity, 'Customer Data');
             }
             
             const [customer_content, account_content] = await Promise.all ([updateData('customer/update.php', update_data), updateData('account/update.php', account_data)]);

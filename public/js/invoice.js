@@ -285,7 +285,7 @@ async function setPaymentRecordsPage() {
             const [invoice_content, payment_content, rating_content] = await Promise.all ([updateData('invoice/update.php', invoice_data), updateData('payment/update_tagged.php', payment_data), updateData('ratings/update.php', rating_data)]);
         
             if (invoice_content.success && payment_content.success && rating_content.success) {
-                const log = await logActivity('Tagged Payment ' + payment_reference_id + ' to ' + account_id + ' in Invoice # ' + invoice_content.invoice_id, 'Untagged Payments');
+                const log = await logActivity('Save Changes - Tagged Payment [' + payment_reference_id + ' - ' + account_id + ' - ' + invoice_content.invoice_id + ']', 'Payment Records');
 
                 if (log) {
                     sessionStorage.setItem('save_message', "Payment Updated Successfully.");
@@ -327,7 +327,7 @@ async function setPaymentRecordsPage() {
             });
             const response = await deleteData('payment/delete.php', delete_data);
 
-            const log = await logActivity('Deleted Payment Record #' + payment_id + ' [' + data.payment_reference_id + ']', 'Untagged Payments');
+            const log = await logActivity('Delete - Untagged Payment [Payment #' + payment_id + ' - ' + data.payment_reference_id + ']', 'Payment Records');
             
             if (response.success && log) {
                 sessionStorage.setItem('save_message', "Payment Record Deleted Successfully.");
@@ -472,7 +472,7 @@ async function setPaymentRecordsPage() {
                 });
                 const response = await deleteData('payment/invalid_pending_payment.php', delete_data);
 
-                const log = await logActivity('Invalidated Payment Record #' + data_id + ' [' + data.account_id + ']', 'Invalid Pending Payment');
+                const log = await logActivity('Invalid - Pending Payment [' + data_id + ' - ' + data.account_id + ']', 'Payment Records');
                 
                 if (response.success && log) {
                     sessionStorage.setItem('save_message', "Payment Record Invalidated Successfully.");
@@ -539,7 +539,7 @@ async function setPaymentRecordsPage() {
             });
             const response = await deleteData('payment/react_invalid_payment.php', react_data);
 
-            const log = await logActivity('Reactivated Payment Record #' + data_id + ' [' + data.account_id + ']', 'Invalid Payment');
+            const log = await logActivity('Re-activate - Invalid Payment [' + data_id + ' - ' + data.account_id + ']', 'Payment Records');
             
             if (response.success && log) {
                 sessionStorage.setItem('save_message', "Payment Record Reactivated Successfully.");
@@ -661,7 +661,7 @@ async function untaggedAddPayment () {
         });
 
         const payment_content = await createData('payment/create.php', payment_data);
-        const log = await logActivity('Added new payment record with Reference ID # ' + payment_ref, 'Add Untagged Payment');
+        const log = await logActivity('Submit - New Untagged Payment [' + payment_ref + ']', 'Payment Records');
     
         if (payment_content.success && log) {
             toastr.success('Payment Record Created Successfully.');
@@ -801,7 +801,7 @@ async function advancedAddPayment () {
         });
 
         const payment_content = await createData('payment/create_advanced_payment.php', payment_data);
-        const log = await logActivity('Added advanced payment record with Reference ID # ' + payment_ref, 'Add Advanced Payment');
+        const log = await logActivity('Save Changes - New Advanced Payment [' + payment_ref + ']', 'Payment Records');
     
         if (payment_content.success && log) {
             toastr.success('Payment Record Created Successfully.');
@@ -941,7 +941,7 @@ async function pendingAddPayment (account_id, approval_id) {
         });
 
         const payment_content = await createData('payment/create_pending_payment.php', payment_data);
-        const log = await logActivity('Approved pending payment record with Reference ID # ' + payment_ref, 'Approve Pending Payment');
+        const log = await logActivity('Approve - Pending Payment [' + payment_ref + ']', 'Payment Records');
     
         if (payment_content.success && log) {
             toastr.success('Payment Record Created Successfully.');
@@ -1101,7 +1101,7 @@ async function setProrateRecordsPage() {
                 });
 
                 const update_content = await updateData('prorate/update.php', update_data);
-                const log = await logActivity('Updated Prorate Record # ' + prorate_id, 'Untagged Prorates')
+                const log = await logActivity('Save Changes - Update Prorate Record [' + prorate_id + ']', 'Untagged Prorates')
             
                 if (update_content.success && log) {
                     sessionStorage.setItem('save_message', "Prorate Record Updated Successfully.");
@@ -1144,7 +1144,7 @@ async function setProrateRecordsPage() {
                 });
 
                 const delete_content = await deleteData('prorate/delete.php', delete_data);
-                const log = await logActivity('Deleted Prorate Record # ' + prorate_id, 'Untagged Prorates');
+                const log = await logActivity('Delete - Untagged Prorate [' + prorate_id + ']', 'Untagged Prorates');
             
                 if (delete_content.success && log) {
                     sessionStorage.setItem('save_message', "Prorate Record Deleted Successfully.");

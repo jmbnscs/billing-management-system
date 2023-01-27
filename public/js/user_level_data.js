@@ -246,7 +246,7 @@ async function setUserRolePrivileges(role_data) {
             }
 
             if (user_update_sucess) {
-                const [pages_update, buttons_update, log] = await Promise.all ([updateData('restriction/update_pages_restriction.php', pages_update_data), updateData('restriction/update_buttons_restriction.php', buttons_update_data), logActivity('Adv. Options - Edit User Level Access [' + userlevel_data.user_role + ']', 'Advanced Options')]);
+                const [pages_update, buttons_update, log] = await Promise.all ([updateData('restriction/update_pages_restriction.php', pages_update_data), updateData('restriction/update_buttons_restriction.php', buttons_update_data), logActivity('Save Changes - User Level Access [' + userlevel_data.user_role + ']', 'Advanced Options')]);
 
                 if (pages_update.success && buttons_update.success && log) {
                     sessionStorage.setItem('save_message', "User Role Updated Successfully.");
@@ -447,18 +447,18 @@ async function setViewAdminPage () {
     
                 let activity, log = true;
                 if (admin.admin_status_id != $('#admin_status').val()) {
-                    activity = 'Updated admin status [' + admin_id + ' - ' + admin.first_name + ' ' + admin.last_name + ']';
+                    activity = 'Save Changes - Admin Status [' + admin_id + ' - ' + admin.first_name + ' ' + admin.last_name + ']';
                     log = await logActivity(activity, 'View Admins');
                 }
                 if (admin.user_level_id != $('#role').val()) {
-                    activity = 'Updated admin user level [' + admin_id + ' - ' + admin.first_name + ' ' + admin.last_name + ']';
+                    activity = 'Save Changes - User Level [' + admin_id + ' - ' + admin.first_name + ' ' + admin.last_name + ']';
                     log = await logActivity(activity, 'View Admins');
                 }
                 if (admin.admin_email != $('#admin_email').val() || admin.mobile_number != $('#mobile_number').val() || admin.address != $('#address').val()) {
-                    activity = 'Updated admin general information [' + admin_id + ' - ' + admin.first_name + ' ' + admin.last_name + ']';
+                    activity = 'Save Changes - General Information [' + admin_id + ' - ' + admin.first_name + ' ' + admin.last_name + ']';
                     log = await logActivity(activity, 'View Admins');
                 }
-    
+
                 const [admin_content, status_content] = await Promise.all ([updateData('admin/update.php', admin_data), updateData('admin/update_status.php', status_data)]);
     
                 if (admin_content.message == 'success' && status_content.message == 'Admin Updated' && log) {
@@ -517,7 +517,7 @@ async function setViewAdminPage () {
                 'admin_password' : content.def_password
             });
     
-            const [update_content, log] = await Promise.all ([updateData('admin/reset_password.php', update_data), logActivity('Password Reset for Admin ' + content.def_username + ' - ' + admin_id, 'View Admins')]);
+            const [update_content, log] = await Promise.all ([updateData('admin/reset_password.php', update_data), logActivity('Password Reset [' + content.def_username + ' - ' + admin_id + ']', 'Admin Data')]);
     
             if (update_content.success && log) {
                 toastr.success('Password has been reset successfully.');

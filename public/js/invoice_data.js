@@ -131,7 +131,7 @@ async function setDefaultSetting() {
 
                 // console.log(tag_content);
 
-                let log = await logActivity('Updated payment for ' + invoice_data.account_id + ' with Invoice # ' + invoice_id, 'Unpaid Invoices');
+                let log = await logActivity('Add - Tagged Payment [' + invoice_data.account_id + ' - ' + invoice_id, 'Invoice Data');
 
                 if (tag_content.success && log) {
                     sessionStorage.setItem('save_message', "Payment Updated Successfully.");

@@ -414,10 +414,10 @@ async function setAddCustomerPage () {
             (delete_account.success && delete_customer.success && delete_installation.success) ? displayErrorMessage() : displayErrorMessage();
         }
 
-        console.log(ratings_content);
-        console.log(rating_data);
+        // console.log(ratings_content);
+        // console.log(rating_data);
 
-        let log = await logActivity('Created new customer account with Account ID # ' + account_id, 'Customer - Add New Account');
+        let log = await logActivity('Create Account [Account ID # ' + account_id + ']', 'Add New Account');
 
         if (ratings_content.success && log) {
             toastr.success('Customer Created Successfully.');

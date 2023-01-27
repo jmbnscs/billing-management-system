@@ -150,7 +150,7 @@ async function setViewTickets () {
                     'admin_id' : admin_id
                 });
 
-                const [claim_content, log] = await Promise.all ([updateData('ticket/claim.php', claim_data), logActivity('Claimed Ticket ' + ticket_num, 'Active Tickets')]);
+                const [claim_content, log] = await Promise.all ([updateData('ticket/claim.php', claim_data), logActivity('Claim [' + ticket_num + ']', 'Active Tickets')]);
             
                 if (claim_content.message == 'Ticket Claimed' && log) {
                     sessionStorage.setItem('save_message', "Ticket Claimed Successfully.");
@@ -271,7 +271,7 @@ async function invalidModal (ticket_num, page) {
             'admin_id' : admin_id
         });
 
-        const [claim_content, log] = await Promise.all ([updateData('ticket/claim.php', update_data), logActivity('Invalidated Ticket # ' + ticket_num, page + ' Tickets')]);
+        const [claim_content, log] = await Promise.all ([updateData('ticket/claim.php', update_data), logActivity('Invalid [Ticket # ' + ticket_num + ']', page + ' Tickets')]);
     
         if (claim_content.message == 'Ticket Claimed' && log) {
             sessionStorage.setItem('save_message', "Ticket Invalidated Successfully.");
@@ -435,7 +435,7 @@ async function pendNetworkModal(ticket_num) {
             'admin_id' : admin_id
         });
 
-        const [prorate_content, ticket_content, log] = await Promise.all ([createData('prorate/create.php', prorate_data), updateData('ticket/update.php', update_data), logActivity('Resolved Ticket ' + ticket_num, 'Pending Tickets')]);
+        const [prorate_content, ticket_content, log] = await Promise.all ([createData('prorate/create.php', prorate_data), updateData('ticket/update.php', update_data), logActivity('Resolve [Ticket # ' + ticket_num + ']', 'Pending Tickets')]);
     
         if ((prorate_content.message == 'Prorate Created') && (ticket_content.message == 'Ticket Updated') && log) {
             sessionStorage.setItem('save_message', "Ticket Resolved Successfully.");
@@ -500,7 +500,7 @@ async function pendSubscriptionModal(ticket_num) {
             'admin_id' : admin_id
         });
 
-        const [account_content, ticket_content, log] = await Promise.all ([updateData('account/update.php', account_data), updateData('ticket/update.php', ticket_data), logActivity('Resolved Ticket ' + ticket_num, 'Pending Tickets')]);
+        const [account_content, ticket_content, log] = await Promise.all ([updateData('account/update.php', account_data), updateData('ticket/update.php', ticket_data), logActivity('Resolve [Ticket # ' + ticket_num + ']', 'Pending Tickets')]);
     
         if (account_content.success && ticket_content.message == 'Ticket Updated' && log) {
             sessionStorage.setItem('save_message', "Ticket Resolved Successfully.");
@@ -541,7 +541,7 @@ async function pendDefaultModal(ticket_num) {
             'admin_id' : admin_id
         });
 
-        const [ticket_content, log] = await Promise.all ([updateData('ticket/update.php', update_data), logActivity('Resolved Ticket ' + ticket_num, 'Pending Tickets')]);
+        const [ticket_content, log] = await Promise.all ([updateData('ticket/update.php', update_data), logActivity('Resolve [Ticket # ' + ticket_num + ']', 'Pending Tickets')]);
     
         if (ticket_content.message == 'Ticket Updated' && log) {
             sessionStorage.setItem('save_message', "Ticket Resolved Successfully.");
@@ -687,7 +687,7 @@ async function invalidatedTicketsModal () {
                 'admin_id' : admin_id
             });
 
-            const [reactivate_content, log] = await Promise.all ([updateData('ticket/claim.php', reactivate_data), logActivity('Re-Activated Ticket ' + ticket_num, 'Invalid Tickets')]);
+            const [reactivate_content, log] = await Promise.all ([updateData('ticket/claim.php', reactivate_data), logActivity('Re-Activate [Ticket # ' + ticket_num + ']', 'Invalid Tickets')]);
         
             if (reactivate_content.message == 'Ticket Claimed' && log) {
                 sessionStorage.setItem('save_message', "Ticket Re-Activated Successfully.");
@@ -703,7 +703,7 @@ async function invalidatedTicketsModal () {
                 'ticket_num' : ticket_num,
             });
 
-            const [delete_content, log] = await Promise.all ([updateData('ticket/delete.php', delete_data), logActivity('Ticket Deleted ' + ticket_num, 'Invalid Tickets')]);
+            const [delete_content, log] = await Promise.all ([updateData('ticket/delete.php', delete_data), logActivity('Delete [Ticket #' + ticket_num + ']', 'Invalid Tickets')]);
         
             if (delete_content.message == 'Ticket Deleted' && log) {
                 sessionStorage.setItem('save_message', "Ticket Deleted Successfully.");
@@ -834,7 +834,7 @@ async function newTicketModal () {
                 'user_level' : user_level
             });
     
-            const [ticket_content, log] = await Promise.all ([createData('ticket/create.php', create_data), logActivity('Created Ticket ' + ticket_num, 'Create a Ticket')]);
+            const [ticket_content, log] = await Promise.all ([createData('ticket/create.php', create_data), logActivity('Submit Ticket [Ticket # ' + ticket_num + ']', 'View Tickets')]);
         
             if (ticket_content.message == 'Ticket Created' && log) {
                 sessionStorage.removeItem('ticket_num');

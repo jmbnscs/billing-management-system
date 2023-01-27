@@ -142,15 +142,15 @@ async function setAdminData(admin_data) {
 
             let activity, log = true;
             if (admin_data.admin_status_id != $('#admin_status_edt').val()) {
-                activity = 'Updated admin status [' + admin_data.admin_id + ' - ' + admin_data.first_name + ' ' + admin_data.last_name + ']';
-                log = await logActivity(activity, 'View Admins');
+                activity = 'Save Changes - Admin Status [' + admin_data.admin_id + ' - ' + admin_data.first_name + ' ' + admin_data.last_name + ']';
+                log = await logActivity(activity, 'View Admins'); 
             }
             if (admin_data.user_level_id != $('#admin_role_edt').val()) {
-                activity = 'Updated admin user level [' + admin_data.admin_id + ' - ' + admin_data.first_name + ' ' + admin_data.last_name + ']';
+                activity = 'Save Changes - User Level [' + admin_data.admin_id + ' - ' + admin_data.first_name + ' ' + admin_data.last_name + ']';
                 log = await logActivity(activity, 'View Admins');
             }
             if (admin_data.admin_email != $('#email_edt').val() || admin_data.mobile_number != $('#mobile_number_edt').val() || admin_data.address != $('#address_edt').val()) {
-                activity = 'Updated admin general information [' + admin_data.admin_id + ' - ' + admin_data.first_name + ' ' + admin_data.last_name + ']';
+                activity = 'Save Changes - General Information [' + admin_data.admin_id + ' - ' + admin_data.first_name + ' ' + admin_data.last_name + ']';
                 log = await logActivity(activity, 'View Admins');
             }
 

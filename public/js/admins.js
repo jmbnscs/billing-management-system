@@ -407,7 +407,7 @@ async function setAddAdminPage () {
             'user_level_id' : $('#role').val()
         });
 
-        const [content, log] = await Promise.all ([createData('admin/create.php', data), logActivity('Created new admin account with Admin ID # ' + $('#admin_id').val(), 'Add New Admin')]);
+        const [content, log] = await Promise.all ([createData('admin/create.php', data), logActivity('Submit - Add New Admin [Admin ID # ' + $('#admin_id').val() + ']', 'Add New Admin')]);
         
         if (content.success && log) {
             let create_content = await fetchData('admin/read_single.php?admin_id=' + $('#admin_id').val());
