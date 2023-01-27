@@ -56,21 +56,39 @@ function resetURL() {
 async function setCustomerPage () {
     const [plans, areas, customer_statuses, customer_data] = await Promise.all ([fetchData('plan/read.php'), fetchData('area/read.php'), fetchData('statuses/read.php?status_table=account_status'), fetchData('views/customer.php')]);
 
-    var t = $('#customer-table').DataTable({
-        pageLength : 5,
+    var active_table = $('#active-customers-table').DataTable( {
+        pageLength: 5,
         lengthMenu: [5, 10, 20],
         "searching": true,
-        "autoWidth": false,
-    }), tag;
+        "autoWidth": false
+    });
+
+    var inactive_table = $('#inactive-customers-table').DataTable( {
+        pageLength: 5,
+        lengthMenu: [5, 10, 20],
+        "searching": true,
+        "autoWidth": false
+    });
+
+    var disconnected_table = $('#disconnected-customers-table').DataTable( {
+        pageLength: 5,
+        lengthMenu: [5, 10, 20],
+        "searching": true,
+        "autoWidth": false
+    });
 
     for (var i = 0; i < plans.length; i++) {
         var opt = `<option value='${plans[i].plan_name}'>${plans[i].plan_name}</option>`;
-        $("#plan-filter").append(opt);
+        $("#active-plan-filter").append(opt);
+        $("#inactive-plan-filter").append(opt);
+        $("#disconnected-plan-filter").append(opt);
     }
 
     for (var i = 0; i < areas.length; i++) {
         var opt = `<option value='${areas[i].area_name}'>${areas[i].area_name}</option>`;
-        $("#area-filter").append(opt);
+        $("#active-area-filter").append(opt);
+        $("#inactive-area-filter").append(opt);
+        $("#disconnected-area-filter").append(opt);
     }
 
     for (var i = 0; i < customer_statuses.length; i++) {
@@ -78,92 +96,182 @@ async function setCustomerPage () {
         $("#customer-status-filter").append(opt);
     }
 
-    for (var i = 0; i < customer_data.length; i++) {
-        (customer_data[i].status == 'ACTIVE') ? tag = 'bg-success' : tag = 'bg-danger';
+    let active_counter = 1, inactive_counter = 1, disconnected_counter = 1;
 
-        t.row.add($(`
-            <tr>
-                <th scope="row" style="color: #012970;">${i+1}</th>
-                <td data-label="Account ID">${customer_data[i].account_id}</td>
-                <td data-label="Customer Name">${customer_data[i].customer_name}</td>
-                <td data-label="Subscription">${customer_data[i].plan}</td>
-                <td data-label="Area">${customer_data[i].area}</td>
-                <td data-label="Balance">&#8369; ${customer_data[i].balance}</td>
-                <td data-label="Status"><span class="badge ${tag}">${customer_data[i].status}</span></td>
-                <td data-label="View"><a href="../views/customer_data?acct=${customer_data[i].account_id}"><button type="button" class="btn btn-outline-primary""><i class="ri ri-eye-fill"></i></button><a></td>
-            </tr>
-        `)).draw(false);
+    for (var i = 0; i < customer_data.length; i++) {
+        if (customer_data[i].status == 'ACTIVE') {
+            active_table.row.add($(`
+                <tr>
+                    <th scope="row" style="color: #012970;">${active_counter}</th>
+                    <td data-label="Account ID">${customer_data[i].account_id}</td>
+                    <td data-label="Customer Name">${customer_data[i].customer_name}</td>
+                    <td data-label="Subscription">${customer_data[i].plan}</td>
+                    <td data-label="Area">${customer_data[i].area}</td>
+                    <td data-label="Balance">&#8369; ${customer_data[i].balance}</td>
+                    <td data-label="View"><a href="../views/customer_data?acct=${customer_data[i].account_id}"><button type="button" class="btn btn-outline-primary""><i class="ri ri-eye-fill"></i></button><a></td>
+                </tr>
+            `)).draw(false);
+
+            active_counter++;
+        }
+        else if (customer_data[i].status == 'INACTIVE') {
+            inactive_table.row.add($(`
+                <tr>
+                    <th scope="row" style="color: #012970;">${inactive_counter}</th>
+                    <td data-label="Account ID">${customer_data[i].account_id}</td>
+                    <td data-label="Customer Name">${customer_data[i].customer_name}</td>
+                    <td data-label="Subscription">${customer_data[i].plan}</td>
+                    <td data-label="Area">${customer_data[i].area}</td>
+                    <td data-label="Balance">&#8369; ${customer_data[i].balance}</td>
+                    <td data-label="View"><a href="../views/customer_data?acct=${customer_data[i].account_id}"><button type="button" class="btn btn-outline-primary""><i class="ri ri-eye-fill"></i></button><a></td>
+                </tr>
+            `)).draw(false);
+
+            inactive_counter++;
+        }
+        else {
+            disconnected_table.row.add($(`
+                <tr>
+                    <th scope="row" style="color: #012970;">${disconnected_counter}</th>
+                    <td data-label="Account ID">${customer_data[i].account_id}</td>
+                    <td data-label="Customer Name">${customer_data[i].customer_name}</td>
+                    <td data-label="Subscription">${customer_data[i].plan}</td>
+                    <td data-label="Area">${customer_data[i].area}</td>
+                    <td data-label="Balance">&#8369; ${customer_data[i].balance}</td>
+                    <td data-label="View"><a href="../views/customer_data?acct=${customer_data[i].account_id}"><button type="button" class="btn btn-outline-primary""><i class="ri ri-eye-fill"></i></button><a></td>
+                </tr>
+            `)).draw(false);
+
+            disconnected_counter++;
+        }
     }
 
-    $("#customer-table_filter.dataTables_filter").append($("#plan-filter"));
-    $("#customer-table_filter.dataTables_filter").append($("#area-filter"));
-    $("#customer-table_filter.dataTables_filter").append($("#customer-status-filter"));
+    $("#active-customers-table_filter.dataTables_filter").append($("#active-plan-filter"));
+    $("#active-customers-table_filter.dataTables_filter").append($("#active-area-filter"));
 
-    var planIndex = 0, areaIndex = 0, statusIndex = 0;
-    $("#customer-table th").each(function (i) {
-        if ($($(this)).html() == "Plan") {
-            planIndex = i; return false;
-        }
-    });
+    $("#inactive-customers-table_filter.dataTables_filter").append($("#inactive-plan-filter"));
+    $("#inactive-customers-table_filter.dataTables_filter").append($("#inactive-area-filter"));
 
-    $("#customer-table th").each(function (i) {
-        if ($($(this)).html() == "Area") {
-            areaIndex = i; return false;
-        }
-    });
-
-    $("#customer-table th").each(function (i) {
-        if ($($(this)).html() == "Status") {
-            statusIndex = i; return false;
-        }
-    });
+    $("#disconnected-customers-table_filter.dataTables_filter").append($("#disconnected-plan-filter"));
+    $("#disconnected-customers-table_filter.dataTables_filter").append($("#disconnected-area-filter"));
 
     $.fn.dataTable.ext.search.push(
-    function (settings, data, dataIndex) {
-        var selectedItem = $('#plan-filter').val()
-        var category = data[planIndex];
-        if (selectedItem === "" || category.includes(selectedItem)) {
-        return true;
+        function (settings, data, dataIndex) {
+            if (settings.nTable.id !== 'active-customers-table'){
+                return true;
+            }
+
+            var selectedItem = $('#active-plan-filter').val()
+            var category = data[3];
+            if (selectedItem === "" || category.includes(selectedItem)) {
+            return true;
+            }
+            return false;
         }
-        return false;
-    }
     );
     
     $.fn.dataTable.ext.search.push(
         function (settings, data, dataIndex) {
-          var selectedItem = $('#area-filter').val()
-          var category = data[areaIndex];
-          if (selectedItem === "" || category.includes(selectedItem)) {
-            return true;
-          }
-          return false;
+            if (settings.nTable.id !== 'active-customers-table'){
+                return true;
+            }
+            
+            var selectedItem = $('#active-area-filter').val()
+            var category = data[4];
+            if (selectedItem === "" || category.includes(selectedItem)) {
+                return true;
+            }
+            return false;
         }
     );
 
     $.fn.dataTable.ext.search.push(
         function (settings, data, dataIndex) {
-          var selectedItem = $('#customer-status-filter').val()
-          var category = data[statusIndex];
-          if (selectedItem === "" || category.includes(selectedItem)) {
+            if (settings.nTable.id !== 'inactive-customers-table'){
+                return true;
+            }
+
+            var selectedItem = $('#inactive-plan-filter').val()
+            var category = data[3];
+            if (selectedItem === "" || category.includes(selectedItem)) {
             return true;
-          }
-          return false;
+            }
+            return false;
+        }
+    );
+    
+    $.fn.dataTable.ext.search.push(
+        function (settings, data, dataIndex) {
+            if (settings.nTable.id !== 'inactive-customers-table'){
+                return true;
+            }
+            
+            var selectedItem = $('#inactive-area-filter').val()
+            var category = data[4];
+            if (selectedItem === "" || category.includes(selectedItem)) {
+                return true;
+            }
+            return false;
         }
     );
 
-    $("#plan-filter").change(function (e) {
-        t.draw();
+    $.fn.dataTable.ext.search.push(
+        function (settings, data, dataIndex) {
+            if (settings.nTable.id !== 'disconnected-customers-table'){
+                return true;
+            }
+
+            var selectedItem = $('#disconnected-plan-filter').val()
+            var category = data[3];
+            if (selectedItem === "" || category.includes(selectedItem)) {
+            return true;
+            }
+            return false;
+        }
+    );
+    
+    $.fn.dataTable.ext.search.push(
+        function (settings, data, dataIndex) {
+            if (settings.nTable.id !== 'disconnected-customers-table'){
+                return true;
+            }
+            
+            var selectedItem = $('#disconnected-area-filter').val()
+            var category = data[4];
+            if (selectedItem === "" || category.includes(selectedItem)) {
+                return true;
+            }
+            return false;
+        }
+    );
+
+    $("#active-plan-filter").change(function (e) {
+        active_table.draw();
     });
 
-    $("#area-filter").change(function (e) {
-        t.draw();
+    $("#active-area-filter").change(function (e) {
+        active_table.draw();
     });
 
-    $("#customer-status-filter").change(function (e) {
-        t.draw();
+    $("#inactive-plan-filter").change(function (e) {
+        inactive_table.draw();
     });
 
-    t.draw();
+    $("#inactive-area-filter").change(function (e) {
+        inactive_table.draw();
+    });
+
+    $("#disconnected-plan-filter").change(function (e) {
+        disconnected_table.draw();
+    });
+
+    $("#disconnected-area-filter").change(function (e) {
+        disconnected_table.draw();
+    });
+
+    active_table.draw();
+    inactive_table.draw();
+    disconnected_table.draw();
 }
 
 // -------------------------------------------------------------------- Add Customer
