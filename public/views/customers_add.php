@@ -150,7 +150,7 @@
 <section class="section customers-add">
     <form class="row" id="add-customer" novalidate>
         <div class="row justify-content-center">
-            <div class="card col-md-4 m-2 p-3">
+            <div class="card col-md-5 m-2 p-3">
                 <h4 class="p-2 pt-4" style="color: #012970; font-weight: bold;">Customer Information</h4>
 
                 <div class="col-12">
@@ -252,7 +252,7 @@
                 </div> -->
             </div>
 
-            <div class="card col-md-4 m-2 p-3">
+            <div class="card col-md-5 m-2 p-3">
                 <h4 class="p-2 pt-4" style="color: #012970; font-weight: bold;">Account Information</h4>
 
                 <div class="col-12">
@@ -353,8 +353,10 @@
                     </div>
                 </div> -->
 
-                <div class ="text-center m-3 pt-2">
-                    <button type="submit" class="btn btn-success w-50">Create Account</button>
+                <div class="row">
+                    <div class ="text-center col-lg-12 pt-4">
+                        <button type="submit" class="btn btn-success">Create Account</button>
+                    </div>
                 </div>
             </div>
 
