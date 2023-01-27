@@ -1,12 +1,16 @@
 <?php
+
+$data_error = array(['account_id', 'start_date', 'plan_name', 'connection_name', 'area_name', 'first_name', 'middle_name', 'last_name', 'billing_address', 'mobile_number', 'email', 'birthdate', 'install_type_name', 'install_balance', 'install_status', 'billing_end_date', 'total_bill', 'running_balance']);
+
 if(isset($_POST['importSubmit'])){
     $ch = require 'curl.init.php';
     $url = DIR_API . "upload/customer.php";
 
     $filename = 'uploaderror.csv';
     $filepath = '../temp/' . $filename;
-
-    $data_error = array(['account_id', 'start_date', 'plan_name', 'connection_name', 'area_name', 'first_name', 'middle_name', 'last_name', 'billing_address', 'mobile_number', 'email', 'birthdate', 'install_type_name', 'install_balance', 'install_status', 'billing_end_date', 'total_bill', 'running_balance']);
+    
+    $added_accts = 0;
+    $empty_rows = 0;
     
     $csvMimes = array('text/x-comma-separated-values', 'text/comma-separated-values', 'application/octet-stream', 'application/vnd.ms-excel', 'application/x-csv', 'text/x-csv', 'text/csv', 'application/csv', 'application/excel', 'application/vnd.msexcel', 'text/plain');
     
@@ -25,24 +29,9 @@ if(isset($_POST['importSubmit'])){
                 $account_id = isAccountIDExist($line[0]);
                 $mobile_number = formatMobileNumber($line[9]);
                 $email = formatEmail($line[10]);
-
-                // Checks if there's an empty string
-                function isThereEmptyString($line) {
-                    for ($i = 0; $i < 17; $i++) { 
-                        if (isEmptyString($line[$i])) {
-                            if ($i == 6) {
-                                continue;
-                            }
-                            else {
-                                return true;
-                            }
-                        }
-                    }
-                    return false;
-                }
-
+                
                 if (isThereEmptyString($line)) {
-                    array_push($data_error, $line);
+                    $empty_rows += 1;
                 }
                 else if ($account_id == 'error') {
                     array_push($data_error, $line);
@@ -86,6 +75,7 @@ if(isset($_POST['importSubmit'])){
 
                     if ($response['success'] == true) {
                         // $qstring = '?status=succ';
+                        $added_accts += 1;
                         continue;
                     }
                     else {
@@ -94,7 +84,7 @@ if(isset($_POST['importSubmit'])){
                 }
             }
 
-            if (count($data_error) <= 1) {
+            if ((count($data_error) == 1) && ($added_accts > 0)) {
                 $qstring = '?status=succ';
                 unlink($filepath);
 
@@ -104,6 +94,9 @@ if(isset($_POST['importSubmit'])){
                 //     )
                 // );
                 // echo '<script> toastr.success("Customer Records Imported Successfully."); </script>';
+            }
+            else if ((count($data_error) <= 1) && ($added_accts <= 0)) {
+                $qstring = '?status=empty';
             }
             else {
                 foreach ($data_error as $fields) {
@@ -128,7 +121,7 @@ if(isset($_POST['importSubmit'])){
         else {
             fclose($fp);
             fclose($csvFile);
-            $qstring = '?status=err';
+            $qstring = '?status=tryAgain';
             // echo json_encode(
             //     array (
             //         'success' => false,
@@ -148,6 +141,42 @@ if(isset($_POST['importSubmit'])){
         //     )
         // );
         // echo '<script> toastr.error("Invalid file type. Please try again."); </script>';
+    }
+}
+else {
+    $qstring = '?status=errImportSubmit';
+}
+
+// Checks if there's an empty string
+function isThereEmptyString($line) {
+    $counter = 0;
+    $num_cols = 0;
+    $index = 0;
+    foreach($line as $i => $value) {
+        if (isEmptyString($value)) {
+            if ($i == 6) {
+                continue;
+            }
+            else {
+                $counter += 1;
+            }
+        }
+        $num_cols += 1;
+    }
+    if($counter == 0) {
+        return false;
+    }
+    else if(($counter > 0) && ($counter < $num_cols)) {
+        foreach ($array as $key => &$value) {
+            if (is_array($value)) {
+                $value = changeNullToEmptyString($value);
+            } elseif (is_null($value)) {
+                $value = "";
+            }
+        }
+    }
+    else {
+        return true;
     }
 }
 

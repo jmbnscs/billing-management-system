@@ -21,8 +21,32 @@ $(document).ready(function () {
         //     window.location.replace('../views/customers_add.php');
         // }, 2000);
     }
+    else if (status == 'tryAgain') {
+        toastr.warning('Some error has occurred, please check error file to update.');
+        $('#error-dl').removeClass('hide');
+        setDownloadError();
+        resetURL();
+        
+        // setTimeout(function(){
+        //     window.location.replace('../views/customers_add.php');
+        // }, 2000);
+    }
     else if (status == 'invalid_file') {
         toastr.error('Please upload a valid csv file.');
+        setTimeout(function(){
+            window.location.replace('../views/customers_import');
+        }, 2000);
+        resetURL();
+    }
+    else if (status == 'empty') {
+        toastr.error('The csv file is empty.');
+        setTimeout(function(){
+            window.location.replace('../views/customers_import');
+        }, 2000);
+        resetURL();
+    }
+    else if (status == 'errImportSubmit') {
+        toastr.error('Please select a file.');
         setTimeout(function(){
             window.location.replace('../views/customers_import');
         }, 2000);
