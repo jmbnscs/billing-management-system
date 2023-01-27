@@ -1,7 +1,7 @@
 // Directories
-const DIR_API = 'http://localhost/gstech_api/api/';
-const DIR_MAIN = '/billing-management-system/public/';
-const DIR_APP = 'http://localhost/billing-management-system/app/includes/';
+const DIR_API = location.protocol + '//' + location.host + '/gstech_api/api/';
+const DIR_MAIN = '/bms/public/';
+const DIR_APP = location.protocol + '//' + location.host + '/bms/app/includes/';
 const DIR_CUR = window.location.pathname;
 
 // Constant Variables
@@ -30,13 +30,13 @@ $(document).ready( () => {
         setToastr();
     }
     else {
-        window.location.replace('../views/login.php');
+        window.location.replace('../views/login');
     }
 });
 
 function checkDefaults() {
     if (admin_id === undefined || admin_id == 'null' || admin_id === null || admin_id == 'undefined') {
-        window.location.replace('../views/login.php');
+        window.location.replace('../views/login');
     }
     else {
         return true;
@@ -46,8 +46,29 @@ function checkDefaults() {
 // Check if still using Default Password
 function isDefault () {
     if (hashed == 0) { 
-        window.location.replace('../views/profile.php');
+        window.location.replace('../views/profile');
     }
+}
+
+// Live Search
+function showResult(str) {
+    if (str.length == 0) {
+      document.getElementById("livesearch").innerHTML="";
+      document.getElementById("livesearch").style.border="0px";
+      return;
+    }
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange=function() {
+      if (this.readyState == 4 && this.status == 200) {
+        document.getElementById("livesearch").innerHTML = this.responseText;
+        document.getElementById("livesearch").style.border = "1px solid #A5ACB2";
+        document.getElementById("livesearch").style.background = "white";
+        document.getElementById("livesearch").style.minWidth = "300px";
+        document.getElementById("livesearch").style.position = "absolute";
+      }
+    }
+    xmlhttp.open("GET", DIR_APP + "/livesearch.php?q=" +str, true);
+    xmlhttp.send();
 }
 
 // Log Admin Activity
@@ -178,6 +199,17 @@ async function isAccountIDExist(account_id) {
         }
     }
     return false;
+}
+
+function isWithSpecialChars(data) {
+    let regex = new RegExp("^[a-zA-Z0-9 -.]+$");
+
+    if (!regex.test(data)) {
+        return true;
+    }
+    else {
+        return false;
+    }
 }
 
 // Functions to format data display
@@ -364,6 +396,9 @@ async function restrictFunctions (page) {
         if (key.split("-")[0] == page) {
             if (restriction[key] == 0) {
                 $('#' + key.split("-")[1] + '-btn').addClass('hide');
+                if (key.split('-')[1] == 'edit') {
+                    $('#save-btn').addClass('hide');
+                }
             }
         }
     });
@@ -380,7 +415,7 @@ function restrictPages (dir) {
                 if (key == dir) {
                     if (data[key] == 0) {
                         setErrorMessage();
-                        window.location.replace("../views/dashboard.php");
+                        window.location.replace("../views/dashboard");
                     }
                 }
             });
@@ -397,7 +432,7 @@ $(() => {
     $('#drop-' + nav_id).removeClass('collapsed');
     $('#' + nav_id + '-nav').addClass('show');
 
-    if (id == 'nav-dashboard' || id == 'nav-profile') {
+    if (id == 'nav-dashboard' || id == 'nav-profile' || id == 'nav-admins' || id == 'nav-plans') {
         document.getElementById(id).classList.remove('collapsed');
     }
     if (nav_id == 'connection' || nav_id == 'concerns' || nav_id == 'user' || nav_id == 'inclusions' || nav_id == 'area') {
@@ -409,7 +444,7 @@ $(() => {
 $('#account-settings').on('click', (e) => {
     e.preventDefault();
     sessionStorage.setItem('edit', true);
-    window.location.replace('../views/profile.php');
+    window.location.replace('../views/profile');
 })
 
 // Logout Session
@@ -421,7 +456,7 @@ function logout() {
         url: '../../app/includes/logout.inc.php',
         cache: false,
         success: function() {
-            window.location.replace('../views/login.php');
+            window.location.replace('../views/login');
         },
         error: function (xhr, status, error) {
             console.error(xhr)

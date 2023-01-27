@@ -1,6 +1,8 @@
 <?php 
   include '../models/header.html';
-  include '../models/navbar.html'; ?>
+  include '../models/navbar.html'; 
+//   include '../../app/includes/customer_upload.php'; 
+?>
 
 <main id="main" class="main">
 
@@ -8,7 +10,7 @@
   <h1>Import Existing Account</h1>
   <nav>
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="dashboard.php">Home</a></li>
+      <li class="breadcrumb-item"><a href="dashboard">Home</a></li>
       <li class="breadcrumb-item active">Customers</li>
     </ol>
   </nav>
@@ -31,7 +33,7 @@
 
             <div class="card-body">
                 <div class="col-md-8 mt-3">
-                    <form method="post" enctype="multipart/form-data" id="upload-customer" class="form-inline">
+                    <form action="" method="post" enctype="multipart/form-data" id="upload-customer" class="form-inline">
                         <div class="form-group">
                             <input type="file" name="file" class="form-control form-control-m" required>
                         </div>
@@ -51,7 +53,12 @@
 
             <div class="card-body">
                 <div class="col-md-8 mt-3">
-                    <a href="../../app/temp/uploaderror.csv" download><button class="btn btn-danger">Download</button></a>
+                    <form method="post" id="download-error" class="form-inline">
+                        <div class="form-group col-md-4 mt-4">
+                            <input type="submit" class="btn btn-danger form-control " name="downloadError" value="Download">
+                        </div>
+                    </form>
+                    <!-- <a href="https://bms.gstechbms.online/bms/app/temp/uploaderror.csv" download><button class="btn btn-danger">Download</button></a> -->
                 </div>
             </div>
         </div>
@@ -92,7 +99,12 @@
 
             <div class="card-body">
                 <div class="col-md-8 mt-3">
-                    <a href="../../app/temp/template.csv" download><button class="btn btn-primary">Download</button></a>
+                    <form method="post" id="download-template" class="form-inline">
+                        <div class="form-group col-md-4 mt-4">
+                            <input type="submit" class="btn btn-primary form-control " name="downloadTemplate" value="Download">
+                        </div>
+                    </form>
+                    <!-- <a href="https://bms.gstechbms.online/bms/app/temp/template.csv" download><button class="btn btn-primary">Download</button></a> -->
                 </div>
             </div>
         </div>
@@ -102,6 +114,8 @@
 </section>
 
 </main><!-- End #main -->
+
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
   <!-- Vendor JS Files -->
   <script src="../assets/vendor/apexcharts/apexcharts.min.js"></script>

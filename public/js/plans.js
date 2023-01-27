@@ -1,7 +1,7 @@
 $(document).ready(function () {
     isDefault();
 
-    if (DIR_CUR == DIR_MAIN + 'views/plans_add.php') {
+    if (DIR_CUR == DIR_MAIN + 'views/plans_add') {
         restrictPages('plan-add');
         setAddPlanPage();
     }
@@ -19,7 +19,14 @@ async function setPlansPage () {
 
     var tag;
 
-    var t = $('#plan-table').DataTable( {
+    var active_table = $('#active-table').DataTable( {
+        pageLength: 5,
+        lengthMenu: [5, 10, 20],
+        "searching": true,
+        "autoWidth": false
+    });
+
+    var deact_table = $('#deactivated-table').DataTable( {
         pageLength: 5,
         lengthMenu: [5, 10, 20],
         "searching": true,
@@ -28,49 +35,79 @@ async function setPlansPage () {
     
     for (var i = 0; i < inclusion.length; i++) {
         var opt = `<option value='${inclusion[i].inclusion_name}'>${inclusion[i].inclusion_name}</option>`;
-        $("#inclusions-filter").append(opt);
-        //$("#inclusions-filter").selectpicker("refresh");
+        $("#active-inclusions-filter").append(opt);
+        $("#deact-inclusions-filter").append(opt);
     }
 
-    for (var i = 0; i < statuses.length; i++) {
-        var opt = `<option value='${statuses[i].status_name}'>${statuses[i].status_name}</option>`;
-        $("#status-filter").append(opt);
-    }
+    var active_counter = 1, deact_counter = 1;
 
     for (var i = 0; i < plan_data.length; i++) {
         (plan_data[i].status == 'ACTIVE') ? tag = 'bg-success' : tag = 'bg-danger';
-        t.row.add($(`
+
+        if (plan_data[i].status == 'ACTIVE') {
+            active_table.row.add($(`
             <tr>
-                <th scope="row" style="color: #012970;">${plan_data[i].plan_name}</th>
+                <th scope="row" style="color: #012970;">${active_counter}</th>
+                <td data-label="Plan Name">${plan_data[i].plan_name}</td>
                 <td data-label="Bandwidth">${plan_data[i].bandwidth} mbps</td>
                 <td data-label="Price">&#8369; ${plan_data[i].price}</td>
                 <td data-label="Inclusions">${plan_data[i].inclusions}</td>
                 <td data-label="Status"><span class="badge ${tag}">${plan_data[i].status}</span></td>
                 <td data-label="View"><button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#view-plans" data-bs-whatever="${plan_data[i].plan_id}" id="edit-modal-btn"><i class="ri ri-eye-fill"></i></button></td>
             </tr>
-        `)).draw(false);
+            `)).draw(false);
+
+            active_counter++;
+        }
+        else {
+            deact_table.row.add($(`
+            <tr>
+                <th scope="row" style="color: #012970;">${deact_counter}</th>
+                <td data-label="Plan Name">${plan_data[i].plan_name}</td>
+                <td data-label="Bandwidth">${plan_data[i].bandwidth} mbps</td>
+                <td data-label="Price">&#8369; ${plan_data[i].price}</td>
+                <td data-label="Inclusions">${plan_data[i].inclusions}</td>
+                <td data-label="Status"><span class="badge ${tag}">${plan_data[i].status}</span></td>
+                <td data-label="View"><button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#view-plans" data-bs-whatever="${plan_data[i].plan_id}" id="edit-modal-btn"><i class="ri ri-eye-fill"></i></button></td>
+            </tr>
+            `)).draw(false);
+
+            deact_counter++;
+        }
+        
     }
 
-    $("#plan-table_filter.dataTables_filter").append($("#inclusions-filter"));
-    $("#plan-table_filter.dataTables_filter").append($("#status-filter"));
+    $("#active-table_filter.dataTables_filter").append($("#active-inclusions-filter"));
+    $("#deactivated-table_filter.dataTables_filter").append($("#deact-inclusions-filter"));
+    // $("#active-table_filter.dataTables_filter").append($("#status-filter"));
 
-    var inclusionsIndex = 0, statusIndex = 0;
-    $("#plan-table th").each(function (i) {
-        if ($($(this)).html() == "Inclusion") {
-            inclusionsIndex = i; return false;
-        }
-    });
+    // var inclusionsIndex = 0, statusIndex = 0;
+    // $("#active-table th").each(function (i) {
+    //     if ($($(this)).html() == "Inclusion") {
+    //         inclusionsIndex = i; return false;
+    //     }
+    // });
 
-    $("#plan-table th").each(function (i) {
-        if ($($(this)).html() == "Status") {
-            statusIndex = i; return false;
-        }
-    });
+    // $("#deactivated-table th").each(function (i) {
+    //     if ($($(this)).html() == "Inclusion") {
+    //         inclusionsIndex = i; return false;
+    //     }
+    // });
+
+    // $("#active-table th").each(function (i) {
+    //     if ($($(this)).html() == "Status") {
+    //         statusIndex = i; return false;
+    //     }
+    // });
 
     $.fn.dataTable.ext.search.push(
         function (settings, data, dataIndex) {
-            var selectedItem = $('#inclusions-filter').val()
-            var category = data[inclusionsIndex];
+            if (settings.nTable.id !== 'active-table'){
+                return true;
+            }
+
+            var selectedItem = $('#active-inclusions-filter').val()
+            var category = data[4];
             if (selectedItem === "" || category.includes(selectedItem)) {
             return true;
             }
@@ -80,8 +117,12 @@ async function setPlansPage () {
 
     $.fn.dataTable.ext.search.push(
         function (settings, data, dataIndex) {
-            var selectedItem = $('#status-filter').val()
-            var category = data[statusIndex];
+            if (settings.nTable.id !== 'deactivated-table'){
+                return true;
+            }
+
+            var selectedItem = $('#deact-inclusions-filter').val()
+            var category = data[4];
             if (selectedItem === "" || category.includes(selectedItem)) {
             return true;
             }
@@ -89,18 +130,33 @@ async function setPlansPage () {
         }
     );
 
-    $("#inclusions-filter").change(function (e) {
-        t.draw();
+    // $.fn.dataTable.ext.search.push(
+    //     function (settings, data, dataIndex) {
+    //         var selectedItem = $('#status-filter').val()
+    //         var category = data[statusIndex];
+    //         if (selectedItem === "" || category.includes(selectedItem)) {
+    //         return true;
+    //         }
+    //         return false;
+    //     }
+    // );
+
+    $("#active-inclusions-filter").change(function (e) {
+        active_table.draw();
     });
 
-    $("#status-filter").change(function (e) {
-        t.draw();
+    $("#deact-inclusions-filter").change(function (e) {
+        deact_table.draw();
     });
+    // $("#status-filter").change(function (e) {
+    //     t.draw();
+    // });
 
-    t.draw();
-    // t.columns.adjust().draw();
+    active_table.draw();
+    deact_table.draw();
 
     setViewModal();
+    setAddPlanPage();
     
     async function setViewModal () {
         $("#view-plans").on("hidden.bs.modal", function () {
@@ -233,9 +289,91 @@ async function setPlansPage () {
             const save_plan = document.getElementById('save-plan');
             save_plan.onsubmit = (e) => {
                 e.preventDefault();
-                processUpdate();
+                checkValidity();
             };
     
+            var req_elem = document.getElementById('save-plan').querySelectorAll("[required]");
+
+            async function checkValidity() {
+                resetElements();
+                var counter = 0;
+                
+                for (var i = 0; i < req_elem.length; i++) {
+                    if (req_elem[i].value == '') {
+                        req_elem[i].classList.add('invalid-input');
+                        req_elem[i].nextElementSibling.classList.add('d-block');
+                        counter++;
+                    }
+                    else {
+                        console.log(DIR_API)
+                        if (req_elem[i].id == 'plan_name') {
+                            const plan_name = await fetchData('check/plan_name.php?plan_name=' + req_elem[i].value);
+                            if (plan_name.exist && (modalTitle.textContent != req_elem[i].value)) {
+                                console.log(modalTitle.textContent)
+                                console.log(req_elem[i].value)
+                                req_elem[i].classList.add('invalid-input');
+                                req_elem[i].nextElementSibling.classList.add('d-block');
+                                $(($('#' + req_elem[i].id).next()).text("Plan name already exist."));
+                                counter++;
+                            }
+                            else if (!isNaN(req_elem[i].value) && req_elem[i].value) {
+                                req_elem[i].classList.add('invalid-input');
+                                req_elem[i].nextElementSibling.classList.add('d-block');
+                                $(($('#' + req_elem[i].id).next()).text("Plan name must not be just numbers."));
+                                counter++;
+                            }
+                            else {
+                                showValid();
+                            }
+                        }
+                        else if (req_elem[i].id == 'bandwidth') {
+                            if (req_elem[i].value < 5) {
+                                req_elem[i].classList.add('invalid-input');
+                                req_elem[i].nextElementSibling.classList.add('d-block');
+                                $(($('#' + req_elem[i].id).next()).text("Bandwidth must at least be 5 mbps."));
+                                counter++;
+                            }
+                            else {
+                                showValid();
+                            }
+                        }
+                        else if (req_elem[i].id == 'price') {
+                            if (req_elem[i].value < 1) {
+                                req_elem[i].classList.add('invalid-input');
+                                req_elem[i].nextElementSibling.classList.add('d-block');
+                                $(($('#' + req_elem[i].id).next()).text('Plan price should at least be \u20B1 1.00'));
+                                counter++;
+                            }
+                            else {
+                                showValid();
+                            }
+                        }
+                        else {
+                            showValid();
+                        }
+        
+                        function showValid() {
+                            req_elem[i].classList.add('valid-input');
+                        }
+                    }
+                } 
+        
+                if (counter > 0) {
+                    toastr.warning('Please provide the appropriate details on each field.');
+                }
+                else {
+                    processUpdate();
+                }
+            }
+
+            function resetElements() {
+                for (var i = 0; i < req_elem.length; i++) {
+                    $('#' + req_elem[i].id).removeClass('valid-input');
+                    $('#' + req_elem[i].id).removeClass('invalid-input');
+                    $(($('#' + req_elem[i].id).next()).removeClass('d-block'));
+                }
+            }
+
             async function processUpdate() {
                 const plan_id = $('#plan_id').val();
                 const plan_name = $('#plan_name').val();
@@ -392,7 +530,7 @@ async function setPlansPage () {
                     'plan_status_id' : plan_status_id
                 });
     
-                const [plan_content, log] = await Promise.all ([updateData('plan/update.php', update_data), logActivity('Updated Plan' + " - " + plan_name, 'View Plans')])
+                const [plan_content, log] = await Promise.all ([updateData('plan/update.php', update_data), logActivity('Save Changes [' + plan_name + ']', 'View Plans')])
             
                 if ((plan_content.message == 'Plan Updated') && (deletePromoMessage == 'Promo Deleted') 
                     && (createPromoMessage == 'Promo Created') && log) {
@@ -432,7 +570,7 @@ async function setAddPlanPage () {
                 counter++;
             }
             else {
-                if (req_elem[i].id == 'plan_name') {
+                if (req_elem[i].id == 'plan_name_add') {
                     const plan_name = await fetchData('check/plan_name.php?plan_name=' + req_elem[i].value);
                     if (plan_name.exist) {
                         req_elem[i].classList.add('invalid-input');
@@ -450,7 +588,7 @@ async function setAddPlanPage () {
                         showValid();
                     }
                 }
-                else if (req_elem[i].id == 'bandwidth') {
+                else if (req_elem[i].id == 'bandwidth_add') {
                     if (req_elem[i].value < 5) {
                         req_elem[i].classList.add('invalid-input');
                         req_elem[i].nextElementSibling.classList.add('d-block');
@@ -461,7 +599,7 @@ async function setAddPlanPage () {
                         showValid();
                     }
                 }
-                else if (req_elem[i].id == 'price') {
+                else if (req_elem[i].id == 'price_add') {
                     if (req_elem[i].value < 1) {
                         req_elem[i].classList.add('invalid-input');
                         req_elem[i].nextElementSibling.classList.add('d-block');
@@ -499,10 +637,10 @@ async function setAddPlanPage () {
     }
 
     async function processCreate() {
-        const plan_name = $('#plan_name').val();
-        const bandwidth = $('#bandwidth').val();
-        const price = $('#price').val();
-        const inclusion = $('#inclusion').val();
+        const plan_name = $('#plan_name_add').val();
+        const bandwidth = $('#bandwidth_add').val();
+        const price = $('#price_add').val();
+        const inclusion = $('#inclusion_add').val();
 
         const create_data = JSON.stringify({
             'plan_name' : plan_name,
@@ -510,10 +648,12 @@ async function setAddPlanPage () {
             'price' : price
         });
 
-        const [plan_content, log] = await Promise.all ([createData('plan/create.php', create_data), logActivity('Created Plan' + " - " + plan_name, 'Add New Plan')]);
+        const [plan_content, log] = await Promise.all ([createData('plan/create.php', create_data), logActivity('Submit - Create Plan [' + plan_name + ']', 'View Plans')]);
+
+        console.log(inclusion);
     
-        let promo_content;
-        if(inclusion.length > 0) {
+        let promo_content, promo_success;
+        if(inclusion != null) {
             let readPlanResponse = await fetchData('plan/read.php');
             const plan_id = readPlanResponse.slice(-1).pop()['plan_id'];
         
@@ -525,10 +665,19 @@ async function setAddPlanPage () {
 
                 promo_content = await createData('promo/create.php', promo_data);
             }
+
+            if (promo_content.message == 'Promo Created') {
+                promo_success = true;
+            }
+            else {
+                promo_success = false;
+            }
+        }
+        else {
+            promo_success = true;
         }
     
-        if ((plan_content.success && promo_content.message == 'Promo Created') 
-            && log || (plan_content.success && inclusion.length == 0)) {
+        if ((plan_content.success && promo_success) && log) {
             toastr.success('Plan Created Successfully.');
             setTimeout(function(){
                 window.location.reload();
@@ -546,8 +695,8 @@ async function setAddPlanPage () {
         const inclusion = await fetchData('inclusion/read.php');
         for (var i = 0; i < inclusion.length; i++) {
             var opt = `<option value='${inclusion[i].inclusion_id}'>${inclusion[i].inclusion_name}</option>`;
-            $("#inclusion").append(opt);
-            $("#inclusion").selectpicker("refresh");
+            $("#inclusion_add").append(opt);
+            $("#inclusion_add").selectpicker("refresh");
         }
     }
 }

@@ -67,8 +67,8 @@ $(document).ready(function () {
 });
 
 // -------------------------------- Backend JS --------------------------------
-const DIR_API = 'http://localhost/gstech_api/api/';
-const DIR_APP = 'http://localhost/billing-management-system/app/includes/';
+const DIR_API = location.protocol + '//' + location.host + '/gstech_api/api/';
+const DIR_APP = location.protocol + '//' + location.host + '/bms/app/includes/';
 
 async function login () {
     const admin_username = $('#admin_username').val();
@@ -111,13 +111,13 @@ async function login () {
         localStorage.setItem('admin_id', content.admin_id);
         localStorage.setItem('login', 'successful');
         logLogin(content.admin_id, admin_username);
-        window.location.replace('../views/dashboard.php');
+        window.location.replace('../views/dashboard');
     }
     else if (content.message == 'change password') {
         localStorage.setItem('hashed', 0);
         localStorage.setItem('admin_id', content.admin_id);
         localStorage.setItem('login', 'successful');
-        window.location.replace('../views/profile.php');
+        window.location.replace('../views/profile');
     }
     else if (content.message == 'Invalid Password'){
         attempt = localStorage.getItem('attempts');

@@ -4,10 +4,10 @@
 
 <main id="main" class="main">
   <div class="pagetitle">
-    <h1>Pending Tickets</h1>
+    <h1>Claimed Tickets</h1>
     <nav>
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="dashboard.php">Home</a></li>
+        <li class="breadcrumb-item"><a href="dashboard">Home</a></li>
         <li class="breadcrumb-item active">Tickets</li>
       </ol>
     </nav>
@@ -18,16 +18,24 @@
     <div class="card recent-sales overflow-auto">
       <br>
       <div class="card-body">
+        <!-- Filter Dropdown -->
+        <div>
+          <select id="pending-concerns-filter" class="form-select table-filter" style="display: inline; width: 200px; margin-left: 25px;">
+            <option value="">Show All: Concerns</option>
+          </select>
+        </div>
+        <!-- End Filter Dropdown -->
+
         <table class="table table-borderless" id="ticket-pending-table">
           <thead>
             <tr>
+              <th scope="col">#</th>
               <th scope="col">Ticket Number</th>
+              <th scope="col">Account ID</th>
               <th scope="col">Concern</th>
               <th scope="col">Date Filed</th>
-              <th scope="col">Account ID</th>
-              <th scope="col">User Level</th>
               <th scope="col">Claimed By</th>
-              <th scope="col">Ticket Status</th>
+              <th scope="col">Status</th>
               <th scope="col">View / Resolve</th>
             </tr>
           </thead>
@@ -70,7 +78,7 @@
                   
                   <div class="col-md-12">
                     <div class="form-floating">
-                      <input type="text" class="form-control" id="concern_details" placeholder="Concern Details" readonly>
+                      <textarea class="form-control" id="concern_details" readonly></textarea>
                       <label for="concern_details">Concern Details</label>
                     </div>
                   </div>
@@ -307,7 +315,7 @@
                   <div class="col-md-12">
                     <div class="form-floating">
                       <input type="text" class="form-control" id="concern_details_invalid" placeholder="Concern Details" readonly>
-                      <label for="concern_details_invalid">Concern Detailsr</label>
+                      <label for="concern_details_invalid">Concern Details</label>
                     </div>
                   </div>
           </div>
@@ -323,6 +331,8 @@
 </form>
 
 </main><!-- End #main -->
+
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
   <!-- Vendor JS Files -->
   <script src="../assets/vendor/apexcharts/apexcharts.min.js"></script>

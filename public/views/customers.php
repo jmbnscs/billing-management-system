@@ -7,7 +7,7 @@
     <h1>Customer List</h1>
     <nav>
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="dashboard.php">Home</a></li>
+        <li class="breadcrumb-item"><a href="dashboard">Home</a></li>
         <li class="breadcrumb-item active">Customers</li>
       </ol>
     </nav>
@@ -40,12 +40,13 @@
         <table class="table table-borderless" id="customer-table">
           <thead>
             <tr>
+              <th scope="col">#</th>
               <th scope="col">ID</th>
               <th scope="col">Customer</th>
               <th scope="col">Plan</th>
               <th scope="col">Area</th>
-              <th scope="col">Status</th>
               <th scope="col">Balance</th>
+              <th scope="col">Status</th>
               <th scope="col">View</th>
             </tr>
           </thead>
@@ -59,6 +60,8 @@
   </div><!-- End Customer List Table -->
 
 </main><!-- End #main -->
+
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
   <!-- Vendor JS Files -->
   <script src="../assets/vendor/apexcharts/apexcharts.min.js"></script>

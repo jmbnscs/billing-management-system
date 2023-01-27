@@ -1,30 +1,50 @@
 <?php
-$ch = require 'curl.init.php';
-$url = DIR_API . "upload/customer.php";
-
-$data_error = array(['account_id', 'start_date', 'plan_name', 'connection_name', 'area_name', 'first_name', 'middle_name', 'last_name', 'billing_address', 'mobile_number', 'email', 'birthdate', 'install_type_name', 'install_balance', 'install_status', 'billing_end_date', 'total_bill', 'running_balance']);
-
 if(isset($_POST['importSubmit'])){
+    $ch = require 'curl.init.php';
+    $url = DIR_API . "upload/customer.php";
+
+    $filename = 'uploaderror.csv';
+    $filepath = '../temp/' . $filename;
+
+    $data_error = array(['account_id', 'start_date', 'plan_name', 'connection_name', 'area_name', 'first_name', 'middle_name', 'last_name', 'billing_address', 'mobile_number', 'email', 'birthdate', 'install_type_name', 'install_balance', 'install_status', 'billing_end_date', 'total_bill', 'running_balance']);
     
     $csvMimes = array('text/x-comma-separated-values', 'text/comma-separated-values', 'application/octet-stream', 'application/vnd.ms-excel', 'application/x-csv', 'text/x-csv', 'text/csv', 'application/csv', 'application/excel', 'application/vnd.msexcel', 'text/plain');
     
     if(!empty($_FILES['file']['name']) && in_array($_FILES['file']['type'], $csvMimes)){
-        
+        $fp = fopen($filepath, 'w');
+
         // If the file is uploaded
         if(is_uploaded_file($_FILES['file']['tmp_name'])){
             
             $csvFile = fopen($_FILES['file']['tmp_name'], 'r');
-            $fp = fopen('../temp/uploaderror.csv', 'w');
             
             fgetcsv($csvFile);
             
-            while(($line = fgetcsv($csvFile)) !== FALSE){
+            while(($line = fgetcsv($csvFile)) != FALSE){
 
                 $account_id = isAccountIDExist($line[0]);
                 $mobile_number = formatMobileNumber($line[9]);
                 $email = formatEmail($line[10]);
 
-                if ($account_id == 'error') {
+                // Checks if there's an empty string
+                function isThereEmptyString($line) {
+                    for ($i = 0; $i < 17; $i++) { 
+                        if (isEmptyString($line[$i])) {
+                            if ($i == 6) {
+                                continue;
+                            }
+                            else {
+                                return true;
+                            }
+                        }
+                    }
+                    return false;
+                }
+
+                if (isThereEmptyString($line)) {
+                    array_push($data_error, $line);
+                }
+                else if ($account_id == 'error') {
                     array_push($data_error, $line);
                 }
                 else if ($mobile_number == 'error') {
@@ -64,39 +84,50 @@ if(isset($_POST['importSubmit'])){
                     curl_close($ch);
                     $response = json_decode($resp, true);
 
-                    if ($response['success'] === true) {
+                    if ($response['success'] == true) {
                         // $qstring = '?status=succ';
                         continue;
                     }
                     else {
-                        array_push($data_error, $data);
+                        array_push($data_error, $line);
                     }
                 }
             }
 
-            if (count($data_error) === 1) {
+            if (count($data_error) <= 1) {
                 $qstring = '?status=succ';
+                unlink($filepath);
+
                 // echo json_encode(
                 //     array (
                 //         'success' => true
                 //     )
                 // );
+                // echo '<script> toastr.success("Customer Records Imported Successfully."); </script>';
             }
             else {
                 foreach ($data_error as $fields) {
                     fputcsv($fp, $fields);
                 }
+                fclose($fp);
+                fclose($csvFile);
                 $qstring = '?status=err';
                 // echo json_encode(
                 //     array (
-                //         'success' => false
+                //         'success' => false,
+                //         'error' => 'There was an error uploading the file. Please check error file and try again.'
                 //     )
                 // );
+
+                // header('Content-Type: text/csv');
+                // header('Content-Disposition: attachment; filename="' . $filename . '"');
+                // unlink($filepath);
+                // echo '<script> toastr.error("There was an error uploading the file. Please check error file and try again."); </script>';
             }
-            fclose($fp);
-            fclose($csvFile);
         }
         else {
+            fclose($fp);
+            fclose($csvFile);
             $qstring = '?status=err';
             // echo json_encode(
             //     array (
@@ -104,7 +135,9 @@ if(isset($_POST['importSubmit'])){
             //         'error' => 'File upload error.'
             //     )
             // );
+            // echo '<script> toastr.error("There was an error uploading the file. Please check error file and try again."); </script>';
         }
+        // echo <script> toastr.error("There was an error ") </script>
     }
     else {
         $qstring = '?status=invalid_file';
@@ -114,14 +147,15 @@ if(isset($_POST['importSubmit'])){
         //         'error' => 'File invalid.'
         //     )
         // );
+        // echo '<script> toastr.error("Invalid file type. Please try again."); </script>';
     }
 }
 
 function formatMobileNumber ($mobile_number) {
-	if((substr($mobile_number, 0, 2) === '09') && (strlen($mobile_number) === 11)) {
+	if((substr($mobile_number, 0, 2) == '09') && (strlen($mobile_number) == 11)) {
     	return $mobile_number;
     }
-    else if((substr($mobile_number, 0, 1) === '9') && (strlen($mobile_number) === 10)) {
+    else if((substr($mobile_number, 0, 1) == '9') && (strlen($mobile_number) == 10)) {
     	return '0' . $mobile_number;
     }
     else {
@@ -140,13 +174,7 @@ function formatEmail ($email) {
 
 function isAccountIDExist ($account_id) {
     $ch = require 'curl.init.php';
-    $url = DIR_API . "account/read_single.php?account_id=" . $account_id;
-
-    $data = json_encode(
-        array (
-            'account_id' => $account_id
-        )
-    );
+    $url = DIR_API . "check/account_id.php?account_id=" . $account_id;
 
     curl_setopt($ch, CURLOPT_URL, $url);
     
@@ -154,7 +182,7 @@ function isAccountIDExist ($account_id) {
     curl_close($ch);
     $response = json_decode($resp, true);
 
-    if ($response['message'] === 'success') {
+    if ($response['exist']) {
         return 'error';
     }
     else {
@@ -162,4 +190,13 @@ function isAccountIDExist ($account_id) {
     }
 }
 
-header("Location: ../../public/views/customers_import.php".$qstring);
+function isEmptyString($data) {
+    if ($data == '' && $data == null) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+header("Location: ../../public/views/customers_import".$qstring);

@@ -8,12 +8,15 @@ $(document).ready(function () {
     if (status == 'succ') {
         toastr.success('Customer Records Imported Successfully.');
         setTimeout(function(){
-            window.location.replace('../views/customers.php');
+            window.location.replace('../views/customers');
         }, 2000);
     }
     else if (status == 'err') {
-        toastr.warning('Some error has occurred, please download file to update.');
+        toastr.warning('Some error has occurred, please check error file to update.');
         $('#error-dl').removeClass('hide');
+        setDownloadError();
+        resetURL();
+        
         // setTimeout(function(){
         //     window.location.replace('../views/customers_add.php');
         // }, 2000);
@@ -21,33 +24,20 @@ $(document).ready(function () {
     else if (status == 'invalid_file') {
         toastr.error('Please upload a valid csv file.');
         setTimeout(function(){
-            window.location.replace('../views/customers_import.php');
+            window.location.replace('../views/customers_import');
         }, 2000);
+        resetURL();
     }
-    else if (DIR_CUR == DIR_MAIN + 'views/customers_add.php') {
+    else if (DIR_CUR == DIR_MAIN + 'views/customers_add') {
         restrictPages('customer-add');
         setAddCustomerPage();
-        
-        // if(user_id == 4|| user_id == 5 || user_id == 6) {
-        //     setErrorMessage();
-        //     window.location.replace("../views/dashboard.php");
-        // }
-        // else {
-        // }
     }
-    else if (DIR_CUR == DIR_MAIN + 'views/customers_import.php') {
+    else if (DIR_CUR == DIR_MAIN + 'views/customers_import') {
         restrictPages('customer-import');
         setImportCustomerPage();
         setExportCustomerPage();
+        setDownloadPage();
         $('#error-dl').addClass('hide');
-        
-        // if(user_id == 4|| user_id == 5 || user_id == 6) {
-        //     setErrorMessage();
-        //     window.location.replace("../views/dashboard.php");
-        // }
-        // else {
-        //     setAddCustomerPage();
-        // }
     }
     else {
         restrictPages('customer-page');
@@ -56,134 +46,134 @@ $(document).ready(function () {
     }
 });
 
+function resetURL() {
+    history.replaceState && history.replaceState(
+        null, '', location.pathname + location.search.replace(/[\?&]status=[^&]+/, '').replace(/^&/, '?')
+      );
+}
+
 // -------------------------------------------------------------------- View Customers
 async function setCustomerPage () {
     const [plans, areas, customer_statuses, customer_data] = await Promise.all ([fetchData('plan/read.php'), fetchData('area/read.php'), fetchData('statuses/read.php?status_table=account_status'), fetchData('views/customer.php')]);
 
-    setCustomerTable();
-    // setViewModal();
+    var t = $('#customer-table').DataTable({
+        pageLength : 5,
+        lengthMenu: [5, 10, 20],
+        "searching": true,
+        "autoWidth": false,
+    }), tag;
 
-    function setCustomerTable () {
-        
-        var t = $('#customer-table').DataTable({
-            pageLength : 5,
-            lengthMenu: [5, 10, 20],
-            "searching": true,
-            "autoWidth": false,
-        }), tag;
-
-        for (var i = 0; i < plans.length; i++) {
-            var opt = `<option value='${plans[i].plan_name}'>${plans[i].plan_name}</option>`;
-            $("#plan-filter").append(opt);
-        }
-
-        for (var i = 0; i < areas.length; i++) {
-            var opt = `<option value='${areas[i].area_name}'>${areas[i].area_name}</option>`;
-            $("#area-filter").append(opt);
-        }
-
-        for (var i = 0; i < customer_statuses.length; i++) {
-            var opt = `<option value='${customer_statuses[i].status_name}'>${customer_statuses[i].status_name}</option>`;
-            $("#customer-status-filter").append(opt);
-        }
-
-        for (var i = 0; i < customer_data.length; i++) {
-            (customer_data[i].status == 'ACTIVE') ? tag = 'bg-success' : tag = 'bg-danger';
-    
-            t.row.add($(`
-                <tr>
-                    <th scope="row" style="color: #012970;">${customer_data[i].account_id}</th>
-                    <td data-label="Customer Name">${customer_data[i].customer_name}</td>
-                    <td data-label="Subscription">${customer_data[i].plan}</td>
-                    <td data-label="Area">${customer_data[i].area}</td>
-                    <td data-label="Status"><span class="badge ${tag}">${customer_data[i].status}</span></td>
-                    <td data-label="Balance">&#8369; ${customer_data[i].balance}</td>
-                    <td data-label="View"><a href="../views/customer_data.php?acct=${customer_data[i].account_id}"><button type="button" class="btn btn-outline-primary""><i class="ri ri-eye-fill"></i></button><a></td>
-                </tr>
-            `)).draw(false);
-        }
-
-        $("#customer-table_filter.dataTables_filter").append($("#plan-filter"));
-        $("#customer-table_filter.dataTables_filter").append($("#area-filter"));
-        $("#customer-table_filter.dataTables_filter").append($("#customer-status-filter"));
-
-        var planIndex = 0, areaIndex = 0, statusIndex = 0;
-        $("#customer-table th").each(function (i) {
-            if ($($(this)).html() == "Plan") {
-                planIndex = i; return false;
-            }
-        });
-
-        $("#customer-table th").each(function (i) {
-            if ($($(this)).html() == "Area") {
-                areaIndex = i; return false;
-            }
-        });
-
-        $("#customer-table th").each(function (i) {
-            if ($($(this)).html() == "Status") {
-                statusIndex = i; return false;
-            }
-        });
-
-        $.fn.dataTable.ext.search.push(
-        function (settings, data, dataIndex) {
-            var selectedItem = $('#plan-filter').val()
-            var category = data[planIndex];
-            if (selectedItem === "" || category.includes(selectedItem)) {
-            return true;
-            }
-            return false;
-        }
-        );
-        
-        $.fn.dataTable.ext.search.push(
-            function (settings, data, dataIndex) {
-              var selectedItem = $('#area-filter').val()
-              var category = data[areaIndex];
-              if (selectedItem === "" || category.includes(selectedItem)) {
-                return true;
-              }
-              return false;
-            }
-        );
-
-        $.fn.dataTable.ext.search.push(
-            function (settings, data, dataIndex) {
-              var selectedItem = $('#customer-status-filter').val()
-              var category = data[statusIndex];
-              if (selectedItem === "" || category.includes(selectedItem)) {
-                return true;
-              }
-              return false;
-            }
-        );
-
-        $("#plan-filter").change(function (e) {
-            t.draw();
-        });
-
-        $("#area-filter").change(function (e) {
-            t.draw();
-        });
-
-        $("#customer-status-filter").change(function (e) {
-            t.draw();
-        });
-
-        t.draw();
-        // t.columns.adjust().draw();
+    for (var i = 0; i < plans.length; i++) {
+        var opt = `<option value='${plans[i].plan_name}'>${plans[i].plan_name}</option>`;
+        $("#plan-filter").append(opt);
     }
+
+    for (var i = 0; i < areas.length; i++) {
+        var opt = `<option value='${areas[i].area_name}'>${areas[i].area_name}</option>`;
+        $("#area-filter").append(opt);
+    }
+
+    for (var i = 0; i < customer_statuses.length; i++) {
+        var opt = `<option value='${customer_statuses[i].status_name}'>${customer_statuses[i].status_name}</option>`;
+        $("#customer-status-filter").append(opt);
+    }
+
+    for (var i = 0; i < customer_data.length; i++) {
+        (customer_data[i].status == 'ACTIVE') ? tag = 'bg-success' : tag = 'bg-danger';
+
+        t.row.add($(`
+            <tr>
+                <th scope="row" style="color: #012970;">${i+1}</th>
+                <td data-label="Account ID">${customer_data[i].account_id}</td>
+                <td data-label="Customer Name">${customer_data[i].customer_name}</td>
+                <td data-label="Subscription">${customer_data[i].plan}</td>
+                <td data-label="Area">${customer_data[i].area}</td>
+                <td data-label="Balance">&#8369; ${customer_data[i].balance}</td>
+                <td data-label="Status"><span class="badge ${tag}">${customer_data[i].status}</span></td>
+                <td data-label="View"><a href="../views/customer_data?acct=${customer_data[i].account_id}"><button type="button" class="btn btn-outline-primary""><i class="ri ri-eye-fill"></i></button><a></td>
+            </tr>
+        `)).draw(false);
+    }
+
+    $("#customer-table_filter.dataTables_filter").append($("#plan-filter"));
+    $("#customer-table_filter.dataTables_filter").append($("#area-filter"));
+    $("#customer-table_filter.dataTables_filter").append($("#customer-status-filter"));
+
+    var planIndex = 0, areaIndex = 0, statusIndex = 0;
+    $("#customer-table th").each(function (i) {
+        if ($($(this)).html() == "Plan") {
+            planIndex = i; return false;
+        }
+    });
+
+    $("#customer-table th").each(function (i) {
+        if ($($(this)).html() == "Area") {
+            areaIndex = i; return false;
+        }
+    });
+
+    $("#customer-table th").each(function (i) {
+        if ($($(this)).html() == "Status") {
+            statusIndex = i; return false;
+        }
+    });
+
+    $.fn.dataTable.ext.search.push(
+    function (settings, data, dataIndex) {
+        var selectedItem = $('#plan-filter').val()
+        var category = data[planIndex];
+        if (selectedItem === "" || category.includes(selectedItem)) {
+        return true;
+        }
+        return false;
+    }
+    );
+    
+    $.fn.dataTable.ext.search.push(
+        function (settings, data, dataIndex) {
+          var selectedItem = $('#area-filter').val()
+          var category = data[areaIndex];
+          if (selectedItem === "" || category.includes(selectedItem)) {
+            return true;
+          }
+          return false;
+        }
+    );
+
+    $.fn.dataTable.ext.search.push(
+        function (settings, data, dataIndex) {
+          var selectedItem = $('#customer-status-filter').val()
+          var category = data[statusIndex];
+          if (selectedItem === "" || category.includes(selectedItem)) {
+            return true;
+          }
+          return false;
+        }
+    );
+
+    $("#plan-filter").change(function (e) {
+        t.draw();
+    });
+
+    $("#area-filter").change(function (e) {
+        t.draw();
+    });
+
+    $("#customer-status-filter").change(function (e) {
+        t.draw();
+    });
+
+    t.draw();
 }
 
 // -------------------------------------------------------------------- Add Customer
 async function setAddCustomerPage () {
     const add_customer = document.getElementById('add-customer');
 
-    if (localStorage.getItem('account_id') == null) {
-        localStorage.setItem('account_id', await generateID('check/account_id.php?account_id=', "", 8));
+    if (sessionStorage.getItem('account_id') == null) {
+        sessionStorage.setItem('account_id', await generateID('check/account_id.php?account_id=', "", 8));
     }
-    $('#account_id').val(localStorage.getItem('account_id'));
+    $('#account_id').val(sessionStorage.getItem('account_id'));
 
     setAddDropdown();
 
@@ -215,6 +205,13 @@ async function setAddCustomerPage () {
             $('#middle_name').addClass('invalid-input');
             $($('#middle_name').next()).addClass('d-block');
         }
+        else if (isWithSpecialChars($('#middle_name').val())) {
+            $('#middle_name').removeClass('valid-input');
+            $('#middle_name').addClass('invalid-input');
+            $($('#middle_name').next()).addClass('d-block');
+            $(($('#middle_name').next()).text("Special characters not allowed."));
+            counter++;
+        }
         
         for (var i = 0; i < req_elem.length; i++) {
             if (req_elem[i].value == '') {
@@ -230,6 +227,12 @@ async function setAddCustomerPage () {
                         $(($('#' + req_elem[i].id).next()).text("First name must not be a number."));
                         counter++;
                     }
+                    else if (isWithSpecialChars(req_elem[i].value)) {
+                        req_elem[i].classList.add('invalid-input');
+                        req_elem[i].nextElementSibling.classList.add('d-block');
+                        $(($('#' + req_elem[i].id).next()).text("Special characters not allowed."));
+                        counter++;
+                    }
                     else {
                         showValid();
                     }
@@ -239,6 +242,12 @@ async function setAddCustomerPage () {
                         req_elem[i].classList.add('invalid-input');
                         req_elem[i].nextElementSibling.classList.add('d-block');
                         $(($('#' + req_elem[i].id).next()).text("Last name must not be a number."));
+                        counter++;
+                    }
+                    else if (isWithSpecialChars(req_elem[i].value)) {
+                        req_elem[i].classList.add('invalid-input');
+                        req_elem[i].nextElementSibling.classList.add('d-block');
+                        $(($('#' + req_elem[i].id).next()).text("Special characters not allowed."));
                         counter++;
                     }
                     else {
@@ -316,7 +325,7 @@ async function setAddCustomerPage () {
             toastr.warning('Please provide the appropriate details on each field.');
         }
         else {
-            localStorage.removeItem('account_id');
+            sessionStorage.removeItem('account_id');
             addCustomer();
         }
     }
@@ -372,6 +381,9 @@ async function setAddCustomerPage () {
 
         account_content = await createData('account/create.php', account_data);
 
+        console.log(account_content);
+        console.log(account_data);
+
         if (account_content.success) {
             customer_content = await createData('customer/create.php', customer_data);
         }
@@ -379,6 +391,9 @@ async function setAddCustomerPage () {
             const delete_account = await deleteData('account/delete.php', delete_data);
             (delete_account.success) ? displayErrorMessage() : displayErrorMessage();
         }
+
+        console.log(customer_content);
+        console.log(customer_data);
 
         if (customer_content.success) {
             installation_content = await createData('installation/create.php', install_data);
@@ -388,6 +403,9 @@ async function setAddCustomerPage () {
             (delete_account.success && delete_customer.success) ? displayErrorMessage() : displayErrorMessage();
         }
 
+        console.log(installation_content);
+        console.log(install_data);
+
         if (installation_content.success) {
             ratings_content = await createData('ratings/create.php', rating_data);
         }
@@ -396,12 +414,15 @@ async function setAddCustomerPage () {
             (delete_account.success && delete_customer.success && delete_installation.success) ? displayErrorMessage() : displayErrorMessage();
         }
 
-        let log = await logActivity('Created new customer account with Account ID # ' + account_id, 'Customer - Add New Account');
+        // console.log(ratings_content);
+        // console.log(rating_data);
+
+        let log = await logActivity('Create Account [Account ID # ' + account_id + ']', 'Add New Account');
 
         if (ratings_content.success && log) {
             toastr.success('Customer Created Successfully.');
             setTimeout(function(){
-                window.location.replace('../views/customers.php');
+                window.location.replace('../views/customers');
              }, 2000);
         }
         else {
@@ -411,9 +432,9 @@ async function setAddCustomerPage () {
 
         function displayErrorMessage() {
             toastr.error('Some error has occurred, please try again later.');
-            setTimeout(function(){
-                window.location.reload();
-             }, 2000);
+            // setTimeout(function(){
+            //     window.location.reload();
+            //  }, 2000);
         }
 
     }
@@ -450,6 +471,7 @@ async function setImportCustomerPage () {
     const import_customer = document.getElementById('upload-customer');
     import_customer.onsubmit = (e) => {
         $('#upload-customer').attr('action', '../../app/includes/customer_upload.php');
+
         // $.ajax({
         //     url: '../../app/includes/customer_upload.php',
         //     cache: false,
@@ -462,6 +484,22 @@ async function setImportCustomerPage () {
 
         //     }
         // });
+        // console.log('here');
+        // var file_data = $("#uploadFile").prop("files")[0];   // Getting the properties of file from file field
+        // var form_data = new FormData();                  // Creating object of FormData class
+        // form_data.append("file", file_data);              // Appending parameter named file with properties of file_field to form_data
+        // $.ajax({
+        //         url: "../../app/includes/customer_upload.php",
+        //         dataType: 'json',
+        //         cache: false,
+        //         contentType: false,
+        //         processData: false,
+        //         data: form_data,                         // Setting the data attribute of ajax with file_data
+        //         type: 'post',
+        //         success: function(data) {
+        //             console.log(data);
+        //         }
+        // });
     };
 }
 
@@ -470,6 +508,48 @@ async function setExportCustomerPage () {
     const export_customer = document.getElementById('export-customer');
     export_customer.onsubmit = (e) => {
         $('#export-customer').attr('action', '../../app/includes/customer_export.php');
+        toastr.info("Preparing CSV File...");
+        // $.ajax({
+        //     url: '../../app/includes/customer_export.php',
+        //     cache: false,
+        //     success: function(response) {
+        //         var res = $.parseJSON(response);
+        //         console.log(res)
+        //     },
+        //     error: function (xhr, status, error, response) {
+        //         console.error(xhr);
+        //         var res = $.parseJSON(response);
+        //         console.log(res)
+        //     }
+        // });
+    };
+}
+
+async function setDownloadPage () {
+    const download_template = document.getElementById('download-template');
+    download_template.onsubmit = (e) => {
+        $('#download-template').attr('action', '../../app/includes/download_template.php');
+        toastr.info("Preparing CSV File...");
+        // $.ajax({
+        //     url: '../../app/includes/customer_export.php',
+        //     cache: false,
+        //     success: function(response) {
+        //         var res = $.parseJSON(response);
+        //         console.log(res)
+        //     },
+        //     error: function (xhr, status, error, response) {
+        //         console.error(xhr);
+        //         var res = $.parseJSON(response);
+        //         console.log(res)
+        //     }
+        // });
+    };
+}
+
+async function setDownloadError () {
+    const download_error = document.getElementById('download-error');
+    download_error.onsubmit = (e) => {
+        $('#download-error').attr('action', '../../app/includes/download_error.php');
         toastr.info("Preparing CSV File...");
         // $.ajax({
         //     url: '../../app/includes/customer_export.php',

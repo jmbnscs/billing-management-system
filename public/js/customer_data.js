@@ -157,32 +157,32 @@ async function setCustomerData(customer_data) {
         
             let activity, log = true, details = account_id + ' - ' + customer_data.first_name + ' ' + customer_data.last_name;
             if (customer.mobile_number != $('#mobile_number_edt').val()) {
-                activity = 'Updated customer mobile number [' + details + '].';
-                log = await logActivity(activity, 'Customer List');
+                activity = 'Save Changes - Mobile Number [' + details + '].';
+                log = await logActivity(activity, 'Customer Data');
             }
             if (customer.email != $('#email_edt').val()) {
-                activity = 'Updated customer email [' + details + '].';
-                log = await logActivity(activity, 'Customer List');
+                activity = 'Save Changes - Email [' + details + '].';
+                log = await logActivity(activity, 'Customer Data');
             }
             if (customer.billing_address != $('#billing_address_edt').val()) {
-                activity = 'Updated customer billing address [' + details + '].';
-                log = await logActivity(activity, 'Customer List');
+                activity = 'Save Changes - Billing Address [' + details + '].';
+                log = await logActivity(activity, 'Customer Data');
             }
             if (account.plan_id != $('#plan_id_edt').val()) {
-                activity = 'Updated account subscription plan [' + details + '].';
-                log = await logActivity(activity, 'Customer List');
+                activity = 'Save Changes - Subscription Plan [' + details + '].';
+                log = await logActivity(activity, 'Customer Data');
             }
             if (account.connection_id != $('#connection_id_edt').val()) {
-                activity = 'Updated account connection type [' + details + '].';
-                log = await logActivity(activity, 'Customer List');
+                activity = 'Save Changes - Connection Type [' + details + '].';
+                log = await logActivity(activity, 'Customer Data');
             }
             if (account.account_status_id != $('#account_status_id_edt').val()) {
-                activity = 'Updated account status [' + details + '].';
-                log = await logActivity(activity, 'Customer List');
+                activity = 'Save Changes - Status [' + details + '].';
+                log = await logActivity(activity, 'Customer Data');
             }
             if (account.area_id != $('#area_id_edt').val()) {
-                activity = 'Updated account area [' + details + '].';
-                log = await logActivity(activity, 'Customer List');
+                activity = 'Save Changes - Area [' + details + '].';
+                log = await logActivity(activity, 'Customer Data');
             }
             
             const [customer_content, account_content] = await Promise.all ([updateData('customer/update.php', update_data), updateData('account/update.php', account_data)]);
@@ -217,12 +217,13 @@ async function setInvoiceHistory() {
     for (var i = 0; i < content.length; i++) {
         let status = await getStatusName('invoice_status', content[i].invoice_status_id);
         (status == 'PAID') ? tag = 'bg-success' : tag = 'bg-danger';
+        let dc_date = new Date(content[i].disconnection_date);
         
         t.row.add($(`
             <tr>
-                <th scope="row" style="color: #012970;">${content[i].invoice_id}</th>
-                <td data-label="Disconnection Date">${content[i].disconnection_date}</td>
-                <td data-label="Running Balance">&#8369; ${content[i].running_balance}</td>
+                <th scope="row" style="color: #012970;">${i+1}</th>
+                <td data-label="Invoice ID">${content[i].invoice_id}</td>
+                <td data-label="Disconnection Date">${dc_date.toLocaleDateString('en-US')}</td>
                 <td data-label="Status"><span class="badge ${tag}">${status}</span></td>
                 <td data-label="View"><button type="submit" class="btn btn-outline-primary" value="${content[i].invoice_id}" name="invoice_id_btn"><i class="ri ri-eye-fill"></i></button></td>
             </tr>
@@ -272,9 +273,10 @@ async function setPaymentHistory() {
         
         t.row.add($(`
             <tr>
-                <th scope="row" style="color: #012970;"><strong>${content[i].payment_reference_id}</strong></th>
+                <th scope="row" style="color: #012970;"><strong>${i+1}</strong></th>
+                <td data-label="Reference ID">${content[i].payment_reference_id}</td>
                 <td data-label="Amount Paid">&#8369; ${content[i].amount_paid}</td>
-                <td data-label="Payment Date">${content[i].payment_date}</td>
+                <td data-label="Payment Date">${(new Date(content[i].payment_date)).toLocaleDateString('en-US')}</td>
                 <td data-label="Status"><span class="badge ${tag}">${payment_status}</span></td>
                 <td data-label="View"><button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#view-payment" data-bs-whatever="${content[i].payment_id}"><i class="ri ri-eye-fill"></i></button></td>
             </tr>
@@ -305,7 +307,7 @@ async function setProrateHistory() {
 
         t.row.add($(`
             <tr>
-                <th scope="row" style="color: #012970;"><strong>${content[i].prorate_id}</strong></th>
+                <th scope="row" style="color: #012970;"><strong>${i+1}</strong></th>
                 <td data-label="Duration">${content[i].duration}</td>
                 <td data-label="Discount">&#8369; ${content[i].prorate_charge}</td>
                 <td data-label="Ticket Number">${content[i].ticket_num}</td>
@@ -387,7 +389,8 @@ async function setTicketHistory() {
         
         t.row.add($(`
             <tr>
-                <th scope="row" style="color: #012970;"><strong>${content[i].ticket_num}</strong></th>
+                <th scope="row" style="color: #012970;"><strong>${i+1}</strong></th>
+                <td data-label="Ticket #">${content[i].ticket_num}</td>
                 <td data-label="Category">${concern.concern_category}</td>
                 <td data-label="Admin">${admin_username}</td>
                 <td data-label="Status"><span class="badge ${tag}">${status}</span></td>

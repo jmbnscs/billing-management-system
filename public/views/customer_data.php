@@ -8,7 +8,7 @@
     <h1>Customer Details</h1>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="dashboard.php">Home</a></li>
+          <li class="breadcrumb-item"><a href="dashboard">Home</a></li>
           <li class="breadcrumb-item active">Customers</li>
         </ol>
       </nav>
@@ -158,9 +158,9 @@
                         <table class="table table-borderless" id="customer-invoice-tbl">
                           <thead>
                             <tr>
+                              <th scope="col">#</th>
                               <th scope="col">Invoice ID</th>
                               <th scope="col">Disconnection Date</th>
-                              <th scope="col">Running Balance</th>
                               <th scope="col">Status</th>
                               <th scope="col">View</th>
                             </tr>
@@ -185,6 +185,7 @@
                       <table class="table table-borderless" id="customer-payment-tbl">
                         <thead>
                           <tr>
+                            <th scope="col">#</th>
                             <th scope="col">Reference ID</th>
                             <th scope="col">Amount Paid</th>
                             <th scope="col">Payment Date</th>
@@ -220,7 +221,7 @@
                       <table class="table table-borderless" id="customer-prorate-tbl">
                         <thead>
                           <tr>
-                            <th scope="col">Prorate ID</th>
+                            <th scope="col">#</th>
                             <th scope="col">Duration</th>
                             <th scope="col">Prorate Discount</th>
                             <th scope="col">Ticket #</th>
@@ -262,6 +263,7 @@
                       <table class="table table-borderless" id="customer-ticket-tbl">
                         <thead>
                           <tr>
+                            <th scope="col">#</th>
                             <th scope="col">Ticket #</th>
                             <th scope="col">Concern</th>
                             <th scope="col">Admin</th>
