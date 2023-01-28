@@ -1551,6 +1551,7 @@ table.dataTable td.dt-control:before {
 /* Tables */
 table {
   padding-top: 10px;
+  font-family: "Nunito", sans-serif;
 }
 
 table thead {
