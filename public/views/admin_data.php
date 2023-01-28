@@ -8,7 +8,7 @@
     <h1>Admin Details</h1>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="dashboard.php">Home</a></li>
+          <li class="breadcrumb-item"><a href="dashboard">Home</a></li>
           <li class="breadcrumb-item active">Admins</li>
         </ol>
       </nav>
@@ -78,6 +78,20 @@
                             <div class="p-2">
                                 <h5 class="card-title p-2">Logs</h5>
 
+                                <!-- Filter Dropdown -->
+                                <div>
+                                  <select id="pages-filter" class="form-select table-filter" style="display: inline; width: 200px; margin-left: 25px;">
+                                    <option value="">Select All: Pages</option>
+                                    <option value="Customer">Customer</option>
+                                    <option value="Invoice">Invoice</option>
+                                    <option value="Plan">Plan</option>
+                                    <option value="Ticket">Ticket</option>
+                                    <option value="Admin">Admin</option>
+                                    <option value="Profile">Profile</option>
+                                    <option value="Payment">Payment</option>
+                                  </select>
+                                </div>
+
                                 <table class="table table-borderless" id="activity-table">
                                     <thead class="table-light">
                                         <tr>
@@ -107,7 +121,13 @@
                             <div class="p-2">
                                 <h5 class="card-title p-2">Ticket History</h5>
 
-                                <table class="table" id="tickets-table">
+                                <div>
+                                  <select id="status-filter" class="form-select table-filter" style="display: inline; width: 200px; margin-left: 25px;">
+                                    <option value="">Select All: Status</option>
+                                  </select>
+                                </div>
+
+                                <table class="table table-borderless" id="tickets-table">
                                     <thead class="table-light">
                                         <tr>
                                             <th scope="col">#</th>
@@ -174,19 +194,22 @@
                 </div>
             </div>
 
-            
-            <div class="col-md-12" id="admin-role-select">
-                <div class="form-floating">
-                <select id="admin_role_edt" class="form-select" required></select>
-                <label for="admin_role_edt">Admin Role</label>
-                </div>
+            <div class="row pt-2">
+              <div class="col-md-12" id="admin-role-select">
+                  <div class="form-floating">
+                  <select id="admin_role_edt" class="form-select"></select>
+                  <label for="admin_role_edt">Admin Role</label>
+                  </div>
+              </div>
             </div>
 
-            <div class="col-md-12" id="admin-status-select">
-                <div class="form-floating">
-                <select id="admin_status_edt" class="form-select" required></select>
-                <label for="admin_status_edt">Admin Status</label>
-                </div>
+            <div class="row pt-2">
+              <div class="col-md-12" id="admin-status-select">
+                  <div class="form-floating">
+                  <select id="admin_status_edt" class="form-select"></select>
+                  <label for="admin_status_edt">Admin Status</label>
+                  </div>
+              </div>
             </div>
 
           </div>
@@ -405,6 +428,8 @@
 </div>
 
 </main>
+
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
   <!-- Vendor JS Files -->
   <script src="../assets/vendor/apexcharts/apexcharts.min.js"></script>

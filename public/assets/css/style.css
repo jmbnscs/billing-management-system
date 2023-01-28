@@ -436,7 +436,7 @@ h6 {
   min-width: 300px;
   /* padding-left: 600px; */
   position: relative;
-  float: right;
+  /* float: left; */
 }
 
 @media (max-width: 1199px) {
@@ -1549,6 +1549,43 @@ table.dataTable td.dt-control:before {
 }
 
 /* Tables */
+table {
+  padding-top: 10px;
+  font-family: "Nunito", sans-serif;
+}
+
+table thead {
+  background-color: #66A6FF;
+}
+
+.table tr button {
+  border: 1px solid #012970;
+  padding: none;
+  font-size: smaller;
+  color: #012970;
+}
+.table tr button:hover {
+  background-color: #66A6FF;
+}
+
+/* .table tr button i {
+  height: 30px;
+} */
+
+.table tr:nth-child(even) {
+  background-color: #C2E9FB;
+}
+
+.table tr:hover {
+  background: #f5f5f5;
+}
+
+/* a.paginate_button.current {
+  border: 2px solid #012970 !important;
+  background-color: #66A6FF !important;
+} */
+
+
 @media screen and (max-width: 600px) {
   table {
     border: 0;
@@ -1597,3 +1634,5 @@ table.dataTable td.dt-control:before {
     border-bottom: 0;
   }
 }
+
+/* DataTable Custom */

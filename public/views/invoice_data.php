@@ -4,14 +4,21 @@
 
 <main id="main" class="main">
   <!-- Page Title -->
-  <div class="pagetitle">
-    <h1>Unpaid Invoice Details</h1>
+  <div class="row pagetitle">
+    <div class="col-md-9">
+      <h1>Unpaid Invoice Details</h1>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="dashboard.php">Home</a></li>
+          <li class="breadcrumb-item"><a href="dashboard">Home</a></li>
           <li class="breadcrumb-item active">Invoice</li>
         </ol>
       </nav>
+    </div>
+
+    <div class="col-md-3 justify-content-center">
+      <button type="button" class="btn btn-primary mt-3 w-100" data-bs-toggle="modal" data-bs-target="#add-payment-md" id="edit-btn">+ Add Payment</button>
+    </div>
+    
   </div><!-- End Page Title -->
 
   <!-- Invoice Data Tabs -->
@@ -27,9 +34,6 @@
                 <h6 id="invoice-id"></h6>
               </div>
 
-              <div class="col-sm-3">
-                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add-payment-md" id="edit-btn">Add Payment</button>
-              </div>
             </div>
 
             <div class="row invoice-information align-items-start ms-1 p-0 pt-3">
@@ -92,6 +96,7 @@
               <table class="table table-borderless" id="payment-table">
                 <thead>
                   <th>Payment Date</th>
+                  <th>Payment Center</th>
                   <th>Reference ID</th>
                   <th>Amount Paid</th>
                 </thead>
@@ -121,22 +126,31 @@
           <div class="modal-body row g-3">
                   <div class="col-md-12">
                     <div class="form-floating">
+                      <select class="form-control required" id="payment_centers">
+                        <option selected disabled value="">Choose Payment Center</option>
+                      </select>
+                      <label for="payment_centers" class="required">Payment Center</label>
+                    </div>
+                  </div>
+
+                  <div class="col-md-12">
+                    <div class="form-floating">
                       <input type="text" class="form-control" id="payment_reference_id_md" placeholder="Payment Reference ID" required>
-                      <label for="payment_reference_id_md">Payment Reference ID</label>
+                      <label for="payment_reference_id_md" class="required">Payment Reference ID</label>
                     </div>
                   </div>
 
                   <div class="col-md-12">
                     <div class="form-floating">
                       <input type="number" min="1" class="form-control" id="amount_paid_md" placeholder="Amount Paid" required>
-                      <label for="amount_paid_md">Amount Paid</label>
+                      <label for="amount_paid_md" class="required">Amount Paid</label>
                     </div>
                   </div>
 
                   <div class="col-md-12">
                     <div class="form-floating">
                       <input type="date" class="form-control custom-date" id="payment_date_md" placeholder="Payment Date" required>
-                      <label for="payment_date_md">Payment Date</label>
+                      <label for="payment_date_md" class="required">Payment Date</label>
                     </div>
                   </div>
           </div>
@@ -152,6 +166,8 @@
 </form>
 
 </main>
+
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
   <!-- Vendor JS Files -->
   <script src="../assets/vendor/apexcharts/apexcharts.min.js"></script>

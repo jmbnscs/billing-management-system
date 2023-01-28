@@ -3,14 +3,20 @@
   include '../models/navbar.html'; ?>
 
 <main id="main" class="main">
-  <div class="pagetitle">
-    <h1>View Plans</h1>
-    <nav>
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="dashboard.php">Home</a></li>
-        <li class="breadcrumb-item active">Plans</li>
-      </ol>
-    </nav>
+  <div class="row pagetitle">
+    <div class="col-md-9">
+      <h1>View Plans</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="dashboard">Home</a></li>
+          <li class="breadcrumb-item active">Plans</li>
+        </ol>
+      </nav>
+    </div>
+
+    <div class="col-md-3 justify-content-center">
+      <button type="button" class="btn btn-primary mt-3 w-100" data-bs-toggle="modal" data-bs-target="#add-plans" id="add-btn">+ Add New Plan</button>
+    </div>
   </div><!-- End Page Title -->
 
   <!-- Plans Table -->
@@ -18,38 +24,86 @@
     <div class="card recent-sales overflow-auto">
       <br>
       <div class="card-body">
-        <!-- Filter Dropdown -->
-        <div>
-          <select id="inclusions-filter" class="form-select table-filter" style="display: inline; width: 200px; margin-left: 25px;">
-            <option value="">Select All: Inclusion</option>
-            <option value="None">None</option>
-          </select>
+
+        <ul class="nav nav-tabs d-flex" role="tablist">
+          <li class="nav-item flex-fill" role="presentation">
+            <button class="nav-link w-100 active" id="active-tab" data-bs-toggle="tab" data-bs-target="#active-plans" type="button" role="tab" aria-controls="active" aria-selected="true">Active</button>
+          </li>
+          <li class="nav-item flex-fill" role="presentation">
+            <button class="nav-link w-100" id="deactivated-tab" data-bs-toggle="tab" data-bs-target="#deactivated-plans" type="button" role="tab" aria-controls="deactivated" aria-selected="false">Deactivated</button>
+          </li>
+        </ul>
+
+        <div class="tab-content pt-2">
+          <!-- Active Plans -->
+          <div class="tab-pane fade show active" id="active-plans" role="tabpanel" aria-labelledby="active-tab">
+            <!-- Filter Dropdown -->
+            <div>
+              <select id="active-inclusions-filter" class="form-select table-filter" style="display: inline; width: 200px; margin-left: 25px;">
+                <option value="">Select All: Inclusion</option>
+                <option value="None">None</option>
+              </select>
+            </div>
+
+            <!-- <div>
+              <select id="status-filter" class="form-select table-filter" style="display: inline; width: 200px; margin-left: 25px;">
+                <option value="">Select All: Status</option>
+              </select>
+            </div> -->
+            <!-- End Filter Dropdown -->
+
+            <table class="table table-borderless" id="active-table">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Plan Name</th>
+                  <th scope="col">Bandwidth</th>
+                  <th scope="col">Price</th>
+                  <th scope="col">Inclusion</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">View</th>
+                </tr>
+              </thead>
+              <tbody id="plan-data">
+              </tbody>
+            </table>
+          </div>
+          
+          <!-- Deactivated Plans -->
+          <div class="tab-pane fade" id="deactivated-plans" role="tabpanel" aria-labelledby="deactivated-tab">
+            <!-- Filter Dropdown -->
+            <div>
+              <select id="deact-inclusions-filter" class="form-select table-filter" style="display: inline; width: 200px; margin-left: 25px;">
+                <option value="">Select All: Inclusion</option>
+                <option value="None">None</option>
+              </select>
+            </div>
+
+            <!-- <div>
+              <select id="status-filter" class="form-select table-filter" style="display: inline; width: 200px; margin-left: 25px;">
+                <option value="">Select All: Status</option>
+              </select>
+            </div> -->
+            <!-- End Filter Dropdown -->
+
+            <table class="table table-borderless" id="deactivated-table">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Plan Name</th>
+                  <th scope="col">Bandwidth</th>
+                  <th scope="col">Price</th>
+                  <th scope="col">Inclusion</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">View</th>
+                </tr>
+              </thead>
+              <tbody id="plan-data">
+              </tbody>
+            </table>
+          </div>
         </div>
-
-        <div>
-          <select id="status-filter" class="form-select table-filter" style="display: inline; width: 200px; margin-left: 25px;">
-            <option value="">Select All: Status</option>
-          </select>
-        </div>
-        <!-- End Filter Dropdown -->
-
-        <table class="table table-borderless" id="plan-table">
-          <thead>
-            <tr>
-              <th scope="col">Plan Name</th>
-              <th scope="col">Bandwidth</th>
-              <th scope="col">Price</th>
-              <th scope="col">Inclusion</th>
-              <th scope="col">Status</th>
-              <th scope="col">View</th>
-            </tr>
-          </thead>
-          <tbody id="plan-data">
-          </tbody>
-        </table>
-
       </div>
-
     </div>
   </div><!-- End Plans Table -->
 
@@ -76,6 +130,9 @@
                 <div class="col-md-12">
                   <div class="form-floating">
                     <input type="text" class="form-control" id="plan_name" placeholder="Plan Name" required>
+                    <div class="invalid-feedback">
+                        Please enter a valid plan name.
+                    </div>
                     <label for="plan_name">Plan Name</label>
                   </div>
                 </div>
@@ -83,6 +140,9 @@
                 <div class="col-md-12">
                   <div class="form-floating">
                     <input type="text" class="form-control" id="bandwidth" placeholder="Bandwidth" required>
+                    <div class="invalid-feedback">
+                        Please enter bandwidth.
+                    </div>
                     <label for="bandwidth">Bandwidth</label>
                   </div>
                 </div>
@@ -90,6 +150,9 @@
                 <div class="col-md-12">
                   <div class="form-floating">
                     <input type="text" class="form-control" id="price" placeholder="Price" required>
+                    <div class="invalid-feedback">
+                        Please enter plan price.
+                    </div>
                     <label for="price">Price</label>
                   </div>
                 </div>
@@ -120,7 +183,70 @@
     </div><!-- End Modal Dialog Scrollable-->
 </form>
 
+<!-- Add New Plan Modal -->
+<form id="add-plan" novalidate>
+    <div class="modal fade" id="add-plans" tabindex="-1">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-m">
+          <div class="modal-content">
+
+            <div class="modal-header">
+              <h5 class="modal-title">Create Plan</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body row g-3">
+                <div class="col-md-12">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="plan_name_add" placeholder="Plan Name" required>
+                    <div class="invalid-feedback">
+                        Please enter a valid plan name.
+                    </div>
+                    <label for="plan_name_add" class="required">Plan Name</label>
+                  </div>
+                </div>
+
+                <div class="col-md-12">
+                  <div class="form-floating">
+                    <input type="number" class="form-control" id="bandwidth_add" placeholder="Bandwidth" min="5" required>
+                    <div class="invalid-feedback">
+                        Please enter bandwidth.
+                    </div>
+                    <label for="bandwidth_add" class="required">Bandwidth</label>
+                  </div>
+                </div>
+
+                <div class="col-md-12">
+                  <div class="form-floating">
+                    <input type="number" class="form-control" id="price_add" min="1" placeholder="Price" required>
+                    <div class="invalid-feedback">
+                        Please enter plan price.
+                    </div>
+                    <label for="price_add" class="required">Price</label>
+                  </div>
+                </div>
+
+                <div class="col-md-12">
+                  <div class="form-floating">
+                    <select class="form-control selectpicker" id="inclusion_add" multiple aria-label="size 5 select example" data-actions-box="true"></select>
+                    <label for="inclusion_add">Inclusion(s)</label>
+                  </div>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-success" id="add-plan-btn">Submit</button>
+            </div>
+          </div>
+        </div>
+    </div><!-- End Modal Dialog Scrollable-->
+</form>
+
 </main><!-- End #main -->
+
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
   <!-- Vendor JS Files -->
   <script src="../assets/vendor/apexcharts/apexcharts.min.js"></script>

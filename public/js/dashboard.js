@@ -17,7 +17,7 @@ $(document).ready(function () {
         setRecentActivity();
     }
     else {
-        window.location.replace('../views/login.php');
+        window.location.replace('../views/login');
     }
     
 });
@@ -29,19 +29,27 @@ const currentDay = new Date().getDate();
 // Global Functions
 function setEventListener() {
     unpaid_this_month.addEventListener('click', (e) => {
-        filterInvoiceCard('month');
+        filterInvoiceCard('This Month');
     }, false);
 
     unpaid_this_year.addEventListener('click', (e) => {
-        filterInvoiceCard('year');
+        filterInvoiceCard('This Year');
+    }, false);
+
+    unpaid_all.addEventListener('click', (e) => {
+        filterInvoiceCard('All');
     }, false);
 
     uncharged_this_month.addEventListener('click', (e) => {
-        filterProrateCard('month');
+        filterProrateCard('This Month');
     }, false);
 
     uncharged_this_year.addEventListener('click', (e) => {
-        filterProrateCard('year');
+        filterProrateCard('This Year');
+    }, false);
+
+    uncharged_all.addEventListener('click', (e) => {
+        filterProrateCard('All');
     }, false);
 }
 
@@ -109,85 +117,45 @@ async function setRecentActivity() {
 }
 
 // Dashboard Cards
-async function setCards() {
-    filterInvoiceCard('month');
-    filterProrateCard('month');
+function setCards() {
+    filterInvoiceCard('This Month');
+    filterProrateCard('This Month');
     setTicketCards();
 }
 
 async function filterInvoiceCard(filter_name) {
-    let unpaid_bill = 0.00, data, page;
-    if (filter_name == 'month') {
-        for (var i = 2; i < 5; i++) {
-            page = 'invoice/read_by_status.php?invoice_status_id=' + i;
-            data = await fetchData(page);
-            if (data.length > 0) {
-                for (var j = 0; j < data.length; j++) {
-                    let bill_date = data[j].billing_period_end.split("-");
-                    if (currentMonth == parseInt(bill_date[1])) {
-                        unpaid_bill = parseFloat(unpaid_bill) + parseFloat(data[j].running_balance);
-                    }
-                }
-            }
-        }
-        document.getElementById('total_unpaid').innerHTML = '\u20B1 ' + unpaid_bill.toFixed(2);
-        document.getElementById('unpaid_filter').innerHTML = "| This Month";
+    const unpaid_invoice = await fetchData('views/invoice_get_unpaid.php?filter=' + filter_name);
+
+    if (unpaid_invoice.total_unpaid == null) {
+        $('#total_unpaid').text('\u20B1 0.00');
     }
-    else if (filter_name == 'year') {
-        for (var i = 2; i < 5; i++) {
-            page = 'invoice/read_by_status.php?invoice_status_id=' + i;
-            data = await fetchData(page);
-            if (data.length > 0) {
-                for (var j = 0; j < data.length; j++) {
-                    let bill_date = data[j].billing_period_end.split("-");
-                    if (currentYear == parseInt(bill_date[0])) {
-                        unpaid_bill = parseFloat(unpaid_bill) + parseFloat(data[j].running_balance);
-                    }
-                }
-            }
-        }
-        document.getElementById('total_unpaid').innerHTML = '\u20B1 ' + unpaid_bill.toFixed(2);
-        document.getElementById('unpaid_filter').innerHTML = "| This Year";
+    else {
+        $('#total_unpaid').text('\u20B1 ' + parseFloat(unpaid_invoice.total_unpaid).toFixed(2));
     }
+
+    $('#unpaid_filter').text('| ' + filter_name);
+    $('#total_invoices').text(unpaid_invoice.total_invoices);
 }
 
 async function filterProrateCard(filter_name) {
-    let uncharged = 0.00;
-    let data = await fetchData('prorate/read_status.php?prorate_status_id=1');
-    if (filter_name == 'month') {
-        for (var i = 0; i < data.length; i++) {
-            let created_at = new Date(data[i].created_at);
-            if (currentMonth == created_at.getMonth() + 1) {
-                uncharged = parseFloat(uncharged) + parseFloat(data[i].prorate_charge);
-            }
-        }
-        document.getElementById('total_uncharged').innerHTML = '\u20B1 ' + uncharged.toFixed(2);
-        document.getElementById('uncharged_filter').innerHTML = "| This Month";
+    const untagged_prorate = await fetchData('views/prorate_get_untagged.php?filter=' + filter_name);
+
+    if (untagged_prorate.total_prorate == null) {
+        $('#total_uncharged').text('\u20B1 0.00');
     }
-    else if (filter_name == 'year') {
-        for (var i = 0; i < data.length; i++) {
-            let created_at = new Date(data[i].created_at);
-            if (currentYear == created_at.getFullYear()) {
-                uncharged = parseFloat(uncharged) + parseFloat(data[i].prorate_charge);
-            }
-        }
-        document.getElementById('total_uncharged').innerHTML = '\u20B1 ' + uncharged.toFixed(2);
-        document.getElementById('uncharged_filter').innerHTML = "| This Year";
+    else {
+        $('#total_uncharged').text('\u20B1 ' + parseFloat(untagged_prorate.total_prorate).toFixed(2));
     }
+
+    $('#uncharged_filter').text('| ' + filter_name);
+    $('#total_prorates').text(untagged_prorate.num_of_prorates);
 }
 
 async function setTicketCards() {
-    let content = await fetchData('ticket/read_status.php?ticket_status_id=1'), counter = 0;
-    (content.length == undefined) ? $('#active_tkt_cnt').text('0') : $('#active_tkt_cnt').text(parseInt(content.length));
+    let tickets = await fetchData('views/ticket_active_claimed.php?admin_id=' + admin_id);
 
-    content = await fetchData('ticket/read_status.php?ticket_status_id=2');
-    for (var i = 0; i < content.length; i++) {
-        content[i].admin_id;
-        if (content[i].admin_id == admin_id) {
-            counter++;
-        }
-    }
-    $('#claimed_tkt_cnt').text(counter);
+    $('#active_tkt_cnt').text(tickets.active_tickets);
+    $('#claimed_tkt_cnt').text(tickets.claimed_tickets + ' / ' + (tickets.active_tickets + tickets.claimed_tickets));
 }
 
 // Revenue Reports
@@ -232,59 +200,59 @@ async function setRevenueReports() {
           }
         }
       });
-}
 
-function setMonthLabel() {
-    let months = ["January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"];
+    async function getRevenueData() {
+        let content = await fetchData('payment/read.php');
+        let current = new Date().getMonth(), i = 6, prev_year = new Date().getFullYear() - 1, data = new Array(), revenue = 0.00, check = 0;
 
-    let current = new Date().getMonth();
-    let labels = new Array(), i = 6;
-
-    while (i !== 0) {
-        if (current <= 0) {
-            current = 12;
-        }
-        labels.push(months[current - 1]);
-        current--;
-        i--;
-    }
-    return labels.reverse();
-}
-
-async function getRevenueData() {
-    let content = await fetchData('payment/read.php');
-    let current = new Date().getMonth(), i = 6, prev_year = new Date().getFullYear() - 1, data = new Array(), revenue = 0.00, check = 0;
-
-    while (i !== 0) {
-        if (current <= 0) {
-            current = 12;
-            check = 1;
-        }
-
-        if (check == 1) {
-            for (var j = 0; j < content.length; j++) {
-                if (parseInt(content[j].payment_date.split('-')[1]) == current && parseInt(content[j].payment_date.split('-')[0] == prev_year)) {
-                    revenue = parseFloat(revenue) + parseFloat(content[j].amount_paid);
-                }
+        while (i !== 0) {
+            if (current <= 0) {
+                current = 12;
+                check = 1;
             }
-            data.push(parseFloat(revenue));
-        }
-        else {
-            for (var j = 0; j < content.length; j++) {
-                if (parseInt(content[j].payment_date.split('-')[1]) == current) {
-                    revenue = parseFloat(revenue) + parseFloat(content[j].amount_paid);
-                }
-            }
-            data.push(parseFloat(revenue));
-        }
-        
 
-        i--;
-        current--;
-        revenue = 0.00;
+            if (check == 1) {
+                for (var j = 0; j < content.length; j++) {
+                    if (parseInt(content[j].payment_date.split('-')[1]) == current || parseInt(content[j].payment_date.split('-')[0] == prev_year)) {
+                        revenue = parseFloat(revenue) + parseFloat(content[j].amount_paid);
+                    }
+                }
+                data.push(parseFloat(revenue));
+            }
+            else {
+                for (var j = 0; j < content.length; j++) {
+                    if (parseInt(content[j].payment_date.split('-')[1]) == current) {
+                        revenue = parseFloat(revenue) + parseFloat(content[j].amount_paid);
+                    }
+                }
+                data.push(parseFloat(revenue));
+            }
+            
+
+            i--;
+            current--;
+            revenue = 0.00;
+        }
+        return data.reverse();
     }
-    return data.reverse();
+
+    function setMonthLabel() {
+        let months = ["January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"];
+    
+        let current = new Date().getMonth();
+        let labels = new Array(), i = 6;
+    
+        while (i !== 0) {
+            if (current <= 0) {
+                current = 12;
+            }
+            labels.push(months[current - 1]);
+            current--;
+            i--;
+        }
+        return labels.reverse();
+    }
 }
 
 // Plan Preview
@@ -308,25 +276,25 @@ async function setPlanPreview() {
         t.row.add($(`
             <tr>
                 <th scope="row">${content[i].plan_name}</th>
-                <td>${content[i].bandwidth} mbps</td>
+                <td data-label="Bandwidth">${content[i].bandwidth} mbps</td>
                 <td>&#8369; ${content[i].price}</td>
                 <td><span class="badge ${tag}">${content[i].status}</span></td>
                 <td>${subscribers}</td>
                 </tr>
         `)).draw(false);
     }
-}
 
-async function countPlanSubscribers(plan_id) {
-    let content = await fetchData('account/read.php'), counter = 0;
-
-    for (var i = 0; i < content.length; i++) {
-        if (content[i].plan_id == plan_id) {
-            counter = counter + 1;
+    async function countPlanSubscribers(plan_id) {
+        let content = await fetchData('account/read.php'), subscribers = 0;
+    
+        for (var i = 0; i < content.length; i++) {
+            if (content[i].plan_id == plan_id) {
+                subscribers = subscribers + 1;
+            }
         }
+    
+        return subscribers;
     }
-
-    return counter;
 }
 
 // Customer Preview
@@ -380,63 +348,64 @@ async function setCollection() {
         }]
     }
     });
-}
 
-async function setCollectionData() {
-    let paid = await getPaidUnpaidData(1);
-    let unpaid = await getPaidUnpaidData(2);
-    let acct_receivables = await getAccountReceivables();
-    let collection = [paid, unpaid, acct_receivables];
-    return collection;
-}
+    async function setCollectionData() {
+        let paid = await getPaidUnpaidData(1);
+        let unpaid = await getPaidUnpaidData(2);
+        let acct_receivables = await getAccountReceivables();
+        let collection = [paid, unpaid, acct_receivables];
+        return collection;
+    }
 
-async function getPaidUnpaidData(status_id) {
-    let content = await fetchData('invoice/read.php');
-    let amount = 0.00;
-    for (var i = 0; i < content.length; i++) {
-        if (parseInt(content[i].billing_period_end.split('-')[1]) == currentMonth && parseInt(content[i].billing_period_end.split('-')[0]) == currentYear) {
-            if (status_id == 1) {
-                if (content[i].invoice_status_id == 1) {
-                    amount = parseFloat(amount) + parseFloat(content[i].amount_paid);
+    async function getPaidUnpaidData(status_id) {
+        let content = await fetchData('invoice/read.php');
+        let amount = 0.00;
+        for (var i = 0; i < content.length; i++) {
+            if (parseInt(content[i].billing_period_end.split('-')[1]) == currentMonth && parseInt(content[i].billing_period_end.split('-')[0]) == currentYear) {
+                if (status_id == 1) {
+                    if (content[i].invoice_status_id == 1) {
+                        amount = parseFloat(amount) + parseFloat(content[i].amount_paid);
+                    }
                 }
-            }
-            else {
-                if (content[i].invoice_status_id !== 1) {
-                    amount = parseFloat(amount) + parseFloat(content[i].running_balance);
+                else {
+                    if (content[i].invoice_status_id !== 1) {
+                        amount = parseFloat(amount) + parseFloat(content[i].running_balance);
+                    }
                 }
             }
         }
+    
+        return amount;
     }
 
-    return amount;
-}
-
-async function getAccountReceivables() {
-    let content = await fetchData('account/read.php');
-    let acct_receivables = 0.00;
-    for (var i = 0; i < content.length; i++) {
-        if (content[i].billing_day > currentDay) {
-            acct_receivables = parseFloat(acct_receivables) + parseFloat(await getPlanPrice(content[i].plan_id));
+    async function getAccountReceivables() {
+        let content = await fetchData('account/read.php');
+        let acct_receivables = 0.00;
+        for (var i = 0; i < content.length; i++) {
+            if (content[i].billing_day > currentDay) {
+                acct_receivables = parseFloat(acct_receivables) + parseFloat(await getPlanPrice(content[i].plan_id));
+            }
         }
+        return acct_receivables;
     }
-    return acct_receivables;
-}
 
-async function getPlanPrice(plan_id) {
-    let content = await fetchData('plan/read_single.php?plan_id=' + plan_id);
-    return parseFloat(content.price);
+    async function getPlanPrice(plan_id) {
+        let content = await fetchData('plan/read_single.php?plan_id=' + plan_id);
+        return parseFloat(content.price);
+    }
 }
 
 // Ticket Overview
 async function setTicketOverview() {
-    let ticket_data = await setTicketData();
+    let ticket_data = await getTicketData();
     new Chart(document.querySelector('#ticket_overview'), {
     type: 'polarArea',
     data: {
         labels: [
         'Network Interruption',
         'Subscription Change',
-        'Disconnection'
+        'Disconnection',
+        'General Concern'
         ],
         datasets: [{
         label: 'Number of Customers',
@@ -444,20 +413,33 @@ async function setTicketOverview() {
         backgroundColor: [
             'rgb(75, 192, 192)',
             'rgb(54, 162, 235)',
-            'rgb(153, 102, 255)'
+            'rgb(153, 102, 255)',
+            'rgb(255, 205, 86)'
         ],
         hoverOffset: 4
         }]
     }
     });
-}
 
-async function setTicketData() {
-    let content = await fetchData('ticket/read.php');
-    let network = 0, subscription = 0, disconnection = 0;
-
-    for (var i = 0; i < content.length; i++) {
-        if (parseInt(content[i].date_filed.split('-')[1]) == currentMonth) {
+    async function getTicketData() {
+        let content = await fetchData('ticket/read.php');
+        let network = 0, subscription = 0, disconnection = 0, general = 0;
+    
+        for (var i = 0; i < content.length; i++) {
+            // if (parseInt(content[i].date_filed.split('-')[1]) == currentMonth) {
+            //     if (content[i].concern_id == 1) {
+            //         network = network + 1;
+            //     }
+            //     else if (content[i].concern_id == 2) {
+            //         subscription = subscription + 1;
+            //     }
+            //     else if (content[i].concern_id == 3) {
+            //         disconnection = disconnection + 1;
+            //     }
+            //     else if (content[i].concern_id == 4) {
+            //         general = general + 1;
+            //     }
+            // }
             if (content[i].concern_id == 1) {
                 network = network + 1;
             }
@@ -467,8 +449,11 @@ async function setTicketData() {
             else if (content[i].concern_id == 3) {
                 disconnection = disconnection + 1;
             }
+            else if (content[i].concern_id == 4) {
+                general = general + 1;
+            }
         }
+    
+        return [network, subscription, disconnection, general];
     }
-
-    return [network, subscription, disconnection];
 }

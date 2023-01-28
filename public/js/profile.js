@@ -60,7 +60,7 @@ async function setProfilePage() {
             'user_level_id' : user_id
         });
 
-        const [content, log] = await Promise.all ([updateData('admin/update.php', update_data), logActivity('Edited Profile Details', 'Profile')]);
+        const [content, log] = await Promise.all ([updateData('admin/update.php', update_data), logActivity('Save Changes', 'Profile')]);
         
         if (content.message = 'Admin Updated' && log) {
             toastr.success('Profile Updated Successfully.');
