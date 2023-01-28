@@ -36,6 +36,7 @@
 
                 <li><a class="dropdown-item" href="#" id="unpaid_this_month">This Month</a></li>
                 <li><a class="dropdown-item" href="#" id="unpaid_this_year">This Year</a></li>
+                <li><a class="dropdown-item" href="#" id="unpaid_all">All</a></li>
               </ul>
             </div>
 
@@ -48,8 +49,7 @@
                 </div>
                 <div class="ps-3" id="unpaid-invoice-data">
                   <h6 id="total_unpaid"></h6>
-                  <!-- <span class="text-success small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">increase</span> -->
-                  <!-- <a href="../views/invoice.php" class="stretched-link"></a> -->
+                  <span class="text-success small pt-1 fw-bold" id="total_invoices"></span> <span class="text-muted small pt-2 ps-1">invoice/s</span>
                 </div>
               </div>
             </div>
@@ -70,6 +70,7 @@
 
                 <li><a class="dropdown-item" href="#" id="uncharged_this_month">This Month</a></li>
                 <li><a class="dropdown-item" href="#" id="uncharged_this_year">This Year</a></li>
+                <li><a class="dropdown-item" href="#" id="uncharged_all">All</a></li>
               </ul>
             </div>
 
@@ -81,9 +82,8 @@
                   <i class="ri ri-pie-chart-line"></i>
                 </div>
                 <div class="ps-3">
-                  <!-- Apply Backend Here -->
                   <h6 id="total_uncharged"></h6>
-                  <!-- <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span> -->
+                  <span class="text-success small pt-1 fw-bold" id="total_prorates"></span> <span class="text-muted small pt-2 ps-1">record/s</span>
 
                 </div>
               </div>
@@ -106,8 +106,7 @@
                 <div class="ps-3">
                   <!-- Apply Backend Here -->
                   <h6 id="active_tkt_cnt"></h6>
-                  <!-- <span class="text-success small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">increase</span> -->
-
+                  <span class="text-success small pt-1 fw-bold">ticket/s</span> 
                 </div>
               </div>
             </div>
@@ -129,8 +128,7 @@
                 <div class="ps-3">
                   <!-- Apply Backend Here -->
                   <h6 id="claimed_tkt_cnt"></h6>
-                  <!-- <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span> -->
-
+                  <span class="text-success small pt-1 fw-bold">ticket/s</span> 
                 </div>
               </div>
             </div>
@@ -203,7 +201,7 @@
       <div class="card">
 
         <div class="card-body pb-0">
-            <h5 class="card-title">Customer Preview <span>| Year 2022</span></h5>
+            <h5 class="card-title">Customer Preview <span>| This Year</span></h5>
             <canvas id="customer_preview" style="max-height: 400px;"></canvas>
           <br>
 
@@ -214,7 +212,7 @@
       <div class="card">
 
         <div class="card-body pb-0">
-          <h5 class="card-title">Submitted Tickets <span>| This Month</span></h5>
+          <h5 class="card-title">Submitted Tickets <span>| All</span></h5>
           
           <canvas id="ticket_overview" style="max-height: 300px;"></canvas>
           <br>

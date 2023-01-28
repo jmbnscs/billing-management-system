@@ -1,6 +1,8 @@
 <?php 
   include '../models/header.html';
-  include '../models/navbar.html'; ?>
+  include '../models/navbar.html'; 
+//   include '../../app/includes/customer_upload.php'; 
+?>
 
 <main id="main" class="main">
 
@@ -31,7 +33,7 @@
 
             <div class="card-body">
                 <div class="col-md-8 mt-3">
-                    <form method="post" enctype="multipart/form-data" id="upload-customer" class="form-inline">
+                    <form action="" method="post" enctype="multipart/form-data" id="upload-customer" class="form-inline">
                         <div class="form-group">
                             <input type="file" name="file" class="form-control form-control-m" required>
                         </div>

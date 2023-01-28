@@ -530,7 +530,7 @@ async function setPlansPage () {
                     'plan_status_id' : plan_status_id
                 });
     
-                const [plan_content, log] = await Promise.all ([updateData('plan/update.php', update_data), logActivity('Updated Plan' + " - " + plan_name, 'View Plans')])
+                const [plan_content, log] = await Promise.all ([updateData('plan/update.php', update_data), logActivity('Save Changes [' + plan_name + ']', 'View Plans')])
             
                 if ((plan_content.message == 'Plan Updated') && (deletePromoMessage == 'Promo Deleted') 
                     && (createPromoMessage == 'Promo Created') && log) {
@@ -648,7 +648,7 @@ async function setAddPlanPage () {
             'price' : price
         });
 
-        const [plan_content, log] = await Promise.all ([createData('plan/create.php', create_data), logActivity('Created Plan' + " - " + plan_name, 'Add New Plan')]);
+        const [plan_content, log] = await Promise.all ([createData('plan/create.php', create_data), logActivity('Submit - Create Plan [' + plan_name + ']', 'View Plans')]);
 
         console.log(inclusion);
     

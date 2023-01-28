@@ -127,7 +127,7 @@ function setConnectionPage() {
                 'connection_name' : $('#connection_name_md').val()
             });
 
-            const [content, log] = await Promise.all ([updateData('connection/update.php', update_data), logActivity('Updated Connection # ' + connection_id, 'Connection - Overview')]);
+            const [content, log] = await Promise.all ([updateData('connection/update.php', update_data), logActivity('Save Changes [Connection #' + connection_id + ']', 'Advanced Options')]);
         
             if (content.message == 'Connection Updated' && log) {
                 sessionStorage.setItem('save_message', "Connection Updated Successfully.");
@@ -163,7 +163,7 @@ function setConnectionPage() {
                 'connection_id' : connection_id
             });
 
-            const [content, log] = await Promise.all ([deleteData('connection/delete.php', delete_data), logActivity('Deleted Connection # ' + connection_id, 'Connection - Overview')]);
+            const [content, log] = await Promise.all ([deleteData('connection/delete.php', delete_data), logActivity('Delete [Connection # ' + connection_id + ']', 'Advanced Options')]);
             
             if (content.message == 'Connection Deleted' && log) {
                 sessionStorage.setItem('save_message', "Connection Deleted Successfully.");
@@ -180,7 +180,7 @@ function setConnectionPage() {
             'connection_name' : $('#connection_name').val()
         });
 
-        const [content, log] = await Promise.all ([createData('connection/create.php', create_data), logActivity('Created new Connection - ' + $('#connection_name').val(), 'Connection - Add Connection')]);
+        const [content, log] = await Promise.all ([createData('connection/create.php', create_data), logActivity('Submit - New Connection [' + $('#connection_name').val() + ']', 'Advanced Options')]);
     
         if (content.message = 'Connection Created' && log) {
             toastr.success('Connection Created Successfully.');
@@ -276,7 +276,7 @@ async function setConcernsPage() {
                 'customer_access' : '1'
             });
 
-            const [content, log] = await Promise.all ([updateData('concerns/update.php', update_data), logActivity('Updated Concern # ' + concern_id, 'Concerns - Overview')]);
+            const [content, log] = await Promise.all ([updateData('concerns/update.php', update_data), logActivity('Save Changes [Concern # ' + concern_id + ']', 'Advanced Options')]);
         
             if (content.message == 'Concern Updated' && log) {
                 sessionStorage.setItem('save_message', "Concern Category Updated Successfully.");
@@ -317,7 +317,7 @@ async function setConcernsPage() {
                 'concern_id' : concern_id
             });
 
-            const [content, log] = await Promise.all ([deleteData('concerns/delete.php', delete_data), logActivity('Deleted Concern # ' + concern_id, 'Concerns - Overview')]);
+            const [content, log] = await Promise.all ([deleteData('concerns/delete.php', delete_data), logActivity('Delete [Concern # ' + concern_id + ']', 'Advanced Options')]);
             
             if (content.message == 'Concern Deleted' && log) {
                 sessionStorage.setItem('save_message', "Concern Category Deleted Successfully.");
@@ -343,7 +343,7 @@ async function setConcernsPage() {
             'customer_access' : '1'
         });
 
-        const [content, log] = await Promise.all ([createData('concerns/create.php', create_data), logActivity('Created new Concern Category - ' + $('#concern_category').val(), 'Concerns - Add Concern Category')]);
+        const [content, log] = await Promise.all ([createData('concerns/create.php', create_data), logActivity('Submit - New Concern Category [' + $('#concern_category').val() + ']', 'Advanced Options')]);
         
         if (content.message = 'Concern Created' && log) {
             toastr.success('Concern Category Created Successfully.');
@@ -410,7 +410,7 @@ function setAreaPage() {
                 'area_name' : area_name
             }); 
 
-            const [content, log] = await Promise.all ([updateData('area/update.php', update_data), logActivity('Updated Area # ' + area_id, 'Area - Overview')]);
+            const [content, log] = await Promise.all ([updateData('area/update.php', update_data), logActivity('Save Changes  [Area # ' + area_id + ']', 'Advanced Options')]);
         
             if (content.message == 'Area Updated' && log) {
                 sessionStorage.setItem('save_message', "Area Updated Successfully.");
@@ -446,7 +446,7 @@ function setAreaPage() {
                 'area_id' : area_id
             });
 
-            const [content, log] = await Promise.all ([deleteData('area/delete.php', delete_data), logActivity('Deleted Area # ' + area_id, 'Area - Overview')]);
+            const [content, log] = await Promise.all ([deleteData('area/delete.php', delete_data), logActivity('Delete [Area # ' + area_id + ']', 'Advanced Options')]);
             
             if (content.message == 'Area Deleted' && log) {
                 sessionStorage.setItem('save_message', "Area Deleted Successfully.");
@@ -464,7 +464,7 @@ function setAreaPage() {
             'area_name' : area_name
         });
 
-        const [content, log] = await Promise.all ([createData('area/create.php', create_data), logActivity('Created new Area - ' + $('#area_name').val(), 'Area - Add Area')]);
+        const [content, log] = await Promise.all ([createData('area/create.php', create_data), logActivity('Submit - New Area - [' + $('#area_name').val() + ']', 'Advanced Options')]);
         
         if (content.message = 'Area Created' && log) {
             toastr.success('Area Created Successfully.');
@@ -548,7 +548,7 @@ async function setInclusionPage() {
                 'inclusion_name' : $('#inclusion_name_md').val()
             });
 
-            const [content, log] = await Promise.all ([updateData('inclusion/update.php', update_data), logActivity('Updated Inclusion # ' + inclusion_id, 'Inclusions - Overview')]);
+            const [content, log] = await Promise.all ([updateData('inclusion/update.php', update_data), logActivity('Save Changes [Inclusion # ' + inclusion_id + ']', 'Advanced Options')]);
         
             if (content.message == 'Inclusion Updated' && log) {
                 sessionStorage.setItem('save_message', "Inclusion Updated Successfully.");
@@ -584,7 +584,7 @@ async function setInclusionPage() {
                 'inclusion_id' : inclusion_id
             });
 
-            const [content, log] = await Promise.all ([deleteData('inclusion/delete.php', delete_data), logActivity('Deleted Inclusion # ' + inclusion_id, 'Inclusions - Overview')]);
+            const [content, log] = await Promise.all ([deleteData('inclusion/delete.php', delete_data), logActivity('Delete [Inclusion # ' + inclusion_id + ']', 'Advanced Options')]);
 
             if (content.message == 'Inclusion Deleted' && log) {
                 sessionStorage.setItem('save_message', "Inclusion Deleted Successfully.");
@@ -603,7 +603,7 @@ async function setInclusionPage() {
             'inclusion_name' : inclusion_name
         });
 
-        const [content, log] = await Promise.all ([createData('inclusion/create.php', create_data), logActivity('Created new Inclusion - ' + $('#inclusion_name').val(), 'Inclusions - Add Inclusion')]);
+        const [content, log] = await Promise.all ([createData('inclusion/create.php', create_data), logActivity('Submit - New Inclusion [' + $('#inclusion_name').val() + ']', 'Advanced Options')]);
         
         if (content.message = 'Inclusion Created' && log) {
             toastr.success('Inclusion Created Successfully.');
@@ -902,7 +902,7 @@ async function setUserLevelPage() {
             }
 
             if (user_update_sucess) {
-                const [pages_update, buttons_update, log] = await Promise.all ([updateData('restriction/update_pages_restriction.php', pages_update_data), updateData('restriction/update_buttons_restriction.php', buttons_update_data), logActivity('Adv. Options - Edit User Level Access [' + userlevel_data.user_role + ']', 'Advanced Options')]);
+                const [pages_update, buttons_update, log] = await Promise.all ([updateData('restriction/update_pages_restriction.php', pages_update_data), updateData('restriction/update_buttons_restriction.php', buttons_update_data), logActivity('Save Changes - User Level Access [' + userlevel_data.user_role + ']', 'Advanced Options')]);
 
                 if (pages_update.success && buttons_update.success && log) {
                     sessionStorage.setItem('save_message', "User Role Updated Successfully.");
@@ -1028,7 +1028,7 @@ async function setUserLevelPage() {
                     'active_invalid' : active_invalid
                 });
 
-                const [pages_create, buttons_create, log] = await Promise.all ([createData('restriction/create_pages_restriction.php', pages_add_data), createData('restriction/create_buttons_restriction.php', buttons_add_data), logActivity('Adv. Options - Add New User Level [' + $('#add_user_role').val() + ']', 'Advanced Options')]);
+                const [pages_create, buttons_create, log] = await Promise.all ([createData('restriction/create_pages_restriction.php', pages_add_data), createData('restriction/create_buttons_restriction.php', buttons_add_data), logActivity('Submit - Add New User Level [' + $('#add_user_role').val() + ']', 'Advanced Options')]);
 
                 if (pages_create.success && buttons_create.success && log) {
                     sessionStorage.setItem('save_message', "New User Level Added Successfully.");
@@ -1062,7 +1062,7 @@ async function setUserLevelPage() {
                 'user_id' : data_id
             });
 
-            const [content, delete_pages, delete_buttons, log] = await Promise.all ([deleteData('user_level/delete.php', delete_data), deleteData('restriction/delete_pages_restriction.php', delete_data),deleteData('restriction/delete_buttons_restriction.php', delete_data), logActivity('Adv. Options - Deleted User Level [' + data.user_role + ']', 'Advanced Options')]);
+            const [content, delete_pages, delete_buttons, log] = await Promise.all ([deleteData('user_level/delete.php', delete_data), deleteData('restriction/delete_pages_restriction.php', delete_data),deleteData('restriction/delete_buttons_restriction.php', delete_data), logActivity('Delete - User Role [' + data.user_role + ']', 'Advanced Options')]);
 
             if (content.success && log) {
                 sessionStorage.setItem('save_message', "User Level Deleted Successfully.");
