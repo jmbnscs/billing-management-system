@@ -88,7 +88,7 @@ async function setRecentActivity() {
     
             if (d >= 1) {
                 activity_label.textContent = d + ' day/s';
-                activity_content.textContent = content[i].activity;
+                activity_content.textContent = content[i].page_accessed + ': ' + content[i].activity;
             }
             else if (h >= 1) {
                 activity_label.textContent = h + ' hr/s';
@@ -155,7 +155,7 @@ async function setTicketCards() {
     let tickets = await fetchData('views/ticket_active_claimed.php?admin_id=' + admin_id);
 
     $('#active_tkt_cnt').text(tickets.active_tickets);
-    $('#claimed_tkt_cnt').text(tickets.claimed_tickets + ' / ' + (tickets.active_tickets + tickets.claimed_tickets));
+    $('#claimed_tkt_cnt').text(tickets.claimed_tickets);
 }
 
 // Revenue Reports
