@@ -240,6 +240,10 @@ async function setInvoiceHistory() {
 
     $.fn.dataTable.ext.search.push(
         function (settings, data, dataIndex) {
+            if (settings.nTable.id !== 'customer-invoice-tbl'){
+                return true;
+            }
+
             var selectedItem = $('#status-filter').val()
             var category = data[statusIndex];
             if (selectedItem === "" || category.includes(selectedItem)) {
@@ -328,6 +332,10 @@ async function setProrateHistory() {
 
     $.fn.dataTable.ext.search.push(
         function (settings, data, dataIndex) {
+        if (settings.nTable.id !== 'customer-prorate-tbl'){
+            return true;
+        }
+
         var selectedItem = $('#prorate-status-filter').val()
         var category = data[statusIndex];
         if (selectedItem === "" || category.includes(selectedItem)) {
@@ -417,6 +425,10 @@ async function setTicketHistory() {
 
     $.fn.dataTable.ext.search.push(
         function (settings, data, dataIndex) {
+        if (settings.nTable.id !== 'customer-ticket-tbl'){
+            return true;
+        }
+    
         var selectedItem = $('#ticket-status-filter').val()
         var category = data[statusIndex];
         if (selectedItem === "" || category.includes(selectedItem)) {
@@ -428,6 +440,10 @@ async function setTicketHistory() {
 
     $.fn.dataTable.ext.search.push(
     function (settings, data, dataIndex) {
+        if (settings.nTable.id !== 'customer-ticket-tbl'){
+            return true;
+        }
+        
         var selectedItem = $('#concern-filter').val()
         var category = data[concernIndex];
         if (selectedItem === "" || category.includes(selectedItem)) {

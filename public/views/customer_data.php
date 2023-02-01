@@ -84,56 +84,54 @@
         <div class="card pb-2">
           <!-- Account Overview -->
           <div class="tab-content">
-            <div class="tab-pane fade show active customer-overview" id="customer-overview">
-              <div class="row">
-                <div class="col-sm-12">
-                  <div class="p-2">
-                    <h5 class="card-title p-2">Account Information</h5>
+            <div class="tab-pane fade show active customer-overview p-3" id="customer-overview">
+              <!-- Account Information -->
+              <h5 class="card-title p-3 border-bottom">Account Information</h5>
 
-                    <div class="row profile-information align-items-start ms-1 p-0">
-                      <div class="col"><p>First Name <br><small id="first_name"></small></p></div>
-                      <div class="col"><p>Middle Name <br><small id="middle_name"></small></p></div>
-                      <div class="col"><p>Last Name <br><small id="last_name"></small></p></div>
-                      <div class="col"><p>Birthday <br><small id="birthdate"></small></p></div>
-                    </div>
-
-                    <div class="row profile-information align-items-start ms-1 p-0">
-                      <div class="col"><p>Start Date <br><small id="start_date"></small></p></div>
-                      <div class="col"><p>Lockin End Date <br><small id="lockin_end_date"></small></p></div>
-                      <div class="col"><p>Billing Day <br><small id="billing_day"></small></p></div>
-                      <div class="col"><p>Bill Count <br><small id="bill_count"></small></p></div>
-                    </div>
-
-                    <h5 class="card-title p-2">Installation Information</h5>
-
-                    <div class="row profile-information align-items-start ms-1 p-0">
-                      <div class="col"><p>Installation Type <br><small id="installation_type"></small></p></div>
-                    </div>
-
-                    <div class="row profile-information align-items-start ms-1 p-0">
-                      <div class="col"><p>Installment <br><small id="installment"></small></p></div>
-                      <div class="col"><p>Total Charge <br><small id="installation_total_charge"></small></p></div>
-                      <div class="col"><p>Balance <br><small id="installation_balance"></small></p></div>
-                      <div class="col"><p>Status <br><small id="install_status"></small></p></div>
-                    </div>
-
-                    <h5 class="card-title p-2">Payment Rating Information</h5>
-
-                    <div class="row profile-information align-items-start ms-1 p-0">
-                      <div class="col"><p>Payment Rating <br><small id="avg_rating"></small></p></div>
-                      <div class="col"></div>
-                    </div>
-
-                    <div class="row profile-information align-items-start ms-1 p-0">
-                      <div class="col"><p>Bill Count <br><small id="rating_base"></small></p></div>
-                      <div class="col"><p>Overdue Payments <br><small id="delinquent_ratings"></small></p></div>
-                      <div class="col"><p>Status <br><small id="rating_status"></small></p></div>
-                    </div>
-
-                  </div>
-                </div>
-
+              <div class="row profile-information align-items-start ms-1 p-0">
+                <div class="col-lg-3"><p>First Name <br><small id="first_name"></small></p></div>
+                <div class="col-lg-3"><p>Middle Name <br><small id="middle_name"></small></p></div>
+                <div class="col-lg-3"><p>Last Name <br><small id="last_name"></small></p></div>
+                <div class="col-lg-3"><p>Birthday <br><small id="birthdate"></small></p></div>
               </div>
+
+              <div class="row profile-information align-items-start ms-1 p-0">
+                <div class="col-lg-3"><p>Start Date <br><small id="start_date"></small></p></div>
+                <div class="col-lg-3"><p>Lockin End Date <br><small id="lockin_end_date"></small></p></div>
+                <div class="col-lg-3"><p>Billing Day <br><small id="billing_day"></small></p></div>
+                <div class="col-lg-3"><p>Bill Count <br><small id="bill_count"></small></p></div>
+              </div>
+              <!-- End Account Information -->
+
+              <!-- Installation Information -->
+              <h5 class="card-title p-3 border-bottom">Installation Information</h5>
+
+              <div class="row profile-information align-items-start ms-1 p-0">
+                <div class="col-lg-3"><p>Installation Type <br><small id="installation_type"></small></p></div>
+              </div>
+
+              <div class="row profile-information align-items-start ms-1 p-0">
+                <div class="col-lg-3"><p>Installment <br><small id="installment"></small></p></div>
+                <div class="col-lg-3"><p>Total Charge <br><small id="installation_total_charge"></small></p></div>
+                <div class="col-lg-3"><p>Balance <br><small id="installation_balance"></small></p></div>
+                <div class="col-lg-3"><p>Status <br><small id="install_status"></small></p></div>
+              </div>
+              <!-- End Installation Information -->
+
+              <!-- Payment Rating Information -->
+              <h5 class="card-title p-3 border-bottom">Payment Rating Information</h5>
+
+              <div class="row profile-information align-items-start ms-1 p-0">
+                <div class="col-lg-3"><p>Payment Rating <br><small id="avg_rating"></small></p></div>
+                <div class="col-lg-3"></div>
+              </div>
+
+              <div class="row profile-information align-items-start ms-1 p-0">
+                <div class="col-lg-3"><p>Bill Count <br><small id="rating_base"></small></p></div>
+                <div class="col-lg-3"><p>Overdue Payments <br><small id="delinquent_ratings"></small></p></div>
+                <div class="col-lg-3"><p>Status <br><small id="rating_status"></small></p></div>
+              </div>
+              <!-- End Payment Rating Information -->
             </div>
           </div>
           <!-- End Account Overview -->
@@ -141,142 +139,123 @@
           <!-- Customer Invoice History  -->
           <form action="../../app/includes/view_invoice.php" method="post" target="_blank">
             <div class="tab-content">
-              <div class="tab-pane fade customer-invoice" id="customer-invoice">
-                <div class="row">
-                  <div class="col-sm-11 m-auto">
-                    <h5 class="card-title p-3">Invoice History</h5>
-                    <div class="container overflow-auto customer-tbl">
+              <div class="tab-pane fade customer-invoice p-3" id="customer-invoice">
+                <h5 class="card-title p-3 border-bottom">Invoice History</h5>
 
-                      <!-- Filter Dropdown -->
-                      <div>
-                        <select id="status-filter" class="form-select table-filter" style="display: inline; width: 150px; margin-left: 20px;">
-                          <option value="">Show All: Status</option>
-                        </select>
-                      </div>
-                      <!-- End Filter Dropdown -->
-
-                        <table class="table table-borderless" id="customer-invoice-tbl">
-                          <thead>
-                            <tr>
-                              <th scope="col">#</th>
-                              <th scope="col">Invoice ID</th>
-                              <th scope="col">Disconnection Date</th>
-                              <th scope="col">Status</th>
-                              <th scope="col">View</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                          </tbody>
-                        </table>
-                    </div>
-                  </div>
+                <!-- Filter Dropdown -->
+                <div>
+                  <select id="status-filter" class="form-select table-filter" style="display: inline; width: 180px; margin-left: 20px;">
+                    <option value="">Show All: Status</option>
+                  </select>
                 </div>
+                <!-- End Filter Dropdown -->
+
+                <table class="table table-borderless" id="customer-invoice-tbl">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Invoice ID</th>
+                      <th scope="col">Disconnection Date</th>
+                      <th scope="col">Status</th>
+                      <th scope="col">View</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+
               </div>
             </div>
           </form><!-- End Customer Invoice History -->
 
           <!-- Customer Payment History -->
           <div class="tab-content">
-            <div class="tab-pane fade customer-payment" id="customer-payment">
-              <div class="row">
-                <div class="col-sm-11 m-auto">
-                  <h5 class="card-title p-3">Payment History</h5>
-                  <div class="container overflow-auto customer-tbl">
-                      <table class="table table-borderless" id="customer-payment-tbl">
-                        <thead>
-                          <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Reference ID</th>
-                            <th scope="col">Amount Paid</th>
-                            <th scope="col">Payment Date</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">View</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                      </table>
-                  </div>
-                </div>
-              </div>
+            <div class="tab-pane fade customer-payment p-3" id="customer-payment">
+              <h5 class="card-title p-3 border-bottom">Payment History</h5>
+
+              <table class="table table-borderless" id="customer-payment-tbl">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Reference ID</th>
+                    <th scope="col">Amount Paid</th>
+                    <th scope="col">Payment Date</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">View</th>
+                  </tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
+
             </div>
           </div><!-- End Customer Payment History -->
 
           <!-- Customer Prorate History -->
           <div class="tab-content">
-            <div class="tab-pane fade customer-prorate" id="customer-prorate">
-              <div class="row">
-                <div class="col-sm-11 m-auto">
-                  <h5 class="card-title p-3">Prorates History</h5>
-                  <div class="container overflow-auto customer-tbl">
+            <div class="tab-pane fade customer-prorate p-3" id="customer-prorate">
+              <h5 class="card-title p-3 border-bottom">Prorates History</h5>
 
-                      <!-- Filter Dropdown -->
-                      <div>
-                        <select id="prorate-status-filter" class="form-select table-filter" style="display: inline; width: 150px; margin-left: 20px;">
-                          <option value="">Show All: Status</option>
-                        </select>
-                      </div>
-                      <!-- End Filter Dropdown -->
-
-                      <table class="table table-borderless" id="customer-prorate-tbl">
-                        <thead>
-                          <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Duration</th>
-                            <th scope="col">Prorate Discount</th>
-                            <th scope="col">Ticket #</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">View</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                      </table>
-                  </div>
-                </div>
+              <!-- Filter Dropdown -->
+              <div>
+                <select id="prorate-status-filter" class="form-select table-filter" style="display: inline; width: 180px; margin-left: 20px;">
+                  <option value="">Show All: Status</option>
+                </select>
               </div>
+              <!-- End Filter Dropdown -->
+
+              <table class="table table-borderless" id="customer-prorate-tbl">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Duration</th>
+                    <th scope="col">Prorate Discount</th>
+                    <th scope="col">Ticket #</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">View</th>
+                  </tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
+
             </div>
           </div><!-- End Customer Prorate History -->
 
           <!-- Customer Ticket History -->
           <div class="tab-content">
-            <div class="tab-pane fade customer-ticket" id="customer-ticket">
-              <div class="row">
-                <div class="col-sm-11 m-auto">
-                  <h5 class="card-title p-3">Tickets History</h5>
-                  <div class="container overflow-auto customer-tbl">
+            <div class="tab-pane fade customer-ticket p-3" id="customer-ticket">
+              <h5 class="card-title p-3 border-bottom">Tickets History</h5>
 
-                      <!-- Filter Dropdown -->
-                      <div>
-                        <select id="ticket-status-filter" class="form-select table-filter" style="display: inline; width: 150px; margin-left: 20px;">
-                          <option value="">Show All: Status</option>
-                        </select>
-                      </div>
-
-                      <div>
-                        <select id="concern-filter" class="form-select table-filter" style="display: inline; width: 150px; margin-left: 20px;">
-                          <option value="">Show All: Concern</option>
-                        </select>
-                      </div>
-                      <!-- End Filter Dropdown -->
-
-                      <table class="table table-borderless" id="customer-ticket-tbl">
-                        <thead>
-                          <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Ticket #</th>
-                            <th scope="col">Concern</th>
-                            <th scope="col">Admin</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">View</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                      </table>
-                  </div>
-                </div>
+              <!-- Filter Dropdown -->
+              <div>
+                <select id="ticket-status-filter" class="form-select table-filter" style="display: inline; width: 180px; margin-left: 20px;">
+                  <option value="">Show All: Status</option>
+                </select>
               </div>
+
+              <div>
+                <select id="concern-filter" class="form-select table-filter" style="display: inline; width: 190px; margin-left: 20px;">
+                  <option value="">Show All: Concern</option>
+                </select>
+              </div>
+              <!-- End Filter Dropdown -->
+
+              <table class="table table-borderless" id="customer-ticket-tbl">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Ticket #</th>
+                    <th scope="col">Concern</th>
+                    <th scope="col">Admin</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">View</th>
+                  </tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
+
             </div>
           </div><!-- End Customer Ticket History -->
 
