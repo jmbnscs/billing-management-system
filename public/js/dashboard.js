@@ -78,6 +78,10 @@ async function setRecentActivity() {
     
             const activity_content = document.createElement('div');
             activity_content.classList.add('activity-content');
+
+            const activity_page = document.createElement('p');
+            activity_page.textContent = content[i].page_accessed + ':';
+            activity_page.classList.add('activity-page');
     
             const seconds = (new Date() - new Date(content[i].date_accessed)) / 1000;
         
@@ -88,7 +92,7 @@ async function setRecentActivity() {
     
             if (d >= 1) {
                 activity_label.textContent = d + ' day/s';
-                activity_content.textContent = content[i].page_accessed + ': ' + content[i].activity;
+                activity_content.textContent = content[i].activity;
             }
             else if (h >= 1) {
                 activity_label.textContent = h + ' hr/s';
@@ -105,8 +109,8 @@ async function setRecentActivity() {
     
             activity_div.append(activity_label);
             activity_div.append(act_icon);
+            activity_div.append(activity_page);
             activity_div.append(activity_content);
-    
             activity_panel.append(activity_div);
         }
     }

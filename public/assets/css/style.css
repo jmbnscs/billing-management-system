@@ -960,6 +960,11 @@ h6 {
   padding-bottom: 20px;
 }
 
+.dashboard .activity .activity-item .activity-page {
+  padding-left: 10px;
+  font-weight: bold;
+}
+
 .dashboard .activity .activity-item:first-child .activite-label::before {
   top: 5px;
 }
