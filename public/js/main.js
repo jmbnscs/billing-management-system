@@ -51,24 +51,45 @@ function isDefault () {
 }
 
 // Live Search
-function showResult(str) {
+async function showResult(str) {
+    const gotoPageContainer = document.getElementById('livesearch');
+
     if (str.length == 0) {
-      document.getElementById("livesearch").innerHTML="";
-      document.getElementById("livesearch").style.border="0px";
+      gotoPageContainer.innerHTML="";
+      gotoPageContainer.style.border="0px";
       return;
     }
-    var xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange=function() {
-      if (this.readyState == 4 && this.status == 200) {
-        document.getElementById("livesearch").innerHTML = this.responseText;
-        document.getElementById("livesearch").style.border = "1px solid #A5ACB2";
-        document.getElementById("livesearch").style.background = "white";
-        document.getElementById("livesearch").style.minWidth = "300px";
-        document.getElementById("livesearch").style.position = "absolute";
-      }
+
+    gotoPageContainer.innerHTML = "";
+    gotoPageContainer.style.border = "0px";
+
+    const pages = await fetchData('pages/read_pages.php');
+    gotoPageContainer.style.position = 'absolute';
+    gotoPageContainer.style.paddingLeft = '10px';
+
+    const search_string = str.toLowerCase();
+    for (var i = 0; i < pages.length; i++) {
+        let page_name = (pages[i].page_name).toLowerCase();
+        if (pages[i].page_dir != '-' && !(pages[i].page_dir).includes('data')) {
+            gotoPageContainer.style.border = '1px solid #A5ACB2';
+            if (page_name.includes(search_string)) {
+                const pageLinkContainer = document.createElement('div');
+                const pageLinkArrow = document.createElement('i');
+                const pageLink = document.createElement('a');
+
+                pageLink.text = pages[i].page_name;
+                pageLink.href = (pages[i].page_dir).split('.')[0];
+
+                pageLinkArrow.classList.add('bi-arrow-right-short');
+
+                pageLinkContainer.style.padding = '3px';
+
+                pageLinkContainer.append(pageLinkArrow);
+                pageLinkContainer.append(pageLink);
+                gotoPageContainer.append(pageLinkContainer);
+            }
+        }
     }
-    xmlhttp.open("GET", DIR_APP + "/livesearch.php?q=" +str, true);
-    xmlhttp.send();
 }
 
 // Log Admin Activity

@@ -428,13 +428,25 @@ h6 {
 
 .header .search-bar {
   min-width: 300px;
-  /* padding-left: 600px; */
+  /* padding-left: 0px; */
   position: relative;
   /* float: left; */
 }
 
-@media (max-width: 1199px) {
-  .header .search-bar {
+.header #livesearch a{
+  /* width: max-content; */
+  padding: none;
+  margin: 0;
+}
+
+.header .livesearch {
+  position: absolute;
+  min-width: 300px;
+  background-color: whitesmoke;
+}
+
+@media (max-width: 778px) {
+  /* .header .search-bar {
     position: fixed;
     top: 50px;
     left: 0;
@@ -450,6 +462,10 @@ h6 {
     top: 60px;
     visibility: visible;
     opacity: 1;
+  } */
+
+  .header .search-bar {
+    display: none;
   }
 }
 
