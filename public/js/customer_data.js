@@ -45,13 +45,14 @@ async function setCustomerData(customer_data) {
     // Installation Information
     $('#installation_type').text(customer_data.installation_type);
     $('#installment').text(customer_data.installment);
-    $('#installation_total_charge').text(customer_data.installation_total_charge);
-    $('#installation_balance').text(customer_data.installation_balance);
+    $('#installation_total_charge').text('\u20B1 ' + customer_data.installation_total_charge);
+    $('#installation_balance').text('\u20B1 ' + customer_data.installation_balance);
     $('#install_status').text(customer_data.install_status);
 
     // Ratings Information
-    $('#avg_rating').text(parseInt(100 - customer_data.avg_rating) + ' %');
-    $('#rating_base').text(customer_data.rating_base);
+    let customer_rating = (parseInt(customer_data.delinquent_ratings) / parseInt(customer_data.bill_count)) * 100;
+    $('#avg_rating').text(parseInt(100 - customer_rating) + ' %');
+    $('#rating_base').text(customer_data.bill_count);
     $('#delinquent_ratings').text(customer_data.delinquent_ratings);
     $('#rating_status').text(customer_data.rating_status);
 

@@ -17,7 +17,7 @@
   <!-- Customer Data Tabs -->
   <section class="section customer-data">
     <div class="row">
-      <div class="col-xl-4">
+      <div class="col-lg-4">
           <div class="card">
             <img src="../images/valued.png" class="card-img-top img-fluid p-3 w-50 h-50 mx-auto d-block" id="rating-img">
             <div class="card-body p-3">
@@ -52,7 +52,7 @@
 
           </div>
       </div>
-      <div class="col-xl-8">
+      <div class="col-lg-8">
         <!-- Navigation Tabs -->
         <!-- Bordered Tabs -->
           <ul class="nav nav-tabs-customer d-flex">
@@ -107,11 +107,11 @@
               <h5 class="card-title p-3 border-bottom">Installation Information</h5>
 
               <div class="row profile-information align-items-start ms-1 p-0">
-                <div class="col-lg-3"><p>Installation Type <br><small id="installation_type"></small></p></div>
+                <div class="col-lg-3"><p>Installation Type <i class="bi bi-info-circle ms-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Customers are given 6 months to pay the installation charge when they choose 'No Cash Out'."></i><br><small id="installation_type"></small></p></div>
               </div>
 
               <div class="row profile-information align-items-start ms-1 p-0">
-                <div class="col-lg-3"><p>Installment <br><small id="installment"></small></p></div>
+                <div class="col-lg-3"><p>Installment <i class="bi bi-info-circle ms-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Remaining installment"></i><br><small id="installment"></small></p></div>
                 <div class="col-lg-3"><p>Total Charge <br><small id="installation_total_charge"></small></p></div>
                 <div class="col-lg-3"><p>Balance <br><small id="installation_balance"></small></p></div>
                 <div class="col-lg-3"><p>Status <br><small id="install_status"></small></p></div>
@@ -119,7 +119,7 @@
               <!-- End Installation Information -->
 
               <!-- Payment Rating Information -->
-              <h5 class="card-title p-3 border-bottom">Payment Rating Information</h5>
+              <h5 class="card-title p-3 border-bottom">Payment Rating Information <i class="bi bi-info-circle ms-1" data-bs-toggle="tooltip" data-bs-placement="top" title="When customers reach payment rating below 30% they'll be considered as delinquent."></i></h5>
 
               <div class="row profile-information align-items-start ms-1 p-0">
                 <div class="col-lg-3"><p>Payment Rating <br><small id="avg_rating"></small></p></div>
@@ -275,21 +275,20 @@
         <div class="modal-header">
           <h5 class="modal-title">Update Customer Details</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
+        </div><!-- End Modal Header -->
 
         <!-- Modal Body -->
         <div class="modal-body">
-          <div class="row g-3">
-            <div class="row pt-2">
+            <div class="row p-2">
                 <div class="col-md-12">
                     <div class="form-floating">
-                    <input type="text" class="form-control" id="billing_address_edt" placeholder="Address" required>
+                    <textarea type="text" class="form-control" id="billing_address_edt" placeholder="Address" required></textarea>
                     <label for="billing_address_edt">Address</label>
                     </div>
                 </div>
             </div>
 
-            <div class="row pt-2">
+            <div class="row p-2">
                 <div class="col-md-12">
                     <div class="form-floating">
                     <input type="text" class="form-control" id="mobile_number_edt" placeholder="Mobile Number" pattern="[0]{1}[9]{1}[0-9]{9}" required>
@@ -298,7 +297,7 @@
                 </div>
             </div>
 
-            <div class="row pt-2">
+            <div class="row p-2">
                 <div class="col-md-12">
                     <div class="form-floating">
                     <input type="email" class="form-control" id="email_edt" placeholder="Email" required>
@@ -307,45 +306,50 @@
                 </div>
             </div>
 
+            <div class="row p-2">
+              <div class="col-md-12">
+                  <div class="form-floating">
+                  <select id="plan_id_edt" class="form-select" required></select>
+                  <label for="plan_id_edt">Subscription Plan</label>
+                  </div>
+              </div>
+            </div>
+
+            <div class="row p-2">
+              <div class="col-md-12">
+                  <div class="form-floating">
+                  <select id="connection_id_edt" class="form-select" required></select>
+                  <label for="connection_id_edt">Connection Type</label>
+                  </div>
+              </div>
+            </div>
             
-            <div class="col-md-12">
-                <div class="form-floating">
-                <select id="plan_id_edt" class="form-select" required></select>
-                <label for="plan_id_edt">Subscription Plan</label>
-                </div>
+            <div class="row p-2">
+              <div class="col-md-12">
+                  <div class="form-floating">
+                  <select id="account_status_id_edt" class="form-select" required></select>
+                  <label for="account_status_id_edt">Account Status</label>
+                  </div>
+              </div>
             </div>
 
-            <div class="col-md-12">
-                <div class="form-floating">
-                <select id="connection_id_edt" class="form-select" required></select>
-                <label for="connection_id_edt">Connection Type</label>
-                </div>
-            </div>
-            
-            <div class="col-md-12">
-                <div class="form-floating">
-                <select id="account_status_id_edt" class="form-select" required></select>
-                <label for="account_status_id_edt">Account Status</label>
-                </div>
+            <div class="row p-2">
+              <div class="col-md-12">
+                  <div class="form-floating">
+                  <select id="area_id_edt" class="form-select" required></select>
+                  <label for="area_id_edt">Area</label>
+                  </div>
+              </div>
             </div>
 
-            <div class="col-md-12">
-                <div class="form-floating">
-                <select id="area_id_edt" class="form-select" required></select>
-                <label for="area_id_edt">Area</label>
-                </div>
-            </div>
-
-          </div>
-
-        </div>
-        <!-- End Modal Body -->
+        </div><!-- End Modal Body -->
+        
 
         <!-- Modal Footer -->
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           <button type="submit" class="btn btn-success">Save Changes</button>
-        </div>
+        </div><!-- End Modal Footer -->
       </div>
     </div>
   </div>
@@ -513,7 +517,7 @@
           <div class="row mb-3">
             <label for="resolution_details" class="col-sm-4 col-form-label">Resolution Details</label>
             <div class="col-sm-8">
-              <input type="text" class="form-control" id="resolution_details" value="" readonly>
+              <textarea row="3" class="form-control" id="resolution_details" value="" readonly></textarea>
             </div>
           </div>
 
