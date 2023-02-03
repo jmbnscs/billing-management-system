@@ -70,7 +70,7 @@ async function setViewTickets () {
                 <td data-label="Ticket #">${active_tickets[i].ticket_num}</td>
                 <td data-label="Account #">${active_tickets[i].account_id}</td>
                 <td data-label="Concern">${active_tickets[i].concern}</td>
-                <td data-label="Date Filed">${new Date(active_tickets[i].date_filed).toLocaleDateString('en-US')}</td>
+                <td data-label="Date Filed">${new Date(active_tickets[i].date_filed).toLocaleDateString('PHT')}</td>
                 <td data-label="Status"><span class="badge bg-danger">${active_tickets[i].ticket_status}</span></td>
                 <td data-label="Actions">
                     <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#activeModal" data-bs-whatever="${active_tickets[i].ticket_num}" id="setName"><i class="bi bi-folder-fill"></i></button>
@@ -189,7 +189,7 @@ async function setViewTickets () {
                     <td data-label="Ticket #">${resolved_tickets[i].ticket_num}</td>
                     <td data-label="Account #">${resolved_tickets[i].account_id}</td>
                     <td data-label="Concern">${resolved_tickets[i].concern}</td>
-                    <td data-label="Date Resolved">${new Date(resolved_tickets[i].date_resolved).toLocaleDateString('en-US')}</td>
+                    <td data-label="Date Resolved">${new Date(resolved_tickets[i].date_resolved).toLocaleDateString('PHT')}</td>
                     <td data-label="Resolved By">${resolved_tickets[i].admin_username}</td>
                     <td data-label="View">
                         <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#resolvedModal" data-bs-whatever="${resolved_tickets[i].ticket_num}" id="setName"><i class="ri ri-eye-fill"></i></button>
@@ -307,7 +307,7 @@ async function setPendingTicketsTable () {
                 <td data-label="Ticket #">${ticket_data[i].ticket_num}</td>
                 <td data-label="Account #">${ticket_data[i].account_id}</td>
                 <td data-label="Concern">${ticket_data[i].concern}</td>
-                <td data-label="Date Filed">${new Date(ticket_data[i].date_filed).toLocaleDateString('en-US')}</td>
+                <td data-label="Date Filed">${new Date(ticket_data[i].date_filed).toLocaleDateString('PHT')}</td>
                 <td data-label="Claimed By">${ticket_data[i].admin_username}</td>
                 <td data-label="Status"><span class="badge bg-warning">${ticket_data[i].ticket_status}</span></td>
                 <td data-label="Actions">
@@ -618,7 +618,7 @@ async function setInvalidTicketsTable () {
                 <td data-label="Ticket #">${ticket_data[i].ticket_num}</td>
                 <td data-label="Account #">${ticket_data[i].account_id}</td>
                 <td data-label="Concern">${ticket_data[i].concern}</td>
-                <td data-label="Date Filed">${new Date(ticket_data[i].date_filed).toLocaleDateString('en-US')}</td>
+                <td data-label="Date Filed">${new Date(ticket_data[i].date_filed).toLocaleDateString('PHT')}</td>
                 <td data-label="Invalidated By">${ticket_data[i].admin_username}</td>
                 <td data-label="Actions">
                     <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#invalidatedModal" data-bs-whatever="${ticket_data[i].ticket_num}" id="setName"><i class="bi bi-folder-fill"></i></button>

@@ -136,6 +136,8 @@ async function setCustomerData(customer_data) {
         const save_customer = document.getElementById('save-customer');
         save_customer.onsubmit = (e) => {
             e.preventDefault();
+            $('#edit-customer-save-btn').prop('disabled', true);
+            $('#edit-customer-save-btn').append('&emsp;<i class="fa fa-circle-o-notch fa-spin"></i>');
             updateCustomerData();
         };
 
@@ -188,8 +190,11 @@ async function setCustomerData(customer_data) {
             const [customer_content, account_content] = await Promise.all ([updateData('customer/update.php', update_data), updateData('account/update.php', account_data)]);
         
             if (customer_content.success && account_content.success && log) {
-                sessionStorage.setItem('save_message', "Customer Updated Successfully.");
-                window.location.reload();
+                setTimeout ( () => {
+                        sessionStorage.setItem('save_message', "Customer Updated Successfully.");
+                        window.location.reload();
+                    },2000
+                );
             }
             else {
                 toastr.error("Customer was not updated.");
@@ -223,7 +228,7 @@ async function setInvoiceHistory() {
             <tr>
                 <th scope="row" style="color: #012970;">${i+1}</th>
                 <td data-label="Invoice ID">${content[i].invoice_id}</td>
-                <td data-label="Disconnection Date">${dc_date.toLocaleDateString('en-US')}</td>
+                <td data-label="Disconnection Date">${dc_date.toLocaleDateString('PHT')}</td>
                 <td data-label="Status"><span class="badge ${tag}">${status}</span></td>
                 <td data-label="View"><button type="submit" class="btn btn-outline-primary" value="${content[i].invoice_id}" name="invoice_id_btn"><i class="ri ri-eye-fill"></i></button></td>
             </tr>
@@ -280,7 +285,7 @@ async function setPaymentHistory() {
                 <th scope="row" style="color: #012970;"><strong>${i+1}</strong></th>
                 <td data-label="Reference ID">${content[i].payment_reference_id}</td>
                 <td data-label="Amount Paid">&#8369; ${content[i].amount_paid}</td>
-                <td data-label="Payment Date">${(new Date(content[i].payment_date)).toLocaleDateString('en-US')}</td>
+                <td data-label="Payment Date">${(new Date(content[i].payment_date)).toLocaleDateString('PHT')}</td>
                 <td data-label="Status"><span class="badge ${tag}">${payment_status}</span></td>
                 <td data-label="View"><button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#view-payment" data-bs-whatever="${content[i].payment_id}"><i class="ri ri-eye-fill"></i></button></td>
             </tr>

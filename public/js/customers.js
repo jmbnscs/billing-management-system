@@ -16,10 +16,6 @@ $(document).ready(function () {
         $('#error-dl').removeClass('hide');
         setDownloadError();
         resetURL();
-        
-        // setTimeout(function(){
-        //     window.location.replace('../views/customers_add.php');
-        // }, 2000);
     }
     else if (status == 'invalid_file') {
         toastr.error('Please upload a valid csv file.');
@@ -286,6 +282,7 @@ async function setAddCustomerPage () {
     setAddDropdown();
 
     var today = new Date();
+
     $('#start_date').val(getDateToday());
     today.setDate(today.getDate() - 7);
     setAllowedDate('#birthdate');
@@ -293,8 +290,9 @@ async function setAddCustomerPage () {
 
     add_customer.onsubmit = (e) => {
         e.preventDefault();
+        $('#add-account-btn').prop('disabled', true);
+        $('#add-account-btn').append('&emsp;<i class="fa fa-circle-o-notch fa-spin"></i>');
         checkValidity();
-        
     };
     
     var req_elem = document.getElementById('add-customer').querySelectorAll("[required]");
@@ -431,6 +429,11 @@ async function setAddCustomerPage () {
 
         if (counter > 0) {
             toastr.warning('Please provide the appropriate details on each field.');
+            setTimeout ( () => {
+                    $('#add-account-btn').prop('disabled', false);
+                    $('#add-account-btn').text('Create Account');
+                },2000
+            );
         }
         else {
             sessionStorage.removeItem('account_id');
@@ -453,96 +456,37 @@ async function setAddCustomerPage () {
     async function addCustomer() {
         const account_id = $('#account_id').val();
 
-        let account_data = JSON.stringify({
+        let newAccountData = JSON.stringify({
             'account_id' : account_id,
             'start_date' : $('#start_date').val(),
             'plan_id' : $('#plan_id').val(),
             'connection_id' : $('#connection_id').val(),
-            'area_id' : $('#area_id').val()
-        });
-
-        let customer_data = JSON.stringify({
-            'account_id' : account_id,
+            'area_id' : $('#area_id').val(),
             'first_name' : $('#first_name').val(),
             'middle_name' : $('#middle_name').val(),
             'last_name' : $('#last_name').val(),
             'billing_address' : $('#billing_address').val(),
             'mobile_number' : $('#mobile_number').val(),
             'email' : $('#email').val(),
-            'birthdate' : $('#birthdate').val()
+            'birthdate' : $('#birthdate').val(),
+            'install_type_id' : $('#install_type_id').val()
         });
 
-        let install_data = JSON.stringify({
-            'install_type_id' : $('#install_type_id').val(),
-            'account_id' : account_id
-        });
+        const add_new_account = await createData('account/add_new_account.php', newAccountData);
 
-        let rating_data = JSON.stringify({
-            'account_id' : account_id
-        });
+        if (add_new_account.success) {
+            await logActivity('Create Account [Account ID # ' + account_id + ']', 'Add New Account');
 
-        let delete_data = JSON.stringify({
-            'account_id' : account_id
-        });
-
-        let account_content, customer_content, installation_content, ratings_content;
-
-        account_content = await createData('account/create.php', account_data);
-
-        console.log(account_content);
-        console.log(account_data);
-
-        if (account_content.success) {
-            customer_content = await createData('customer/create.php', customer_data);
-        }
-        else {
-            const delete_account = await deleteData('account/delete.php', delete_data);
-            (delete_account.success) ? displayErrorMessage() : displayErrorMessage();
-        }
-
-        console.log(customer_content);
-        console.log(customer_data);
-
-        if (customer_content.success) {
-            installation_content = await createData('installation/create.php', install_data);
-        }
-        else {
-            const [delete_account, delete_customer] = await Promise.all ([deleteData('account/delete.php', delete_data), deleteData('customer/delete.php', delete_data)]);
-            (delete_account.success && delete_customer.success) ? displayErrorMessage() : displayErrorMessage();
-        }
-
-        console.log(installation_content);
-        console.log(install_data);
-
-        if (installation_content.success) {
-            ratings_content = await createData('ratings/create.php', rating_data);
-        }
-        else {
-            const [delete_account, delete_customer, delete_installation] = await Promise.all ([deleteData('account/delete.php', delete_data), deleteData('customer/delete.php', delete_data), deleteData('installation/delete.php', delete_data)]);
-            (delete_account.success && delete_customer.success && delete_installation.success) ? displayErrorMessage() : displayErrorMessage();
-        }
-
-        // console.log(ratings_content);
-        // console.log(rating_data);
-
-        let log = await logActivity('Create Account [Account ID # ' + account_id + ']', 'Add New Account');
-
-        if (ratings_content.success && log) {
-            toastr.success('Customer Created Successfully.');
             setTimeout(function(){
+                sessionStorage.setItem('save_message', "Account Added Successfully. Please check inactive tab.");
                 window.location.replace('../views/customers');
-             }, 2000);
+            }, 3000);
         }
         else {
-            const [delete_account, delete_customer, delete_installation, delete_ratings] = await Promise.all ([deleteData('account/delete.php', delete_data), deleteData('customer/delete.php', delete_data), deleteData('installation/delete.php', delete_data), deleteData('ratings/delete.php', delete_data)]);
-            (delete_account.success && delete_customer.success && delete_installation.success && delete_ratings.success) ? displayErrorMessage() : displayErrorMessage();
-        }
-
-        function displayErrorMessage() {
             toastr.error('Some error has occurred, please try again later.');
-            // setTimeout(function(){
-            //     window.location.reload();
-            //  }, 2000);
+            setTimeout(function(){
+                window.location.reload();
+            }, 2000);
         }
 
     }

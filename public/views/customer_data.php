@@ -348,7 +348,7 @@
         <!-- Modal Footer -->
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-success">Save Changes</button>
+          <button type="submit" class="btn btn-success" id="edit-customer-save-btn">Save Changes</button>
         </div><!-- End Modal Footer -->
       </div>
     </div>
