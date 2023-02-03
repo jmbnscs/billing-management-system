@@ -261,31 +261,44 @@ async function setPaymentRecordsPage() {
             const payment_date = $('#edit_untagged_payment_date').val();
             const payment_center = $('#edit_untagged_payment_centers').val();
 
-            const latest_invoice = await fetchData('invoice/read_latest.php?account_id=' + account_id);
+            // const latest_invoice = await fetchData('invoice/read_latest.php?account_id=' + account_id);
 
-            let invoice_data = JSON.stringify({
+            let update_data = JSON.stringify({
                 'account_id' : account_id,
                 'payment_reference_id' : payment_reference_id,
                 'amount_paid' : amount_paid,
-                'payment_date' : payment_date
-            });
-
-            let payment_data = JSON.stringify({
+                'payment_date' : payment_date,
                 'payment_center' : payment_center,
-                'account_id' : account_id,
-                'invoice_id' : latest_invoice.invoice_id,
                 'payment_id' : payment_id
             });
 
-            let rating_data = JSON.stringify({
-                'account_id' : account_id,
-                'invoice_status' : latest_invoice.invoice_status_id
-            })
+            const updatePayment = await updateData('payment/update_payment.php', update_data);
 
-            const [invoice_content, payment_content, rating_content] = await Promise.all ([updateData('invoice/update.php', invoice_data), updateData('payment/update_tagged.php', payment_data), updateData('ratings/update.php', rating_data)]);
+            // let invoice_data = JSON.stringify({
+            //     'account_id' : account_id,
+            //     'payment_reference_id' : payment_reference_id,
+            //     'amount_paid' : amount_paid,
+            //     'payment_date' : payment_date
+            // });
+
+            // let payment_data = JSON.stringify({
+            //     'payment_center' : payment_center,
+            //     'account_id' : account_id,
+            //     'invoice_id' : latest_invoice.invoice_id,
+            //     'payment_id' : payment_id
+            // });
+
+            // let rating_data = JSON.stringify({
+            //     'account_id' : account_id,
+            //     'invoice_status' : latest_invoice.invoice_status_id
+            // })
+
+            // const [invoice_content, payment_content, rating_content] = await Promise.all ([updateData('invoice/update.php', invoice_data), updateData('payment/update_tagged.php', payment_data), updateData('ratings/update.php', rating_data)]);
         
-            if (invoice_content.success && payment_content.success && rating_content.success) {
-                const log = await logActivity('Save Changes - Tagged Payment [' + payment_reference_id + ' - ' + account_id + ' - ' + invoice_content.invoice_id + ']', 'Payment Records');
+            // if (invoice_content.success && payment_content.success && rating_content.success) 
+            
+            if (updatePayment.success) {
+                const log = await logActivity('Save Changes - Tagged Payment [' + payment_reference_id + ' - ' + account_id + ' - ' + updatePayment.invoice_id + ']', 'Payment Records');
 
                 if (log) {
                     sessionStorage.setItem('save_message', "Payment Updated Successfully.");

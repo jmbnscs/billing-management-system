@@ -50,9 +50,8 @@ async function setCustomerData(customer_data) {
     $('#install_status').text(customer_data.install_status);
 
     // Ratings Information
-    let customer_rating = (parseInt(customer_data.delinquent_ratings) / parseInt(customer_data.bill_count)) * 100;
-    $('#avg_rating').text(parseInt(100 - customer_rating) + ' %');
-    $('#rating_base').text(customer_data.bill_count);
+    $('#avg_rating').text(customer_data.avg_rating + ' %');
+    $('#rating_base').text(customer_data.rating_base);
     $('#delinquent_ratings').text(customer_data.delinquent_ratings);
     $('#rating_status').text(customer_data.rating_status);
 

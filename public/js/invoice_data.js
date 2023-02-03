@@ -94,13 +94,6 @@ async function setDefaultSetting() {
         };
     
         async function processUpdate() {
-            let update_data = JSON.stringify({
-                'account_id' : invoice_data.account_id,
-                'payment_reference_id' : $('#payment_reference_id_md').val(),
-                'amount_paid' : $('#amount_paid_md').val(),
-                'payment_date' : $('#payment_date_md').val()
-            });
-
             let payment_data = JSON.stringify({
                 'amount_paid' : $('#amount_paid_md').val(),
                 'payment_center' : $('#payment_centers').val(),
@@ -108,34 +101,33 @@ async function setDefaultSetting() {
                 'payment_date' : $('#payment_date_md').val()
             })
 
-            let rating_data = JSON.stringify({
-                'account_id' : invoice_data.account_id,
-                'invoice_status' : invoice_data.invoice_status_id
-            });
+            const createPayment = await createData('payment/create.php', payment_data);
 
-            const [update_content, payment_content, rating_content] = await Promise.all ([updateData('invoice/update.php', update_data), createData('payment/create.php', payment_data), updateData('ratings/update.php', rating_data)]);
-
-            // console.log(payment_content.success);
-            // console.log(update_content.success);
-            // console.log(rating_content.success);
-
-            if (payment_content.success && update_content.success && rating_content.success) {
-                let tag_data = JSON.stringify({
-                    'payment_center' : $('#payment_centers').val(),
+            if (createPayment.success) {
+                let update_data = JSON.stringify({
                     'account_id' : invoice_data.account_id,
-                    'invoice_id' : invoice_id,
-                    'payment_id' : payment_content.payment_id
+                    'payment_reference_id' : $('#payment_reference_id_md').val(),
+                    'amount_paid' : $('#amount_paid_md').val(),
+                    'payment_date' : $('#payment_date_md').val(),
+                    'payment_center' : $('#payment_centers').val(),
+                    'payment_id' : createPayment.payment_id
                 });
     
-                const tag_content = await updateData('payment/update_tagged.php', tag_data);
+                const updatePayment = await updateData('payment/update_payment.php', update_data);
 
-                // console.log(tag_content);
+                if (updatePayment.success) {
+                    let log = await logActivity('Add - Tagged Payment [' + invoice_data.account_id + ' - ' + invoice_id, 'Invoice Data');
 
-                let log = await logActivity('Add - Tagged Payment [' + invoice_data.account_id + ' - ' + invoice_id, 'Invoice Data');
-
-                if (tag_content.success && log) {
-                    sessionStorage.setItem('save_message', "Payment Updated Successfully.");
-                    window.location.reload();
+                    if (log) {
+                        sessionStorage.setItem('save_message', "Payment Updated Successfully.");
+                        window.location.reload();
+                    }
+                    else {
+                        toastr.error("Payment was not updated.");
+                    }
+                }
+                else {
+                    toastr.error("Payment was not updated.");
                 }
             }
             else {
