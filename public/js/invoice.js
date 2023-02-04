@@ -1110,7 +1110,12 @@ async function setProrateRecordsPage() {
 
             update_fn.onsubmit = (e) => {
                 e.preventDefault();
-                processUpdate();
+                $('#save-btn').prop('disabled', true);
+                $('#save-btn').append('&emsp;<i class="fa fa-circle-o-notch fa-spin"></i>');
+                setTimeout ( () => {
+                        processUpdate();
+                    },2000
+                );
             };
 
             async function processUpdate() {
@@ -1158,7 +1163,12 @@ async function setProrateRecordsPage() {
 
             delete_fn.onsubmit = (e) => {
                 e.preventDefault();
-                processDelete();
+                $('#dlt-btn').prop('disabled', true);
+                $('#dlt-btn').append('&emsp;<i class="fa fa-circle-o-notch fa-spin"></i>');
+                setTimeout ( () => {
+                        processDelete();
+                    },2000
+                );
             };
 
             async function processDelete() {

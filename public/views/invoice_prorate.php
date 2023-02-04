@@ -11,11 +11,11 @@
         <li class="breadcrumb-item active">Invoice</li>
       </ol>
     </nav>
-  </div><!-- End Page Title -->
+  </div>
 
   <!-- Prorate Records Table -->
-  <div class="col-12">
-    <div class="card recent-sales overflow-auto">
+  <div class="col-lg-12">
+    <div class="card">
       <br>
       <div class="card-body">
 
@@ -78,23 +78,23 @@
 
               <div class="col-md-12 row pt-3">
                 <label>Duration</label>
-                <div class="form-floating col-sm-4">
-                  <input type="number" class="form-control" id="duration_hours" placeholder="HH" value="" required>
+                <div class="form-floating col-md-4 p-1">
+                  <input type="number" class="form-control" id="duration_hours" placeholder="HH" value="" min="0" required>
                   <label for="duration_hours">Hours</label>
                 </div>
-                <div class="form-floating col-sm-4">
+                <div class="form-floating col-md-4 p-1">
                   <input type="number" class="form-control" id="duration_minutes" placeholder="MM" value="" min="0" max="59" required>
                   <label for="duration_minutes">Minutes</label>
                 </div>
-                <div class="form-floating col-sm-4">
+                <div class="form-floating col-md-4 p-1">
                   <input type="number" class="form-control" id="duration_seconds" placeholder="SS" value="" min="0" max="59" required>
                   <label for="duration_seconds">Seconds</label>
                 </div>
               </div>
 
               <div class="col-md-12">
-                <div class="col-sm-5">
-                  <input type="text" class="form-control text-center " id="status" value="" disabled>
+                <div class="col-md-5">
+                  <input type="text" class="form-control text-center" id="status" value="" disabled>
                 </div>
               </div>
 
