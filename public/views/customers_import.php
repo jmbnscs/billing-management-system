@@ -1,7 +1,6 @@
 <?php 
   include '../models/header.html';
   include '../models/navbar.html'; 
-//   include '../../app/includes/customer_upload.php'; 
 ?>
 
 <main id="main" class="main">
@@ -14,36 +13,28 @@
       <li class="breadcrumb-item active">Customers</li>
     </ol>
   </nav>
-</div><!-- End Page Title -->
+</div>
 
 <section class="section customers-add">
   <div class="row">
-    <div class="col-mb-8">
-        <!-- <div class="col-md-12 head">
-            <div class="float-right">
-                <a href="javascript:void(0);" class="btn btn-success" onclick="formToggle('importFrm');"><i class="plus"></i> Import</a>
-            </div>
-        </div> -->
-        <!-- CSV file upload form -->
-
+    <div class="col-lg-7">
         <div class="card">
             <div class="card-header">
-                <h5>Import Customer Data</h5>
+                <h5>Import Customer Data <i class="bi bi-info-circle ms-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Accepts CSV files only."></i></h5>
             </div>
 
             <div class="card-body">
-                <div class="col-md-8 mt-3">
+                <div class="col-md-12 mt-3">
                     <form action="" method="post" enctype="multipart/form-data" id="upload-customer" class="form-inline">
                         <div class="form-group">
-                            <input type="file" name="file" class="form-control form-control-m" required>
+                            <input type="file" name="file" accept=".csv" class="form-control" required>
                         </div>
-                        <div class="form-group col-md-4 mt-4">
+                        <div class="form-group col-md-6 mt-4">
                             <input type="submit" class="btn btn-success form-control " name="importSubmit" value="Import Customer Data">
                         </div>
                     </form>
                 </div>
             </div>
-
         </div>
 
         <div class="card hide" id="error-dl">
@@ -52,29 +43,15 @@
             </div>
 
             <div class="card-body">
-                <div class="col-md-8 mt-3">
+                <div class="col-md-12 mt-3">
                     <form method="post" id="download-error" class="form-inline">
-                        <div class="form-group col-md-4 mt-4">
-                            <input type="submit" class="btn btn-danger form-control " name="downloadError" value="Download">
+                        <div class="form-group col-md-6 mt-4">
+                            <input type="submit" class="btn btn-danger form-control " name="downloadError" value="Download Error File">
                         </div>
                     </form>
-                    <!-- <a href="https://bms.gstechbms.online/bms/app/temp/uploaderror.csv" download><button class="btn btn-danger">Download</button></a> -->
                 </div>
             </div>
         </div>
-
-        <!-- 
-        <div class="card">
-            <div class="card-header">
-                <h5>Export Customer Data</h5>
-            </div>
-
-            <div class="card-body">
-                <div class="col-md-8 mt-3">
-                    <a href="../../app/includes/customer_export.php" download><button class="btn btn-primary">Download</button></a>
-                </div>
-            </div>
-        </div> -->
         
         <div class="card">
             <div class="card-header">
@@ -82,9 +59,9 @@
             </div>
 
             <div class="card-body">
-                <div class="col-md-8 mt-3">
+                <div class="col-md-12 mt-3">
                     <form method="post" id="export-customer" class="form-inline">
-                        <div class="form-group col-md-4 mt-4">
+                        <div class="form-group col-md-6 mt-4">
                             <input type="submit" class="btn btn-info form-control " name="exportSubmit" value="Export Customer Data">
                         </div>
                     </form>
@@ -98,13 +75,19 @@
             </div>
 
             <div class="card-body">
-                <div class="col-md-8 mt-3">
+                <div class="col-md-12 mt-3">
                     <form method="post" id="download-template" class="form-inline">
-                        <div class="form-group col-md-4 mt-4">
-                            <input type="submit" class="btn btn-primary form-control " name="downloadTemplate" value="Download">
+                        <div class="col-md-6">
+                            <input type="submit" class="btn btn-primary form-control " name="downloadTemplate" value="Download Template">
                         </div>
                     </form>
-                    <!-- <a href="https://bms.gstechbms.online/bms/app/temp/template.csv" download><button class="btn btn-primary">Download</button></a> -->
+
+                    <form action="../../app/includes/download_guide.php" method="post" target="_blank">
+                        <div class="col-md-6 pt-4">
+                            <input type="submit" class="btn btn-info form-control " name="viewTemplateGuide" value="View Template Guide">
+                        </div>
+                    </form>
+                    
                 </div>
             </div>
         </div>
@@ -113,7 +96,7 @@
   </div>
 </section>
 
-</main><!-- End #main -->
+</main>
 
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 

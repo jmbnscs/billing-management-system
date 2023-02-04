@@ -282,12 +282,12 @@ require_once('../helpers/tcpdf/tcpdf.php');
     $customer = $pdf->CustomerData($invoice['account_id']);
     $pdf->BillingInformation($invoice, $customer);
     
-    // $pdf->setTextShadow(array('enabled'=>true, 'depth_w'=>0.2, 'depth_h'=>0.2, 'color'=>array(196,196,196), 'opacity'=>1, 'blend_mode'=>'Normal'));
-
-    $pdf->AddPage();
     $payment = $pdf->PaymentData($invoice['invoice_id']);
-    $pdf->PaymentInformation($payment);
-
+    if (!array_key_exists('message', $payment)) {
+        $pdf->AddPage();
+        $pdf->PaymentInformation($payment);
+    }
+    
     // ---------------------------------------------------------
     
     $invoice = $pdf->Output('test.pdf', 'I');

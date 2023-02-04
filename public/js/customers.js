@@ -17,12 +17,20 @@ $(document).ready(function () {
         setDownloadError();
         resetURL();
     }
-    else if (status == 'invalid_file') {
+    else if (status == 'invalid') {
         toastr.error('Please upload a valid csv file.');
         setTimeout(function(){
             window.location.replace('../views/customers_import');
+            resetURL();
         }, 2000);
-        resetURL();
+        
+    }
+    else if (status == 'empty') {
+        toastr.error('The file you uploaded is empty.');
+        setTimeout(function(){
+            window.location.replace('../views/customers_import');
+            resetURL();
+        }, 2000);
     }
     else if (DIR_CUR == DIR_MAIN + 'views/customers_add') {
         restrictPages('customer-add');
@@ -523,35 +531,6 @@ async function setImportCustomerPage () {
     const import_customer = document.getElementById('upload-customer');
     import_customer.onsubmit = (e) => {
         $('#upload-customer').attr('action', '../../app/includes/customer_upload.php');
-
-        // $.ajax({
-        //     url: '../../app/includes/customer_upload.php',
-        //     cache: false,
-        //     success: function(response) {
-        //         var res = $.parseJSON(response);
-        //     },
-        //     error: function (xhr, status, error, response) {
-        //         console.error(xhr);
-        //         var res = $.parseJSON(response);
-
-        //     }
-        // });
-        // console.log('here');
-        // var file_data = $("#uploadFile").prop("files")[0];   // Getting the properties of file from file field
-        // var form_data = new FormData();                  // Creating object of FormData class
-        // form_data.append("file", file_data);              // Appending parameter named file with properties of file_field to form_data
-        // $.ajax({
-        //         url: "../../app/includes/customer_upload.php",
-        //         dataType: 'json',
-        //         cache: false,
-        //         contentType: false,
-        //         processData: false,
-        //         data: form_data,                         // Setting the data attribute of ajax with file_data
-        //         type: 'post',
-        //         success: function(data) {
-        //             console.log(data);
-        //         }
-        // });
     };
 }
 
@@ -561,19 +540,6 @@ async function setExportCustomerPage () {
     export_customer.onsubmit = (e) => {
         $('#export-customer').attr('action', '../../app/includes/customer_export.php');
         toastr.info("Preparing CSV File...");
-        // $.ajax({
-        //     url: '../../app/includes/customer_export.php',
-        //     cache: false,
-        //     success: function(response) {
-        //         var res = $.parseJSON(response);
-        //         console.log(res)
-        //     },
-        //     error: function (xhr, status, error, response) {
-        //         console.error(xhr);
-        //         var res = $.parseJSON(response);
-        //         console.log(res)
-        //     }
-        // });
     };
 }
 
@@ -582,19 +548,6 @@ async function setDownloadPage () {
     download_template.onsubmit = (e) => {
         $('#download-template').attr('action', '../../app/includes/download_template.php');
         toastr.info("Preparing CSV File...");
-        // $.ajax({
-        //     url: '../../app/includes/customer_export.php',
-        //     cache: false,
-        //     success: function(response) {
-        //         var res = $.parseJSON(response);
-        //         console.log(res)
-        //     },
-        //     error: function (xhr, status, error, response) {
-        //         console.error(xhr);
-        //         var res = $.parseJSON(response);
-        //         console.log(res)
-        //     }
-        // });
     };
 }
 
@@ -603,18 +556,5 @@ async function setDownloadError () {
     download_error.onsubmit = (e) => {
         $('#download-error').attr('action', '../../app/includes/download_error.php');
         toastr.info("Preparing CSV File...");
-        // $.ajax({
-        //     url: '../../app/includes/customer_export.php',
-        //     cache: false,
-        //     success: function(response) {
-        //         var res = $.parseJSON(response);
-        //         console.log(res)
-        //     },
-        //     error: function (xhr, status, error, response) {
-        //         console.error(xhr);
-        //         var res = $.parseJSON(response);
-        //         console.log(res)
-        //     }
-        // });
     };
 }
