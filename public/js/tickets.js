@@ -2,18 +2,7 @@ $(document).ready(function () {
     isDefault();
     restrictPages('ticket-page');
     
-    if (DIR_CUR == DIR_MAIN + 'views/tickets_create') {
-        restrictPages('ticket-create');
-        newTicketModal();
-    }
-    else if (DIR_CUR == DIR_MAIN + 'views/tickets_resolved') {
-        restrictPages('ticket-resolved');
-        displaySuccessMessage();
-
-        setResolvedTicketsTable();
-        resolvedModal();
-    }
-    else if (DIR_CUR == DIR_MAIN + 'views/tickets_pending') {
+    if (DIR_CUR == DIR_MAIN + 'views/tickets_pending') {
         restrictPages('ticket-pending');
         displaySuccessMessage();
 
@@ -140,7 +129,12 @@ async function setViewTickets () {
             const claim_ticket = document.getElementById('claim-ticket-modal');
             claim_ticket.onsubmit = (e) => {
                 e.preventDefault();
-                claimTicketData();
+                $('#claim-ticket').prop('disabled', true);
+                $('#claim-ticket').append('&emsp;<i class="fa fa-circle-o-notch fa-spin"></i>');
+                setTimeout ( () => {
+                        claimTicketData();
+                    },2000
+                );
             };
 
             async function claimTicketData() {
@@ -261,7 +255,12 @@ async function invalidModal (ticket_num, page) {
 
     invalid_ticket.onsubmit = (e) => {
         e.preventDefault();
-        invalidTicketData();
+        $('#invalid-ticket').prop('disabled', true);
+        $('#invalid-ticket').append('&emsp;<i class="fa fa-circle-o-notch fa-spin"></i>');
+        setTimeout ( () => {
+                invalidTicketData();
+            },2000
+        );
     };
 
     async function invalidTicketData() {
@@ -354,7 +353,6 @@ async function pendingModal () {
             $('#resolve-btn').attr('data-bs-target', '#subscriptionModal');
         }
         else {
-            //$('#resolve-btn').attr('data-bs-target', '#disconnectModal');
             $('#resolve-btn').attr('data-bs-target', '#defaultModal');
         }
 
@@ -381,7 +379,6 @@ async function pendingModal () {
                 pendSubscriptionModal(ticket_num);
             }
             else {
-                //pendDisconnectModal(ticket_num);
                 pendDefaultModal(ticket_num);
             }
         };
@@ -408,7 +405,12 @@ async function pendNetworkModal(ticket_num) {
     const resolve_network = document.getElementById('network-ticket-modal');
     resolve_network.onsubmit = (e) => {
         e.preventDefault();
-        networkTicketData();
+        $('#resolve-network-btn').prop('disabled', true);
+        $('#resolve-network-btn').append('&emsp;<i class="fa fa-circle-o-notch fa-spin"></i>');
+        setTimeout ( () => {
+                networkTicketData();
+            },2000
+        );
     };
 
     async function networkTicketData() {
@@ -473,7 +475,13 @@ async function pendSubscriptionModal(ticket_num) {
     const resolve_subscription = document.getElementById('subscription-ticket-modal');
     resolve_subscription.onsubmit = (e) => {
         e.preventDefault();
-        subscriptionTicketData();
+        $('#resolve-subscription-btn').prop('disabled', true);
+        $('#resolve-subscription-btn').append('&emsp;<i class="fa fa-circle-o-notch fa-spin"></i>');
+        setTimeout ( () => {
+                subscriptionTicketData();
+            },2000
+        );
+        
     };
 
     async function subscriptionTicketData() {
@@ -515,21 +523,23 @@ async function pendSubscriptionModal(ticket_num) {
 async function pendDefaultModal(ticket_num) {
     var disconModal = document.getElementById('defaultModal');
     var modalTitle = disconModal.querySelector('.modal-title');
-    // modalTitle.textContent = ticket_num + ' -  Disconnection Ticket';
     
     const ticket = await fetchData('ticket/read_single.php?ticket_num=' + ticket_num);
-    const [customer, plan, account] = await Promise.all ([fetchData('customer/read_single.php?account_id=' + ticket.account_id), fetchData('plan/read.php'), fetchData('account/read_single.php?account_id=' + ticket.account_id)]);
+    const [customer, concerns] = await Promise.all ([fetchData('customer/read_single.php?account_id=' + ticket.account_id), fetchData('concerns/read_single.php?concern_id=' + ticket.concern_id)]);
 
-    // Should be changed when new concern_category will be added
-    concern_category = (ticket.concern_id == 3) ? 'Disconnection' : 'General Concern'
-    modalTitle.textContent = ticket_num + ' - ' + concern_category; 
+    modalTitle.textContent = ticket_num + ' - ' + concerns.concern_category; 
     $('#account_id_disc').val(ticket.account_id);
     $('#customer_name_disc').val(customer.first_name + ' ' + customer.last_name);
 
     const resolve_default = document.getElementById('default-ticket-modal');
     resolve_default.onsubmit = (e) => {
         e.preventDefault();
-        defaultTicketData();
+        $('#resolve-default-btn').prop('disabled', true);
+        $('#resolve-default-btn').append('&emsp;<i class="fa fa-circle-o-notch fa-spin"></i>');
+        setTimeout ( () => {
+                defaultTicketData();
+            },2000
+        );
     };
 
     async function defaultTicketData() {
@@ -552,46 +562,6 @@ async function pendDefaultModal(ticket_num) {
         }
     }
 }
-
-// async function pendDisconnectModal(ticket_num) {
-//     var disconModal = document.getElementById('disconnectModal');
-//     var modalTitle = disconModal.querySelector('.modal-title');
-//     modalTitle.textContent = ticket_num + ' -  Disconnection Ticket';
-    
-//     const ticket = await fetchData('ticket/read_single.php?ticket_num=' + ticket_num);
-//     const [customer, plan, account] = await Promise.all ([fetchData('customer/read_single.php?account_id=' + ticket.account_id), fetchData('plan/read.php'), fetchData('account/read_single.php?account_id=' + ticket.account_id)]);
-
-//     $('#account_id_disc').val(ticket.account_id);
-//     $('#customer_name_disc').val(customer.first_name + ' ' + customer.last_name);
-
-//     const resolve_disconnect = document.getElementById('disconnect-ticket-modal');
-//     resolve_disconnect.onsubmit = (e) => {
-//         e.preventDefault();
-//         disconnectTicketData();
-//     };
-
-//     async function disconnectTicketData() {
-//         const update_data = JSON.stringify({
-//             'ticket_num' : ticket_num,
-//             'resolution_details' : $('#resolution_details_disc').val(),
-//             'date_resolved' : getDateToday(),
-//             'ticket_status_id' : 3,
-//             'admin_id' : admin_id
-//         });
-
-//         const [ticket_content, log] = await Promise.all ([updateData('ticket/update.php', update_data), logActivity('Resolved Ticket ' + ticket_num, 'Pending Tickets')]);
-    
-//         if (ticket_content.message == 'Ticket Updated' && log) {
-//             sessionStorage.setItem('save_message', "Ticket Resolved Successfully.");
-//             window.location.replace('../views/tickets');
-//         }
-//         else {
-//             toastr.error("Ticket was not resolved. " + ticket_content.message);
-//         }
-//     }
-// }
-
-
 
 // -------------------------------------------------------------------- Invalid Ticket Page
 async function setInvalidTicketsTable () {
@@ -672,12 +642,22 @@ async function invalidatedTicketsModal () {
 
         reactivate_ticket.onclick = (e) => {
             e.preventDefault();
-            reActivateTicketData();
+            $('#reactivate-btn').prop('disabled', true);
+            $('#reactivate-btn').append('&emsp;<i class="fa fa-circle-o-notch fa-spin"></i>');
+            setTimeout ( () => {
+                    reActivateTicketData();
+                },2000
+            );
         };
 
         delete_ticket.onclick = (e) => {
             e.preventDefault();
-            deleteTicketData();
+            $('#delete-btn').prop('disabled', true);
+            $('#delete-btn').append('&emsp;<i class="fa fa-circle-o-notch fa-spin"></i>');
+            setTimeout ( () => {
+                    deleteTicketData();
+                },2000
+            );
         };
         
         async function reActivateTicketData() {
@@ -719,10 +699,7 @@ async function invalidatedTicketsModal () {
 // -------------------------------------------------------------------- Add Ticket Page
 async function newTicketModal () {
     const create_ticket = document.getElementById('create-ticket');
-    // $('#ticket_num').val(await generateID('check/ticket_num.php?ticket_num=', "TN", 6));
     getExistingAccounts = await fetchData('account/read.php');
-
-    // localStorage.removeItem('ticket_num');
 
     if (sessionStorage.getItem('ticket_num') == null) {
         sessionStorage.setItem('ticket_num', await generateID('check/ticket_num.php?ticket_num=', "TN", 6));
@@ -739,13 +716,6 @@ async function newTicketModal () {
     create_ticket.onsubmit = async (e) => {
         e.preventDefault();
         checkValidity();
-
-        // if (await isAccountIDExist($('#account_id').val())) {
-        //     createTicket();
-        // }
-        // else {
-        //     toastr.error('Account ID does not exist.');
-        // }
     };
 
     var req_elem = document.getElementById('create-ticket').querySelectorAll("[required]");
@@ -798,7 +768,12 @@ async function newTicketModal () {
             toastr.warning('Please provide the appropriate details on each field.');
         }
         else {
-            createTicket();
+            $('#create-ticket-btn').prop('disabled', true);
+            $('#create-ticket-btn').append('&emsp;<i class="fa fa-circle-o-notch fa-spin"></i>');
+            setTimeout ( () => {
+                    createTicket();
+                },2000
+            );
         }
     }
 

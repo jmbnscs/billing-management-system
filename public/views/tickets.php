@@ -17,10 +17,10 @@
     <div class="col-md-3 justify-content-center">
       <button type="button" class="btn btn-primary mt-3 w-100" data-bs-toggle="modal" data-bs-target="#create-ticket-modal">+ Create New Ticket</button>
     </div>
-  </div><!-- End Page Title -->
+  </div>
 
-  <div class="col-12">
-    <div class="card recent-sales overflow-auto">
+  <div class="col-lg-12">
+    <div class="card">
       <br>
       <div class="card-body">
 
@@ -406,7 +406,7 @@
           <!-- Modal Footer -->
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-success">Submit Ticket</button>
+            <button type="submit" class="btn btn-success" id="create-ticket-btn">Submit Ticket</button>
           </div>
         </div>
       </div>

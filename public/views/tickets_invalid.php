@@ -11,11 +11,11 @@
         <li class="breadcrumb-item active">Tickets</li>
       </ol>
     </nav>
-  </div><!-- End Page Title -->
+  </div>
 
   <!-- Invalid Tickets Table -->
-  <div class="col-12">
-    <div class="card recent-sales overflow-auto">
+  <div class="col-lg-12">
+    <div class="card">
       <br>
       <div class="card-body">
 
@@ -39,8 +39,7 @@
               <th scope="col">View / Delete</th>
             </tr>
           </thead>
-          <tbody id="ticket-invalid-data">
-          </tbody>
+          <tbody></tbody>
         </table>
 
       </div>
@@ -116,7 +115,7 @@
   </div>
 </form>
 
-</main><!-- End #main -->
+</main>
 
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 

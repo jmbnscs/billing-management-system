@@ -11,11 +11,11 @@
         <li class="breadcrumb-item active">Tickets</li>
       </ol>
     </nav>
-  </div><!-- End Page Title -->
+  </div>
 
   <!-- Pending Tickets Table -->
-  <div class="col-12">
-    <div class="card recent-sales overflow-auto">
+  <div class="col-lg-12">
+    <div class="card">
       <br>
       <div class="card-body">
         <!-- Filter Dropdown -->
@@ -148,24 +148,24 @@
 
                   <div class="col-md-12 row pt-3">
                     <label>Duration</label>
-                    <div class="form-floating col-sm-4">
-                      <input type="number" class="form-control" id="duration_hours" placeholder="HH" value="" required>
-                      <label for="duration_hours">Hours</label>
+                    <div class="form-floating col-md-4 p-1">
+                      <input type="number" class="form-control" id="duration_hours" placeholder="HH" value="" min="0" required>
+                      <label for="duration_hours" class="required">Hours</label>
                     </div>
-                    <div class="form-floating col-sm-4">
+                    <div class="form-floating col-md-4 p-1">
                       <input type="number" class="form-control" id="duration_minutes" placeholder="MM" value="" min="0" max="59" required>
-                      <label for="duration_minutes">Minutes</label>
+                      <label for="duration_minutes" class="required">Minutes</label>
                     </div>
-                    <div class="form-floating col-sm-4">
+                    <div class="form-floating col-md-4 p-1">
                       <input type="number" class="form-control" id="duration_seconds" placeholder="SS" value="" min="0" max="59" required>
-                      <label for="duration_seconds">Seconds</label>
+                      <label for="duration_seconds" class="required">Seconds</label>
                     </div>
                   </div>
 
                   <div class="col-md-12">
                     <div class="form-floating">
-                      <textarea class="form-control" id="resolution_details_net" value="" placeholder="Resolution Details" required></textarea>
-                      <label for="resolution_details_net">Resolution Details</label>
+                      <textarea class="form-control" id="resolution_details_net" value="" placeholder="Resolution Details" rows="5" required></textarea>
+                      <label for="resolution_details_net" class="required">Resolution Details</label>
                     </div>
                   </div>
           </div>
@@ -212,14 +212,14 @@
                   <div class="col-md-12">
                     <div class="form-floating">
                       <select id="plan_id_sub" class="form-select" required></select>
-                      <label for="plan_id_sub">Subscription Plan</label>
+                      <label for="plan_id_sub" class="required">Subscription Plan</label>
                     </div>
                   </div>
 
                   <div class="col-md-12">
                     <div class="form-floating">
                       <textarea class="form-control" id="resolution_details_sub" placeholder="Resolution Details" required></textarea>
-                      <label for="resolution_details_sub">Resolution Details</label>
+                      <label for="resolution_details_sub" class="required">Resolution Details</label>
                     </div>
                   </div>
           </div>
@@ -267,7 +267,7 @@
                   <div class="col-md-12">
                     <div class="form-floating">
                       <textarea class="form-control" id="resolution_details_disc" placeholder="Resolution Details" required></textarea>
-                      <label for="resolution_details_disc">Resolution Details</label>
+                      <label for="resolution_details_disc" class="required">Resolution Details</label>
                     </div>
                   </div>
 
