@@ -93,7 +93,12 @@ function setConnectionPage() {
             toastr.error('Special characters not allowed.');
         }
         else {
-            processCreate();
+            $('#conn-create-new-btn').prop('disabled', true);
+            $('#conn-create-new-btn').append('&emsp;<i class="fa fa-circle-o-notch fa-spin"></i>');
+            setTimeout ( () => {
+                    processCreate();
+                },2000
+            );
         }
     };
 
@@ -117,7 +122,12 @@ function setConnectionPage() {
                 toastr.error('Special characters not allowed.');
             }
             else {
-                processUpdate();
+                $('#conn-update-data-btn').prop('disabled', true);
+                $('#conn-update-data-btn').append('&emsp;<i class="fa fa-circle-o-notch fa-spin"></i>');
+                setTimeout ( () => {
+                        processUpdate();
+                    },2000
+                );
             }
         };
 
@@ -155,7 +165,12 @@ function setConnectionPage() {
         delete_fn = document.getElementById('conn-delete-data');
         delete_fn.onsubmit = (e) => {
             e.preventDefault();
-            processDelete();
+            $('#conn-delete-data-btn').prop('disabled', true);
+            $('#conn-delete-data-btn').append('&emsp;<i class="fa fa-circle-o-notch fa-spin"></i>');
+            setTimeout ( () => {
+                    processDelete();
+                },2000
+            );
         };
 
         async function processDelete() {
@@ -211,7 +226,12 @@ async function setConcernsPage() {
             toastr.error('Special characters not allowed.');
         }
         else {
-            processCreate();
+            $('#concerns-create-new-btn').prop('disabled', true);
+            $('#concerns-create-new-btn').append('&emsp;<i class="fa fa-circle-o-notch fa-spin"></i>');
+            setTimeout ( () => {
+                    processCreate();
+                },2000
+            );
         }
     };
 
@@ -246,7 +266,6 @@ async function setConcernsPage() {
         var modalTitle = updateModal.querySelector('.modal-title');
         modalTitle.textContent = 'Update Concern Category?';
 
-        // (concern_data.customer_access == 0) ? $('#customer_access_md').attr('checked', 0) : $('#customer_access_md').attr('checked', 1);
         $('#concern_id').val(concern_data.concern_id);
         $('#concern_category_md').val(concern_data.concern_category);
 
@@ -257,19 +276,16 @@ async function setConcernsPage() {
                 toastr.error('Special characters not allowed.');
             }
             else {
-                processUpdate();
+                $('#concerns-update-data-btn').prop('disabled', true);
+                $('#concerns-update-data-btn').append('&emsp;<i class="fa fa-circle-o-notch fa-spin"></i>');
+                setTimeout ( () => {
+                        processUpdate();
+                    },2000
+                );
             }
         };
 
-        // let customer_switch_md;
-        // $('#customer_access_md').on('change', function() {
-        //     customer_switch_md = $(this).is(':checked');
-        // });
-
         async function processUpdate() {
-            // let customer_access;
-            // (customer_switch_md) ? customer_access = 1 : customer_access = 0;
-
             const update_data = JSON.stringify({
                 'concern_id' : concern_id,
                 'concern_category' : $('#concern_category_md').val(),
@@ -286,10 +302,6 @@ async function setConcernsPage() {
                 toastr.error("Concern Category was not updated.");
             }
         }
-
-        // function toggleSwitch(bool) {
-        //     $('#customer_access_md').attr('checked', bool);
-        // }
     });
 
     var deleteModal = document.getElementById('concernsDeleteModal')
@@ -309,7 +321,12 @@ async function setConcernsPage() {
         delete_fn = document.getElementById('concerns-delete-data');
         delete_fn.onsubmit = (e) => {
             e.preventDefault();
-            processDelete();
+            $('#concerns-delete-data-btn').prop('disabled', true);
+            $('#concerns-delete-data-btn').append('&emsp;<i class="fa fa-circle-o-notch fa-spin"></i>');
+            setTimeout ( () => {
+                    processDelete();
+                },2000
+            );
         };
 
         async function processDelete() {
@@ -330,14 +347,7 @@ async function setConcernsPage() {
 
     });
     
-    // let customer_switch;
-    // $('#customer_access').on('change', function() {
-    //     customer_switch = $(this).is(':checked');
-    // });
     async function processCreate() {
-        // let customer_access;
-        // (customer_switch) ? customer_access = 1 : customer_access = 0;
-
         const create_data = JSON.stringify({
             'concern_category' : $('#concern_category').val(),
             'customer_access' : '1'
@@ -358,127 +368,6 @@ async function setConcernsPage() {
 }
 // End of Concerns Page
 
-// -------------------------------------------------------------------- Area Page
-function setAreaPage() {
-    setTable('area', '#areas-table');
-
-    create_fn = document.getElementById('area-create-new');
-    create_fn.onsubmit = async (e) => {
-        e.preventDefault();
-        const result = await fetchData('check/area_name.php?area_name=' + $('#area_name').val());
-        if (result.exist) {
-            toastr.error(result.error);
-            $('#area_name').val(null);
-        }
-        else if (isWithSpecialChars($('#area_name').val())) {
-            toastr.error('Special characters not allowed.');
-        }
-        else {
-            processCreate();
-        }
-    };
-
-    var updateModal = document.getElementById('areaEditModal')
-    updateModal.addEventListener('show.bs.modal', async function (event) {
-
-        var button = event.relatedTarget;
-        var area_id = button.getAttribute('data-bs-whatever');
-        let area_data = await fetchData('area/read_single.php?area_id=' + area_id);
-
-        var modalTitle = updateModal.querySelector('.modal-title');
-        modalTitle.textContent = 'Update Area?';
-
-        $('#area_id').val(area_id);
-        $('#area_name_md').val(area_data.area_name);
-
-        update_fn = document.getElementById('area-update-data');
-        update_fn.onsubmit = (e) => {
-            e.preventDefault();
-            if (isWithSpecialChars($('#area_name_md').val())) {
-                toastr.error('Special characters not allowed.');
-            }
-            else {
-                processUpdate();
-            }
-        };
-
-        async function processUpdate() {
-            const area_name = $('#area_name_md').val();
-
-            const update_data = JSON.stringify({
-                'area_id' : area_id,
-                'area_name' : area_name
-            }); 
-
-            const [content, log] = await Promise.all ([updateData('area/update.php', update_data), logActivity('Save Changes  [Area # ' + area_id + ']', 'Advanced Options')]);
-        
-            if (content.message == 'Area Updated' && log) {
-                sessionStorage.setItem('save_message', "Area Updated Successfully.");
-                window.location.reload();
-            }
-            else {
-                toastr.error("Area was not updated.");
-            }
-        }
-    });
-
-    var deleteModal = document.getElementById('areaDeleteModal')
-    deleteModal.addEventListener('show.bs.modal', async function (event) {
-
-        var button = event.relatedTarget;
-        var area_id = button.getAttribute('data-bs-whatever');
-        let data = await fetchData('area/read_single.php?area_id=' + area_id);
-
-        var modalTitle = deleteModal.querySelector('.modal-title');
-        modalTitle.textContent = "Delete " + data.area_name + "?";
-
-        $('#area_id_d').val(area_id);
-        $('#area_name_md_d').val(data.area_name);
-
-        delete_fn = document.getElementById('area-delete-data');
-        delete_fn.onsubmit = (e) => {
-            e.preventDefault();
-            processDelete();
-        };
-
-        async function processDelete() {
-            const delete_data = JSON.stringify({
-                'area_id' : area_id
-            });
-
-            const [content, log] = await Promise.all ([deleteData('area/delete.php', delete_data), logActivity('Delete [Area # ' + area_id + ']', 'Advanced Options')]);
-            
-            if (content.message == 'Area Deleted' && log) {
-                sessionStorage.setItem('save_message', "Area Deleted Successfully.");
-                window.location.reload();
-            }
-            else {
-                toastr.error("Area was not deleted.");
-            }
-        }
-    });
-    
-    async function processCreate() {
-        const area_name = $('#area_name').val();
-        const create_data = JSON.stringify({
-            'area_name' : area_name
-        });
-
-        const [content, log] = await Promise.all ([createData('area/create.php', create_data), logActivity('Submit - New Area - [' + $('#area_name').val() + ']', 'Advanced Options')]);
-        
-        if (content.message = 'Area Created' && log) {
-            toastr.success('Area Created Successfully.');
-            setTimeout(function(){
-                window.location.replace('../views/options');
-             }, 2000);
-        }
-        else {
-            toastr.error('Area was not created.');
-        }
-    }
-}
-// End of Area Page
-
 // -------------------------------------------------------------------- Inclusion Page
 async function setInclusionPage() {
     create_fn = document.getElementById('inclusion-create-new');
@@ -493,7 +382,12 @@ async function setInclusionPage() {
             toastr.error('Special characters not allowed.');
         }
         else {
-            processCreate();
+            $('#inclusion-create-new-btn').prop('disabled', true);
+            $('#inclusion-create-new-btn').append('&emsp;<i class="fa fa-circle-o-notch fa-spin"></i>');
+            setTimeout ( () => {
+                    processCreate();
+                },2000
+            );
         }
     };
 
@@ -538,7 +432,12 @@ async function setInclusionPage() {
                 toastr.error('Special characters not allowed.');
             }
             else {
-                processUpdate();
+                $('#inclusion-update-data-btn').prop('disabled', true);
+                $('#inclusion-update-data-btn').append('&emsp;<i class="fa fa-circle-o-notch fa-spin"></i>');
+                setTimeout ( () => {
+                        processUpdate();
+                    },2000
+                );
             }
         };
 
@@ -576,7 +475,12 @@ async function setInclusionPage() {
         delete_fn = document.getElementById('inclusion-delete-data');
         delete_fn.onsubmit = (e) => {
             e.preventDefault();
-            processDelete();
+            $('#inclusion-delete-data-btn').prop('disabled', true);
+            $('#inclusion-delete-data-btn').append('&emsp;<i class="fa fa-circle-o-notch fa-spin"></i>');
+            setTimeout ( () => {
+                    processDelete();
+                },2000
+            );
         };
 
         async function processDelete() {
@@ -617,6 +521,142 @@ async function setInclusionPage() {
     }
 }
 // End of Inclusion Page
+
+// -------------------------------------------------------------------- Area Page
+function setAreaPage() {
+    setTable('area', '#areas-table');
+
+    create_fn = document.getElementById('area-create-new');
+    create_fn.onsubmit = async (e) => {
+        e.preventDefault();
+        const result = await fetchData('check/area_name.php?area_name=' + $('#area_name').val());
+        if (result.exist) {
+            toastr.error(result.error);
+            $('#area_name').val(null);
+        }
+        else if (isWithSpecialChars($('#area_name').val())) {
+            toastr.error('Special characters not allowed.');
+        }
+        else {
+            $('#area-create-new-btn').prop('disabled', true);
+            $('#area-create-new-btn').append('&emsp;<i class="fa fa-circle-o-notch fa-spin"></i>');
+            setTimeout ( () => {
+                    processCreate();
+                },2000
+            );
+        }
+    };
+
+    var updateModal = document.getElementById('areaEditModal')
+    updateModal.addEventListener('show.bs.modal', async function (event) {
+
+        var button = event.relatedTarget;
+        var area_id = button.getAttribute('data-bs-whatever');
+        let area_data = await fetchData('area/read_single.php?area_id=' + area_id);
+
+        var modalTitle = updateModal.querySelector('.modal-title');
+        modalTitle.textContent = 'Update Area?';
+
+        $('#area_id').val(area_id);
+        $('#area_name_md').val(area_data.area_name);
+
+        update_fn = document.getElementById('area-update-data');
+        update_fn.onsubmit = (e) => {
+            e.preventDefault();
+            if (isWithSpecialChars($('#area_name_md').val())) {
+                toastr.error('Special characters not allowed.');
+            }
+            else {
+                $('#area-update-data-btn').prop('disabled', true);
+                $('#area-update-data-btn').append('&emsp;<i class="fa fa-circle-o-notch fa-spin"></i>');
+                setTimeout ( () => {
+                        processUpdate();
+                    },2000
+                );
+            }
+        };
+
+        async function processUpdate() {
+            const area_name = $('#area_name_md').val();
+
+            const update_data = JSON.stringify({
+                'area_id' : area_id,
+                'area_name' : area_name
+            }); 
+
+            const [content, log] = await Promise.all ([updateData('area/update.php', update_data), logActivity('Save Changes  [Area # ' + area_id + ']', 'Advanced Options')]);
+        
+            if (content.message == 'Area Updated' && log) {
+                sessionStorage.setItem('save_message', "Area Updated Successfully.");
+                window.location.reload();
+            }
+            else {
+                toastr.error("Area was not updated.");
+            }
+        }
+    });
+
+    var deleteModal = document.getElementById('areaDeleteModal')
+    deleteModal.addEventListener('show.bs.modal', async function (event) {
+
+        var button = event.relatedTarget;
+        var area_id = button.getAttribute('data-bs-whatever');
+        let data = await fetchData('area/read_single.php?area_id=' + area_id);
+
+        var modalTitle = deleteModal.querySelector('.modal-title');
+        modalTitle.textContent = "Delete " + data.area_name + "?";
+
+        $('#area_id_d').val(area_id);
+        $('#area_name_md_d').val(data.area_name);
+
+        delete_fn = document.getElementById('area-delete-data');
+        delete_fn.onsubmit = (e) => {
+            e.preventDefault();
+            $('#area-delete-data-btn').prop('disabled', true);
+            $('#area-delete-data-btn').append('&emsp;<i class="fa fa-circle-o-notch fa-spin"></i>');
+            setTimeout ( () => {
+                    processDelete();
+                },2000
+            );
+        };
+
+        async function processDelete() {
+            const delete_data = JSON.stringify({
+                'area_id' : area_id
+            });
+
+            const [content, log] = await Promise.all ([deleteData('area/delete.php', delete_data), logActivity('Delete [Area # ' + area_id + ']', 'Advanced Options')]);
+            
+            if (content.message == 'Area Deleted' && log) {
+                sessionStorage.setItem('save_message', "Area Deleted Successfully.");
+                window.location.reload();
+            }
+            else {
+                toastr.error("Area was not deleted.");
+            }
+        }
+    });
+    
+    async function processCreate() {
+        const area_name = $('#area_name').val();
+        const create_data = JSON.stringify({
+            'area_name' : area_name
+        });
+
+        const [content, log] = await Promise.all ([createData('area/create.php', create_data), logActivity('Submit - New Area - [' + $('#area_name').val() + ']', 'Advanced Options')]);
+        
+        if (content.message = 'Area Created' && log) {
+            toastr.success('Area Created Successfully.');
+            setTimeout(function(){
+                window.location.replace('../views/options');
+             }, 2000);
+        }
+        else {
+            toastr.error('Area was not created.');
+        }
+    }
+}
+// End of Area Page
 
 // -------------------------------------------------------------------- User Level Page
 async function setUserLevelPage() {

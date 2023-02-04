@@ -2,21 +2,21 @@
   include '../models/header.html';
   include '../models/navbar.html'; ?>
 
-  <main id="main" class="main">
+<main id="main" class="main">
 
-    <div class="pagetitle">
-      <h1>Advanced Options</h1>
-      <nav>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="dashboard">Home</a></li>
-          <li class="breadcrumb-item active">Options</li>
-        </ol>
-      </nav>
-    </div><!-- End Page Title -->
+  <div class="pagetitle">
+    <h1>Advanced Options</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="dashboard">Home</a></li>
+        <li class="breadcrumb-item active">Options</li>
+      </ol>
+    </nav>
+  </div>
 
   <section class="section connection">
     <div class="row">
-      <div class="col-xl-12">
+      <div class="col-lg-12">
         <div class="card">
           <div class="card-body pt-3">
             
@@ -158,24 +158,6 @@
     </div>
   </section>
 
-<!-- Add New Connection Form -->
-<!-- <div class="tab-pane fade add-connection-tab pt-3 " id="add-connection-tab">
-  <form id="create-new">
-    <div class="row mb-3">
-      <label for="connection_name" class="col-md-4 col-lg-3 col-form-label">Connection Name</label>
-      <div class="col-md-8 col-lg-9">
-        <input name="connection_name" type="text" class="form-control" id="connection_name" value="" required>
-      </div>
-    </div>
-
-    <div class="text-center">
-      <button type="submit" class="btn btn-primary">Add Connection</button>
-    </div>
-  </form>
-
-</div> -->
-<!-- End Add New Connection Form -->
-
 <!-- ------------------------------------------------------ Connection Modal -->
 <!-- Add New Connection Modal -->
 <form id="conn-create-new">
@@ -201,7 +183,7 @@
             <!-- Modal Footer -->
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="submit" class="btn btn-success">Submit</button>
+              <button type="submit" class="btn btn-success" id="conn-create-new-btn">Submit</button>
             </div>
           </div>
         </div>
@@ -243,7 +225,7 @@
           <!-- Modal Footer -->
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-success" id="save-btn">Save Changes</button>
+            <button type="submit" class="btn btn-success" id="conn-update-data-btn">Save Changes</button>
           </div>
         </div>
       </div>
@@ -277,7 +259,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-          <button type="submit" class="btn btn-danger">Delete</button>
+          <button type="submit" class="btn btn-danger" id="conn-delete-data-btn">Delete</button>
         </div>
       </div>
     </div>
@@ -310,7 +292,7 @@
             <!-- Modal Footer -->
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="submit" class="btn btn-success">Submit</button>
+              <button type="submit" class="btn btn-success" id="concerns-create-new-btn">Submit</button>
             </div>
           </div>
         </div>
@@ -347,20 +329,13 @@
                   </div>
                 </div>
 
-                <!-- <div class="col-md-12">
-                  <div class="form-check form-switch">
-                    <input type="checkbox" class="form-check-input" id="customer_access_md" value="1">
-                    <label for="customer_access_md">Customer Access</label>
-                  </div>
-                </div> -->
-
           </div>
           <!-- End Modal Body -->
 
           <!-- Modal Footer -->
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-success" id="save-btn">Save Changes</button>
+            <button type="submit" class="btn btn-success" id="concerns-update-data-btn">Save Changes</button>
           </div>
         </div>
       </div>
@@ -392,18 +367,11 @@
                     <label for="concern_category_md_d">Concern Category Name</label>
                   </div>
                 </div>
-
-                <!-- <div class="col-md-12">
-                  <div class="form-check form-switch">
-                    <input type="checkbox" class="form-check-input" id="customer_access_md_d" value="1" disabled>
-                    <label for="customer_access_md_d">Customer Access</label>
-                  </div>
-                </div> -->
         </div>
 
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-          <button type="submit" class="btn btn-danger">Delete</button>
+          <button type="submit" class="btn btn-danger" id="concerns-delete-data-btn">Delete</button>
         </div>
       </div>
     </div>
@@ -436,7 +404,7 @@
             <!-- Modal Footer -->
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="submit" class="btn btn-success">Submit</button>
+              <button type="submit" class="btn btn-success" id="inclusion-create-new-btn">Submit</button>
             </div>
           </div>
         </div>
@@ -478,7 +446,7 @@
           <!-- Modal Footer -->
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-success" id="save-btn">Save Changes</button>
+            <button type="submit" class="btn btn-success" id="inclusion-update-data-btn">Save Changes</button>
           </div>
         </div>
       </div>
@@ -512,7 +480,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-          <button type="submit" class="btn btn-danger">Delete</button>
+          <button type="submit" class="btn btn-danger" id="inclusion-delete-data-btn">Delete</button>
         </div>
       </div>
     </div>
@@ -546,7 +514,7 @@
             <!-- Modal Footer -->
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="submit" class="btn btn-success">Submit</button>
+              <button type="submit" class="btn btn-success" id="area-create-new-btn">Submit</button>
             </div>
           </div>
         </div>
@@ -588,7 +556,7 @@
           <!-- Modal Footer -->
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-success" id="save-btn">Save Changes</button>
+            <button type="submit" class="btn btn-success" id="area-update-data-btn">Save Changes</button>
           </div>
         </div>
       </div>
@@ -621,7 +589,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-          <button type="submit" class="btn btn-danger">Delete</button>
+          <button type="submit" class="btn btn-danger" id="area-delete-data-btn">Delete</button>
         </div>
       </div>
     </div>
@@ -629,27 +597,26 @@
 </form>
 <!-- ------------------------------------------------------ End Area Modal-->
 
-  </main><!-- End #main -->
+</main>
 
-  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
- 
-  <!-- Vendor JS Files -->
-  <script src="../assets/vendor/apexcharts/apexcharts.min.js"></script>
-  <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="../assets/vendor/chart.js/chart.min.js"></script>
-  <script src="../assets/vendor/echarts/echarts.min.js"></script>
-  <script src="../assets/vendor/quill/quill.min.js"></script>
-  <script src="../assets/vendor/simple-datatables/simple-datatables.js"></script>
-  <script src="../assets/vendor/tinymce/tinymce.min.js"></script>
-  <script src="../assets/vendor/php-email-form/validate.js"></script>
+<!-- Vendor JS Files -->
+<script src="../assets/vendor/apexcharts/apexcharts.min.js"></script>
+<script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="../assets/vendor/chart.js/chart.min.js"></script>
+<script src="../assets/vendor/echarts/echarts.min.js"></script>
+<script src="../assets/vendor/quill/quill.min.js"></script>
+<script src="../assets/vendor/simple-datatables/simple-datatables.js"></script>
+<script src="../assets/vendor/tinymce/tinymce.min.js"></script>
+<script src="../assets/vendor/php-email-form/validate.js"></script>
 
-  <!-- Template Main JS File -->
-  <script src="../assets/js/main.js"></script>
+<!-- Template Main JS File -->
+<script src="../assets/js/main.js"></script>
 
-  <!-- Backend JS File -->
-  <script src="../js/main.js"></script>
-  <script src="../js/misc.js"></script>
+<!-- Backend JS File -->
+<script src="../js/main.js"></script>
+<script src="../js/misc.js"></script>
 
 </body>
 
