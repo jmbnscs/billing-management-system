@@ -84,7 +84,13 @@ async function setDefaultSetting() {
             e.preventDefault();
             const reference = await fetchData('check/payment_ref.php?payment_reference_id=' + $('#payment_reference_id_md').val());
             if (!reference.exist) {
-                processUpdate();
+                    $('#add-payment-btn').prop('disabled', true);
+                    $('#add-payment-btn').append('&emsp;<i class="fa fa-circle-o-notch fa-spin"></i>');
+
+                    setTimeout ( () => {
+                        processUpdate();
+                    },3000
+                );
             }
             else {
                 toastr.error('Payment Reference ID already exist.');

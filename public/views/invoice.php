@@ -14,8 +14,8 @@
   </div><!-- End Page Title -->
 
   <!-- Invoice Table -->
-  <div class="col-12">
-    <div class="card recent-sales overflow-auto">
+  <div class="col-lg-12">
+    <div class="card">
       <br>
       <div class="card-body">
         <ul class="nav nav-tabs d-flex" role="tablist">
