@@ -15,6 +15,10 @@ let extractUserRole = decodeURI(user_role);
 async function setDefaultSetting() {
     const getUserLevels = await fetchData('user_level/read.php');
     displaySuccessMessage();
+
+    if (extractUserRole == 'IT Administrator') {
+        $('#role-privilege-edit-btn').addClass('hide');
+    }
    
     let role_data;
     for(var i = 1; i < getUserLevels.length; i++) {
@@ -25,10 +29,20 @@ async function setDefaultSetting() {
         else {
             role_data = null;
         }
-        // role_data = (getUserLevels[i].user_role = extractUserRole) ? getUserLevels[i] : null;
     }
-    (role_data !== null) ? setUserRolePrivileges(role_data) : toastr.error("User Role Does not Exist");
-    setViewAdminPage ();
+
+    if (role_data !== null) {
+        setUserRolePrivileges(role_data);
+        setViewAdminPage ();
+    }
+    else {
+        toastr.error("User Role Does not Exist");
+        setTimeout ( () => {
+                window.location.replace('../views/user_level');
+            },2000
+        );
+    }
+    
 }
 
 async function setUserRolePrivileges(role_data) {
@@ -157,10 +171,30 @@ async function setUserRolePrivileges(role_data) {
             }
         }
 
+        function isChecked() {
+            updatecheckboxes = document.getElementsByName('check');
+            for(var i = 0; i < updatecheckboxes.length; i++) {
+                if($('#' + updatecheckboxes[i].id).is(':checked')) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         update_fn = document.getElementById('user-update-data');
         update_fn.onsubmit = (e) => {
             e.preventDefault();
-            processUpdate();
+            if(isChecked()) {
+                $('#user-update-data-btn').prop('disabled', true);
+                $('#user-update-data-btn').append('&emsp;<i class="fa fa-circle-o-notch fa-spin"></i>');
+                setTimeout ( () => {
+                        processUpdate();
+                    },2000
+                );
+            }
+            else {
+                toastr.error("User Role was not updated. Please choose access restriction of at least one.");
+            }
         };
 
         async function processUpdate() {
@@ -254,7 +288,7 @@ async function setUserRolePrivileges(role_data) {
                 }
             }
             else {
-                toastr.error("User Role was not updated.");
+                toastr.error("User Role was not updated. Some error occured, please try again.");
             }
         }
     });
@@ -287,7 +321,6 @@ async function setViewAdminPage () {
                 <tr>
                     <th scope="row" style="color: #012970;"><strong>${admins[i].admin_id}</strong></th>
                     <td data-label="Admin">${admins[i].first_name + " " + admins[i].last_name}</td>
-                    <td data-label="Role">${admins[i].role}</td>
                     <td data-label="Email">${admins[i].admin_email}</td>
                     <td data-label="Status"><span class="badge ${tag}">${admins[i].status}</span></td>
                     <td data-label="View"><a href="../views/admin_data?acct=${admins[i].admin_id}"><button type="button" class="btn btn-outline-primary"><i class="ri ri-eye-fill"></i></button></a></td>
@@ -320,215 +353,5 @@ async function setViewAdminPage () {
         });
 
         t.draw();
-        // t.columns.adjust().draw();
-    }
-    
-    async function setViewModal () {
-        $("#view-admins").on("hidden.bs.modal", function () {
-            $('#save-btn').attr('disabled', true);
-            $('#edit-btn').attr('disabled', false);
-        });
-    
-        var viewModal = document.getElementById('view-admins')
-        viewModal.addEventListener('show.bs.modal', async function (event) {
-    
-            var button = event.relatedTarget;
-            var admin_id = button.getAttribute('data-bs-whatever');
-            var modalTitle = viewModal.querySelector('.modal-title');
-            var admin_role;
-          
-            const [admin, user_levels, admin_statuses, defaults] = await Promise.all ([fetchData('admin/read_single.php?admin_id=' + admin_id), fetchData('user_level/read.php'), fetchData('statuses/read.php?status_table=admin_status'), fetchData('logs/read_admin_default.php?admin_id=' + admin_id)])
-    
-            $('#admin_id').val(admin.admin_id);
-            $('#admin_username').val(admin.admin_username);
-            $('#admin_password').val(defaults.def_password);
-            
-            $('#first_name').val(admin.first_name);
-            (admin.middle_name == null || admin.middle_name === '') ? $('#middle_name').val('N/A') : $('#middle_name').val(admin.middle_name);
-            $('#last_name').val(admin.last_name);
-            $('#admin_bday').val(admin.birthdate);
-            $('#employment_date').val(admin.employment_date);
-    
-            $('#mobile_number').val(admin.mobile_number);
-            $('#admin_email').val(admin.admin_email);
-            $('#address').val(admin.address);
-    
-            toggleInputData('disabled', true);
-            setDefaultDropdown();
-    
-            modalTitle.textContent = admin.first_name + ' ' + admin.last_name + ' [' + admin_role + ']';
-    
-            function setDefaultDropdown () {
-                $("#role").empty();
-                    for (var i = 0; i < user_levels.length; i++) {
-                        if (user_levels[i].user_id == admin.user_level_id) {
-                            admin_role = user_levels[i].user_role;
-                            var opt = `<option value='${user_levels[i].user_id}'>${user_levels[i].user_role}</option>`;
-                            $("#role").append(opt);
-                        }
-                    }
-    
-                $("#admin_status").empty();
-                for (var i = 0; i < admin_statuses.length; i++) {
-                    if (admin_statuses[i].status_id == admin.admin_status_id) {
-                        var opt = `<option value='${admin_statuses[i].status_id}'>${admin_statuses[i].status_name}</option>`;
-                        $("#admin_status").append(opt);
-                    }
-                }
-            }
-    
-            async function setDropdownData () {
-                if (admin.admin_id != '11674') {
-                    $("#role").empty();
-                    $("#role").append(`<option selected disabled value="">Choose Admin Level</option>`);
-                    for (var i = 1; i < user_levels.length; i++) {
-                        if (user_levels[i].user_id == admin.user_level_id) {
-                            var opt = `<option selected value='${user_levels[i].user_id}' style='color: blue'>${user_levels[i].user_role}</option>`;
-                        }
-                        else {
-                            var opt = `<option value='${user_levels[i].user_id}'>${user_levels[i].user_role}</option>`;
-                        }
-                        $("#role").append(opt);
-                    }
-
-                    $("#admin_status").empty();
-                    $("#admin_status").append(`<option selected disabled>Choose Admin Status</option>`);
-                    for (var i = 0; i < admin_statuses.length; i++) {
-                        if (admin_statuses[i].status_id == admin.admin_status_id) {
-                            var opt = `<option selected value='${admin_statuses[i].status_id}' style='color: blue'>${admin_statuses[i].status_name}</option>`;
-                        }
-                        else {
-                            var opt = `<option value='${admin_statuses[i].status_id}'>${admin_statuses[i].status_name}</option>`;
-                        }
-                        $("#admin_status").append(opt);
-                    }
-                }
-                else {
-                    $("#role").attr('disabled', true);
-                    $("#admin_status").attr('disabled', true);
-                }
-    
-                $("#admin_status").empty();
-                $("#admin_status").append(`<option selected disabled>Choose Admin Status</option>`);
-                for (var i = 0; i < admin_statuses.length; i++) {
-                    if (admin_statuses[i].status_id == admin.admin_status_id) {
-                        var opt = `<option selected value='${admin_statuses[i].status_id}' style='color: blue'>${admin_statuses[i].status_name}</option>`;
-                    }
-                    else {
-                        var opt = `<option value='${admin_statuses[i].status_id}'>${admin_statuses[i].status_name}</option>`;
-                    }
-                    $("#admin_status").append(opt);
-                }
-            }
-    
-            function toggleInputData (setAttr, bool) {
-                $('#mobile_number').attr(setAttr, bool);
-                $('#admin_email').attr(setAttr, bool);
-                $('#address').attr(setAttr, bool);
-                $('#role').attr(setAttr, bool);
-                $('#admin_status').attr(setAttr, bool);
-            }
-            
-            async function updateAdminData() {
-                const admin_id = $('#admin_id').val();
-            
-                let admin_data = JSON.stringify({
-                    'admin_id' : admin_id,
-                    'admin_email' : $('#admin_email').val(),
-                    'mobile_number' : $('#mobile_number').val(),
-                    'address' : $('#address').val(),
-                    'user_level_id' : $('#role').val()
-                });
-            
-                let status_data = JSON.stringify({
-                    'admin_id' : admin_id,
-                    'admin_status_id' : $('#admin_status').val()
-                });
-    
-                let activity, log = true;
-                if (admin.admin_status_id != $('#admin_status').val()) {
-                    activity = 'Save Changes - Admin Status [' + admin_id + ' - ' + admin.first_name + ' ' + admin.last_name + ']';
-                    log = await logActivity(activity, 'View Admins');
-                }
-                if (admin.user_level_id != $('#role').val()) {
-                    activity = 'Save Changes - User Level [' + admin_id + ' - ' + admin.first_name + ' ' + admin.last_name + ']';
-                    log = await logActivity(activity, 'View Admins');
-                }
-                if (admin.admin_email != $('#admin_email').val() || admin.mobile_number != $('#mobile_number').val() || admin.address != $('#address').val()) {
-                    activity = 'Save Changes - General Information [' + admin_id + ' - ' + admin.first_name + ' ' + admin.last_name + ']';
-                    log = await logActivity(activity, 'View Admins');
-                }
-
-                const [admin_content, status_content] = await Promise.all ([updateData('admin/update.php', admin_data), updateData('admin/update_status.php', status_data)]);
-    
-                if (admin_content.message == 'success' && status_content.message == 'Admin Updated' && log) {
-                    sessionStorage.setItem('save_message', "Admin Updated Successfully.");
-                    window.location.reload();
-                }
-                else {
-                    toastr.error("Admin was not updated.");
-                }
-            }
-    
-            const edit_admin = document.getElementById('edit-btn');
-            edit_admin.onclick = (e) => {
-                e.preventDefault();
-                $('#save-btn').attr('disabled', false);
-                $('#edit-btn').attr('disabled', true);
-                toggleInputData('disabled', false);
-                setDropdownData();
-            };
-    
-            const save_admin = document.getElementById('save-admin');
-            save_admin.onsubmit = (e) => {
-                e.preventDefault();
-                updateAdminData();
-            };
-    
-            const reset_pwd_btn = document.getElementById('reset-btn');
-            reset_pwd_btn.onclick = (e) => {
-                e.preventDefault();
-                $('#view-admins').modal('hide');
-                setResetPWModal(admin_id);
-            };
-        });
-    }
-    
-    async function setResetPWModal (admin_id) {
-        var resetModal = document.getElementById('reset-pw-modal');
-        var modalTitle = resetModal.querySelector('.modal-title');
-        modalTitle.textContent = 'Reset Password for Admin ' + admin_id + '?';
-    
-        const content = await fetchData('logs/read_admin_default.php?admin_id=' + admin_id);
-        const admin_content = await fetchData('admin/read_single.php?admin_id=' + admin_id);
-        $('#admin_id_rst').val(content.admin_id);
-        $('#admin_username_rst').val(content.def_username);
-        $('#admin_password_rst').val(content.def_password);
-    
-        const reset_pwd = document.getElementById('reset-password');
-        reset_pwd.onsubmit = (e) => {
-            e.preventDefault();
-            resetPassword();
-        };
-    
-        async function resetPassword() {
-            let update_data = JSON.stringify({
-                'admin_id' : content.admin_id,
-                'admin_password' : content.def_password
-            });
-    
-            const [update_content, log] = await Promise.all ([updateData('admin/reset_password.php', update_data), logActivity('Password Reset [' + content.def_username + ' - ' + admin_id + ']', 'Admin Data')]);
-    
-            if (update_content.success && log) {
-                toastr.success('Password has been reset successfully.');
-                setTimeout (() => {
-                    window.location.reload();
-                }, 2000);
-            }
-            else {
-                toastr.error('Some error has occurred, please try again later.');
-                // toastr.error(update_content.error);
-            }
-        }
     }
 }

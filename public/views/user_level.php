@@ -225,7 +225,7 @@
           <!-- Modal Footer -->
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-success">Submit</button>
+            <button type="submit" class="btn btn-success" id="user-add-data-btn">Submit</button>
           </div>
         </div>
       </div>
@@ -269,19 +269,19 @@
                 <div class="mb-1">
                   <label class="title">Customer Management</label>
                   <div class="form-check form-check-inline pe-3">
-                    <input class="form-check-input" type="checkbox" id="cust-view" value="1" name="check">
+                    <input class="form-check-input" type="checkbox" id="cust-view" value="1" name="update_check">
                     <label class="form-check-label" for="cust-view">View</label>
                   </div>
                   <div class="form-check form-check-inline pe-3">
-                    <input class="form-check-input" type="checkbox" id="cust-add" value="1" name="check">
+                    <input class="form-check-input" type="checkbox" id="cust-add" value="1" name="update_check">
                     <label class="form-check-label" for="cust-add">Add</label>
                   </div>
                   <div class="form-check form-check-inline pe-3">
-                    <input class="form-check-input" type="checkbox" id="cust-edit" value="1" name="check">
+                    <input class="form-check-input" type="checkbox" id="cust-edit" value="1" name="update_check">
                     <label class="form-check-label" for="cust-edit">Edit</label>
                   </div>
                   <!-- <div class="form-check form-check-inline pe-3">
-                    <input class="form-check-input" type="checkbox" id="cust-dlt" value="1" name="check">
+                    <input class="form-check-input" type="checkbox" id="cust-dlt" value="1" name="update_check">
                     <label class="form-check-label" for="cust-dlt">Delete</label>
                   </div> -->
                 </div>
@@ -289,19 +289,19 @@
                 <div class="mb-1">
                   <label class="title">Invoice Management</label>
                   <div class="form-check form-check-inline pe-3">
-                    <input class="form-check-input" type="checkbox" id="inv-view" value="1" name="check">
+                    <input class="form-check-input" type="checkbox" id="inv-view" value="1" name="update_check">
                     <label class="form-check-label" for="inv-view">View</label>
                   </div>
                   <!-- <div class="form-check form-check-inline pe-3">
-                    <input class="form-check-input" type="checkbox" id="inv-add" value="1" name="check">
+                    <input class="form-check-input" type="checkbox" id="inv-add" value="1" name="update_check">
                     <label class="form-check-label" for="inv-add">Add</label>
                   </div> -->
                   <!-- <div class="form-check form-check-inline pe-3">
-                    <input class="form-check-input" type="checkbox" id="inv-edit" value="1" name="check">
+                    <input class="form-check-input" type="checkbox" id="inv-edit" value="1" name="update_check">
                     <label class="form-check-label" for="inv-edit">Edit</label>
                   </div>
                   <div class="form-check form-check-inline pe-3">
-                    <input class="form-check-input" type="checkbox" id="inv-dlt" value="1" name="check">
+                    <input class="form-check-input" type="checkbox" id="inv-dlt" value="1" name="update_check">
                     <label class="form-check-label" for="inv-dlt">Delete</label>
                   </div> -->
                 </div>
@@ -309,19 +309,19 @@
                 <div class="mb-1">
                   <label class="title">Payment Management</label>
                   <div class="form-check form-check-inline pe-3">
-                    <input class="form-check-input" type="checkbox" id="pay-view" value="1" name="check">
+                    <input class="form-check-input" type="checkbox" id="pay-view" value="1" name="update_check">
                     <label class="form-check-label" for="pay-view">View</label>
                   </div>
                   <div class="form-check form-check-inline pe-3">
-                    <input class="form-check-input" type="checkbox" id="pay-add" value="1" name="check">
+                    <input class="form-check-input" type="checkbox" id="pay-add" value="1" name="update_check">
                     <label class="form-check-label" for="pay-add">Add</label>
                   </div>
                   <div class="form-check form-check-inline pe-3">
-                    <input class="form-check-input" type="checkbox" id="pay-edit" value="1" name="check">
+                    <input class="form-check-input" type="checkbox" id="pay-edit" value="1" name="update_check">
                     <label class="form-check-label" for="pay-edit">Edit</label>
                   </div>
                   <div class="form-check form-check-inline pe-3">
-                    <input class="form-check-input" type="checkbox" id="pay-dlt" value="1" name="check">
+                    <input class="form-check-input" type="checkbox" id="pay-dlt" value="1" name="update_check">
                     <label class="form-check-label" for="pay-dlt">Delete</label>
                   </div>
                 </div>
@@ -329,19 +329,19 @@
                 <div class="mb-1">
                   <label class="title">Prorate Management</label>
                   <div class="form-check form-check-inline pe-3">
-                    <input class="form-check-input" type="checkbox" id="pro-view" value="1" name="check">
+                    <input class="form-check-input" type="checkbox" id="pro-view" value="1" name="update_check">
                     <label class="form-check-label" for="pro-view">View</label>
                   </div>
                   <!-- <div class="form-check form-check-inline pe-3">
-                    <input class="form-check-input" type="checkbox" id="pro-add" value="1" name="check">
+                    <input class="form-check-input" type="checkbox" id="pro-add" value="1" name="update_check">
                     <label class="form-check-label" for="pro-add">Add</label>
                   </div> -->
                   <div class="form-check form-check-inline pe-3">
-                    <input class="form-check-input" type="checkbox" id="pro-edit" value="1" name="check">
+                    <input class="form-check-input" type="checkbox" id="pro-edit" value="1" name="update_check">
                     <label class="form-check-label" for="pro-edit">Edit</label>
                   </div>
                   <div class="form-check form-check-inline pe-3">
-                    <input class="form-check-input" type="checkbox" id="pro-dlt" value="1" name="check">
+                    <input class="form-check-input" type="checkbox" id="pro-dlt" value="1" name="update_check">
                     <label class="form-check-label" for="pro-dlt">Delete</label>
                   </div>
                 </div>
@@ -349,19 +349,19 @@
                 <div class="mb-1">
                   <label class="title">Admin Management</label>
                   <div class="form-check form-check-inline pe-3">
-                    <input class="form-check-input" type="checkbox" id="adm-view" value="1" name="check">
+                    <input class="form-check-input" type="checkbox" id="adm-view" value="1" name="update_check">
                     <label class="form-check-label" for="adm-view">View</label>
                   </div>
                   <div class="form-check form-check-inline pe-3">
-                    <input class="form-check-input" type="checkbox" id="adm-add" value="1" name="check">
+                    <input class="form-check-input" type="checkbox" id="adm-add" value="1" name="update_check">
                     <label class="form-check-label" for="adm-add">Add</label>
                   </div>
                   <div class="form-check form-check-inline pe-3">
-                    <input class="form-check-input" type="checkbox" id="adm-edit" value="1" name="check">
+                    <input class="form-check-input" type="checkbox" id="adm-edit" value="1" name="update_check">
                     <label class="form-check-label" for="adm-edit">Edit</label>
                   </div>
                   <!-- <div class="form-check form-check-inline pe-3">
-                    <input class="form-check-input" type="checkbox" id="adm-dlt" value="1" name="check">
+                    <input class="form-check-input" type="checkbox" id="adm-dlt" value="1" name="update_check">
                     <label class="form-check-label" for="adm-dlt">Delete</label>
                   </div> -->
                 </div>
@@ -369,19 +369,19 @@
                 <div class="mb-1">
                   <label class="title">Subscriptions Management</label>
                   <div class="form-check form-check-inline pe-3">
-                    <input class="form-check-input" type="checkbox" id="plans-view" value="1" name="check">
+                    <input class="form-check-input" type="checkbox" id="plans-view" value="1" name="update_check">
                     <label class="form-check-label" for="plans-view">View</label>
                   </div>
                   <div class="form-check form-check-inline pe-3">
-                    <input class="form-check-input" type="checkbox" id="plans-add" value="1" name="check">
+                    <input class="form-check-input" type="checkbox" id="plans-add" value="1" name="update_check">
                     <label class="form-check-label" for="plans-add">Add</label>
                   </div>
                   <div class="form-check form-check-inline pe-3">
-                    <input class="form-check-input" type="checkbox" id="plans-edit" value="1" name="check">
+                    <input class="form-check-input" type="checkbox" id="plans-edit" value="1" name="update_check">
                     <label class="form-check-label" for="plans-edit">Edit</label>
                   </div>
                   <!-- <div class="form-check form-check-inline pe-3">
-                    <input class="form-check-input" type="checkbox" id="plans-dlt" value="1" name="check">
+                    <input class="form-check-input" type="checkbox" id="plans-dlt" value="1" name="update_check">
                     <label class="form-check-label" for="plans-dlt">Delete</label>
                   </div> -->
                 </div>
@@ -389,19 +389,19 @@
                 <div class="mb-1">
                   <label class="title">Tickets Management</label>
                   <div class="form-check form-check-inline pe-3">
-                    <input class="form-check-input" type="checkbox" id="tkt-view" value="1" name="check">
+                    <input class="form-check-input" type="checkbox" id="tkt-view" value="1" name="update_check">
                     <label class="form-check-label" for="tkt-view">View</label>
                   </div>
                   <div class="form-check form-check-inline pe-3">
-                    <input class="form-check-input" type="checkbox" id="tkt-add" value="1" name="check">
+                    <input class="form-check-input" type="checkbox" id="tkt-add" value="1" name="update_check">
                     <label class="form-check-label" for="tkt-add">Add</label>
                   </div>
                   <div class="form-check form-check-inline pe-3">
-                    <input class="form-check-input" type="checkbox" id="tkt-edit" value="1" name="check">
+                    <input class="form-check-input" type="checkbox" id="tkt-edit" value="1" name="update_check">
                     <label class="form-check-label" for="tkt-edit">Edit</label>
                   </div>
                   <div class="form-check form-check-inline pe-3">
-                    <input class="form-check-input" type="checkbox" id="tkt-dlt" value="1" name="check">
+                    <input class="form-check-input" type="checkbox" id="tkt-dlt" value="1" name="update_check">
                     <label class="form-check-label" for="tkt-dlt">Delete</label>
                   </div>
                 </div>
@@ -409,15 +409,15 @@
                 <!-- <div class="mb-1">
                   <label class="title">Tickets Management</label>
                   <div class="form-check form-check-inline pe-3">
-                    <input class="form-check-input" type="checkbox" id="tkt-view" value="1" name="check">
+                    <input class="form-check-input" type="checkbox" id="tkt-view" value="1" name="update_check">
                     <label class="form-check-label" for="tkt-view">View</label>
                   </div>
                   <div class="form-check form-check-inline pe-3">
-                    <input class="form-check-input" type="checkbox" id="tkt-edit" value="1" name="check">
+                    <input class="form-check-input" type="checkbox" id="tkt-edit" value="1" name="update_check">
                     <label class="form-check-label" for="tkt-edit">Edit</label>
                   </div>
                   <div class="form-check form-check-inline pe-3">
-                    <input class="form-check-input" type="checkbox" id="tkt-dlt" value="1" name="check">
+                    <input class="form-check-input" type="checkbox" id="tkt-dlt" value="1" name="update_check">
                     <label class="form-check-label" for="tkt-dlt">Delete</label>
                   </div>
                 </div> -->
@@ -430,7 +430,7 @@
           <!-- Modal Footer -->
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-success" id="save-btn">Save Changes</button>
+            <button type="submit" class="btn btn-success" id="user-update-data-btn">Save Changes</button>
           </div>
         </div>
       </div>
@@ -458,34 +458,34 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-          <button type="submit" class="btn btn-danger">Delete</button>
+          <button type="submit" class="btn btn-danger" id="user-delete-data-btn">Delete</button>
         </div>
       </div>
     </div>
   </div>
 </form>
 <!-- End Delete User Level Modal-->
-  </main><!-- End #main -->
 
-  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+</main>
 
- 
-  <!-- Vendor JS Files -->
-  <script src="../assets/vendor/apexcharts/apexcharts.min.js"></script>
-  <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="../assets/vendor/chart.js/chart.min.js"></script>
-  <script src="../assets/vendor/echarts/echarts.min.js"></script>
-  <script src="../assets/vendor/quill/quill.min.js"></script>
-  <script src="../assets/vendor/simple-datatables/simple-datatables.js"></script>
-  <script src="../assets/vendor/tinymce/tinymce.min.js"></script>
-  <script src="../assets/vendor/php-email-form/validate.js"></script>
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
-  <!-- Template Main JS File -->
-  <script src="../assets/js/main.js"></script>
+<!-- Vendor JS Files -->
+<script src="../assets/vendor/apexcharts/apexcharts.min.js"></script>
+<script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="../assets/vendor/chart.js/chart.min.js"></script>
+<script src="../assets/vendor/echarts/echarts.min.js"></script>
+<script src="../assets/vendor/quill/quill.min.js"></script>
+<script src="../assets/vendor/simple-datatables/simple-datatables.js"></script>
+<script src="../assets/vendor/tinymce/tinymce.min.js"></script>
+<script src="../assets/vendor/php-email-form/validate.js"></script>
 
-  <!-- Backend JS File -->
-  <script src="../js/main.js"></script>
-  <script src="../js/misc.js"></script>
+<!-- Template Main JS File -->
+<script src="../assets/js/main.js"></script>
+
+<!-- Backend JS File -->
+<script src="../js/main.js"></script>
+<script src="../js/misc.js"></script>
 
 </body>
 

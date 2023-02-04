@@ -673,29 +673,55 @@ async function setUserLevelPage() {
 
         (countUsers.message != 'No Accounts Found') ? users_count = countUsers.length : users_count = 0;
 
-        const content = `
-        <div class="col-sm-4 user-cards">
-            <div class="card mt-3">
-            <div class="card-body">
-                <h5>${user_levels[i].user_role}</h5>
-                <h6>Total users with this role: ${users_count}</h6>
-                <ul>
-                    <li><i class="bi bi-check2-circle"></i> ${descriptions[0]}</li>
-                    <li><i class="bi bi-check2-circle"></i> ${descriptions[1]}</li>
-                    <li><i class="bi bi-check2-circle"></i> ${descriptions[2]}</li>
-                    <li><i class="bi bi-check2-circle"></i> ${descriptions[3]}</li>
-                    <li><i class="bi bi-check2-circle"></i> ${descriptions[4]}</li>
-                    <li><i class="bi bi-check2-circle"></i> <em>and ${descriptions.length - 5} more.. </em></li>
-                </ul>
+        if (user_levels[i].user_id != 2) {
+            const content = `
+            <div class="col-sm-4 user-cards">
+                <div class="card mt-3">
+                <div class="card-body">
+                    <h5>${user_levels[i].user_role}</h5>
+                    <h6>Total users with this role: ${users_count}</h6>
+                    <ul>
+                        <li><i class="bi bi-check2-circle"></i> ${descriptions[0]}</li>
+                        <li><i class="bi bi-check2-circle"></i> ${descriptions[1]}</li>
+                        <li><i class="bi bi-check2-circle"></i> ${descriptions[2]}</li>
+                        <li><i class="bi bi-check2-circle"></i> ${descriptions[3]}</li>
+                        <li><i class="bi bi-check2-circle"></i> ${descriptions[4]}</li>
+                        <li><i class="bi bi-check2-circle"></i> <em>and ${descriptions.length - 5} more.. </em></li>
+                    </ul>
 
-                <a href="../views/user_level_data?user_role=${user_levels[i].user_role}" style="text-decorations:none; color:inherit;"><button class="btn btn-outline-success w-25">View</button></a>
-                <button class="btn btn-outline-primary w-25" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="${user_levels[i].user_id}">Edit</button>
+                    <a href="../views/user_level_data?user_role=${user_levels[i].user_role}" style="text-decorations:none; color:inherit;"><button class="btn btn-outline-success w-25">View</button></a>
+                    <button class="btn btn-outline-primary w-25" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="${user_levels[i].user_id}">Edit</button>
+                </div>
+                </div>
             </div>
-            </div>
-        </div>
-        `;
+            `;
 
-        container.innerHTML += content;
+            container.innerHTML += content;
+        }
+        else {
+            const content = `
+            <div class="col-sm-4 user-cards">
+                <div class="card mt-3">
+                <div class="card-body">
+                    <h5>${user_levels[i].user_role}</h5>
+                    <h6>Total users with this role: ${users_count}</h6>
+                    <ul>
+                        <li><i class="bi bi-check2-circle"></i> ${descriptions[0]}</li>
+                        <li><i class="bi bi-check2-circle"></i> ${descriptions[1]}</li>
+                        <li><i class="bi bi-check2-circle"></i> ${descriptions[2]}</li>
+                        <li><i class="bi bi-check2-circle"></i> ${descriptions[3]}</li>
+                        <li><i class="bi bi-check2-circle"></i> ${descriptions[4]}</li>
+                        <li><i class="bi bi-check2-circle"></i> <em>and ${descriptions.length - 5} more.. </em></li>
+                    </ul>
+    
+                    <a href="../views/user_level_data?user_role=${user_levels[i].user_role}" style="text-decorations:none; color:inherit;"><button class="btn btn-outline-success w-25">View</button></a>
+                </div>
+                </div>
+            </div>
+            `;
+    
+            container.innerHTML += content;
+        }
     }
 
     for (var i = 5; i < user_levels.length; i++) {
@@ -707,30 +733,56 @@ async function setUserLevelPage() {
 
         (countUsers.message != 'No Accounts Found') ? users_count = countUsers.length : users_count = 0;
 
-        const content = `
-        <div class="col-sm-4 user-cards">
-            <div class="card mt-3">
-            <div class="card-body">
-                <h5>${user_levels[i].user_role}</h5>
-                <h6>Total users with this role: ${users_count}</h6>
-                <ul>
-                    <li><i class="bi bi-check2-circle"></i> ${descriptions[0]}</li>
-                    <li><i class="bi bi-check2-circle"></i> ${descriptions[1]}</li>
-                    <li><i class="bi bi-check2-circle"></i> ${descriptions[2]}</li>
-                    <li><i class="bi bi-check2-circle"></i> ${descriptions[3]}</li>
-                    <li><i class="bi bi-check2-circle"></i> ${descriptions[4]}</li>
-                    <li><i class="bi bi-check2-circle"></i> <em>and ${descriptions.length - 5} more.. </em></li>
-                </ul>
+        if (descriptions.length <= 5) {
+            const content = `
+            <div class="col-sm-4 user-cards">
+                <div class="card mt-3">
+                <div class="card-body">
+                    <h5>${user_levels[i].user_role}</h5>
+                    <h6>Total users with this role: ${users_count}</h6>
+                    <ul>
+                        <li><i class="bi bi-check2-circle"></i> ${descriptions[0]}</li>
+                        <li><i class="bi bi-check2-circle"></i> ${descriptions[1]}</li>
+                        <li><i class="bi bi-check2-circle"></i> ${descriptions[2]}</li>
+                        <li><i class="bi bi-check2-circle"></i> <em>and more.. </em></li>
+                    </ul>
 
-                <a href="../views/user_level_data?user_role=${user_levels[i].user_role}" style="text-decorations:none; color:inherit;"><button class="btn btn-outline-success w-25">View</button></a>
-                <button class="btn btn-outline-primary w-25" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="${user_levels[i].user_id}">Edit</button>
-                <button class="btn btn-outline-danger w-25" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-whatever="${user_levels[i].user_id}">Delete</button>
+                    <a href="../views/user_level_data?user_role=${user_levels[i].user_role}" style="text-decorations:none; color:inherit;"><button class="btn btn-outline-success w-25">View</button></a>
+                    <button class="btn btn-outline-primary w-25" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="${user_levels[i].user_id}">Edit</button>
+                    <button class="btn btn-outline-danger w-25" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-whatever="${user_levels[i].user_id}">Delete</button>
+                    </div>
                 </div>
             </div>
-        </div>
-        `;
+            `;
 
-        container.innerHTML += content;
+            container.innerHTML += content;
+        }
+        else {
+            const content = `
+            <div class="col-sm-4 user-cards">
+                <div class="card mt-3">
+                <div class="card-body">
+                    <h5>${user_levels[i].user_role}</h5>
+                    <h6>Total users with this role: ${users_count}</h6>
+                    <ul>
+                        <li><i class="bi bi-check2-circle"></i> ${descriptions[0]}</li>
+                        <li><i class="bi bi-check2-circle"></i> ${descriptions[1]}</li>
+                        <li><i class="bi bi-check2-circle"></i> ${descriptions[2]}</li>
+                        <li><i class="bi bi-check2-circle"></i> ${descriptions[3]}</li>
+                        <li><i class="bi bi-check2-circle"></i> ${descriptions[4]}</li>
+                        <li><i class="bi bi-check2-circle"></i> <em>and ${descriptions.length - 5} more.. </em></li>
+                    </ul>
+    
+                    <a href="../views/user_level_data?user_role=${user_levels[i].user_role}" style="text-decorations:none; color:inherit;"><button class="btn btn-outline-success w-25">View</button></a>
+                    <button class="btn btn-outline-primary w-25" data-bs-toggle="modal" data-bs-target="#editModal" data-bs-whatever="${user_levels[i].user_id}">Edit</button>
+                    <button class="btn btn-outline-danger w-25" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-whatever="${user_levels[i].user_id}">Delete</button>
+                    </div>
+                </div>
+            </div>
+            `;
+    
+            container.innerHTML += content;
+        }
     }
 
     var updateModal = document.getElementById('editModal');
@@ -839,9 +891,9 @@ async function setUserLevelPage() {
         }
 
         function isChecked() {
-            addcheckboxes = document.getElementsByName('add_check');
-            for(var i = 0; i < addcheckboxes.length; i++) {
-                if($('#' + addcheckboxes[i].id).is(':checked')) {
+            updatecheckboxes = document.getElementsByName('update_check');
+            for(var i = 0; i < updatecheckboxes.length; i++) {
+                if($('#' + updatecheckboxes[i].id).is(':checked')) {
                     return true;
                 }
             }
@@ -852,10 +904,15 @@ async function setUserLevelPage() {
         update_fn.onsubmit = (e) => {
             e.preventDefault();
             if(isChecked()) {
-                processUpdate();
+                $('#user-update-data-btn').prop('disabled', true);
+                $('#user-update-data-btn').append('&emsp;<i class="fa fa-circle-o-notch fa-spin"></i>');
+                setTimeout ( () => {
+                        processUpdate();
+                    },2000
+                );
             }
             else {
-                toastr.error("User Role was not updated. Please check at least one.");
+                toastr.error("User Role was not updated. Please choose access restriction of at least one.");
             }
         };
 
@@ -985,10 +1042,15 @@ async function setUserLevelPage() {
         create_fn.onsubmit = (e) => {
             e.preventDefault();
             if(isChecked()) {
-                processCreate();
+                $('#user-add-data-btn').prop('disabled', true);
+                $('#user-add-data-btn').append('&emsp;<i class="fa fa-circle-o-notch fa-spin"></i>');
+                setTimeout ( () => {
+                        processCreate();
+                    },2000
+                );
             }
             else {
-                toastr.error("User Role was not added. Please check at least one.");
+                toastr.error("User Role was not added. Please choose access restriction of at least one.");
             }
         };
 
@@ -1094,7 +1156,12 @@ async function setUserLevelPage() {
         delete_fn = document.getElementById('user-delete-data');
         delete_fn.onsubmit = (e) => {
             e.preventDefault();
-            processDelete();
+            $('#user-delete-data-btn').prop('disabled', true);
+            $('#user-delete-data-btn').append('&emsp;<i class="fa fa-circle-o-notch fa-spin"></i>');
+            setTimeout ( () => {
+                    processDelete();
+                },2000
+            );
         };
 
         async function processDelete() {
@@ -1102,7 +1169,7 @@ async function setUserLevelPage() {
                 'user_id' : data_id
             });
 
-            const [content, delete_pages, delete_buttons, log] = await Promise.all ([deleteData('user_level/delete.php', delete_data), deleteData('restriction/delete_pages_restriction.php', delete_data),deleteData('restriction/delete_buttons_restriction.php', delete_data), logActivity('Delete - User Role [' + data.user_role + ']', 'Advanced Options')]);
+            const [content, log] = await Promise.all ([deleteData('user_level/delete.php', delete_data), logActivity('Delete - User Role [' + data.user_role + ']', 'Advanced Options')]);
 
             if (content.success && log) {
                 sessionStorage.setItem('save_message', "User Level Deleted Successfully.");
