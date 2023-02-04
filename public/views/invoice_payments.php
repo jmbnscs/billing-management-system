@@ -14,8 +14,8 @@
   </div><!-- End Page Title -->
 
   <!-- Payment Records Table -->
-  <div class="col-12">
-    <div class="card recent-sales overflow-auto">
+  <div class="col-lg-12">
+    <div class="card">
       <br>
       <div class="card-body">
           <ul class="nav nav-tabs d-flex" role="tablist">
@@ -96,12 +96,6 @@
 
           <!-- For Approval Payment Records -->
           <div class="tab-pane fade" id="approval-payments" role="tabpanel" aria-labelledby="approval-tab">
-
-            <!-- <div class="row">
-              <div class="col-md-9">
-                <h5 class="card-title">Customer Uploaded Payment Records</h5>
-              </div>
-            </div> -->
             <h5 class="card-title">Customer Uploaded Payment Records</h5>
         
             <table class="table table-borderless" id="approval-payments-table">
@@ -121,7 +115,6 @@
 
           <!-- Invalid Payment Records -->
           <div class="tab-pane fade" id="invalid-payments" role="tabpanel" aria-labelledby="invalid-tab">
-
             <h5 class="card-title">Invalid Customer Uploaded Payment Records</h5>
         
             <table class="table table-borderless" id="invalid-payments-table">
@@ -181,7 +174,7 @@
             <div class="modal-body row g-3">
                 <div class="col-md-12">
                   <div class="form-floating">
-                    <input type="number" class="form-control" id="add_untagged_amount_paid" placeholder="Amount Paid" min="1" required>
+                    <input type="number" step="0.01" class="form-control" id="add_untagged_amount_paid" placeholder="Amount Paid" min="1" required>
                     <div class="invalid-feedback">Please enter amount paid.</div>
                     <label for="add_untagged_amount_paid" class="required">Amount Paid</label>
                   </div>
@@ -201,7 +194,7 @@
             <!-- Modal Footer -->
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="submit" class="btn btn-success">Submit</button>
+              <button type="submit" class="btn btn-success" id="untagged-create-new-btn">Submit</button>
             </div>
           </div>
         </div>
@@ -241,14 +234,14 @@
 
                 <div class="col-md-12">
                   <div class="form-floating">
-                    <input type="number" class="form-control" id="edit_untagged_amount_paid" placeholder="Amount Paid" required>
+                    <input type="number" step="0.01" class="form-control" id="edit_untagged_amount_paid" placeholder="Amount Paid" required>
                     <label for="edit_untagged_amount_paid">Amount Paid</label>
                   </div>
                 </div>
 
                 <div class="col-md-12">
                   <div class="form-floating">
-                    <input type="date" class="form-control" id="edit_untagged_payment_date" placeholder="Payment Date" required>
+                    <input type="date" class="form-control custom-date" id="edit_untagged_payment_date" placeholder="Payment Date" required>
                     <label for="edit_untagged_payment_date">Payment Date</label>
                   </div>
                 </div>
@@ -274,7 +267,7 @@
           <!-- Modal Footer -->
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-success" id="edit-btn">Save Changes</button>
+            <button type="submit" class="btn btn-success" id="untagged-update-data-btn">Save Changes</button>
           </div>
         </div>
       </div>
@@ -304,7 +297,7 @@
 
             <div class="col-md-12">
               <div class="form-floating">
-                <input type="number" class="form-control" id="dlt_untagged_amount_paid" placeholder="Amount Paid" readonly>
+                <input type="number" step="0.01" class="form-control" id="dlt_untagged_amount_paid" placeholder="Amount Paid" readonly>
                 <label for="dlt_untagged_amount_paid">Amount Paid</label>
               </div>
             </div>
@@ -327,7 +320,7 @@
       
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-          <button type="submit" class="btn btn-danger">Delete</button>
+          <button type="submit" class="btn btn-danger" id="untagged-delete-data-btn">Delete</button>
         </div>
       </div>
     </div>
@@ -373,7 +366,7 @@
 
                 <div class="col-md-12">
                   <div class="form-floating">
-                    <input type="number" class="form-control" id="add_advanced_amount_paid" placeholder="Amount Paid" required>
+                    <input type="number" step="0.01" class="form-control" id="add_advanced_amount_paid" placeholder="Amount Paid" required>
                     <div class="invalid-feedback">Please enter amount paid.</div>
                     <label for="add_advanced_amount_paid">Amount Paid</label>
                   </div>
@@ -381,7 +374,7 @@
 
                 <div class="col-md-12">
                   <div class="form-floating">
-                    <input type="date" class="form-control" id="add_advanced_payment_date" placeholder="Payment Date" required>
+                    <input type="date" class="form-control custom-date" id="add_advanced_payment_date" placeholder="Payment Date" required>
                     <div class="invalid-feedback">Please choose payment date.</div>
                     <label for="add_advanced_payment_date">Payment Date</label>
                   </div>
@@ -403,7 +396,7 @@
           <!-- Modal Footer -->
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-success" id="edit-btn">Save Changes</button>
+            <button type="submit" class="btn btn-success" id="advanced-create-new-btn">Save Changes</button>
           </div>
         </div>
       </div>
@@ -564,23 +557,23 @@
                       <div class="form-floating">
                         <input type="text" class="form-control" id="add_pending_reference_id" placeholder="Reference ID" required>
                         <div class="invalid-feedback">Please enter valid reference ID.</div>
-                        <label for="add_pending_reference_id">Reference ID</label>
+                        <label for="add_pending_reference_id" class="required">Reference ID</label>
                       </div>
                     </div>
 
                     <div class="col-md-12">
                       <div class="form-floating">
-                        <input type="number" class="form-control" id="add_pending_amount_paid" placeholder="Amount Paid" required>
+                        <input type="number" step="0.01" class="form-control" id="add_pending_amount_paid" placeholder="Amount Paid" required>
                         <div class="invalid-feedback">Please enter amount paid.</div>
-                        <label for="add_pending_amount_paid">Amount Paid</label>
+                        <label for="add_pending_amount_paid" class="required">Amount Paid</label>
                       </div>
                     </div>
 
                     <div class="col-md-12">
                       <div class="form-floating">
-                        <input type="date" class="form-control" id="add_pending_payment_date" placeholder="Payment Date" required>
+                        <input type="date" class="form-control custom-date" id="add_pending_payment_date" placeholder="Payment Date" required>
                         <div class="invalid-feedback">Please choose payment date.</div>
-                        <label for="add_pending_payment_date">Payment Date</label>
+                        <label for="add_pending_payment_date" class="required">Payment Date</label>
                       </div>
                     </div>
 
@@ -597,7 +590,7 @@
           <!-- Modal Footer -->
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-success" id="edit-btn">Save Changes</button>
+            <button type="submit" class="btn btn-success" id="pending-create-new-btn">Save Changes</button>
           </div>
         </div>
       </div>
@@ -644,7 +637,7 @@
       
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-          <button type="submit" class="btn btn-danger">Invalid</button>
+          <button type="submit" class="btn btn-danger" id="pending-delete-data-btn">Invalid</button>
         </div>
       </div>
     </div>

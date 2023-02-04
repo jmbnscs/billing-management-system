@@ -142,7 +142,7 @@
 
                   <div class="col-md-12">
                     <div class="form-floating">
-                      <input type="number" min="1" class="form-control" id="amount_paid_md" placeholder="Amount Paid" required>
+                      <input type="number" min="1" step="0.01" class="form-control" id="amount_paid_md" placeholder="Amount Paid" required>
                       <label for="amount_paid_md" class="required">Amount Paid</label>
                     </div>
                   </div>

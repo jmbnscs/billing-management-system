@@ -247,7 +247,12 @@ async function setPaymentRecordsPage() {
         update_fn.onsubmit = async (e) => {
             e.preventDefault();
             if (await isAccountIDExist($('#edit_untagged_account_id').val())) {
-                untaggedProcessUpdate();
+                $('#untagged-update-data-btn').prop('disabled', true);
+                $('#untagged-update-data-btn').append('&emsp;<i class="fa fa-circle-o-notch fa-spin"></i>');
+                setTimeout ( () => {
+                        untaggedProcessUpdate();
+                    },2000
+                );
             }
             else {
                 toastr.error('Account ID does not exist.');
@@ -306,7 +311,12 @@ async function setPaymentRecordsPage() {
         const delete_fn = document.getElementById('untagged-delete-data');
         delete_fn.onsubmit = (e) => {
             e.preventDefault();
-            processDelete();
+            $('#untagged-delete-data-btn').prop('disabled', true);
+            $('#untagged-delete-data-btn').append('&emsp;<i class="fa fa-circle-o-notch fa-spin"></i>');
+            setTimeout ( () => {
+                    processDelete();
+                },2000
+            );
         };
 
         async function processDelete() {
@@ -451,7 +461,12 @@ async function setPaymentRecordsPage() {
             const delete_fn = document.getElementById('pending-delete-data');
             delete_fn.onsubmit = (e) => {
                 e.preventDefault();
-                processDelete();
+                $('#pending-delete-data-btn').prop('disabled', true);
+                $('#pending-delete-data-btn').append('&emsp;<i class="fa fa-circle-o-notch fa-spin"></i>');
+                setTimeout ( () => {
+                        processDelete();
+                    },2000
+                );
             };
 
             async function processDelete() {
@@ -518,7 +533,12 @@ async function setPaymentRecordsPage() {
         const react_fn = document.getElementById('react-invalid-data');
         react_fn.onsubmit = (e) => {
             e.preventDefault();
-            processReactivate();
+            $('#reactivate-invalid-btn').prop('disabled', true);
+            $('#reactivate-invalid-btn').append('&emsp;<i class="fa fa-circle-o-notch fa-spin"></i>');
+            setTimeout ( () => {
+                    processReactivate();
+                },2000
+            );
         };
 
         async function processReactivate() {
@@ -626,7 +646,12 @@ async function untaggedAddPayment () {
             toastr.warning('Please provide the appropriate details on each field.');
         }
         else {
-            addPayment();
+            $('#untagged-create-new-btn').prop('disabled', true);
+            $('#untagged-create-new-btn').append('&emsp;<i class="fa fa-circle-o-notch fa-spin"></i>');
+            setTimeout ( () => {
+                    addPayment();
+                },2000
+            );
         }
     }
 
@@ -765,7 +790,12 @@ async function advancedAddPayment () {
             toastr.warning('Please provide the appropriate details on each field.');
         }
         else {
-            addPayment();
+            $('#advanced-create-new-btn').prop('disabled', true);
+            $('#advanced-create-new-btn').append('&emsp;<i class="fa fa-circle-o-notch fa-spin"></i>');
+            setTimeout ( () => {
+                    addPayment();
+                },2000
+            );
         }
     }
 
@@ -904,7 +934,12 @@ async function pendingAddPayment (account_id, approval_id) {
             toastr.warning('Please provide the appropriate details on each field.');
         }
         else {
-            addPayment();
+            $('#pending-create-new-btn').prop('disabled', true);
+            $('#pending-create-new-btn').append('&emsp;<i class="fa fa-circle-o-notch fa-spin"></i>');
+            setTimeout ( () => {
+                    addPayment();
+                },2000
+            );
         }
     }
 
