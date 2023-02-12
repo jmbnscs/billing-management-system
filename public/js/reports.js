@@ -737,9 +737,24 @@ async function generateAdminLogsReport(content_data, date_from, date_to) {
 
 async function generateIncomeReport(content_data, date_from, date_to) {
     const income_report = await fetchReports('reports/read_income_summary.php', content_data);
+    let gross_income = parseFloat(income_report.sales) - parseFloat(income_report.total_expenses);
+    let net_income = parseFloat(income_report.sales) - (parseFloat(income_report.total_expenses) + parseFloat(income_report.installation_sales) + parseFloat(income_report.prorate_loss));
 
     let from = formatDate(date_from, 'from');
     let to = formatDate(new Date(date_to), 'to');
+
+    function formatReportDate(date) {
+        var today = new Date(date);
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); 
+        var yyyy = today.getFullYear();
+        today = yyyy + '-' + mm + '-' + dd;
+    
+        return today;
+    }
+
+    $('#report-from').val(formatReportDate(from));
+    $('#report-to').val(formatReportDate(to));
 
     const report_title = 'Income Report Summary (' + from + ' - ' + to + ')';
     const dates = from + ' - ' + to;
@@ -757,119 +772,59 @@ async function generateIncomeReport(content_data, date_from, date_to) {
 
     $('#income-reports-column-header').append(reports_column_header);
 
-    var income_report_table = $('#income-reports-table').DataTable( {
-        dom: 'Bfrtip',
-        buttons: [
-            'copy',  
-            {
-                extend: 'excelHtml5',
-                title: 'GSTech ' + report_title
-            },
-            {
-                extend: 'pdfHtml5',
-                title: 'GSTech ' + report_title,
-                exportOptions: {
-                    columns: ':visible',
-                    search: 'applied',
-                    order: 'applied'
-                }
-            },
-            {
-                extend: 'csv',
-                title: 'GSTech ' + report_title
-            },
-            {
-                extend: 'print',
-                title: 'GSTech ' + report_title,
-                customize: function ( win ) {
-                    $(win.document.body)
-                        .css( 'font-size', '10pt' );
- 
-                    $(win.document.body).find( 'table' )
-                        .addClass( 'compact' )
-                        .css( 'font-size', 'inherit' );
-                }
-            }
-        ],
-        pageLength: 20,
-        "searching": false,
-        "autoWidth": false,
-        ordering: false,
-        paging: false,
-        info: false,
-        lengthChange: false
-    });
-
-    let gross_income = parseFloat(income_report.sales) - parseFloat(income_report.total_expenses);
-    let net_income = parseFloat(income_report.sales) - (parseFloat(income_report.total_expenses) + parseFloat(income_report.installation_sales) + parseFloat(income_report.prorate_loss));
-
-    income_report_table.row.add($(`
+    let revenues = `
         <tr>
             <th scope="row" style="color: #012970;"><strong>REVENUES</strong> <br> &emsp;Total Sales</th>
             <td><br>&#8369; ${(parseFloat(income_report.sales)).toLocaleString('PHT', {minimumFractionDigits:2, maximumFractionDigits:2})}</td>
         </tr>
-    `)).draw(false);
+    `;
 
-    income_report_table.row.add($(`
+    $('#income-reports-body').append(revenues);
+    
+    let cost_of_sales = `
         <tr>
             <th scope="row" style="color: #012970; border-bottom: 3px solid;"><strong>LESS: COST OF SALES</strong></th>
             <td style="border-bottom: 3px solid;">&#8369; ${(parseFloat(income_report.total_expenses)).toLocaleString('PHT', {minimumFractionDigits:2, maximumFractionDigits:2})}</td>
         </tr>
-    `)).draw(false);
+    `;
 
-    income_report_table.row.add($(`
+    $('#income-reports-body').append(cost_of_sales);
+
+    let gross_profit = `
         <tr>
             <th scope="row" style="color: #012970; border-bottom: 3px solid;"><strong>GROSS PROFIT</strong></th>
             <td style="border-bottom: 3px solid;">&#8369; ${(parseFloat(gross_income)).toLocaleString('PHT', {minimumFractionDigits:2, maximumFractionDigits:2})}</td>
         </tr>
-    `)).draw(false);
+    `;
 
-    income_report_table.row.add($(`
+    $('#income-reports-body').append(gross_profit);
+
+    let install_charge = `
         <tr>
             <th scope="row" style="color: #012970;"><strong>OTHER INCOME/(LOSS)</strong> <br> &emsp;Installation Charges</th>
             <td><br>&#8369; ${(parseFloat(income_report.installation_sales)).toLocaleString('PHT', {minimumFractionDigits:2, maximumFractionDigits:2})}
             </td>
         </tr>
-    `)).draw(false);
+    `;
     
-    income_report_table.row.add($(`
+    $('#income-reports-body').append(install_charge);
+
+    let tb_prorate_discounts = `
         <tr>
             <th scope="row" style="color: #012970; border-bottom: 4px solid;">&emsp;Prorate Discounts</th>
             <td style="border-bottom: 4px solid;">&#8369; ${(parseFloat(income_report.prorate_loss)).toLocaleString('PHT', {minimumFractionDigits:2, maximumFractionDigits:2})}</td>
         </tr>
-    `)).draw(false);
+    `;
 
-    income_report_table.row.add($(`
+    $('#income-reports-body').append(tb_prorate_discounts);
+
+    let tb_net_income = `
         <tr>
             <th scope="row" style="color: #012970; border-bottom: 4px solid;"><strong>NET INCOME</strong></th>
             <th style="color: #012970; border-bottom: 4px solid;">&#8369; ${(parseFloat(net_income)).toLocaleString('PHT', {minimumFractionDigits:2, maximumFractionDigits:2})}</th>
         </tr>
-    `)).draw(false);
+    `;
 
-    // for (var i = 0; i < income_report.length; i++) {
-    //     income_report_table.row.add($(`
-    //         <tr>
-    //             <th scope="row" style="color: #012970;">${i+1}</th>
-    //             <td data-label="Payment Center">${income_report[i].payment_center}</td>
-    //             <td data-label="Reference ID">${income_report[i].reference_id}</td>
-    //             <td data-label="Payment Date">${new Date(income_report[i].payment_date).toLocaleDateString('PHT')}</td>
-    //             <td data-label="Account ID">${income_report[i].account_id}</td>
-    //             <td data-label="Amount Paid">&#8369; ${(parseFloat(income_report[i].amount_paid)).toLocaleString('PHT', {minimumFractionDigits:2, maximumFractionDigits:2})}</td>
-    //         </tr>
-    //     `)).draw(false);
-
-    //     total += parseFloat(income_report[i].amount_paid);
-    // }
-
-    income_report_table.draw();
-
-    // let income_gross_income = `
-    //     <tr style="height:70px" class="justify-content-center">
-    //         <th scope="row" style="color: #012970; text-align: right;" colspan="5" class="align-middle pe-5">Gross Income:</th>
-    //         <td class="align-middle">&#8369; ${parseFloat(total).toLocaleString('PHT', {minimumFractionDigits:2, maximumFractionDigits:2})}</td>
-    //     </tr>
-    // `;
-
-    // $('#income-reports-column-footer').append(income_gross_income);
+    $('#income-reports-body').append(tb_net_income);
 }
 

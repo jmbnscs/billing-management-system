@@ -15,81 +15,84 @@
     </div>
   </div>
 
-  <form id="generate-report">
+  
     <div class="card p-3">
       <div class="card-body">
         <!-- <h5 class="card-title">Default Card</h5> -->
-        <div class="row">
-          <div class="col-md-4">
-            <label for="report_type" class="form-label">Report</label>
-            <select class="form-select" aria-label="Report Type" id="report_type" required>
-              <option selected disabled value="">Please select report:</option>
-              <option value="1">Sales Report</option>
-              <option value="2">Installation Report</option>
-              <option value="3">Prorates Report</option>
-              <option value="4">Customer Report</option>
-              <option value="5">Invoice Report</option>
-              <option value="6">Admin Logs Report</option>
-              <option value="7">Income Summary Report</option>
-            </select>
+        <form id="generate-report">
+          <div class="row">
+            <div class="col-md-4">
+              <label for="report_type" class="form-label">Report</label>
+              <select class="form-select" aria-label="Report Type" id="report_type" required>
+                <option selected disabled value="">Please select report:</option>
+                <option value="1">Sales Report</option>
+                <option value="2">Installation Report</option>
+                <option value="3">Prorates Report</option>
+                <option value="4">Customer Report</option>
+                <option value="5">Invoice Report</option>
+                <option value="6">Admin Logs Report</option>
+                <option value="7">Income Summary Report</option>
+              </select>
+            </div>
+
+            <div class="col-md-5"></div>
+
+            <div class="col-md-3 p-3"><button type="submit" class="btn btn-success w-100">Generate Report</button></div>
+          
           </div>
 
-          <div class="col-md-5"></div>
+          <div class="row pt-3">
+            <div class="col-md-4">
+              <label for="date_from" class="form-label">From:</label>
+              <input type="month" class="form-control" id="date_from" min="2021-09" required>
+            </div>
 
-          <div class="col-md-3 p-3"><button type="submit" class="btn btn-success w-100">Generate Report</button></div>
-        
-        </div>
-
-        <div class="row pt-3">
-          <div class="col-md-4">
-            <label for="date_from" class="form-label">From:</label>
-            <input type="month" class="form-control" id="date_from" min="2021-09" required>
+            <div class="col-md-4">
+              <label for="date_to" class="form-label">To:</label>
+              <input type="month" class="form-control" id="date_to" required>
+            </div>
           </div>
 
-          <div class="col-md-4">
-            <label for="date_to" class="form-label">To:</label>
-            <input type="month" class="form-control" id="date_to" required>
-          </div>
-        </div>
+          <!-- Customer Reports Sub Filter -->
+          <div class="row pt-3 hide" id="customer_filter">
+            <div class="col-md-4">
+              <label for="customer_status" class="form-label">Status</label>
+              <select class="form-select" aria-label="Status" id="customer_status">
+                <option disabled value="">Please select status:</option>
+                <option selected value="0">All</option>
+                <option value="1">Active</option>
+                <option value="2">Inactive</option>
+                <option value="3">Disconnected</option>
+              </select>
+            </div>
 
-        <!-- Customer Reports Sub Filter -->
-        <div class="row pt-3 hide" id="customer_filter">
-          <div class="col-md-4">
-            <label for="customer_status" class="form-label">Status</label>
-            <select class="form-select" aria-label="Status" id="customer_status">
-              <option disabled value="">Please select status:</option>
-              <option selected value="0">All</option>
-              <option value="1">Active</option>
-              <option value="2">Inactive</option>
-              <option value="3">Disconnected</option>
-            </select>
+            <div class="col-md-4">
+              <label for="customer_area" class="form-label">Area</label>
+              <select class="form-select" aria-label="Area" id="customer_area">
+                <option disabled value="">Please select area:</option>
+                <option selected value="0">All</option>
+              </select>
+            </div> 
           </div>
+          <!-- Customer Reports Sub Filter -->
 
-          <div class="col-md-4">
-            <label for="customer_area" class="form-label">Area</label>
-            <select class="form-select" aria-label="Area" id="customer_area">
-              <option disabled value="">Please select area:</option>
-              <option selected value="0">All</option>
-            </select>
-          </div> 
-        </div>
-        <!-- Customer Reports Sub Filter -->
-
-        <!-- Invoice Reports Sub Filter -->
-        <div class="row pt-3 hide" id="invoice_filter">
-          <div class="col-md-4">
-            <label for="invoice_status" class="form-label">Status</label>
-            <select class="form-select" aria-label="Status" id="invoice_status">
-              <option disabled value="">Please select status:</option>
-              <option selected value="0">All</option>
-              <option value="1">Paid</option>
-              <option value="2">Unpaid</option>
-              <option value="3">Overdue</option>
-              <option value="4">For Disconnection</option>
-            </select>
+          <!-- Invoice Reports Sub Filter -->
+          <div class="row pt-3 hide" id="invoice_filter">
+            <div class="col-md-4">
+              <label for="invoice_status" class="form-label">Status</label>
+              <select class="form-select" aria-label="Status" id="invoice_status">
+                <option disabled value="">Please select status:</option>
+                <option selected value="0">All</option>
+                <option value="1">Paid</option>
+                <option value="2">Unpaid</option>
+                <option value="3">Overdue</option>
+                <option value="4">For Disconnection</option>
+              </select>
+            </div>
           </div>
-        </div>
-        <!-- Invoice Reports Sub Filter -->
+          <!-- Invoice Reports Sub Filter -->
+
+        </form>
 
         <!-- Sales Reports Display -->
         <div class="row pt-5 hide" id="sales-reports-container">
@@ -176,22 +179,40 @@
         <!-- End Admin Logs Reports Display -->
 
         <!-- Income Summary Reports Display -->
-        <div class="row pt-5 hide" id="income-reports-container">
-          <div class="col-md-8">
-            <h5 id="income-reports-title" style="border-bottom: 2px solid black;">Income Report Summary</h5>
-          </div>
+          <div class="row pt-5 hide" id="income-reports-container">
+            <div class="col-md-8">
+              <h5 id="income-reports-title" style="border-bottom: 2px solid black;">Income Report Summary</h5>
+            </div>
 
-          <table class="table table-borderless" id="income-reports-table">
-            <thead id="income-reports-column-header"></thead>
-            <tbody id="income-reports-body"></tbody>
-            <tfoot id="income-reports-column-footer"></tfoot>
-          </table>
-        </div>
+            <!-- <table class="table table-borderless" id="income-reports-table">
+              <thead id="income-reports-column-header"></thead>
+              <tbody id="income-reports-body"></tbody>
+              <tfoot id="income-reports-column-footer"></tfoot>
+            </table> -->
+
+            <form action="../../app/includes/view_income_report.php" method="post" target="_blank">
+              <div class="row pb-3">
+                <div class="col-md-8"></div>
+                  <div class="col-md-4">
+                      <input type="date" value="" name="report_from" id="report-from" hidden>
+                      <input type="date" value="" name="report_to" id="report-to" hidden>
+                      <button type="submit" class="btn btn-primary w-100" id="print-pdf-btn" name="print_pdf">Print PDF</button>
+                  </div>
+              </div>
+              
+              <table class="table table-borderless pt-2" id="income-reports-table">
+                <thead id="income-reports-column-header"></thead>
+                <tbody id="income-reports-body"></tbody>
+                <tfoot id="income-reports-column-footer"></tfoot>
+              </table>
+
+            </div>
+          </form>
+
         <!-- End Income Summary Reports Display -->
         
       </div>
     </div>
-  </form>
   
 
 </main><!-- End #main -->
