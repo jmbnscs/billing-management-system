@@ -15,7 +15,7 @@
     </div>
 
     <div class="col-md-3 justify-content-center">
-      <button type="button" class="btn btn-primary mt-3 w-100" data-bs-toggle="modal" data-bs-target="#add-admin-modal">+ Add New Admin</button>
+      <button type="button" class="btn btn-primary mt-3 w-100" data-bs-toggle="modal" data-bs-target="#add-admin-modal" id="add-btn">+ Add New Admin</button>
     </div>
     
   </div><!-- End Page Title -->
@@ -162,7 +162,7 @@
     </div>
   </div> <!-- End Admins Table -->
 
-<!-- Add New Plan Modal -->
+<!-- Add New Admin Modal -->
 <form id="add-admin" novalidate>
   <div class="modal fade" id="add-admin-modal" tabindex="-1">
       <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-m">
@@ -260,7 +260,7 @@
           <!-- Modal Footer -->
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-success" id="add-plan-btn">Submit</button>
+            <button type="submit" class="btn btn-success" id="add-admin-btn">Submit</button>
           </div>
         </div>
       </div>

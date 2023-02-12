@@ -15,7 +15,7 @@ $(document).ready(function () {
 
 // -------------------------------------------------------------------- View Plan Page
 async function setPlansPage () {
-    const [plan_data, inclusion, statuses] = await Promise.all ([fetchData('views/plan.php'), fetchData('inclusion/read.php'), fetchData('statuses/read.php?status_table=plan_status')]);
+    const [plan_data, inclusion] = await Promise.all ([fetchData('views/plan.php'), fetchData('inclusion/read.php')]);
 
     var tag;
 
@@ -79,26 +79,6 @@ async function setPlansPage () {
 
     $("#active-table_filter.dataTables_filter").append($("#active-inclusions-filter"));
     $("#deactivated-table_filter.dataTables_filter").append($("#deact-inclusions-filter"));
-    // $("#active-table_filter.dataTables_filter").append($("#status-filter"));
-
-    // var inclusionsIndex = 0, statusIndex = 0;
-    // $("#active-table th").each(function (i) {
-    //     if ($($(this)).html() == "Inclusion") {
-    //         inclusionsIndex = i; return false;
-    //     }
-    // });
-
-    // $("#deactivated-table th").each(function (i) {
-    //     if ($($(this)).html() == "Inclusion") {
-    //         inclusionsIndex = i; return false;
-    //     }
-    // });
-
-    // $("#active-table th").each(function (i) {
-    //     if ($($(this)).html() == "Status") {
-    //         statusIndex = i; return false;
-    //     }
-    // });
 
     $.fn.dataTable.ext.search.push(
         function (settings, data, dataIndex) {
@@ -130,17 +110,6 @@ async function setPlansPage () {
         }
     );
 
-    // $.fn.dataTable.ext.search.push(
-    //     function (settings, data, dataIndex) {
-    //         var selectedItem = $('#status-filter').val()
-    //         var category = data[statusIndex];
-    //         if (selectedItem === "" || category.includes(selectedItem)) {
-    //         return true;
-    //         }
-    //         return false;
-    //     }
-    // );
-
     $("#active-inclusions-filter").change(function (e) {
         active_table.draw();
     });
@@ -148,9 +117,6 @@ async function setPlansPage () {
     $("#deact-inclusions-filter").change(function (e) {
         deact_table.draw();
     });
-    // $("#status-filter").change(function (e) {
-    //     t.draw();
-    // });
 
     active_table.draw();
     deact_table.draw();
@@ -305,12 +271,9 @@ async function setPlansPage () {
                         counter++;
                     }
                     else {
-                        console.log(DIR_API)
                         if (req_elem[i].id == 'plan_name') {
                             const plan_name = await fetchData('check/plan_name.php?plan_name=' + req_elem[i].value);
                             if (plan_name.exist && (modalTitle.textContent != req_elem[i].value)) {
-                                console.log(modalTitle.textContent)
-                                console.log(req_elem[i].value)
                                 req_elem[i].classList.add('invalid-input');
                                 req_elem[i].nextElementSibling.classList.add('d-block');
                                 $(($('#' + req_elem[i].id).next()).text("Plan name already exist."));
@@ -362,7 +325,12 @@ async function setPlansPage () {
                     toastr.warning('Please provide the appropriate details on each field.');
                 }
                 else {
-                    processUpdate();
+                    $('#save-plan-btn').prop('disabled', true);
+                    $('#save-plan-btn').append('&emsp;<i class="fa fa-circle-o-notch fa-spin"></i>');
+                    setTimeout ( () => {
+                            processUpdate();
+                        },2000
+                    );
                 }
             }
 
@@ -624,7 +592,12 @@ async function setAddPlanPage () {
             toastr.warning('Please provide the appropriate details on each field.');
         }
         else {
-            processCreate();
+            $('#add-plan-btn').prop('disabled', true);
+            $('#add-plan-btn').append('&emsp;<i class="fa fa-circle-o-notch fa-spin"></i>');
+            setTimeout ( () => {
+                    processCreate();
+                },2000
+            );
         }
     }
 
@@ -650,8 +623,6 @@ async function setAddPlanPage () {
 
         const [plan_content, log] = await Promise.all ([createData('plan/create.php', create_data), logActivity('Submit - Create Plan [' + plan_name + ']', 'View Plans')]);
 
-        console.log(inclusion);
-    
         let promo_content, promo_success;
         if(inclusion != null) {
             let readPlanResponse = await fetchData('plan/read.php');

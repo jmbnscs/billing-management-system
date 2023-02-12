@@ -1,244 +1,210 @@
 $(document).ready( async () => {
     isDefault();
     restrictPages('admin-page');
+    restrictPages('admin-view');
+    restrictFunctions('admins');
+    displaySuccessMessage();
+    setViewAdminPage();
 
-
-    if (DIR_CUR == DIR_MAIN + 'views/admins_add.php') {
-        restrictPages('admin-add');
-        setAddAdminPage();
-    }
-    else {
-        restrictPages('admin-view');
-        displaySuccessMessage();
-        setViewAdminPage();
-    }
 });
-
-async function checkRestriction () {
-    const content = await fetchData('restriction/get_user_restriction.php?user_id=' + user_id);
-
-    if (content.length > 0) {
-        for (var i = 0; i < content.length; i++) {
-            if (content[i].nav_id == 'admin-add') {
-                setErrorMessage();
-                return true;
-            }
-        }
-        return false;
-    }
-    else {
-        return false;
-    }
-}
 
 // -------------------------------------------------------------------- View Admin
 async function setViewAdminPage () {
-    setAdminTable();
-    // setViewModal();
-    
-    async function setAdminTable () {
-    
-        var active_table = $('#active-admins-table').DataTable( {
-            pageLength: 5,
-            lengthMenu: [5, 10, 20],
-            "searching": true,
-            "autoWidth": false
-        });
+    var active_table = $('#active-admins-table').DataTable( {
+        pageLength: 5,
+        lengthMenu: [5, 10, 20],
+        "searching": true,
+        "autoWidth": false
+    });
 
-        var inactive_table = $('#inactive-admins-table').DataTable( {
-            pageLength: 5,
-            lengthMenu: [5, 10, 20],
-            "searching": true,
-            "autoWidth": false
-        });
+    var inactive_table = $('#inactive-admins-table').DataTable( {
+        pageLength: 5,
+        lengthMenu: [5, 10, 20],
+        "searching": true,
+        "autoWidth": false
+    });
 
-        var suspended_table = $('#suspended-admins-table').DataTable( {
-            pageLength: 5,
-            lengthMenu: [5, 10, 20],
-            "searching": true,
-            "autoWidth": false
-        });
+    var suspended_table = $('#suspended-admins-table').DataTable( {
+        pageLength: 5,
+        lengthMenu: [5, 10, 20],
+        "searching": true,
+        "autoWidth": false
+    });
 
-        var locked_table = $('#locked-admins-table').DataTable( {
-            pageLength: 5,
-            lengthMenu: [5, 10, 20],
-            "searching": true,
-            "autoWidth": false
-        });
+    var locked_table = $('#locked-admins-table').DataTable( {
+        pageLength: 5,
+        lengthMenu: [5, 10, 20],
+        "searching": true,
+        "autoWidth": false
+    });
 
-        const [admin_statuses, user_roles, admins] = await Promise.all ([fetchData('statuses/read.php?status_table=admin_status'), fetchData('user_level/read.php'), fetchData('views/admin.php')]);
+    const [user_roles, admins] = await Promise.all ([fetchData('user_level/read.php'), fetchData('views/admin.php')]);
 
-        // for (var i = 0; i < admin_statuses.length; i++) {
-        //     var opt = `<option value='${admin_statuses[i].status_name}'>${admin_statuses[i].status_name}</option>`;
-        //     $("#status-filter").append(opt);
-        // }
+    for (var i = 1; i < user_roles.length; i++) {
+        var opt = `<option value='${user_roles[i].user_role}'>${user_roles[i].user_role}</option>`;
+        $("#active-role-filter").append(opt);
+        $("#inactive-role-filter").append(opt);
+        $("#suspended-role-filter").append(opt);
+        $("#locked-role-filter").append(opt);
+    }
 
-        for (var i = 1; i < user_roles.length; i++) {
-            var opt = `<option value='${user_roles[i].user_role}'>${user_roles[i].user_role}</option>`;
-            $("#active-role-filter").append(opt);
-            $("#inactive-role-filter").append(opt);
-            $("#suspended-role-filter").append(opt);
-            $("#locked-role-filter").append(opt);
+    var active_counter = 1, inactive_counter = 1, suspended_counter = 1, locked_counter = 1;
+
+    for (var i = 0; i < admins.length; i++) {
+        var tag;
+        (admins[i].status == 'Active') ? tag = 'bg-success' : tag = 'bg-danger';
+
+        if (admins[i].status == 'Active') {
+            active_table.row.add($(`
+            <tr>
+                <th scope="row" style="color: #012970;"><strong>${active_counter}</strong></th>
+                <td data-label="Admin ID">${admins[i].admin_id}</td>
+                <td data-label="Admin">${admins[i].admin_name}</td>
+                <td data-label="Role">${admins[i].role}</td>
+                <td data-label="Email">${admins[i].admin_email}</td>
+                <td data-label="Status"><span class="badge ${tag}">${admins[i].status}</span></td>
+                <td data-label="View"><a href="../views/admin_data?acct=${admins[i].admin_id}"><button type="button" class="btn btn-outline-primary"><i class="ri ri-eye-fill"></i></button></a></td>
+            </tr>
+            `)).draw(false);
+
+            active_counter++;
+        }
+        else if (admins[i].status == 'Inactive') {
+            inactive_table.row.add($(`
+            <tr>
+                <th scope="row" style="color: #012970;"><strong>${inactive_counter}</strong></th>
+                <td data-label="Admin ID">${admins[i].admin_id}</td>
+                <td data-label="Admin">${admins[i].admin_name}</td>
+                <td data-label="Role">${admins[i].role}</td>
+                <td data-label="Email">${admins[i].admin_email}</td>
+                <td data-label="Status"><span class="badge ${tag}">${admins[i].status}</span></td>
+                <td data-label="View"><a href="../views/admin_data?acct=${admins[i].admin_id}"><button type="button" class="btn btn-outline-primary"><i class="ri ri-eye-fill"></i></button></a></td>
+            </tr>
+            `)).draw(false);
+
+            inactive_counter++;
+        }
+        else if (admins[i].status == 'Suspended') {
+            suspended_table.row.add($(`
+            <tr>
+                <th scope="row" style="color: #012970;"><strong>${suspended_counter}</strong></th>
+                <td data-label="Admin ID">${admins[i].admin_id}</td>
+                <td data-label="Admin">${admins[i].admin_name}</td>
+                <td data-label="Role">${admins[i].role}</td>
+                <td data-label="Email">${admins[i].admin_email}</td>
+                <td data-label="Status"><span class="badge ${tag}">${admins[i].status}</span></td>
+                <td data-label="View"><a href="../views/admin_data?acct=${admins[i].admin_id}"><button type="button" class="btn btn-outline-primary"><i class="ri ri-eye-fill"></i></button></a></td>
+            </tr>
+            `)).draw(false);
+
+            suspended_counter++;
+        }
+        else if (admins[i].status == 'Locked') {
+            locked_table.row.add($(`
+            <tr>
+                <th scope="row" style="color: #012970;"><strong>${locked_counter}</strong></th>
+                <td data-label="Admin ID">${admins[i].admin_id}</td>
+                <td data-label="Admin">${admins[i].admin_name}</td>
+                <td data-label="Role">${admins[i].role}</td>
+                <td data-label="Email">${admins[i].admin_email}</td>
+                <td data-label="Status"><span class="badge ${tag}">${admins[i].status}</span></td>
+                <td data-label="View"><a href="../views/admin_data?acct=${admins[i].admin_id}"><button type="button" class="btn btn-outline-primary"><i class="ri ri-eye-fill"></i></button></a></td>
+            </tr>
+            `)).draw(false);
+
+            locked_counter++;
+        }
+        
+        
+    }
+
+    $("#active-admins-table_filter.dataTables_filter").append($("#active-role-filter"));
+    $("#inactive-admins-table_filter.dataTables_filter").append($("#inactive-role-filter"));
+    $("#suspended-admins-table_filter.dataTables_filter").append($("#suspended-role-filter"));
+    $("#locked-admins-table_filter.dataTables_filter").append($("#locked-role-filter"));
+
+    $.fn.dataTable.ext.search.push(
+    function (settings, data, dataIndex) {
+        if (settings.nTable.id !== 'active-admins-table'){
+            return true;
         }
 
-        var active_counter = 1, inactive_counter = 1, suspended_counter = 1, locked_counter = 1;
-
-        for (var i = 0; i < admins.length; i++) {
-            var tag;
-            (admins[i].status == 'Active') ? tag = 'bg-success' : tag = 'bg-danger';
-
-            if (admins[i].status == 'Active') {
-                active_table.row.add($(`
-                <tr>
-                    <th scope="row" style="color: #012970;"><strong>${active_counter}</strong></th>
-                    <td data-label="Admin ID">${admins[i].admin_id}</td>
-                    <td data-label="Admin">${admins[i].admin_name}</td>
-                    <td data-label="Role">${admins[i].role}</td>
-                    <td data-label="Email">${admins[i].admin_email}</td>
-                    <td data-label="Status"><span class="badge ${tag}">${admins[i].status}</span></td>
-                    <td data-label="View"><a href="../views/admin_data?acct=${admins[i].admin_id}"><button type="button" class="btn btn-outline-primary"><i class="ri ri-eye-fill"></i></button></a></td>
-                </tr>
-                `)).draw(false);
-
-                active_counter++;
-            }
-            else if (admins[i].status == 'Inactive') {
-                inactive_table.row.add($(`
-                <tr>
-                    <th scope="row" style="color: #012970;"><strong>${inactive_counter}</strong></th>
-                    <td data-label="Admin ID">${admins[i].admin_id}</td>
-                    <td data-label="Admin">${admins[i].admin_name}</td>
-                    <td data-label="Role">${admins[i].role}</td>
-                    <td data-label="Email">${admins[i].admin_email}</td>
-                    <td data-label="Status"><span class="badge ${tag}">${admins[i].status}</span></td>
-                    <td data-label="View"><a href="../views/admin_data?acct=${admins[i].admin_id}"><button type="button" class="btn btn-outline-primary"><i class="ri ri-eye-fill"></i></button></a></td>
-                </tr>
-                `)).draw(false);
-
-                inactive_counter++;
-            }
-            else if (admins[i].status == 'Suspended') {
-                suspended_table.row.add($(`
-                <tr>
-                    <th scope="row" style="color: #012970;"><strong>${suspended_counter}</strong></th>
-                    <td data-label="Admin ID">${admins[i].admin_id}</td>
-                    <td data-label="Admin">${admins[i].admin_name}</td>
-                    <td data-label="Role">${admins[i].role}</td>
-                    <td data-label="Email">${admins[i].admin_email}</td>
-                    <td data-label="Status"><span class="badge ${tag}">${admins[i].status}</span></td>
-                    <td data-label="View"><a href="../views/admin_data?acct=${admins[i].admin_id}"><button type="button" class="btn btn-outline-primary"><i class="ri ri-eye-fill"></i></button></a></td>
-                </tr>
-                `)).draw(false);
-
-                suspended_counter++;
-            }
-            else if (admins[i].status == 'Locked') {
-                locked_table.row.add($(`
-                <tr>
-                    <th scope="row" style="color: #012970;"><strong>${locked_counter}</strong></th>
-                    <td data-label="Admin ID">${admins[i].admin_id}</td>
-                    <td data-label="Admin">${admins[i].admin_name}</td>
-                    <td data-label="Role">${admins[i].role}</td>
-                    <td data-label="Email">${admins[i].admin_email}</td>
-                    <td data-label="Status"><span class="badge ${tag}">${admins[i].status}</span></td>
-                    <td data-label="View"><a href="../views/admin_data?acct=${admins[i].admin_id}"><button type="button" class="btn btn-outline-primary"><i class="ri ri-eye-fill"></i></button></a></td>
-                </tr>
-                `)).draw(false);
-
-                locked_counter++;
-            }
-            
-            
+        var selectedItem = $('#active-role-filter').val();
+        var category = data[3];
+        if (selectedItem === "" || category.includes(selectedItem)) {
+        return true;
         }
-    
-        $("#active-admins-table_filter.dataTables_filter").append($("#active-role-filter"));
-        $("#inactive-admins-table_filter.dataTables_filter").append($("#inactive-role-filter"));
-        $("#suspended-admins-table_filter.dataTables_filter").append($("#suspended-role-filter"));
-        $("#locked-admins-table_filter.dataTables_filter").append($("#locked-role-filter"));
+        return false;
+        }
+    );
 
-        $.fn.dataTable.ext.search.push(
+    $.fn.dataTable.ext.search.push(
         function (settings, data, dataIndex) {
-            if (settings.nTable.id !== 'active-admins-table'){
+            if (settings.nTable.id !== 'inactive-admins-table'){
                 return true;
             }
 
-            var selectedItem = $('#active-role-filter').val();
+            var selectedItem = $('#inactive-role-filter').val();
             var category = data[3];
             if (selectedItem === "" || category.includes(selectedItem)) {
             return true;
             }
             return false;
-            }
-        );
+        }
+    );
 
-        $.fn.dataTable.ext.search.push(
-            function (settings, data, dataIndex) {
-                if (settings.nTable.id !== 'inactive-admins-table'){
-                    return true;
-                }
-
-                var selectedItem = $('#inactive-role-filter').val();
-                var category = data[3];
-                if (selectedItem === "" || category.includes(selectedItem)) {
+    $.fn.dataTable.ext.search.push(
+        function (settings, data, dataIndex) {
+            if (settings.nTable.id !== 'suspended-admins-table'){
                 return true;
-                }
-                return false;
             }
-        );
+            
+            var selectedItem = $('#suspended-role-filter').val();
+            var category = data[3];
+            if (selectedItem === "" || category.includes(selectedItem)) {
+            return true;
+            }
+            return false;
+        }
+    );
 
-        $.fn.dataTable.ext.search.push(
-            function (settings, data, dataIndex) {
-                if (settings.nTable.id !== 'suspended-admins-table'){
-                    return true;
-                }
-                
-                var selectedItem = $('#suspended-role-filter').val();
-                var category = data[3];
-                if (selectedItem === "" || category.includes(selectedItem)) {
+    $.fn.dataTable.ext.search.push(
+        function (settings, data, dataIndex) {
+            if (settings.nTable.id !== 'locked-admins-table'){
                 return true;
-                }
-                return false;
             }
-        );
-
-        $.fn.dataTable.ext.search.push(
-            function (settings, data, dataIndex) {
-                if (settings.nTable.id !== 'locked-admins-table'){
-                    return true;
-                }
-                
-                var selectedItem = $('#locked-role-filter').val();
-                var category = data[3];
-                if (selectedItem === "" || category.includes(selectedItem)) {
-                return true;
-                }
-                return false;
+            
+            var selectedItem = $('#locked-role-filter').val();
+            var category = data[3];
+            if (selectedItem === "" || category.includes(selectedItem)) {
+            return true;
             }
-        );
+            return false;
+        }
+    );
 
-        $("#active-role-filter").change(function (e) {
-            active_table.draw();
-        });
-
-        $("#inactive-role-filter").change(function (e) {
-            inactive_table.draw();
-        });
-
-        $("#suspended-role-filter").change(function (e) {
-            suspended_table.draw();
-        });
-
-        $("#locked-role-filter").change(function (e) {
-            locked_table.draw();
-        });
-
+    $("#active-role-filter").change(function (e) {
         active_table.draw();
-        inactive_table.draw();
-        suspended_table.draw();
-        locked_table.draw();
+    });
 
-        setAddAdminPage();
-    }
+    $("#inactive-role-filter").change(function (e) {
+        inactive_table.draw();
+    });
+
+    $("#suspended-role-filter").change(function (e) {
+        suspended_table.draw();
+    });
+
+    $("#locked-role-filter").change(function (e) {
+        locked_table.draw();
+    });
+
+    active_table.draw();
+    inactive_table.draw();
+    suspended_table.draw();
+    locked_table.draw();
+
+    setAddAdminPage();
 }
 
 // -------------------------------------------------------------------- Add Admin

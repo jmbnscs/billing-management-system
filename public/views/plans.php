@@ -17,11 +17,11 @@
     <div class="col-md-3 justify-content-center">
       <button type="button" class="btn btn-primary mt-3 w-100" data-bs-toggle="modal" data-bs-target="#add-plans" id="add-btn">+ Add New Plan</button>
     </div>
-  </div><!-- End Page Title -->
+  </div>
 
   <!-- Plans Table -->
-  <div class="col-12">
-    <div class="card recent-sales overflow-auto">
+  <div class="col-lg-12">
+    <div class="card">
       <br>
       <div class="card-body">
 
@@ -44,13 +44,6 @@
                 <option value="None">None</option>
               </select>
             </div>
-
-            <!-- <div>
-              <select id="status-filter" class="form-select table-filter" style="display: inline; width: 200px; margin-left: 25px;">
-                <option value="">Select All: Status</option>
-              </select>
-            </div> -->
-            <!-- End Filter Dropdown -->
 
             <table class="table table-borderless" id="active-table">
               <thead>
@@ -78,13 +71,6 @@
                 <option value="None">None</option>
               </select>
             </div>
-
-            <!-- <div>
-              <select id="status-filter" class="form-select table-filter" style="display: inline; width: 200px; margin-left: 25px;">
-                <option value="">Select All: Status</option>
-              </select>
-            </div> -->
-            <!-- End Filter Dropdown -->
 
             <table class="table table-borderless" id="deactivated-table">
               <thead>
