@@ -12,7 +12,7 @@
           <li class="breadcrumb-item active">Admins</li>
         </ol>
       </nav>
-  </div><!-- End Page Title -->
+  </div>
 
   <!-- Admin Data Tabs -->
   <section class="section admin-data">
@@ -221,7 +221,7 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#reset-pw-modal" id="reset-btn">Reset Password</button>
-          <button type="submit" class="btn btn-success">Save Changes</button>
+          <button type="submit" class="btn btn-success" id="update-admin-btn">Save Changes</button>
         </div>
       </div>
     </div>
@@ -267,7 +267,7 @@
           <!-- Modal Footer -->
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-danger">Reset</button>
+            <button type="submit" class="btn btn-danger" id="reset-pw-btn">Reset</button>
           </div>
         </div>
       </div>
@@ -432,14 +432,7 @@
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
   <!-- Vendor JS Files -->
-  <script src="../assets/vendor/apexcharts/apexcharts.min.js"></script>
   <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="../assets/vendor/chart.js/chart.min.js"></script>
-  <script src="../assets/vendor/echarts/echarts.min.js"></script>
-  <script src="../assets/vendor/quill/quill.min.js"></script>
-  <script src="../assets/vendor/simple-datatables/simple-datatables.js"></script>
-  <script src="../assets/vendor/tinymce/tinymce.min.js"></script>
-  <script src="../assets/vendor/php-email-form/validate.js"></script>
 
   <!-- Template Main JS File -->
   <script src="../assets/js/main.js"></script>
@@ -452,7 +445,7 @@
 
   <!-- Backend JS File -->
   <script src="../js/main.js"></script>
-  <script src="../js/admin_data.js" type="module"></script>
+  <script src="../js/admin_data.js"></script>
 
 </body>
 </html>

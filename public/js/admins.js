@@ -343,7 +343,12 @@ async function setAddAdminPage () {
         }
         else {
             sessionStorage.removeItem('new_admin_id');
-            addAdmin();
+            $('#add-admin-btn').prop('disabled', true);
+            $('#add-admin-btn').append('&emsp;<i class="fa fa-circle-o-notch fa-spin"></i>');
+            setTimeout ( () => {
+                    addAdmin();
+                },2000
+            );
         }
     }
 

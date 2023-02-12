@@ -87,13 +87,23 @@ async function setAdminData(admin_data) {
         const reset_pwd = document.getElementById('reset-password');
         reset_pwd.onsubmit = (e) => {
             e.preventDefault();
-            resetPassword();
+            $('#reset-pw-btn').prop('disabled', true);
+            $('#reset-pw-btn').append('&emsp;<i class="fa fa-circle-o-notch fa-spin"></i>');
+            setTimeout ( () => {
+                    resetPassword();
+                },2000
+            );
         };
 
         const save_admin = document.getElementById('save-admin');
         save_admin.onsubmit = (e) => {
             e.preventDefault();
-            updateAdminData();
+            $('#update-admin-btn').prop('disabled', true);
+            $('#update-admin-btn').append('&emsp;<i class="fa fa-circle-o-notch fa-spin"></i>');
+            setTimeout ( () => {
+                    updateAdminData();
+                },2000
+            );
         };
     
         async function resetPassword() {

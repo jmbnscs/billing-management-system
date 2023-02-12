@@ -12,7 +12,7 @@
           <li class="breadcrumb-item active">Profile</li>
         </ol>
       </nav>
-    </div><!-- End Page Title -->
+    </div>
 
     <section class="section profile">
       <div class="row">
@@ -22,8 +22,31 @@
             <div class="mx-auto mt-4 d-block admin-icon" id="admin-icon"></div>
             <div class="card-body p-3">
               <div>
-                <h4 class="text-center fw-bold" id="profile-name"></h4>
-                <h6 class="text-center fw-light fst-italic"><span id="profile-role"></span></h6>
+                <h4 class="text-center fw-bold" id="admin-name"></h4>
+                <h6 class="text-center fw-light fst-italic"><span id="role-name"></span></h6>
+              </div>
+
+              <div class="mt-3 row border-bottom">
+                <div class="col-sm-9 pt-3">
+                  <h5 class="fw-bold">Details</h5>
+                </div>
+
+              </div>
+
+              <div class="profile-details mt-4 p-0">
+                <p>Admin ID <br><small class="text-secondary" id="admin_id"></small></p>
+
+                <p>First Name <br><small class="text-secondary" id="first_name"></small></p>
+                <p>Middle Name <br><small class="text-secondary" id="middle_name"></small></p>
+                <p>Last Name <br><small class="text-secondary" id="last_name"></small></p>
+
+                <p>Employment Date <br><small class="text-secondary" id="employment_date"></small></p>
+                <p>Address <br><small class="text-secondary" id="address"></small></p>
+                <p>Mobile Number <br><small class="text-secondary" id="mobile_number"></small></p>
+                <p>Email <br><small class="text-secondary" id="admin_email"></small></p>
+
+                <p>Birthday <br><small class="text-secondary" id="birthdate"></small></p>
+                <p>Admin Status <br><small class="text-secondary" id="admin_status"></small></p>
               </div>
 
             </div>
@@ -40,7 +63,7 @@
               <ul class="nav nav-tabs nav-tabs-bordered">
 
                 <li class="nav-item">
-                  <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview" id="overview-profile">Overview</button>
+                  <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-activity-logs" id="activity-logs">Activity Logs</button>
                 </li>
 
                 <li class="nav-item">
@@ -51,62 +74,32 @@
                   <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change-password" id="password-change">Change Password</button>
                 </li>
 
-                <li class="nav-item">
-                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-activity-logs" id="activity-logs">Activity Logs</button>
-                </li>
-
               </ul>
               <div class="tab-content pt-2">
-
-                <div class="tab-pane fade show active profile-overview " id="profile-overview">
-                  <h5 class="card-title">Profile Details</h5>
-
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 label ">Full Name</div>
-                    <div class="col-lg-9 col-md-8" id="full_name"></div>
+                <!-- Activity Logs -->
+                  <div class="tab-pane fade show active" id="profile-activity-logs">
+                    <div class="row activity-tbl">
+                      <!-- <div class="col-sm-11 m-auto"> -->
+                        <h5 class="card-title">Activity Logs</h5>
+                          <div class="container overflow-auto activity-logs-tbl">
+                          <table class="table table-borderless" id="activity-logs-tbl">
+                            <thead>
+                              <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Page</th>
+                                <th scope="col">Date</th>
+                                <th scope="col">Time</th>
+                                <th scope="col">View</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                          </table>
+                        </div>
+                      <!-- </div> -->
+                    </div>
                   </div>
-
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 label">Email</div>
-                    <div class="col-lg-9 col-md-8" id="email"></div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 label">Mobile Number</div>
-                    <div class="col-lg-9 col-md-8" id="mobile_number"></div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 label">First Name</div>
-                    <div class="col-lg-9 col-md-8" id="first_name"></div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 label">Middle Name</div>
-                    <div class="col-lg-9 col-md-8" id="middle_name"></div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 label">Last Name</div>
-                    <div class="col-lg-9 col-md-8" id="last_name"></div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 label">Birthday</div>
-                    <div class="col-lg-9 col-md-8" id="birthdate"></div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 label">Address</div>
-                    <div class="col-lg-9 col-md-8" id="address"></div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 label">Employment Date</div>
-                    <div class="col-lg-9 col-md-8" id="employment_date"></div>
-                  </div>
-
-                </div>
+                <!-- End Activity Logs -->
 
                 <div class="tab-pane fade profile-edit pt-3 " id="profile-edit">
 
@@ -149,7 +142,7 @@
                     </div>
 
                     <div class="text-center">
-                      <button type="submit" class="btn btn-primary">Save Changes</button>
+                      <button type="submit" class="btn btn-primary" id="edit-btn">Save Changes</button>
                     </div>
                   </form><!-- End Profile Edit Form -->
 
@@ -181,38 +174,14 @@
                     </div>
 
                     <div class="text-center">
-                      <button type="submit" class="btn btn-primary">Change Password</button>
+                      <button type="submit" class="btn btn-primary" id="change-pw-btn">Change Password</button>
                     </div>
 
                   </form><!-- End Change Password Form -->
 
                 </div>
 
-                <!-- Activity Logs -->
-                <div class="tab-content">
-                  <div class="tab-pane fade" id="profile-activity-logs">
-                    <div class="row activity-tbl">
-                      <div class="col-sm-11 m-auto">
-                        <h5 class="card-title">Activity Logs</h5>
-                          <div class="container overflow-auto activity-logs-tbl">
-                          <table class="table table-borderless" id="activity-logs-tbl">
-                            <thead>
-                              <tr>
-                                <th scope="col">ID</th>
-                                <th scope="col">Page</th>
-                                <th scope="col">Date</th>
-                                <th scope="col">Time</th>
-                                <th scope="col">View</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div><!-- End Activity Logs -->
+                
 
               </div>
             </div>
@@ -300,14 +269,7 @@
 
  
   <!-- Vendor JS Files -->
-  <script src="../assets/vendor/apexcharts/apexcharts.min.js"></script>
   <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="../assets/vendor/chart.js/chart.min.js"></script>
-  <script src="../assets/vendor/echarts/echarts.min.js"></script>
-  <script src="../assets/vendor/quill/quill.min.js"></script>
-  <script src="../assets/vendor/simple-datatables/simple-datatables.js"></script>
-  <script src="../assets/vendor/tinymce/tinymce.min.js"></script>
-  <script src="../assets/vendor/php-email-form/validate.js"></script>
 
   <!-- Template Main JS File -->
   <script src="../assets/js/main.js"></script>

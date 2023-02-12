@@ -18,11 +18,11 @@
       <button type="button" class="btn btn-primary mt-3 w-100" data-bs-toggle="modal" data-bs-target="#add-admin-modal" id="add-btn">+ Add New Admin</button>
     </div>
     
-  </div><!-- End Page Title -->
+  </div>
 
   <!-- Admins Table -->
-  <div class="col-12">
-    <div class="card recent-sales overflow-auto">
+  <div class="col-lg-12">
+    <div class="card">
       <br>
       <div class="card-body">
         <ul class="nav nav-tabs d-flex" role="tablist">
@@ -45,11 +45,6 @@
           <!-- Active Admins -->
           <div class="tab-pane fade show active" id="active-admins" role="tabpanel" aria-labelledby="active-tab">
             <!-- Filter Dropdown -->
-            <!-- <div>
-              <select id="status-filter" class="form-select table-filter" style="display: inline; width: 200px; margin-left: 25px;">
-                <option value="">Show All: Status</option>
-              </select>
-            </div> -->
             <div>
               <select id="active-role-filter" class="form-select table-filter" style="display: inline; width: 200px; margin-left: 25px;">
                 <option value="">Show All: Role</option>
@@ -273,14 +268,7 @@
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
   <!-- Vendor JS Files -->
-  <script src="../assets/vendor/apexcharts/apexcharts.min.js"></script>
   <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="../assets/vendor/chart.js/chart.min.js"></script>
-  <script src="../assets/vendor/echarts/echarts.min.js"></script>
-  <script src="../assets/vendor/quill/quill.min.js"></script>
-  <script src="../assets/vendor/simple-datatables/simple-datatables.js"></script>
-  <script src="../assets/vendor/tinymce/tinymce.min.js"></script>
-  <script src="../assets/vendor/php-email-form/validate.js"></script>
 
   <!-- Template Main JS File -->
   <script src="../assets/js/main.js"></script>

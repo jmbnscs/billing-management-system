@@ -12,7 +12,7 @@ $(document).ready( () => {
         document.getElementById('activity-logs').click();
     }
     else {
-        document.getElementById('overview-profile').click();
+        document.getElementById('activity-logs').click();
     }
 });
 
@@ -21,12 +21,13 @@ async function setProfilePage() {
     const data = await getAdminData(admin_id);
     const user = await getUserLevel(data.user_level_id);
     $('#admin-icon').text((data.first_name).charAt(0) + (data.last_name).charAt(0));
-    $('#profile-name').text(data.first_name + ' ' + data.last_name);
-    $('#profile-role').text(user.user_role);
+    $('#admin-name').text(data.first_name + ' ' + data.last_name);
+    $('#role-name').text(user.user_role);
 
     // Overview
+    $('#admin_id').text(admin_id);
     $('#full_name').text(data.first_name + ' ' + data.last_name);
-    $('#email').text(data.admin_email);
+    $('#admin_email').text(data.admin_email);
     $('#mobile_number').text(data.mobile_number);
     $('#first_name').text(data.first_name);
     $('#middle_name').text(data.middle_name);
@@ -34,6 +35,7 @@ async function setProfilePage() {
     $('#birthdate').text(formatDateString(data.birthdate));
     $('#address').text(data.address);
     $('#employment_date').text(formatDateString(data.employment_date));
+    $('#admin_status').text(await getStatusName('admin_status', data.admin_status_id));
 
     // Edit Profile
     $('#fullName').val(data.first_name + ' ' + data.last_name);
@@ -48,7 +50,12 @@ async function setProfilePage() {
     const edit_profile = document.getElementById('edit-form');
     edit_profile.onsubmit = (e) => {
         e.preventDefault();
-        processUpdate();
+        $('#edit-btn').prop('disabled', true);
+        $('#edit-btn').append('&emsp;<i class="fa fa-circle-o-notch fa-spin"></i>');
+        setTimeout ( () => {
+                processUpdate();
+            },2000
+        );
     };
 
     async function processUpdate() {
@@ -67,6 +74,11 @@ async function setProfilePage() {
             setTimeout( () => {
                 location.reload();
             }, 2000);
+        }
+        else {
+            toastr.warning('Some error has occured, please try again.', 'Oops!');
+            $('#edit-btn').prop('disabled', false);
+            $('#edit-btn').text('Save Changes');
         }
     }
 
@@ -112,10 +124,13 @@ async function setProfilePage() {
                     if (content.message == 'Password Updated' && log) {
                         localStorage.setItem('hashed', 1);
                         toastr.success(content.message);
-    
-                        setTimeout(function(){
-                            logout();
-                         }, 2000);
+
+                        $('#change-pw-btn').prop('disabled', true);
+                        $('#change-pw-btn').append('&emsp;<i class="fa fa-circle-o-notch fa-spin"></i>');
+                        setTimeout ( () => {
+                                logout();  
+                            },2000
+                        );
                     }
                 }
             }
@@ -144,10 +159,10 @@ async function setRecentActivity() {
         t.row.add($(`
             <tr>
                 <th scope="row" style="color: #012970;"><strong>${content[i].id}</strong></th>
-                <td>${content[i].page_accessed}</td>
-                <td>${content[i].date_accessed.split(' ')[0]}</td>
-                <td>${content[i].date_accessed.split(' ')[1]}</td>
-                <td><button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#view-activity-modal" data-bs-whatever="${content[i].id}"><i class="ri ri-eye-fill"></i></button></td>
+                <td data-label="Page Accessed">${content[i].page_accessed}</td>
+                <td data-label="Date Accessed">${content[i].date_accessed.split(' ')[0]}</td>
+                <td data-label="Time Accessed">${content[i].date_accessed.split(' ')[1]}</td>
+                <td data-label="View"><button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#view-activity-modal" data-bs-whatever="${content[i].id}"><i class="ri ri-eye-fill"></i></button></td>
             </tr>
         `)).draw(false);
     }
