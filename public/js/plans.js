@@ -126,8 +126,8 @@ async function setPlansPage () {
     
     async function setViewModal () {
         $("#view-plans").on("hidden.bs.modal", function () {
-            $('#edit-plan').attr('disabled', false);
-            $('#save-plan-btn').attr('disabled', true);
+            $('#edit-btn').attr('disabled', false);
+            $('#save-btn').attr('disabled', true);
         });
     
         var updateModal = document.getElementById('view-plans')
@@ -243,11 +243,11 @@ async function setPlansPage () {
                 }
             }
     
-            const edit_plan = document.getElementById('edit-plan');
+            const edit_plan = document.getElementById('edit-btn');
             edit_plan.onclick = (e) => {
                 e.preventDefault();
-                $('#save-plan-btn').attr('disabled', false);
-                $('#edit-plan').attr('disabled', true);
+                $('#save-btn').attr('disabled', false);
+                $('#edit-btn').attr('disabled', true);
                 toggleInputData('disabled', false);
                 setDropdownData();
             };
@@ -325,8 +325,8 @@ async function setPlansPage () {
                     toastr.warning('Please provide the appropriate details on each field.');
                 }
                 else {
-                    $('#save-plan-btn').prop('disabled', true);
-                    $('#save-plan-btn').append('&emsp;<i class="fa fa-circle-o-notch fa-spin"></i>');
+                    $('#save-btn').prop('disabled', true);
+                    $('#save-btn').append('&emsp;<i class="fa fa-circle-o-notch fa-spin"></i>');
                     setTimeout ( () => {
                             processUpdate();
                         },2000

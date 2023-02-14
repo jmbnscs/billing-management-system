@@ -15,7 +15,7 @@
     </div>
     
     <div class="col-md-3 justify-content-center">
-      <button type="button" class="btn btn-primary mt-3 w-100" data-bs-toggle="modal" data-bs-target="#create-ticket-modal">+ Create New Ticket</button>
+      <button type="button" class="btn btn-primary mt-3 w-100" data-bs-toggle="modal" data-bs-target="#create-ticket-modal" id="add-ticket-btn">+ Create New Ticket</button>
     </div>
   </div>
 

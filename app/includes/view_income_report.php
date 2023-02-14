@@ -54,28 +54,24 @@ require_once('../helpers/tcpdf/tcpdf.php');
             $to = new DateTime($report_to);
 
             $gross_income = (float)$data['sales'] - (float)$data['total_expenses'];
-            $net_income = $gross_income + (float)$data['installation_sales'] + (float)$data['prorate_loss'];
+            $net_income = $gross_income - ((float)$data['installation_sales'] + (float)$data['prorate_loss']);
 
             $this->Ln(10);
 
             $html = '
-            <h2> Income Report Summary </h2>
-            <p> ' . $from->format('m/d/y') . ' - ' . $to->format('m/d/y') . ' </p>
+            <br>
+            <h2 style="color: #012970; text-align: center;"> Income Summary Report</h2>
+            <p style="text-align: center;"> <em>' . $from->format('m/d/y') . ' - ' . $to->format('m/d/y') . '</em> </p>
             
             <table style="width:100%; margin-bottom=0; padding: 15px;">
                 <tr>
-                    <th scope="col" style="width: 75%; color: #012970; border-bottom: 3px solid #0000CD;"></th>
-                    <th scope="col" style="width: 25%; color: #012970; border-bottom: 3px solid #0000CD;"></th>
+                    <th scope="row" style="width: 75%; color: #012970;"><strong>REVENUES</strong> <br> &nbsp;&nbsp;Total Sales</th>
+                    <td style="width: 25%;"><br> P '. number_format($data['sales'], 2) .' </td>
                 </tr>
 
                 <tr>
-                    <th scope="row" style="color: #012970;"><strong>REVENUES</strong> <br> &nbsp;&nbsp;Total Sales</th>
-                    <td><br> P '. number_format($data['sales'], 2) .' </td>
-                </tr>
-
-                <tr>
-                    <th scope="row" style="color: #012970; border-bottom: 3px solid #0000CD;"><strong>LESS: COST OF SALES</strong></th>
-                    <td style="border-bottom: 3px solid #0000CD;;"> P '. number_format($data['total_expenses'], 2) . '</td>
+                    <th scope="row" style="color: #012970; border-bottom: 1px double #0000CD;"><strong>LESS: COST OF SALES</strong></th>
+                    <td style="border-bottom: 1px double #0000CD;"> P '. number_format($data['total_expenses'], 2) . '</td>
                 </tr>
 
                 <tr>
@@ -84,22 +80,52 @@ require_once('../helpers/tcpdf/tcpdf.php');
                 </tr>
 
                 <tr>
-                    <th scope="row" style="color: #012970;"><strong>OTHER INCOME/(LOSS)</strong> <br> &nbsp;&nbsp;Installation Charges</th>
+                    <th scope="row" style="color: #012970;"><strong>OTHER INCOME/(LOSS)</strong> <br>&nbsp;&nbsp;Installation Charges</th>
                     <td><br><br> P ' . number_format($data['installation_sales'], 2) . '</td>
                 </tr>
 
                 <tr>
-                    <th scope="row" style="color: #012970; border-bottom: 4px solid #0000CD;">&nbsp;&nbsp;Prorate Discounts</th>
-                    <td style="border-bottom: 4px solid #0000CD;"> P ' . number_format($data['prorate_loss'], 2) . '</td>
+                    <th scope="row" style="color: #012970; border-bottom: 1px double #0000CD;">&nbsp;&nbsp;Prorate Discounts</th>
+                    <td style="border-bottom: 1px double #0000CD;"> P ' . number_format($data['prorate_loss'], 2) . '</td>
                 </tr>
 
                 <tr>
                     <th scope="row" style="color: #012970; border-bottom: 4px solid #0000CD;"><strong>NET INCOME</strong></th>
-                    <th style="color: #012970; border-bottom: 4px solid #0000CD;"><strong>P '. number_format($net_income, 2) .'</strong></th>
+                    <th style="color: #012970; border-bottom: 4px solid #0000CD; font-size: 20px;"><strong>P '. number_format($net_income, 2) .'</strong></th>
                 </tr>
             </table>
             ';
             $this->writeHTML($html, true, false, true, false, '');
+        }
+
+        public function displayTable($header, $data, $title) {
+            $this->Write(0, $title, '', 0, 'L', true, 0, false, false, 0);
+            $width_cell=array(10,40,40,30,30,25);
+            $this->SetFillColor(102, 178, 255);
+
+            for ($i = 0; $i < count($header); $i++) {
+                $this->Cell($width_cell[$i],10,$header[$i],1,0,'C',true); 
+            }
+            $this->Ln();
+            
+            $fill=0;
+            $this->SetFillColor(224, 224, 224);
+
+            for ($i = 0; $i < count($data); $i++) {
+                $counter = 0;
+                $this->Cell($width_cell[0],10,$i + 1,1,0,'C',$fill);
+
+                foreach ($data[$i] as $row) {
+                    $this->Cell($width_cell[$counter + 1],10,$row,1,0,'C',$fill);
+                    $counter++;
+                    
+                }
+                $this->Ln();
+                
+                $fill=!$fill;
+            }
+
+            $this->Ln(10);
         }
 
         
@@ -112,11 +138,6 @@ require_once('../helpers/tcpdf/tcpdf.php');
     $pdf->setAuthor('GSTechBMS');
     $pdf->setSubject('GSTech Billing Statement');
     
-    // $pdf->setHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE.' 001', PDF_HEADER_STRING, array(0,64,255), array(0,64,128));
-    // $pdf->setFooterData(array(0,64,0), array(0,64,128));
-    
-    // $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-    
     $pdf->setDefaultMonospacedFont(PDF_FONT_MONOSPACED);
     
     // set margins
@@ -128,36 +149,35 @@ require_once('../helpers/tcpdf/tcpdf.php');
     
     $pdf->setTitle('Income Summary Report');
 
-    // $test = $_POST['report_data'];
-
     $pdf->AddPage();
     $pdf->SetHeaderPage();
 
-    $reports = $pdf->ReadData('reports/read_income_summary.php', $_POST['report_from'], $_POST['report_to']);
+    $date_from = $_POST['report_from'];
+    $date_to = $_POST['report_to'];
 
-    $pdf->displayData($reports, $_POST['report_from'], $_POST['report_to']);
+    $reports = $pdf->ReadData('reports/read_income_summary.php', $date_from, $date_to);
+    $pdf->displayData($reports, $date_from, $date_to);
 
-    // $plans = $pdf->LoadData('plan/read_active.php');
-    // $header = array('#', 'Plans', 'Bandwidth', 'Price');
-    // $pdf->displayTable($header, $plans, 'Available Plans');
-    
-    // $connections = $pdf->LoadData('connection/read.php');
-    // $header = array('#', 'Connection Name');
-    // $pdf->displayTable($header, $connections, 'Connection Types');
+    // $pdf->AddPage();
+    // $sales = $pdf->ReadData('reports/read_sales.php', $date_from, $date_to);
+    // $sales_header = array('#', 'Payment Center', 'Reference #', 'Payment Date', 'Account ID', 'Amt. Paid');
+    // $pdf->displayTable($sales_header, $sales, 'Payment History');
 
-    // $areas = $pdf->LoadData('area/read.php');
-    // $header = array('#', 'Area Name');
-    // $pdf->displayTable($header, $areas, 'Areas');
+    // $installation = $pdf->ReadData('reports/read_installation.php', $date_from, $date_to);
+    // $installation_header = array('#', 'Reference #', 'Payment Date', 'Account ID', 'Amt. Paid');
 
-    // $installation = $pdf->LoadData('installation_type/read.php');
-    // $header = array('#', 'Installation Type');
-    // $pdf->displayTable($header, $installation, 'Installation Types');
+    // if (count($installation) > 1) {
+    //     $pdf->displayTable($installation_header, $installation, 'Installation Records');
+    // }
 
-    // $installation_status = $pdf->LoadData('statuses/read.php?status_table=installation_status');
-    // $header = array('#', 'Installation Status');
-    // $pdf->displayTable($header, $installation_status, 'Installation Status');
+    // $prorates = $pdf->ReadData('reports/read_prorates.php', $date_from, $date_to);
+    // $prorates_header = array('#', 'Date', 'Invoice ID', 'Account ID', 'Duration', 'Prorate');
 
-    
+    // if (count($prorates) > 1) {
+    //     $pdf->displayTable($prorates_header, $prorates, 'Prorate Records');
+    // }
+
+
     // ---------------------------------------------------------
     
     $invoice = $pdf->Output('test.pdf', 'I');

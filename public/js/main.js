@@ -78,7 +78,7 @@ async function showResult(str) {
                 const pageLink = document.createElement('a');
 
                 pageLink.text = pages[i].page_name;
-                pageLink.href = (pages[i].page_dir).split('.')[0];
+                pageLink.href = pages[i].page_dir;
 
                 pageLinkArrow.classList.add('bi-arrow-right-short');
 
@@ -375,15 +375,6 @@ function isWithinRange(date, input_date) {
     return minDate < inputDate && inputDate < maxDate;
 }
 
-// function formToggle(ID){
-//     var element = document.getElementById(ID);
-//     if(element.style.display === "none"){
-//         element.style.display = "block";
-//     }else{
-//         element.style.display = "none";
-//     }
-// }
-
 // Display Default Data
 async function setDefaults () {
     const admin_data = await getAdminData(admin_id);
@@ -445,21 +436,25 @@ function restrictPages (dir) {
 
 $(() => {
     // Navbar Active Config
-    const path = location.pathname.split('/')[4];
-    const id = 'nav-' + path.split('.')[0];
-    const nav_id = path.split('_')[0].split('.')[0];
+    const path = location.pathname.split('/').pop();
+    const id = 'nav-' + path;
+    const nav_id = path.split('_')[0];
 
     $('#' + id).addClass('active');
     $('#drop-' + nav_id).removeClass('collapsed');
     $('#' + nav_id + '-nav').addClass('show');
 
-    if (id == 'nav-dashboard' || id == 'nav-profile' || id == 'nav-admins' || id == 'nav-plans') {
+    if (id == 'nav-dashboard' || id == 'nav-profile' || id == 'nav-admins' || id == 'nav-plans' || id == 'nav-reports') {
         document.getElementById(id).classList.remove('collapsed');
     }
-    if (nav_id == 'connection' || nav_id == 'concerns' || nav_id == 'user' || nav_id == 'inclusions' || nav_id == 'area') {
+    if (nav_id == 'user') {
         $('#drop-options').removeClass('collapsed');
         $('#options-nav').addClass('show');
     }
+    // if (nav_id == 'connection' || nav_id == 'concerns' || nav_id == 'user' || nav_id == 'inclusions' || nav_id == 'area') {
+    //     $('#drop-options').removeClass('collapsed');
+    //     $('#options-nav').addClass('show');
+    // }
 })
 
 $('#account-settings').on('click', (e) => {

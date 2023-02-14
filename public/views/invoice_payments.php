@@ -44,7 +44,7 @@
               </div>
 
               <div class="col-md-3 justify-content-center">
-                <button type="button" class="btn btn-primary mt-3 w-100" data-bs-toggle="modal" data-bs-target="#add-untagged-modal">+ Add Untagged Payment</button>
+                <button type="button" class="btn btn-primary mt-3 w-100" data-bs-toggle="modal" data-bs-target="#add-untagged-modal" id="add-untagged-btn">+ Add Untagged Payment</button>
               </div>
             </div>
         
@@ -73,7 +73,7 @@
               </div>
 
               <div class="col-md-3 justify-content-center">
-                <button type="button" class="btn btn-primary mt-3 w-100" data-bs-toggle="modal" data-bs-target="#add-advanced-modal">+ Add Advanced Payment</button>
+                <button type="button" class="btn btn-primary mt-3 w-100" data-bs-toggle="modal" data-bs-target="#add-advanced-modal" id="add-advanced-btn">+ Add Advanced Payment</button>
               </div>
             </div>
 
@@ -396,7 +396,7 @@
           <!-- Modal Footer -->
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-success" id="advanced-create-new-btn">Save Changes</button>
+            <button type="submit" class="btn btn-success" id="advanced-create-new-btn">Submit</button>
           </div>
         </div>
       </div>
