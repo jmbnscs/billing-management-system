@@ -1,9 +1,9 @@
 <?php
     // DB Params
-    $host = 'localhost:3307';
-    $db_name = 'bms';
-    $username = 'root';
-    $password = '';
+    $host = 'localhost';
+    $db_name = 'u575223139_bms';
+    $username = 'u575223139_finalsbms';
+    $password = '[atFeP2nN';
     $conn;
 
     $conn = null;
