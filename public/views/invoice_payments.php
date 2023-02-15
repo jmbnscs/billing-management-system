@@ -11,7 +11,7 @@
         <li class="breadcrumb-item active">Invoice</li>
       </ol>
     </nav>
-  </div><!-- End Page Title -->
+  </div>
 
   <!-- Payment Records Table -->
   <div class="col-lg-12">
